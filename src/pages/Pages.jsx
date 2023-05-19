@@ -1,0 +1,1069 @@
+import React, { useEffect, useState } from "react";
+import { NumericFormat } from "react-number-format";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import clienteAxios from "../config/axios";
+import mercadopago from "../../src/components/mercadopago/mercadopago";
+import { localidades } from "../data";
+import { AiOutlineArrowDown } from "react-icons/ai";
+import { toast } from "react-toastify";
+
+const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
+  const [metodoPago, setMetodoPago] = useState(false);
+  const [ orderId, setOrderId] = useState("");
+  const { user } = useSelector((state) => ({ ...state.auth }));
+
+  const navigate = useNavigate();
+
+  const [customer, setCustomer] = useState({
+    email: user?.email ? user.email : "",
+    firstName: "",
+    lastName: "",
+    address: "",
+    address2: "",
+    ciudad: "Bogotá",
+    localidad: "",
+    telefono: "",
+    cedula: "",
+  });
+
+  const [botonPago, setBotonPago] = useState(false);
+
+  const {
+    email,
+    firstName,
+    lastName,
+    address,
+    address2,
+    ciudad,
+    localidad,
+    telefono,
+    cedula,
+  } = customer;
+
+  const handleChange = (e) => {
+    setCustomer({
+      ...customer,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (
+      [
+        email,
+        firstName,
+        lastName,
+        address,
+        address2,
+        ciudad,
+        localidad,
+        telefono,
+        cedula,
+      ].includes("")
+    ) {
+      return toast.error("Todos los campos son obligatorios");
+    }
+
+    localStorage.setItem("data_customer", JSON.stringify(customer));
+
+    setBotonPago(true);
+  };
+
+
+
+  const [services, setServices] = useState(
+    JSON.parse(localStorage.getItem("services"))
+      ? JSON.parse(localStorage.getItem("services"))
+      : []
+  );
+
+  const { estado } = useSelector((state) => ({ ...state.auth }));
+
+  const [estadoState, setEstadoState] = useState(estado);
+
+  useEffect(() => {
+    setEstadoState(estado);
+    if (localStorage.getItem("localidad", localidad)) {
+      setCustomer({
+        ...customer,
+        localidad: localStorage.getItem("localidad", localidad),
+      });
+    }
+  }, []);
+
+  setTimeout(() => {
+    setEstadoState(localStorage.getItem("estado"));
+  }, 4000);
+
+  const reservaLink = async () => {
+    try {
+      //let { data } = await clienteAxios.post(`/reservas/crear/${"asdsad"}`);
+
+      navigate("/resumen");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //capturo de localstorage DateService, ProfessionalService, profile, services, y guardo para la preferencia de respaldo
+
+  const reservationData = {
+    DateService: localStorage.getItem("DateService"),
+    ProfessionalService: localStorage.getItem("ProfessionalService"),
+    profile: localStorage.getItem("profile"),
+    services: localStorage.getItem("services"),
+    dataCustomer: localStorage.getItem("data_customer"),
+  };
+
+  let localServices = [];
+  let orderData = {};
+
+  if (localStorage.getItem("services")) {
+    localServices = JSON.parse(localStorage.getItem("services"));
+
+    orderData = {
+      quantity: 1,
+      description: localServices[0]?.nombre.toString(),
+      price: localServices[0]?.precioTotal,
+    };
+  }
+
+
+  const handleCheckout = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${import.meta.env.VITE_APP_BACK}/pay/preference`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reservationData),
+      });
+  
+      const data = await response.json();
+      const orderId = data.newOrder;
+      setOrderId(orderId);
+  
+      const secondResponse = await fetch(`${import.meta.env.VITE_APP_BACK}/pay/create_preference/${orderId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      const preference = await secondResponse.json();
+      createCheckoutButton(preference.id);
+    } catch (error) {
+      console.log(error);
+      alert("Unexpected error");
+    }
+  };
+
+  const createCheckoutButton = (preferenceId) => {
+    // Initialize the checkout
+    mercadopago.checkout({
+      preference: {
+        id: preferenceId,
+      },
+      render: {
+        container: "#button-checkout", // Class name where the payment button will be displayed
+        label: "Pagar", // Change the payment button text (optional)
+      },
+    });
+
+    let profile = localStorage.getItem('profile');
+    localStorage.clear();
+    localStorage.setItem('profile', profile)
+  };
+
+  return (
+    <div>
+      <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
+        <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
+          <div className="grid  md:grid-cols-2 gap-4 w-full">
+            <div>
+              <Link to="/servicio" class="text-base leading-none text-gray-600 pl-1">Volver</Link>
+
+              <p class="text-4xl font-semibold leading-9 text-gray-800 mt-4 mb-6">
+                Finalizar compra
+              </p>
+              <p class="text-xl font-medium leading-tight text-gray-800 mb-6">
+                Información del contacto
+              </p>
+              <div class="form-container w-full">
+                <form onSubmit={onSubmit}>
+                  <input
+                    type="email"
+                    name="email"
+                    onChange={handleChange}
+                    value={email}
+                    class="p-4 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0"
+                    placeholder="Correo electrónico"
+                  />
+                  {/* <div class="flex mt-4">
+                    <input
+                      type="checkbox"
+                      name=""
+                      id=""
+                      class="accent-gray-800 cursor-pointer"
+                    />
+                    <p class="text-sm leading-none text-gray-600 pl-2">
+                      Envíame un correo electrónico con noticias y ofertas.
+                    </p>
+                  </div> */}
+                  <p class="text-xl font-medium leading-tight text-gray-800 mt-6 text-left">
+                    Detalles de reservación
+                  </p>
+                  <input
+                    type="text"
+                    name="firstName"
+                    onChange={handleChange}
+                    value={firstName}
+                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    placeholder="Nombre"
+                  />
+                  <input
+                    type="text"
+                    name="lastName"
+                    onChange={handleChange}
+                    value={lastName}
+                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    placeholder="Apellidos"
+                  />
+                  <input
+                    type="text"
+                    name="address"
+                    onChange={handleChange}
+                    value={address}
+                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    placeholder="Dirección"
+                  />
+                  <input
+                    type="text"
+                    name="address2"
+                    onChange={handleChange}
+                    value={address2}
+                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    placeholder="Información adicional"
+                  />
+                  <div class="flex md:flex-row flex-col relative">
+                    <div class="mx-auto mt-6 w-full">
+                      <div class="relative w-full">
+                        <input
+                          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                          id="ciudad"
+                          type="text"
+                          name="ciudad"
+                          value={ciudad}
+                          placeholder="Bogotá"
+                          disabled={true}
+                        />
+                      </div>
+                    </div>
+                    <div class="mx-auto mt-6 w-full md:ml-8">
+                      <div class="relative w-full">
+                        <select
+                          className=" appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                          name="localidad"
+                          id="localidad"
+                          value={localidad}
+                          onChange={handleChange}
+                          disabled={true}
+                        >
+                          <option value="">Localidad</option>
+                          {localidades.map((localidad, index) => (
+                            <option key={index} value={localidad.split(" ")[1]}>
+                              {localidad}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                          <AiOutlineArrowDown className="fill-current h-4 w-4" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <input
+                    type="number"
+                    name="telefono"
+                    value={telefono}
+                    onChange={handleChange}
+                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    placeholder="Teléfono"
+                  />
+                  <input
+                    type="number"
+                    name="cedula"
+                    value={cedula}
+                    onChange={handleChange}
+                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    placeholder="Cédula"
+                  />
+                  {/* <div class="flex mt-4">
+                    <input
+                      type="checkbox"
+                      name=""
+                      id=""
+                      class="accent-gray-800 cursor-pointer"
+                    />
+                    <p class="text-sm leading-none text-gray-600 pl-2">
+                      Guardar esta información para la próxima vez.
+                    </p> 
+                  </div> */}
+                  <div class="div flex w-full block">
+                    <button class="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
+                      Confirmar Datos
+                    </button>
+                  </div>
+                </form>
+                {botonPago && (
+                  <div class="pb-8">
+                    <div class="div flex w-full lg:hidden md:block block">
+                      <button class="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
+                        Proceder al pago
+                      </button>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          padding: "0 1.7142857142857142em",
+                          fontFamily: "Helvetica Neue, Arial, sans-serif",
+                          fontSize: "0.875em",
+                          lineHeight: "2.7142857142857144",
+                          background: "#009ee3",
+                          borderRadius: "0.2857142857142857em",
+                          color: "#fff",
+                          cursor: "pointer",
+                          border: "0",
+                          textAlign: "center",
+                        }}
+                      >
+                        <button className="ButtonCart" onClick={handleCheckout}>
+                          Proceder al Pago
+                        </button>
+                      </div>
+                      <div
+                        style={{
+                          padding: "0 1.7142857142857142em",
+                          fontFamily: "Helvetica Neue, Arial, sans-serif",
+                          fontSize: "0.875em",
+                          lineHeight: "2.7142857142857144",
+                          background: "#009ee3",
+                          borderRadius: "0.2857142857142857em",
+                          color: "#fff",
+                          cursor: "pointer",
+                          border: "0",
+                          textAlign: "center",
+                        }}
+                      >
+                        <div id="button-checkout"></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="relative md:px-6 bg-gray-50 md:pb-20 pb-9 px-4">
+              <div class="lg:px-8">
+                <div class="lg:col-start-2 md:col-start-0 lg:col-span-10 md:col-span-12 sm:col-span-12 col-span-12">
+                  <div class="lg:mt-[153px] md:mt-12 mt-8 lg:ml-8 md:ml-0 ml-0 col-span-10">
+                    <p class="text-xl font-semibold leading-tight text-gray-800">
+                      Resumen de servicios
+                    </p>
+
+                    <div class="product-container">
+                      {services?.map((producto, index) => (
+                        <>
+                          <div class="sm:flex items-start mt-10">
+                            <div class="w-auto">
+                              <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                <img
+                                  src={producto?.img}
+                                  alt=""
+                                  className="h-full w-full object-cover object-center"
+                                />
+                              </div>
+                            </div>
+                            <div class="flex items-start justify-between w-full">
+                              <div class="sm:ml-8">
+                                <p class="text-lg font-medium leading-none text-gray-800 mt-6 sm:mt-0">
+                                  {producto?.nombre}
+                                </p>
+                                <p class="text-base leading-none text-gray-600 mt-4 sm:mt-2">
+                                  {producto.cantidad}
+                                </p>
+                                <p className="text-base font-medium leading-none hover:underline text-gray-600 cursor-pointer mt-8">
+                                  Ver detalles
+                                </p>
+                              </div>
+
+                              <p class="text-lg font-semibold leading-none text-gray-800 mt-6 sm:mt-0">
+                                <NumericFormat
+                                  value={producto?.precioTotal}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"$"}
+                                />
+                              </p>
+                            </div>
+                          </div>
+                          <div className="my-2">
+                            <p className="inline-block">
+                              El servidor sera atendido por la profesional{" "}
+                            </p>
+                            <p className="text-base inline-block ml-1 font-medium leading-none hover:underline text-gray-600 cursor-pointer">
+                              {" "}
+                              Andrea
+                            </p>
+                          </div>
+                          <hr class="w-full bg-gray-200 border mt-4 h-[1px]" />
+                        </>
+                      ))}
+
+                      <div class="div flex justify-between mt-6">
+                        <div class="title">
+                          <p class="text-lg leading-none text-gray-600">
+                            Fecha
+                          </p>
+                        </div>
+                        <div class="price">
+                          <p class="text-lg font-semibold leading-none text-gray-600">
+                            14/04/2023
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="div flex justify-between mt-6">
+                        <div class="title">
+                          <p class="text-lg leading-none text-gray-600">Hora</p>
+                        </div>
+                        <div class="price">
+                          <p class="text-lg font-semibold leading-none text-gray-600">
+                            08:00 AM
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="div flex justify-between mt-6">
+                        <div class="title">
+                          <p class="text-lg leading-none text-gray-600">
+                            Servicios Totales
+                          </p>
+                        </div>
+
+                        <div class="price">
+                          <p class="text-lg font-semibold leading-none text-gray-600">
+                            {services.length}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="div flex justify-between mt-6">
+                        <div class="title">
+                          <p class="text-lg leading-none text-gray-600">
+                            Descuento por Fidelidad
+                          </p>
+                        </div>
+                        <div class="price">
+                          <p class="text-lg font-semibold leading-none text-gray-600">
+                            0
+                          </p>
+                        </div>
+                      </div>
+                      <hr class="w-full bg-gray-200 border mt-6 h-[1px]" />
+                      <div class="div flex justify-between mt-6">
+                        <div class="title">
+                          <p class="text-2xl font-semibold leading-normal text-gray-800">
+                            Total
+                          </p>
+                        </div>
+                        <div class="price">
+                          <p class="text-2xl font-semibold leading-normal text-gray-800">
+                            {services.length > 1 ? (
+                              <p>
+                                {" "}
+                                <NumericFormat
+                                  value={services.reduce(
+                                    (a, b) =>
+                                      Number(a.precioTotal) +
+                                      Number(b.precioTotal)
+                                  )}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"$"}
+                                />
+                              </p>
+                            ) : (
+                              <NumericFormat
+                                value={services?.map((a) => a.precioTotal)[0]}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"$"}
+                              />
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Pages;
+
+
+
+
+
+
+
+// import React, { useEffect, useState } from "react";
+// import { NumericFormat } from "react-number-format";
+// import { useSelector } from "react-redux";
+// import { Link, useNavigate } from "react-router-dom";
+// import clienteAxios from "../config/axios";
+// import mercadopago from "../../src/components/mercadopago/mercadopago";
+// import { localidades } from "../data";
+// import { AiOutlineArrowDown } from "react-icons/ai";
+// import { toast } from "react-toastify";
+
+// const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
+//   const [metodoPago, setMetodoPago] = useState(false);
+//   const [ orderId, setOrderId] = useState("");
+//   const { user } = useSelector((state) => ({ ...state.auth }));
+
+//   const navigate = useNavigate();
+
+//   const [customer, setCustomer] = useState({
+//     email: user?.email ? user.email : "",
+//     firstName: "",
+//     lastName: "",
+//     address: "",
+//     address2: "",
+//     ciudad: "Bogotá",
+//     localidad: "",
+//     telefono: "",
+//     cedula: "",
+//   });
+
+//   const [botonPago, setBotonPago] = useState(false);
+
+//   const {
+//     email,
+//     firstName,
+//     lastName,
+//     address,
+//     address2,
+//     ciudad,
+//     localidad,
+//     telefono,
+//     cedula,
+//   } = customer;
+
+//   const handleChange = (e) => {
+//     setCustomer({
+//       ...customer,
+//       [e.target.name]: e.target.value,
+//     });
+//   };
+
+//   const onSubmit = (e) => {
+//     e.preventDefault();
+
+//     if (
+//       [
+//         email,
+//         firstName,
+//         lastName,
+//         address,
+//         address2,
+//         ciudad,
+//         localidad,
+//         telefono,
+//         cedula,
+//       ].includes("")
+//     ) {
+//       return toast.error("Todos los campos son obligatorios");
+//     }
+
+//     localStorage.setItem("data_customer", JSON.stringify(customer));
+
+//     setBotonPago(true);
+//   };
+
+
+
+//   const [services, setServices] = useState(
+//     JSON.parse(localStorage.getItem("services"))
+//       ? JSON.parse(localStorage.getItem("services"))
+//       : []
+//   );
+
+//   const { estado } = useSelector((state) => ({ ...state.auth }));
+
+//   const [estadoState, setEstadoState] = useState(estado);
+
+//   useEffect(() => {
+//     setEstadoState(estado);
+//     if (localStorage.getItem("localidad", localidad)) {
+//       setCustomer({
+//         ...customer,
+//         localidad: localStorage.getItem("localidad", localidad),
+//       });
+//     }
+//   }, []);
+
+//   setTimeout(() => {
+//     setEstadoState(localStorage.getItem("estado"));
+//   }, 4000);
+
+//   const reservaLink = async () => {
+//     try {
+//       //let { data } = await clienteAxios.post(`/reservas/crear/${"asdsad"}`);
+
+//       navigate("/resumen");
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+
+//   //capturo de localstorage DateService, ProfessionalService, profile, services, y guardo para la preferencia de respaldo
+
+//   const reservationData = {
+//     DateService: localStorage.getItem("DateService"),
+//     ProfessionalService: localStorage.getItem("ProfessionalService"),
+//     profile: localStorage.getItem("profile"),
+//     services: localStorage.getItem("services"),
+//     dataCustomer: localStorage.getItem("data_customer"),
+//   };
+
+//   let localServices = [];
+//   let orderData = {};
+
+//   if (localStorage.getItem("services")) {
+//     localServices = JSON.parse(localStorage.getItem("services"));
+
+//     orderData = {
+//       quantity: 1,
+//       description: localServices[0]?.nombre.toString(),
+//       price: localServices[0]?.precioTotal,
+//     };
+//   }
+
+
+//   const handleCheckout = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const response = await fetch(`${import.meta.env.VITE_APP_BACK}/pay/preference`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(reservationData),
+//       });
+  
+//       const data = await response.json();
+//       const orderId = data.newOrder;
+//       setOrderId(orderId);
+  
+//       const secondResponse = await fetch(`${import.meta.env.VITE_APP_BACK}/pay/create_preference/${orderId}`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(orderData),
+//       });
+  
+//       const preference = await secondResponse.json();
+//       createCheckoutButton(preference.id);
+//     } catch (error) {
+//       console.log(error);
+//       alert("Unexpected error");
+//     }
+//   };
+
+//   const createCheckoutButton = (preferenceId) => {
+//     // Initialize the checkout
+//     mercadopago.checkout({
+//       preference: {
+//         id: preferenceId,
+//       },
+//       render: {
+//         container: "#button-checkout", // Class name where the payment button will be displayed
+//         label: "Pagar", // Change the payment button text (optional)
+//       },
+//     });
+
+//     let profile = localStorage.getItem('profile');
+//     localStorage.clear();
+//     localStorage.setItem('profile', profile)
+//   };
+
+//   return (
+//     <div>
+//       <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
+//         <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
+//           <div className="grid  md:grid-cols-2 gap-4 w-full">
+//             <div>
+//               <Link to="/servicio" class="text-base leading-none text-gray-600 pl-1">Volver</Link>
+
+//               <p class="text-4xl font-semibold leading-9 text-gray-800 mt-4 mb-6">
+//                 Finalizar compra
+//               </p>
+//               <p class="text-xl font-medium leading-tight text-gray-800 mb-6">
+//                 Información del contacto
+//               </p>
+//               <div class="form-container w-full">
+//                 <form onSubmit={onSubmit}>
+//                   <input
+//                     type="email"
+//                     name="email"
+//                     onChange={handleChange}
+//                     value={email}
+//                     class="p-4 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0"
+//                     placeholder="Correo electrónico"
+//                   />
+//                   {/* <div class="flex mt-4">
+//                     <input
+//                       type="checkbox"
+//                       name=""
+//                       id=""
+//                       class="accent-gray-800 cursor-pointer"
+//                     />
+//                     <p class="text-sm leading-none text-gray-600 pl-2">
+//                       Envíame un correo electrónico con noticias y ofertas.
+//                     </p>
+//                   </div> */}
+//                   <p class="text-xl font-medium leading-tight text-gray-800 mt-6 text-left">
+//                     Detalles de reservación
+//                   </p>
+//                   <input
+//                     type="text"
+//                     name="firstName"
+//                     onChange={handleChange}
+//                     value={firstName}
+//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     placeholder="Nombre"
+//                   />
+//                   <input
+//                     type="text"
+//                     name="lastName"
+//                     onChange={handleChange}
+//                     value={lastName}
+//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     placeholder="Apellidos"
+//                   />
+//                   <input
+//                     type="text"
+//                     name="address"
+//                     onChange={handleChange}
+//                     value={address}
+//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     placeholder="Dirección"
+//                   />
+//                   <input
+//                     type="text"
+//                     name="address2"
+//                     onChange={handleChange}
+//                     value={address2}
+//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     placeholder="Información adicional"
+//                   />
+//                   <div class="flex md:flex-row flex-col relative">
+//                     <div class="mx-auto mt-6 w-full">
+//                       <div class="relative w-full">
+//                         <input
+//                           className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+//                           id="ciudad"
+//                           type="text"
+//                           name="ciudad"
+//                           value={ciudad}
+//                           placeholder="Bogotá"
+//                           disabled={true}
+//                         />
+//                       </div>
+//                     </div>
+//                     <div class="mx-auto mt-6 w-full md:ml-8">
+//                       <div class="relative w-full">
+//                         <select
+//                           className=" appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+//                           name="localidad"
+//                           id="localidad"
+//                           value={localidad}
+//                           onChange={handleChange}
+//                           disabled={true}
+//                         >
+//                           <option value="">Localidad</option>
+//                           {localidades.map((localidad, index) => (
+//                             <option key={index} value={localidad.split(" ")[1]}>
+//                               {localidad}
+//                             </option>
+//                           ))}
+//                         </select>
+//                         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+//                           <AiOutlineArrowDown className="fill-current h-4 w-4" />
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                   <input
+//                     type="number"
+//                     name="telefono"
+//                     value={telefono}
+//                     onChange={handleChange}
+//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     placeholder="Teléfono"
+//                   />
+//                   <input
+//                     type="number"
+//                     name="cedula"
+//                     value={cedula}
+//                     onChange={handleChange}
+//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     placeholder="Cédula"
+//                   />
+//                   {/* <div class="flex mt-4">
+//                     <input
+//                       type="checkbox"
+//                       name=""
+//                       id=""
+//                       class="accent-gray-800 cursor-pointer"
+//                     />
+//                     <p class="text-sm leading-none text-gray-600 pl-2">
+//                       Guardar esta información para la próxima vez.
+//                     </p> 
+//                   </div> */}
+//                   <div class="div flex w-full block">
+//                     <button class="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
+//                       Confirmar Datos
+//                     </button>
+//                   </div>
+//                 </form>
+//                 {botonPago && (
+//                   <div class="pb-8">
+//                     <div class="div flex w-full lg:hidden md:block block">
+//                       <button class="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
+//                         Proceder al pago
+//                       </button>
+//                     </div>
+
+//                     <div
+//                       style={{
+//                         display: "flex",
+//                         flexDirection: "column",
+//                         gap: "10px",
+//                         marginTop: "10px",
+//                       }}
+//                     >
+//                       <div
+//                         style={{
+//                           padding: "0 1.7142857142857142em",
+//                           fontFamily: "Helvetica Neue, Arial, sans-serif",
+//                           fontSize: "0.875em",
+//                           lineHeight: "2.7142857142857144",
+//                           background: "#009ee3",
+//                           borderRadius: "0.2857142857142857em",
+//                           color: "#fff",
+//                           cursor: "pointer",
+//                           border: "0",
+//                           textAlign: "center",
+//                         }}
+//                       >
+//                         <button className="ButtonCart" onClick={handleCheckout}>
+//                           Proceder al Pago
+//                         </button>
+//                       </div>
+//                       <div
+//                         style={{
+//                           padding: "0 1.7142857142857142em",
+//                           fontFamily: "Helvetica Neue, Arial, sans-serif",
+//                           fontSize: "0.875em",
+//                           lineHeight: "2.7142857142857144",
+//                           background: "#009ee3",
+//                           borderRadius: "0.2857142857142857em",
+//                           color: "#fff",
+//                           cursor: "pointer",
+//                           border: "0",
+//                           textAlign: "center",
+//                         }}
+//                       >
+//                         <div id="button-checkout"></div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 )}
+//               </div>
+//             </div>
+//             <div class="relative md:px-6 bg-gray-50 md:pb-20 pb-9 px-4">
+//               <div class="lg:px-8">
+//                 <div class="lg:col-start-2 md:col-start-0 lg:col-span-10 md:col-span-12 sm:col-span-12 col-span-12">
+//                   <div class="lg:mt-[153px] md:mt-12 mt-8 lg:ml-8 md:ml-0 ml-0 col-span-10">
+//                     <p class="text-xl font-semibold leading-tight text-gray-800">
+//                       Resumen de servicios
+//                     </p>
+
+//                     <div class="product-container">
+//                       {services?.map((producto, index) => (
+//                         <>
+//                           <div class="sm:flex items-start mt-10">
+//                             <div class="w-auto">
+//                               <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+//                                 <img
+//                                   src={producto?.img}
+//                                   alt=""
+//                                   className="h-full w-full object-cover object-center"
+//                                 />
+//                               </div>
+//                             </div>
+//                             <div class="flex items-start justify-between w-full">
+//                               <div class="sm:ml-8">
+//                                 <p class="text-lg font-medium leading-none text-gray-800 mt-6 sm:mt-0">
+//                                   {producto?.nombre}
+//                                 </p>
+//                                 <p class="text-base leading-none text-gray-600 mt-4 sm:mt-2">
+//                                   {producto.cantidad}
+//                                 </p>
+//                                 <p className="text-base font-medium leading-none hover:underline text-gray-600 cursor-pointer mt-8">
+//                                   Ver detalles
+//                                 </p>
+//                               </div>
+
+//                               <p class="text-lg font-semibold leading-none text-gray-800 mt-6 sm:mt-0">
+//                                 <NumericFormat
+//                                   value={producto?.precioTotal}
+//                                   displayType={"text"}
+//                                   thousandSeparator={true}
+//                                   prefix={"$"}
+//                                 />
+//                               </p>
+//                             </div>
+//                           </div>
+//                           <div className="my-2">
+//                             <p className="inline-block">
+//                               El servidor sera atendido por la profesional{" "}
+//                             </p>
+//                             <p className="text-base inline-block ml-1 font-medium leading-none hover:underline text-gray-600 cursor-pointer">
+//                               {" "}
+//                               Andrea
+//                             </p>
+//                           </div>
+//                           <hr class="w-full bg-gray-200 border mt-4 h-[1px]" />
+//                         </>
+//                       ))}
+
+//                       <div class="div flex justify-between mt-6">
+//                         <div class="title">
+//                           <p class="text-lg leading-none text-gray-600">
+//                             Fecha
+//                           </p>
+//                         </div>
+//                         <div class="price">
+//                           <p class="text-lg font-semibold leading-none text-gray-600">
+//                             14/04/2023
+//                           </p>
+//                         </div>
+//                       </div>
+
+//                       <div class="div flex justify-between mt-6">
+//                         <div class="title">
+//                           <p class="text-lg leading-none text-gray-600">Hora</p>
+//                         </div>
+//                         <div class="price">
+//                           <p class="text-lg font-semibold leading-none text-gray-600">
+//                             08:00 AM
+//                           </p>
+//                         </div>
+//                       </div>
+
+//                       <div class="div flex justify-between mt-6">
+//                         <div class="title">
+//                           <p class="text-lg leading-none text-gray-600">
+//                             Servicios Totales
+//                           </p>
+//                         </div>
+
+//                         <div class="price">
+//                           <p class="text-lg font-semibold leading-none text-gray-600">
+//                             {services.length}
+//                           </p>
+//                         </div>
+//                       </div>
+
+//                       <div class="div flex justify-between mt-6">
+//                         <div class="title">
+//                           <p class="text-lg leading-none text-gray-600">
+//                             Descuento por Fidelidad
+//                           </p>
+//                         </div>
+//                         <div class="price">
+//                           <p class="text-lg font-semibold leading-none text-gray-600">
+//                             0
+//                           </p>
+//                         </div>
+//                       </div>
+//                       <hr class="w-full bg-gray-200 border mt-6 h-[1px]" />
+//                       <div class="div flex justify-between mt-6">
+//                         <div class="title">
+//                           <p class="text-2xl font-semibold leading-normal text-gray-800">
+//                             Total
+//                           </p>
+//                         </div>
+//                         <div class="price">
+//                           <p class="text-2xl font-semibold leading-normal text-gray-800">
+//                             {services.length > 1 ? (
+//                               <p>
+//                                 {" "}
+//                                 <NumericFormat
+//                                   value={services.reduce(
+//                                     (a, b) =>
+//                                       Number(a.precioTotal) +
+//                                       Number(b.precioTotal)
+//                                   )}
+//                                   displayType={"text"}
+//                                   thousandSeparator={true}
+//                                   prefix={"$"}
+//                                 />
+//                               </p>
+//                             ) : (
+//                               <NumericFormat
+//                                 value={services?.map((a) => a.precioTotal)[0]}
+//                                 displayType={"text"}
+//                                 thousandSeparator={true}
+//                                 prefix={"$"}
+//                               />
+//                             )}
+//                           </p>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Pages;
