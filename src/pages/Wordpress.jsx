@@ -6,14 +6,14 @@ const Wordpress = () => {
 
   const productos = [
     {
-      nombre: "Depilación con cera mujer suscripción 6 meses",
-      precio: "600.000",
-      id: "10953",
+      nombre: "Masaje reductor + Limpieza facial profunda",
+      precio: "298000",
+      id: "12307",
     },
     {
-      nombre: "Producto 2",
+      nombre: "Drenaje linfático + Limpieza facial profunda",
       precio: "500.000",
-      id: "10864",
+      id: "298000",
     },
   ];
 
