@@ -107,6 +107,27 @@ export const hoursArray = [
   { hora: "8:00 pm - 9:00 pm", value: "20:00 - 20:59" },
 ];
 
+//se usa en schedule para carga de horarios
+export const newHourArray = [
+  { horaInicio: "06:00", horaFin: "07:00", valueHoraInicio: "06:00", valueHoraFin: "06:59" },
+  { horaInicio: "07:00", horaFin: "08:00", valueHoraInicio: "07:00", valueHoraFin: "07:59" },
+  { horaInicio: "08:00", horaFin: "09:00", valueHoraInicio: "08:00", valueHoraFin: "08:59" },
+  { horaInicio: "09:00", horaFin: "10:00", valueHoraInicio: "09:00", valueHoraFin: "09:59" },
+  { horaInicio: "10:00", horaFin: "11:00", valueHoraInicio: "10:00", valueHoraFin: "10:59" },
+  { horaInicio: "11:00", horaFin: "12:00", valueHoraInicio: "11:00", valueHoraFin: "11:59" },
+  { horaInicio: "12:00", horaFin: "13:00", valueHoraInicio: "12:00", valueHoraFin: "12:59" },
+  { horaInicio: "13:00", horaFin: "14:00", valueHoraInicio: "13:00", valueHoraFin: "13:59" },
+  { horaInicio: "14:00", horaFin: "15:00", valueHoraInicio: "14:00", valueHoraFin: "14:59" },
+  { horaInicio: "15:00", horaFin: "16:00", valueHoraInicio: "15:00", valueHoraFin: "15:59" },
+  { horaInicio: "16:00", horaFin: "17:00", valueHoraInicio: "16:00", valueHoraFin: "16:59" },
+  { horaInicio: "17:00", horaFin: "18:00", valueHoraInicio: "17:00", valueHoraFin: "17:59" },
+  { horaInicio: "18:00", horaFin: "19:00", valueHoraInicio: "18:00", valueHoraFin: "18:59" },
+  { horaInicio: "19:00", horaFin: "20:00", valueHoraInicio: "19:00", valueHoraFin: "19:59" },
+  { horaInicio: "20:00", horaFin: "21:00", valueHoraInicio: "20:00", valueHoraFin: "20:59" },
+];
+
+
+
 export const hours = {
   hour: "6:00 am - 7:00 am",
   hour2: "7:00 am - 8:00 am",
@@ -124,6 +145,25 @@ export const hours = {
   hour14: "7:00 pm - 8:00 pm",
   hour15: "8:00 pm - 9:00 pm",
 };
+
+//se usa en carrito para eleccion por profesional 
+export const hourSelect = [
+  "06:00",
+  "07:00",
+  "08:00",
+  "09:00",
+  "10:00",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
+  "18:00",
+  "19:00",
+  "20:00",
+];
 
 export const hoursSelect = [
   "6:00 am",

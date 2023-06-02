@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import clienteAxios from "../config/axios";
-import { hoursArray, hoursSelect } from "../data";
+import { hoursArray, hourSelect } from "../data";
 import Spinner from "./Spinner";
+//import limpiarHorarios from "../helpers/Logic/limpiarHorarios";
 
 const dateCurrent = new Date();
 
@@ -17,10 +18,9 @@ const ScheduleByDateForm = ({ handleButtonMetodoPago }) => {
 
   const [pagar, setPagar] = useState(false);
   const [profesional, setProfesional] = useState({});
-
   const [cargando, setCargando] = useState(false);
-
   const [profesionalesRequest, setProfesionalesRequest] = useState([]);
+//  const [hourSelect, setHoursSelect] = useState([]);
 
   const handleProfesional = (profesional) => {
     const updatedArray = profesionalesRequest.map((obj) =>
@@ -30,8 +30,13 @@ const ScheduleByDateForm = ({ handleButtonMetodoPago }) => {
     );
 
     setProfesionalesRequest(updatedArray);
+    console.log("Updated Array", updatedArray)
 
     setProfesional(profesional);
+    // console.log("PROFESIONAL.HORARIOS",profesional.horarios)
+    // let horarios = profesional.horarios  
+    // setHoursSelect(limpiarHorarios(horarios));
+    // console.log("setHoursSelect HOURSELECT", hourSelect)
     setPagar(true);
   };
 
@@ -145,7 +150,7 @@ console.log(data)
                     required=""
                   >
                     <option value="">Hora</option>
-                    {hoursSelect?.map((hour, index) => (
+                    {hourSelect?.map((hour, index) => (
                       <option key={index} value={hour}>
                         {hour}
                       </option>

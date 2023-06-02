@@ -134,6 +134,7 @@ const ServiceDetails = () => {
           {services.length > 0 ? (
             services?.map((producto, index) => (
               <>
+               key={index}
                 <hr className="mt-6" />
                 <div className="grid grid-cols-6 mt-8 gap-5">
                   <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">

@@ -1,14 +1,16 @@
+const getScheduleProfessional = (horariosForm) => {
+    const result = horariosForm.map((horario) => horario.hora.split(""));
+    return result;
+  };
+  
+  export default getScheduleProfessional;
+  
+// const getScheduleProfessional = (horariosForm)=>{
 
-const getScheduleProfessional = (horariosForm)=>{
+//     const result = horariosForm.map((horario)=>(
+//         horario.hora.split("")
+//     ))
 
+// }
 
-    const result = horariosForm.map((horario)=>(
-        horario.split("")
-    ))
-
-
-
-
-}
-
-export default getScheduleProfessional
+// export default getScheduleProfessional

@@ -7,7 +7,7 @@ import {
   getOrders,
   updateOrder,
   createOrder,
-} from "./../../../../redux/features/ordenesSlice";
+} from "../../../../redux/features/ordenesSlice";
 import moment from "moment";
 import swal from "sweetalert";
 import "./Ordenesantd.css";
@@ -368,7 +368,7 @@ const ProductExpanded = ({
   );
 };
 
-const OrdenesAntDesing = () => {
+const FacturacionAntDesing = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -415,16 +415,106 @@ const OrdenesAntDesing = () => {
         orden.direccion_Servicio
           ?.toLowerCase()
           .includes(searchText.toLowerCase()) ||
-        moment(orden.dia_servicio, "YYYY-MM-DD")
+        moment(orden.createdAt, "YYYY-MM-DD")
           .format("YYYY-MM-DD")
-          .includes(searchText) || // Verifica si la búsqueda coincide con la fecha de la orden
-        moment(orden.hora_servicio, "hh:mm a")
-          .format("hh:mm a")
-          .includes(searchText) // Verifica si la búsqueda coincide con la hora de la orden
+          .includes(searchText) // Verifica si la búsqueda coincide con la fecha de la orden
+        
     );
   }, [newProducts, searchText]);
 
   const columns = [
+    {
+      title: "EDITAR",
+      dataIndex: "",
+      render: (value) => (
+        <div className="ActionsDiv">
+          <button
+            className="ButtonsActions"
+            onClick={() => setEditProduct(value._id)}
+          >
+            <BiEditAlt />
+          </button>
+        </div>
+      ),
+    },
+    Table.EXPAND_COLUMN,
+    {
+      title: "Estado Pago",
+      dataIndex: "estadoPago",
+      filters: [
+        { text: "Pending", value: "pending" },
+        { text: "Rejected", value: "rejected" },
+        { text: "Approved", value: "approved" },
+      ],
+      onFilter: (value, record) => record?.estadoPago?.indexOf(value) === 0,
+      render: (estadoPago) => (
+        <>
+          {estadoPago === "approved" ? (
+            <Tag color="green">Approved</Tag>
+          ) : estadoPago === "rejected" ? (
+            <Tag color="red">Failure</Tag>
+          ) : (
+            <Tag color="yellow">Pending</Tag>
+          )}
+        </>
+      ),
+    },    
+    {
+      title: "Id Pago",
+      dataIndex: "payment_id",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+    {
+      title: "Estado Servicio",
+      dataIndex: "estadoServicio",
+      filters: [
+        { text: "Pendiente", value: "Pendiente" },
+        { text: "Completado", value: "Completado" },
+        { text: "Cancelado", value: "Cancelado" },
+      ],
+      onFilter: (value, record) => record?.estadoServicio?.indexOf(value) === 0,
+      render: (estadoServicio) => (
+        <>
+          {estadoServicio === "Completado" ? (
+            <Tag color="green">Completado</Tag>
+          ) : estadoServicio === "Cancelado" ? (
+            <Tag color="red">Cancelado</Tag>
+          ) : (
+            <Tag color="yellow">Pendiente</Tag>
+          )}
+        </>
+      ),
+    },
+    {
+      title: "Facturacion",
+      dataIndex: "estadoFacturacion",
+      filters: [
+        { text: "Facturado", value: "Facturado" },
+        { text: "NoFacturado", value: "NoFacturado" },
+        { text: "Error", value: "Error" },
+      ],
+      onFilter: (value, record) => record?.estadoFacturacion?.indexOf(value) === 0,
+      render: (estadoFacturacion) => (
+        <>
+          {estadoFacturacion === "Facturado" ? (
+            <Tag color="green">Facturado</Tag>
+          ) : estadoFacturacion === "Error" ? (
+            <Tag color="red">Error</Tag>
+          ) : (
+            <Tag color="yellow">NoFacturado</Tag>
+          )}
+        </>
+      ),
+    },
+    {
+      title: "Nro.Factura",
+      dataIndex: "numeroFacturacion",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
     {
       title: "Orden",
       dataIndex: "_id",
@@ -489,7 +579,7 @@ const OrdenesAntDesing = () => {
       render: (text) => <p>{text}</p>,
     },
     {
-      title: "Direccion Servicio",
+      title: "Direccion",
       dataIndex: "direccion_Servicio",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
@@ -503,75 +593,26 @@ const OrdenesAntDesing = () => {
       render: (text) => <p>{text}</p>,
     },
     {
-      title: "Dia",
-      dataIndex: "dia_servicio",
+      title: "DiaVenta",
+      dataIndex: "createdAt",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
+      render: (text) => <p>{moment(text).format("YYYY-MM-DD")}</p>,    },
     {
-      title: "Hora",
-      dataIndex: "hora_servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Profesional",
+      title: "Nombre Prof.",
       dataIndex: "profesional_nombre",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
       render: (text) => <p>{text}</p>,
     },
     {
-      title: "Telefono",
-      dataIndex: "profesional_telefono",
+      title: "Apellido Prof.",
+      dataIndex: "profesional_apellido",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
       render: (text) => <p>{text}</p>,
     },
-    {
-      title: "Estado Pago",
-      dataIndex: "estadoPago",
-      filters: [
-        { text: "Pending", value: "pending" },
-        { text: "Rejected", value: "rejected" },
-        { text: "Approved", value: "approved" },
-      ],
-      onFilter: (value, record) => record?.estadoPago?.indexOf(value) === 0,
-      render: (estadoPago) => (
-        <>
-          {estadoPago === "approved" ? (
-            <Tag color="green">Approved</Tag>
-          ) : estadoPago === "rejected" ? (
-            <Tag color="red">Failure</Tag>
-          ) : (
-            <Tag color="yellow">Pending</Tag>
-          )}
-        </>
-      ),
-    },
-    {
-      title: "Estado Servicio",
-      dataIndex: "estadoServicio",
-      filters: [
-        { text: "Pendiente", value: "Pendiente" },
-        { text: "Completado", value: "Completado" },
-        { text: "Cancelado", value: "Cancelado" },
-      ],
-      onFilter: (value, record) => record?.estadoServicio?.indexOf(value) === 0,
-      render: (estadoServicio) => (
-        <>
-          {estadoServicio === "Completado" ? (
-            <Tag color="green">Completado</Tag>
-          ) : estadoServicio === "Cancelado" ? (
-            <Tag color="red">Cancelado</Tag>
-          ) : (
-            <Tag color="yellow">Pendiente</Tag>
-          )}
-        </>
-      ),
-    },
+    
     // {
     //   title: "payment_id",
     //   dataIndex: "payment_id",
@@ -587,27 +628,13 @@ const OrdenesAntDesing = () => {
     //   dataIndex: "merchant_order_id",
     //   render: (text) => <p>{text}</p>,
     // },
-    {
-      title: "EDITAR",
-      dataIndex: "",
-      render: (value) => (
-        <div className="ActionsDiv">
-          <button
-            className="ButtonsActions"
-            onClick={() => setEditProduct(value._id)}
-          >
-            <BiEditAlt />
-          </button>
-        </div>
-      ),
-    },
-    Table.EXPAND_COLUMN,
+   
   ];
 
   return (
     // style={{ width: '100%', height: '400px', overflow: 'auto' }}
     <div style={{ textAlign: "center", alignItems: "center", overflow: 'auto' }}>
-      <p className="p">ORDENES  </p>
+      <p className="p">FACTURACION  </p>
       <p className="p">Busqueda : Id de Orden, ó Datos de cliente, Datos Profesional, Fecha y Hora del Servicio (YYYY-MM-DD)  </p>
       <h1 style={{ textAlign: "center", alignItems: "center" }}>
         <Input.Search
@@ -684,4 +711,5 @@ const OrdenesAntDesing = () => {
   );
 };
 
-export default OrdenesAntDesing;
+export default FacturacionAntDesing;
+

@@ -47,8 +47,8 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                 </div>
                 <form className="mt-11">
                   <div className="flex items-center space-x-9">
-                    <div class="flex flex-col w-1/2">
-                      <label class="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
+                    <div className="flex flex-col w-1/2">
+                      <label className="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
                         {" "}
                         Nombre{" "}
                       </label>
@@ -56,11 +56,11 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                         value={`${userState?.nombre} ${userState?.apellido}`}
                         placeholder="Nombre"
                         disabled={true}
-                        class="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
+                        className="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
                       />
                     </div>
-                    <div class="flex flex-col w-1/2">
-                      <label class="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
+                    <div className="flex flex-col w-1/2">
+                      <label className="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
                         {" "}
                         Cédula{" "}
                       </label>
@@ -68,13 +68,13 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                         value={`${userState?.cedula ? userState?.cedula : ""}`}
                         placeholder="Cédula"
                         disabled={true}
-                        class="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
+                        className="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
                       />
                     </div>
                   </div>
                   <div className="flex items-center space-x-9 mt-8">
-                    <div class="flex flex-col w-1/2">
-                      <label class="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
+                    <div className="flex flex-col w-1/2">
+                      <label className="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
                         {" "}
                         Email{" "}
                       </label>
@@ -82,11 +82,11 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                         value={`${userState?.email}`}
                         placeholder="Email"
                         disabled={true}
-                        class="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
+                        className="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
                       />
                     </div>
-                    <div class="flex flex-col w-1/2">
-                      <label class="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
+                    <div className="flex flex-col w-1/2">
+                      <label className="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
                         {" "}
                         Ciudad{" "}
                       </label>
@@ -94,7 +94,7 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                         value={`${userState?.ciudad}`}
                         placeholder="Bogota"
                         disabled={true}
-                        class="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
+                        className="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
                       />
                     </div>
                   </div>
@@ -112,7 +112,7 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                 <Link
                   to={`${LinksPerfiles[userState.rol]}/${userState._id}`}
                   type="button"
-                  class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10"
+                  className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10"
                 >
                   Ver perfil
                 </Link>

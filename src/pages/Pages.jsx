@@ -9,23 +9,42 @@ import { AiOutlineArrowDown } from "react-icons/ai";
 import { toast } from "react-toastify";
 
 const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
+  const [customer, setCustomer] = useState({});
   const [metodoPago, setMetodoPago] = useState(false);
-  const [ orderId, setOrderId] = useState("");
+  const [orderId, setOrderId] = useState("");
   const { user } = useSelector((state) => ({ ...state.auth }));
-
   const navigate = useNavigate();
 
-  const [customer, setCustomer] = useState({
-    email: user?.email ? user.email : "",
-    firstName: "",
-    lastName: "",
-    address: "",
-    address2: "",
-    ciudad: "Bogotá",
-    localidad: "",
-    telefono: "",
-    cedula: "",
-  });
+  //aqui se precargan los datos del cliente para que no los tenga que tipear en la seccion de pagos.
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        let { data } = await clienteAxios.get(
+          `api/usuarios/perfil/${user._id}`
+        );
+
+        const { nombre, apellido, direcciones, telefono, cedula } = data;
+
+        setCustomer({
+          email: user?.email || "",
+          firstName: user?.nombre || data?.nombre || "",
+          lastName: data?.apellido || "",
+          address: data?.direcciones[0].direccion || "",
+          address2: data?.direcciones[0].info || "",
+          ciudad: data?.direcciones[0].ciudad || "",
+          localidad: data?.direcciones[0].localidad || "",
+          cedula: data?.cedula || "",
+          telefono: data?.telefono || "",
+        });
+      } catch (err) {
+        let error = err.response.data.msg
+          ? err.response.data.msg
+          : err.response && "Estamos presentando problemas internos";
+        return toast.error(error);
+      }
+    };
+    getUser();
+  }, [user._id]);
 
   const [botonPago, setBotonPago] = useState(false);
 
@@ -72,8 +91,6 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
     setBotonPago(true);
   };
 
-
-
   const [services, setServices] = useState(
     JSON.parse(localStorage.getItem("services"))
       ? JSON.parse(localStorage.getItem("services"))
@@ -118,6 +135,24 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
     dataCustomer: localStorage.getItem("data_customer"),
   };
 
+  //Obtenemos del localstorage los servicios que contrato el cliente para el renderizado del resumen
+  let appointment = {
+    date: "",
+    time: "",
+  };
+
+  if (localStorage.getItem("DateService"))
+    try {
+      const dataResumenServicios = localStorage.getItem("DateService");
+      const parsedDateService = JSON.parse(dataResumenServicios);
+      const { date, time } = parsedDateService;
+      appointment.date = date;
+      appointment.time = time;
+    } catch (error) {
+      console.log(error);
+    }
+
+  //Obtenemos del localstorage los servicios que contrato el cliente para el renderizado del resumen
   let localServices = [];
   let orderData = {};
 
@@ -131,30 +166,35 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
     };
   }
 
-
   const handleCheckout = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_APP_BACK}/pay/preference`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reservationData),
-      });
-  
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_BACK}/pay/preference`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reservationData),
+        }
+      );
+
       const data = await response.json();
       const orderId = data.newOrder;
       setOrderId(orderId);
-  
-      const secondResponse = await fetch(`${import.meta.env.VITE_APP_BACK}/pay/create_preference/${orderId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
-  
+
+      const secondResponse = await fetch(
+        `${import.meta.env.VITE_APP_BACK}/pay/create_preference/${orderId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
+
       const preference = await secondResponse.json();
       createCheckoutButton(preference.id);
     } catch (error) {
@@ -175,9 +215,9 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       },
     });
 
-    let profile = localStorage.getItem('profile');
+    let profile = localStorage.getItem("profile");
     localStorage.clear();
-    localStorage.setItem('profile', profile)
+    localStorage.setItem("profile", profile);
   };
 
   return (
@@ -186,36 +226,41 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
         <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
           <div className="grid  md:grid-cols-2 gap-4 w-full">
             <div>
-              <Link to="/servicio" class="text-base leading-none text-gray-600 pl-1">Volver</Link>
+              <Link
+                to="/servicio"
+                className="text-base leading-none text-gray-600 pl-1"
+              >
+                Volver
+              </Link>
 
-              <p class="text-4xl font-semibold leading-9 text-gray-800 mt-4 mb-6">
+              <p className="text-4xl font-semibold leading-9 text-gray-800 mt-4 mb-6">
                 Finalizar compra
               </p>
-              <p class="text-xl font-medium leading-tight text-gray-800 mb-6">
+              <p className="text-xl font-medium leading-tight text-gray-800 mb-6">
                 Información del contacto
               </p>
-              <div class="form-container w-full">
+              <div className="form-container w-full">
                 <form onSubmit={onSubmit}>
                   <input
                     type="email"
                     name="email"
                     onChange={handleChange}
                     value={email}
-                    class="p-4 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0"
+                    className="p-4 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0"
                     placeholder="Correo electrónico"
                   />
-                  {/* <div class="flex mt-4">
+                  {/* <div className="flex mt-4">
                     <input
                       type="checkbox"
                       name=""
                       id=""
-                      class="accent-gray-800 cursor-pointer"
+                      className="accent-gray-800 cursor-pointer"
                     />
-                    <p class="text-sm leading-none text-gray-600 pl-2">
+                    <p className="text-sm leading-none text-gray-600 pl-2">
                       Envíame un correo electrónico con noticias y ofertas.
                     </p>
                   </div> */}
-                  <p class="text-xl font-medium leading-tight text-gray-800 mt-6 text-left">
+                  <p className="text-xl font-medium leading-tight text-gray-800 mt-6 text-left">
                     Detalles de reservación
                   </p>
                   <input
@@ -223,7 +268,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                     name="firstName"
                     onChange={handleChange}
                     value={firstName}
-                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
                     placeholder="Nombre"
                   />
                   <input
@@ -231,7 +276,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                     name="lastName"
                     onChange={handleChange}
                     value={lastName}
-                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
                     placeholder="Apellidos"
                   />
                   <input
@@ -239,7 +284,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                     name="address"
                     onChange={handleChange}
                     value={address}
-                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
                     placeholder="Dirección"
                   />
                   <input
@@ -247,12 +292,12 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                     name="address2"
                     onChange={handleChange}
                     value={address2}
-                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
                     placeholder="Información adicional"
                   />
-                  <div class="flex md:flex-row flex-col relative">
-                    <div class="mx-auto mt-6 w-full">
-                      <div class="relative w-full">
+                  <div className="flex md:flex-row flex-col relative">
+                    <div className="mx-auto mt-6 w-full">
+                      <div className="relative w-full">
                         <input
                           className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                           id="ciudad"
@@ -264,8 +309,8 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                         />
                       </div>
                     </div>
-                    <div class="mx-auto mt-6 w-full md:ml-8">
-                      <div class="relative w-full">
+                    <div className="mx-auto mt-6 w-full md:ml-8">
+                      <div className="relative w-full">
                         <select
                           className=" appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                           name="localidad"
@@ -292,7 +337,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                     name="telefono"
                     value={telefono}
                     onChange={handleChange}
-                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
                     placeholder="Teléfono"
                   />
                   <input
@@ -300,30 +345,30 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                     name="cedula"
                     value={cedula}
                     onChange={handleChange}
-                    class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+                    className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
                     placeholder="Cédula"
                   />
-                  {/* <div class="flex mt-4">
+                  {/* <div className="flex mt-4">
                     <input
                       type="checkbox"
                       name=""
                       id=""
-                      class="accent-gray-800 cursor-pointer"
+                      className="accent-gray-800 cursor-pointer"
                     />
-                    <p class="text-sm leading-none text-gray-600 pl-2">
+                    <p className="text-sm leading-none text-gray-600 pl-2">
                       Guardar esta información para la próxima vez.
                     </p> 
                   </div> */}
-                  <div class="div flex w-full block">
-                    <button class="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
+                  <div className="div flex w-full block">
+                    <button className="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
                       Confirmar Datos
                     </button>
                   </div>
                 </form>
                 {botonPago && (
-                  <div class="pb-8">
-                    <div class="div flex w-full lg:hidden md:block block">
-                      <button class="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
+                  <div className="pb-8">
+                    <div className="div flex w-full lg:hidden md:block block">
+                      <button className="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
                         Proceder al pago
                       </button>
                     </div>
@@ -375,19 +420,19 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                 )}
               </div>
             </div>
-            <div class="relative md:px-6 bg-gray-50 md:pb-20 pb-9 px-4">
-              <div class="lg:px-8">
-                <div class="lg:col-start-2 md:col-start-0 lg:col-span-10 md:col-span-12 sm:col-span-12 col-span-12">
-                  <div class="lg:mt-[153px] md:mt-12 mt-8 lg:ml-8 md:ml-0 ml-0 col-span-10">
-                    <p class="text-xl font-semibold leading-tight text-gray-800">
+            <div className="relative md:px-6 bg-gray-50 md:pb-20 pb-9 px-4">
+              <div className="lg:px-8">
+                <div className="lg:col-start-2 md:col-start-0 lg:col-span-10 md:col-span-12 sm:col-span-12 col-span-12">
+                  <div className="lg:mt-[153px] md:mt-12 mt-8 lg:ml-8 md:ml-0 ml-0 col-span-10">
+                    <p className="text-xl font-semibold leading-tight text-gray-800">
                       Resumen de servicios
                     </p>
 
-                    <div class="product-container">
+                    <div className="product-container">
                       {services?.map((producto, index) => (
                         <>
-                          <div class="sm:flex items-start mt-10">
-                            <div class="w-auto">
+                          <div className="sm:flex items-start mt-10">
+                            <div className="w-auto">
                               <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                 <img
                                   src={producto?.img}
@@ -396,20 +441,20 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                                 />
                               </div>
                             </div>
-                            <div class="flex items-start justify-between w-full">
-                              <div class="sm:ml-8">
-                                <p class="text-lg font-medium leading-none text-gray-800 mt-6 sm:mt-0">
+                            <div className="flex items-start justify-between w-full">
+                              <div className="sm:ml-8">
+                                <p className="text-lg font-medium leading-none text-gray-800 mt-6 sm:mt-0">
                                   {producto?.nombre}
                                 </p>
-                                <p class="text-base leading-none text-gray-600 mt-4 sm:mt-2">
+                                <p className="text-base leading-none text-gray-600 mt-4 sm:mt-2">
                                   {producto.cantidad}
                                 </p>
                                 <p className="text-base font-medium leading-none hover:underline text-gray-600 cursor-pointer mt-8">
-                                  Ver detalles
+                                  {/* Ver detalles */}
                                 </p>
                               </div>
 
-                              <p class="text-lg font-semibold leading-none text-gray-800 mt-6 sm:mt-0">
+                              <p className="text-lg font-semibold leading-none text-gray-800 mt-6 sm:mt-0">
                                 <NumericFormat
                                   value={producto?.precioTotal}
                                   displayType={"text"}
@@ -419,7 +464,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                               </p>
                             </div>
                           </div>
-                          <div className="my-2">
+                          {/* <div className="my-2">
                             <p className="inline-block">
                               El servidor sera atendido por la profesional{" "}
                             </p>
@@ -427,70 +472,72 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                               {" "}
                               Andrea
                             </p>
-                          </div>
-                          <hr class="w-full bg-gray-200 border mt-4 h-[1px]" />
+                          </div> */}
+                          <hr className="w-full bg-gray-200 border mt-4 h-[1px]" />
                         </>
                       ))}
 
-                      <div class="div flex justify-between mt-6">
-                        <div class="title">
-                          <p class="text-lg leading-none text-gray-600">
+                      <div className="div flex justify-between mt-6">
+                        <div className="title">
+                          <p className="text-lg leading-none text-gray-600">
                             Fecha
                           </p>
                         </div>
-                        <div class="price">
-                          <p class="text-lg font-semibold leading-none text-gray-600">
-                            14/04/2023
+                        <div className="price">
+                          <p className="text-lg font-semibold leading-none text-gray-600">
+                            {appointment?.date}
                           </p>
                         </div>
                       </div>
 
-                      <div class="div flex justify-between mt-6">
-                        <div class="title">
-                          <p class="text-lg leading-none text-gray-600">Hora</p>
+                      <div className="div flex justify-between mt-6">
+                        <div className="title">
+                          <p className="text-lg leading-none text-gray-600">
+                            Hora
+                          </p>
                         </div>
-                        <div class="price">
-                          <p class="text-lg font-semibold leading-none text-gray-600">
-                            08:00 AM
+                        <div className="price">
+                          <p className="text-lg font-semibold leading-none text-gray-600">
+                            {appointment?.time}
                           </p>
                         </div>
                       </div>
 
-                      <div class="div flex justify-between mt-6">
-                        <div class="title">
-                          <p class="text-lg leading-none text-gray-600">
+                      <div className="div flex justify-between mt-6">
+                        <div className="title">
+                          <p className="text-lg leading-none text-gray-600">
                             Servicios Totales
                           </p>
                         </div>
 
-                        <div class="price">
-                          <p class="text-lg font-semibold leading-none text-gray-600">
+                        <div className="price">
+                          <p className="text-lg font-semibold leading-none text-gray-600">
                             {services.length}
                           </p>
                         </div>
                       </div>
 
-                      <div class="div flex justify-between mt-6">
-                        <div class="title">
-                          <p class="text-lg leading-none text-gray-600">
-                            Descuento por Fidelidad
+                      <div className="div flex justify-between mt-6">
+                        <div className="title">
+                          <p className="text-lg leading-none text-gray-600">
+                            {/* Descuento por Fidelidad */}
                           </p>
                         </div>
-                        <div class="price">
-                          <p class="text-lg font-semibold leading-none text-gray-600">
-                            0
+                        <div className="price">
+                          <p className="text-lg font-semibold leading-none text-gray-600">
+                            {/* 0 */}
                           </p>
                         </div>
                       </div>
-                      <hr class="w-full bg-gray-200 border mt-6 h-[1px]" />
-                      <div class="div flex justify-between mt-6">
-                        <div class="title">
-                          <p class="text-2xl font-semibold leading-normal text-gray-800">
+                      <hr className="w-full bg-gray-200 border mt-6 h-[1px]" />
+                      <div className="div flex justify-between mt-6">
+                        <div className="title">
+                          <p className="text-2xl font-semibold leading-normal text-gray-800">
                             Total
                           </p>
                         </div>
-                        <div class="price">
-                          <p class="text-2xl font-semibold leading-normal text-gray-800">
+                        <div className="price">
+                          <p className="text-2xl font-semibold leading-normal text-gray-800">
                             {services.length > 1 ? (
                               <p>
                                 {" "}
@@ -724,36 +771,36 @@ export default Pages;
 //         <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
 //           <div className="grid  md:grid-cols-2 gap-4 w-full">
 //             <div>
-//               <Link to="/servicio" class="text-base leading-none text-gray-600 pl-1">Volver</Link>
+//               <Link to="/servicio" className="text-base leading-none text-gray-600 pl-1">Volver</Link>
 
-//               <p class="text-4xl font-semibold leading-9 text-gray-800 mt-4 mb-6">
+//               <p className="text-4xl font-semibold leading-9 text-gray-800 mt-4 mb-6">
 //                 Finalizar compra
 //               </p>
-//               <p class="text-xl font-medium leading-tight text-gray-800 mb-6">
+//               <p className="text-xl font-medium leading-tight text-gray-800 mb-6">
 //                 Información del contacto
 //               </p>
-//               <div class="form-container w-full">
+//               <div className="form-container w-full">
 //                 <form onSubmit={onSubmit}>
 //                   <input
 //                     type="email"
 //                     name="email"
 //                     onChange={handleChange}
 //                     value={email}
-//                     class="p-4 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0"
+//                     className="p-4 rounded border border-gray-300 w-full placeholder-gray-600 focus:ring-0"
 //                     placeholder="Correo electrónico"
 //                   />
-//                   {/* <div class="flex mt-4">
+//                   {/* <div className="flex mt-4">
 //                     <input
 //                       type="checkbox"
 //                       name=""
 //                       id=""
-//                       class="accent-gray-800 cursor-pointer"
+//                       className="accent-gray-800 cursor-pointer"
 //                     />
-//                     <p class="text-sm leading-none text-gray-600 pl-2">
+//                     <p className="text-sm leading-none text-gray-600 pl-2">
 //                       Envíame un correo electrónico con noticias y ofertas.
 //                     </p>
 //                   </div> */}
-//                   <p class="text-xl font-medium leading-tight text-gray-800 mt-6 text-left">
+//                   <p className="text-xl font-medium leading-tight text-gray-800 mt-6 text-left">
 //                     Detalles de reservación
 //                   </p>
 //                   <input
@@ -761,7 +808,7 @@ export default Pages;
 //                     name="firstName"
 //                     onChange={handleChange}
 //                     value={firstName}
-//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
 //                     placeholder="Nombre"
 //                   />
 //                   <input
@@ -769,7 +816,7 @@ export default Pages;
 //                     name="lastName"
 //                     onChange={handleChange}
 //                     value={lastName}
-//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
 //                     placeholder="Apellidos"
 //                   />
 //                   <input
@@ -777,7 +824,7 @@ export default Pages;
 //                     name="address"
 //                     onChange={handleChange}
 //                     value={address}
-//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
 //                     placeholder="Dirección"
 //                   />
 //                   <input
@@ -785,12 +832,12 @@ export default Pages;
 //                     name="address2"
 //                     onChange={handleChange}
 //                     value={address2}
-//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
 //                     placeholder="Información adicional"
 //                   />
-//                   <div class="flex md:flex-row flex-col relative">
-//                     <div class="mx-auto mt-6 w-full">
-//                       <div class="relative w-full">
+//                   <div className="flex md:flex-row flex-col relative">
+//                     <div className="mx-auto mt-6 w-full">
+//                       <div className="relative w-full">
 //                         <input
 //                           className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
 //                           id="ciudad"
@@ -802,8 +849,8 @@ export default Pages;
 //                         />
 //                       </div>
 //                     </div>
-//                     <div class="mx-auto mt-6 w-full md:ml-8">
-//                       <div class="relative w-full">
+//                     <div className="mx-auto mt-6 w-full md:ml-8">
+//                       <div className="relative w-full">
 //                         <select
 //                           className=" appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
 //                           name="localidad"
@@ -830,7 +877,7 @@ export default Pages;
 //                     name="telefono"
 //                     value={telefono}
 //                     onChange={handleChange}
-//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
 //                     placeholder="Teléfono"
 //                   />
 //                   <input
@@ -838,30 +885,30 @@ export default Pages;
 //                     name="cedula"
 //                     value={cedula}
 //                     onChange={handleChange}
-//                     class="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
+//                     className="p-4 rounded border border-gray-300 block w-full placeholder-gray-600 mt-6"
 //                     placeholder="Cédula"
 //                   />
-//                   {/* <div class="flex mt-4">
+//                   {/* <div className="flex mt-4">
 //                     <input
 //                       type="checkbox"
 //                       name=""
 //                       id=""
-//                       class="accent-gray-800 cursor-pointer"
+//                       className="accent-gray-800 cursor-pointer"
 //                     />
-//                     <p class="text-sm leading-none text-gray-600 pl-2">
+//                     <p className="text-sm leading-none text-gray-600 pl-2">
 //                       Guardar esta información para la próxima vez.
 //                     </p> 
 //                   </div> */}
-//                   <div class="div flex w-full block">
-//                     <button class="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
+//                   <div className="div flex w-full block">
+//                     <button className="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
 //                       Confirmar Datos
 //                     </button>
 //                   </div>
 //                 </form>
 //                 {botonPago && (
-//                   <div class="pb-8">
-//                     <div class="div flex w-full lg:hidden md:block block">
-//                       <button class="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
+//                   <div className="pb-8">
+//                     <div className="div flex w-full lg:hidden md:block block">
+//                       <button className="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
 //                         Proceder al pago
 //                       </button>
 //                     </div>
@@ -913,19 +960,19 @@ export default Pages;
 //                 )}
 //               </div>
 //             </div>
-//             <div class="relative md:px-6 bg-gray-50 md:pb-20 pb-9 px-4">
-//               <div class="lg:px-8">
-//                 <div class="lg:col-start-2 md:col-start-0 lg:col-span-10 md:col-span-12 sm:col-span-12 col-span-12">
-//                   <div class="lg:mt-[153px] md:mt-12 mt-8 lg:ml-8 md:ml-0 ml-0 col-span-10">
-//                     <p class="text-xl font-semibold leading-tight text-gray-800">
+//             <div className="relative md:px-6 bg-gray-50 md:pb-20 pb-9 px-4">
+//               <div className="lg:px-8">
+//                 <div className="lg:col-start-2 md:col-start-0 lg:col-span-10 md:col-span-12 sm:col-span-12 col-span-12">
+//                   <div className="lg:mt-[153px] md:mt-12 mt-8 lg:ml-8 md:ml-0 ml-0 col-span-10">
+//                     <p className="text-xl font-semibold leading-tight text-gray-800">
 //                       Resumen de servicios
 //                     </p>
 
-//                     <div class="product-container">
+//                     <div className="product-container">
 //                       {services?.map((producto, index) => (
 //                         <>
-//                           <div class="sm:flex items-start mt-10">
-//                             <div class="w-auto">
+//                           <div className="sm:flex items-start mt-10">
+//                             <div className="w-auto">
 //                               <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
 //                                 <img
 //                                   src={producto?.img}
@@ -934,12 +981,12 @@ export default Pages;
 //                                 />
 //                               </div>
 //                             </div>
-//                             <div class="flex items-start justify-between w-full">
-//                               <div class="sm:ml-8">
-//                                 <p class="text-lg font-medium leading-none text-gray-800 mt-6 sm:mt-0">
+//                             <div className="flex items-start justify-between w-full">
+//                               <div className="sm:ml-8">
+//                                 <p className="text-lg font-medium leading-none text-gray-800 mt-6 sm:mt-0">
 //                                   {producto?.nombre}
 //                                 </p>
-//                                 <p class="text-base leading-none text-gray-600 mt-4 sm:mt-2">
+//                                 <p className="text-base leading-none text-gray-600 mt-4 sm:mt-2">
 //                                   {producto.cantidad}
 //                                 </p>
 //                                 <p className="text-base font-medium leading-none hover:underline text-gray-600 cursor-pointer mt-8">
@@ -947,7 +994,7 @@ export default Pages;
 //                                 </p>
 //                               </div>
 
-//                               <p class="text-lg font-semibold leading-none text-gray-800 mt-6 sm:mt-0">
+//                               <p className="text-lg font-semibold leading-none text-gray-800 mt-6 sm:mt-0">
 //                                 <NumericFormat
 //                                   value={producto?.precioTotal}
 //                                   displayType={"text"}
@@ -966,69 +1013,69 @@ export default Pages;
 //                               Andrea
 //                             </p>
 //                           </div>
-//                           <hr class="w-full bg-gray-200 border mt-4 h-[1px]" />
+//                           <hr className="w-full bg-gray-200 border mt-4 h-[1px]" />
 //                         </>
 //                       ))}
 
-//                       <div class="div flex justify-between mt-6">
-//                         <div class="title">
-//                           <p class="text-lg leading-none text-gray-600">
+//                       <div className="div flex justify-between mt-6">
+//                         <div className="title">
+//                           <p className="text-lg leading-none text-gray-600">
 //                             Fecha
 //                           </p>
 //                         </div>
-//                         <div class="price">
-//                           <p class="text-lg font-semibold leading-none text-gray-600">
+//                         <div className="price">
+//                           <p className="text-lg font-semibold leading-none text-gray-600">
 //                             14/04/2023
 //                           </p>
 //                         </div>
 //                       </div>
 
-//                       <div class="div flex justify-between mt-6">
-//                         <div class="title">
-//                           <p class="text-lg leading-none text-gray-600">Hora</p>
+//                       <div className="div flex justify-between mt-6">
+//                         <div className="title">
+//                           <p className="text-lg leading-none text-gray-600">Hora</p>
 //                         </div>
-//                         <div class="price">
-//                           <p class="text-lg font-semibold leading-none text-gray-600">
+//                         <div className="price">
+//                           <p className="text-lg font-semibold leading-none text-gray-600">
 //                             08:00 AM
 //                           </p>
 //                         </div>
 //                       </div>
 
-//                       <div class="div flex justify-between mt-6">
-//                         <div class="title">
-//                           <p class="text-lg leading-none text-gray-600">
+//                       <div className="div flex justify-between mt-6">
+//                         <div className="title">
+//                           <p className="text-lg leading-none text-gray-600">
 //                             Servicios Totales
 //                           </p>
 //                         </div>
 
-//                         <div class="price">
-//                           <p class="text-lg font-semibold leading-none text-gray-600">
+//                         <div className="price">
+//                           <p className="text-lg font-semibold leading-none text-gray-600">
 //                             {services.length}
 //                           </p>
 //                         </div>
 //                       </div>
 
-//                       <div class="div flex justify-between mt-6">
-//                         <div class="title">
-//                           <p class="text-lg leading-none text-gray-600">
+//                       <div className="div flex justify-between mt-6">
+//                         <div className="title">
+//                           <p className="text-lg leading-none text-gray-600">
 //                             Descuento por Fidelidad
 //                           </p>
 //                         </div>
-//                         <div class="price">
-//                           <p class="text-lg font-semibold leading-none text-gray-600">
+//                         <div className="price">
+//                           <p className="text-lg font-semibold leading-none text-gray-600">
 //                             0
 //                           </p>
 //                         </div>
 //                       </div>
-//                       <hr class="w-full bg-gray-200 border mt-6 h-[1px]" />
-//                       <div class="div flex justify-between mt-6">
-//                         <div class="title">
-//                           <p class="text-2xl font-semibold leading-normal text-gray-800">
+//                       <hr className="w-full bg-gray-200 border mt-6 h-[1px]" />
+//                       <div className="div flex justify-between mt-6">
+//                         <div className="title">
+//                           <p className="text-2xl font-semibold leading-normal text-gray-800">
 //                             Total
 //                           </p>
 //                         </div>
-//                         <div class="price">
-//                           <p class="text-2xl font-semibold leading-normal text-gray-800">
+//                         <div className="price">
+//                           <p className="text-2xl font-semibold leading-normal text-gray-800">
 //                             {services.length > 1 ? (
 //                               <p>
 //                                 {" "}

@@ -58,11 +58,11 @@ const Reservation = () => {
               </div>
             </div>
 
-            <p className="text-center my-4">Tenemos dos opciones para ti</p>
+            {/* <p className="text-center my-4">Tenemos dos opciones para ti</p> */}
 
             <div style={{ backgroundColor: "rgb(255, 255, 255)" }}>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2  cursor-pointer">
-                <button
+                {/* <button
                   onClick={() => handleOption("/reserva/fecha")}
                   disabled={localidad ? false : true}
                   className={`p-6 bg-gray-100 rounded-lg text-center  ${
@@ -81,7 +81,7 @@ const Reservation = () => {
                     Se te dispondrá las profesionales que estén disponibles en
                     la fecha y hora que selecciones.
                   </p>
-                </button>
+                </button> */}
 
                 <button
                  onClick={() => handleOption("/reserva/profesional")}
@@ -95,7 +95,7 @@ const Reservation = () => {
                   </div>
 
                   <h3 className="text-lg font-bold mb-2">
-                    2. Selecciona por profesional
+                    Selecciona Nuestr@s Profesionales
                   </h3>
 
                   <p className="text-sm leading-6 text-gray-600">

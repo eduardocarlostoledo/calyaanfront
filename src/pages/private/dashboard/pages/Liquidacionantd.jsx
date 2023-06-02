@@ -7,7 +7,7 @@ import {
   getOrders,
   updateOrder,
   createOrder,
-} from "./../../../../redux/features/ordenesSlice";
+} from "../../../../redux/features/ordenesSlice";
 import moment from "moment";
 import swal from "sweetalert";
 import "./Ordenesantd.css";
@@ -368,7 +368,7 @@ const ProductExpanded = ({
   );
 };
 
-const OrdenesAntDesing = () => {
+const LiquidacionAntDesing = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -426,112 +426,22 @@ const OrdenesAntDesing = () => {
 
   const columns = [
     {
-      title: "Orden",
-      dataIndex: "_id",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
+      title: "EDITAR",
+      dataIndex: "",
+      render: (value) => (
+        <div className="ActionsDiv">
+          <button
+            className="ButtonsActions"
+            onClick={() => setEditProduct(value._id)}
+          >
+            <BiEditAlt />
+          </button>
+        </div>
+      ),
     },
+    Table.EXPAND_COLUMN,
     {
-      title: "Apellido",
-      dataIndex: "cliente_apellido",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Nombre",
-      dataIndex: "cliente_nombre",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Cedula",
-      dataIndex: "cliente_cedula",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Telefono",
-      dataIndex: "cliente_telefono",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "email",
-      dataIndex: "cliente_email",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Servicio",
-      dataIndex: "servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Precio",
-      dataIndex: "precio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Cant.",
-      dataIndex: "cantidad",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Direccion Servicio",
-      dataIndex: "direccion_Servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Localidad",
-      dataIndex: "localidad_Servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Dia",
-      dataIndex: "dia_servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Hora",
-      dataIndex: "hora_servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Profesional",
-      dataIndex: "profesional_nombre",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Telefono",
-      dataIndex: "profesional_telefono",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Estado Pago",
+      title: "estadoPago",
       dataIndex: "estadoPago",
       filters: [
         { text: "Pending", value: "pending" },
@@ -552,7 +462,7 @@ const OrdenesAntDesing = () => {
       ),
     },
     {
-      title: "Estado Servicio",
+      title: "estadoServicio",
       dataIndex: "estadoServicio",
       filters: [
         { text: "Pendiente", value: "Pendiente" },
@@ -572,42 +482,156 @@ const OrdenesAntDesing = () => {
         </>
       ),
     },
+
+    {
+      title: "estadoLiquidacion",
+      dataIndex: "estadoLiquidacion",
+      filters: [
+        { text: "Liquidado", value: "Liquidado" },
+        { text: "NoLiquidado", value: "NoLiquidado" },
+        { text: "Error", value: "Error" },
+      ],
+      onFilter: (value, record) => record?.estadoLiquidacion?.indexOf(value) === 0,
+      render: (estadoLiquidacion) => (
+        <>
+          {estadoLiquidacion === "Liquidado" ? (
+            <Tag color="green">Liquidado</Tag>
+          ) : estadoLiquidacion === "Error" ? (
+            <Tag color="red">Error</Tag>
+          ) : (
+            <Tag color="yellow">NoLiquidado</Tag>
+          )}
+        </>
+      ),
+    },
+    {
+      title: "Nro.Liquidacion",
+      dataIndex: "numeroLiquidacion",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },   
+    {
+      title: "Orden",
+      dataIndex: "_id",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+    {
+      title: "Nombre Prof.",
+      dataIndex: "profesional_nombre",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+    {
+      title: "Apellido Prof.",
+      dataIndex: "profesional_apellido",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+    {
+      title: "Nombre",
+      dataIndex: "cliente_nombre",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+        {
+      title: "Apellido",
+      dataIndex: "cliente_apellido",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+
     // {
-    //   title: "payment_id",
-    //   dataIndex: "payment_id",
+    //   title: "Cedula",
+    //   dataIndex: "cliente_cedula",
+    //   sorter: (a, b) => a.id - b.id,
+    //   defaultSortOrder: "descend",
     //   render: (text) => <p>{text}</p>,
     // },
     // {
-    //   title: "payment_type",
-    //   dataIndex: "payment_type",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    // {
-    //   title: "merchant_order_id",
-    //   dataIndex: "merchant_order_id",
+    //   title: "Telefono",
+    //   dataIndex: "cliente_telefono",
+    //   sorter: (a, b) => a.id - b.id,
+    //   defaultSortOrder: "descend",
     //   render: (text) => <p>{text}</p>,
     // },
     {
-      title: "EDITAR",
-      dataIndex: "",
-      render: (value) => (
-        <div className="ActionsDiv">
-          <button
-            className="ButtonsActions"
-            onClick={() => setEditProduct(value._id)}
-          >
-            <BiEditAlt />
-          </button>
-        </div>
-      ),
+      title: "email",
+      dataIndex: "cliente_email",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
     },
-    Table.EXPAND_COLUMN,
+    {
+      title: "SERVICIO",
+      dataIndex: "servicio",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+    {
+      title: "COTIZACION",
+      dataIndex: "precio",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+    // {
+    //   title: "Cant.",
+    //   dataIndex: "cantidad",
+    //   sorter: (a, b) => a.id - b.id,
+    //   defaultSortOrder: "descend",
+    //   render: (text) => <p>{text}</p>,
+    // },
+    // {
+    //   title: "Direccion Servicio",
+    //   dataIndex: "direccion_Servicio",
+    //   sorter: (a, b) => a.id - b.id,
+    //   defaultSortOrder: "descend",
+    //   render: (text) => <p>{text}</p>,
+    // },
+    // {
+    //   title: "Localidad",
+    //   dataIndex: "localidad_Servicio",
+    //   sorter: (a, b) => a.id - b.id,
+    //   defaultSortOrder: "descend",
+    //   render: (text) => <p>{text}</p>,
+    // },
+    {
+      title: "CITA DIA",
+      dataIndex: "dia_servicio",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+    {
+      title: "CITA HORA",
+      dataIndex: "hora_servicio",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+    {
+      title: "FECHA VENTA",
+      dataIndex: "createdAt",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => <p>{moment(text).format("YYYY-MM-DD")}</p>,    },
+   
+    
+    
   ];
 
   return (
     // style={{ width: '100%', height: '400px', overflow: 'auto' }}
     <div style={{ textAlign: "center", alignItems: "center", overflow: 'auto' }}>
-      <p className="p">ORDENES  </p>
+      <p className="p">LIQUIDACIONES A PERSONAL  </p>
       <p className="p">Busqueda : Id de Orden, ó Datos de cliente, Datos Profesional, Fecha y Hora del Servicio (YYYY-MM-DD)  </p>
       <h1 style={{ textAlign: "center", alignItems: "center" }}>
         <Input.Search
@@ -684,4 +708,5 @@ const OrdenesAntDesing = () => {
   );
 };
 
-export default OrdenesAntDesing;
+export default LiquidacionAntDesing;
+

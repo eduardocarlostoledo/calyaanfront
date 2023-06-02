@@ -77,6 +77,9 @@ import ScheduledReservationsAdmin from "./pages/private/dashboard/pages/Schedule
 import CreateReservation from "./pages/private/dashboard/pages/CreateReservation";
 import HistoryScheduledProfessional from "./pages/private/dashboard/pages/HistoryScheduledProfessional";
 import OrdenesAntDesing from "./pages/private/dashboard/pages/Ordenesantd";
+import FacturacionAntDesing from "./pages/private/dashboard/pages/Facturacionantd";
+import LiquidacionAntDesing from "./pages/private/dashboard/pages/Liquidacionantd";
+
 
 function App() {
 
@@ -205,6 +208,8 @@ function App() {
             <Route path="/historial-servicios/admin/:id" element={<ScheduledReservationsAdmin />} />
             <Route path="/reservar" element={<CreateReservation />} />
             <Route path="/ordenesantdesing" element={<OrdenesAntDesing />} />
+            <Route path="/facturacionantdesing" element={<FacturacionAntDesing />} />
+            <Route path="/liquidacionantdesing" element={<LiquidacionAntDesing />} />
           </Route>
         </Route>
       </RoutesWithNotFound>
