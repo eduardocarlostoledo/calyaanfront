@@ -12,8 +12,8 @@ const Wordpress = () => {
     },
     {
       nombre: "Drenaje linfático + Limpieza facial profunda",
-      precio: "500.000",
-      id: "298000",
+      precio: "298000",
+      id: "12308",
     },
   ];
 

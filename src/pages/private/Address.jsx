@@ -7,12 +7,11 @@ import clienteAxios from "../../config/axios";
 const Address = () => {
   const [modalAddressForm, setModalAddressForm] = useState(false);
   const [addressEdit, setAddressEdit] = useState(false);
+  const [arrayAddress, setArrayAddress] = useState([]);
 
   const handleModalAddress = () => {
     setModalAddressForm(!modalAddressForm);
-  };
-
-  const [arrayAddress, setArrayAddress] = useState([]);
+  }; 
 
   useEffect(() => {
     const getDirecciones = async () => {
@@ -31,9 +30,6 @@ const Address = () => {
   }, []);
 
   const crearDireccion = async (direccion) => {
-
-
-
     try {
       const { data } = await clienteAxios.post(
         `api/usuarios/direcciones`,
