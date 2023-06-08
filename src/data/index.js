@@ -18,7 +18,7 @@ export const services = [
     {
     id: 3,
     image:
-      "https://calyaan.com/wp-content/uploads/2022/06/Recurso-5-.jpg",
+      "https://calyaan.com/wp-content/uploads/2022/06/Recurso-5--300x300.jpg.webp",
     text: "Masaje relajante + Limpieza facial profunda",
     count: "1",
     link: "https://calyaan.com/producto/masaje-relajante-limpieza-facial-profunda/",
