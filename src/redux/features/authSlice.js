@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import swal from "sweetalert";
 import * as api from "../api";
 
 import { addMessage } from "./notificationsSlice";
@@ -50,6 +50,7 @@ export const register = createAsyncThunk(
     try {
       const response = await api.signUp(userForm);
       toast.success("Registro exitoso, confirma tu cuenta con el email enviado");
+      swal("Registro Exitoso!", "Por Favor, confirma tu correo electrónico para Ingresar", "success");
       navigate("/");
       return response.data;
 

@@ -62,7 +62,7 @@ const TableTransactionHistory = () => {
 
   const filtrarVentasPorFecha = () => {
     setCargando(true)
-    let ventasFiltradas = paginado.resultados.filter(
+    let ventasFiltradas = historial.filter(
       (venta) => venta.createdAt.split("T")[0] === fechaSeleccionada
     );
 

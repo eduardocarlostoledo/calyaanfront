@@ -68,6 +68,9 @@ const Register = ({referido=false}) => {
             try {
                 const response = await clienteAxios.post(`api/usuarios?referido=${referido}`, userForm);
                 toast.success("Registro exitoso");
+                
+
+            
                 navigate("/");
                 return response.data;
           

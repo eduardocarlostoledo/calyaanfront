@@ -171,12 +171,28 @@ const ModalAddress = ({
                         value={localidad}
                         onChange={handleChange}
                       >
+                        <option value="">Localidades</option>{" "}
+                        {/* Opción por defecto */}
+                        {localidades.map((localidad) => (
+                          <option value={localidad} key={localidad}>
+                            {localidad}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* <select
+                        className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        name="localidad"
+                        id="localidad"
+                        value={localidad}
+                        onChange={handleChange}
+                      >
                         {localidades.map((localidad, index) => (
                           <option key={index} value={localidad.split(" ")[1]}>
                             {localidad}
                           </option>
                         ))}
-                      </select>
+                      </select> */}
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <AiOutlineArrowDown className="fill-current h-4 w-4" />
                       </div>

@@ -397,32 +397,70 @@ const LiquidacionAntDesing = () => {
   }));
 
 //se filtran las ordenes para renderizado de la tabla
-  const filteredOrdenes = useMemo(() => {
-    return newProducts?.filter(
-      (orden) =>
-        
-        orden._id?.includes(searchText) ||
-        orden.cliente_cedula?.includes(searchText) ||
-        orden.cliente_telefono?.includes(searchText) ||
-        orden.cliente_nombre
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase()) ||
-        orden.cliente_apellido
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase()) ||
-        orden.cliente_email?.includes(searchText) ||
-        orden.servicio?.toLowerCase().includes(searchText.toLowerCase()) ||
-        orden.direccion_Servicio
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase()) ||
-        moment(orden.dia_servicio, "YYYY-MM-DD")
-          .format("YYYY-MM-DD")
-          .includes(searchText) || // Verifica si la búsqueda coincide con la fecha de la orden
-        moment(orden.hora_servicio, "hh:mm a")
-          .format("hh:mm a")
-          .includes(searchText) // Verifica si la búsqueda coincide con la hora de la orden
+//agrego fullName para q encuentre nombre compuesto y facilitar el trabajo de busqueda
+const filteredOrdenes = useMemo(() => {
+  if (!newProducts || newProducts.length === 0) {
+    return []; // Devuelve un array vacío si newProducts está vacío
+  }
+
+  return newProducts?.filter((orden) => {
+    const fullNameProfesional = `${orden.profesional_nombre} ${orden.profesional_apellido}`.toLowerCase();
+    const fullNameCliente = `${orden.cliente_nombre} ${orden.cliente_apellido}`.toLowerCase();
+    const searchTextLower = searchText.toLowerCase();
+
+    return (
+      fullNameProfesional?.includes(searchTextLower) ||
+      fullNameCliente?.includes(searchTextLower) ||
+      orden._id?.includes(searchText) ||
+      orden.cliente_cedula?.includes(searchText) ||
+      orden.cliente_telefono?.includes(searchText) ||
+      orden.cliente_nombre?.toLowerCase().includes(searchTextLower) ||
+      orden.cliente_apellido?.toLowerCase().includes(searchTextLower) ||
+      orden.cliente_email?.includes(searchText) ||
+      orden.servicio?.toLowerCase().includes(searchTextLower) ||
+      orden.direccion_Servicio?.toLowerCase().includes(searchTextLower) ||
+      moment(orden.dia_servicio, "YYYY-MM-DD")
+        .format("YYYY-MM-DD")
+        .includes(searchText) ||
+      moment(orden.hora_servicio, "hh:mm a").format("hh:mm a").includes(searchText)
     );
-  }, [newProducts, searchText]);
+  });
+}, [newProducts, searchText]);
+
+
+  // const filteredOrdenes = useMemo(() => {
+  //   return newProducts?.filter(
+  //     (orden) =>
+
+  //     (orden.profesional_nombre?.toLowerCase().includes(searchText.toLowerCase() + " " + orden.profesional_apellido?.toLowerCase()) || orden.profesional_apellido?.toLowerCase().includes(searchText.toLowerCase())) || orden.profesional_nombre?.toLowerCase().includes(searchText.toLowerCase()) ||
+
+
+      
+  //     // orden.profesional_nombre?.toLowerCase().includes(searchText.toLowerCase()) && " " &&
+  //     // orden.profesional_apellido?.toLowerCase().includes(searchText.toLowerCase()) ||
+
+  //       orden._id?.includes(searchText) ||
+  //       orden.cliente_cedula?.includes(searchText) ||
+  //       orden.cliente_telefono?.includes(searchText) ||
+  //       orden.cliente_nombre
+  //         ?.toLowerCase()
+  //         .includes(searchText.toLowerCase()) ||
+  //       orden.cliente_apellido
+  //         ?.toLowerCase()
+  //         .includes(searchText.toLowerCase()) ||
+  //       orden.cliente_email?.includes(searchText) ||
+  //       orden.servicio?.toLowerCase().includes(searchText.toLowerCase()) ||
+  //       orden.direccion_Servicio
+  //         ?.toLowerCase()
+  //         .includes(searchText.toLowerCase()) ||
+  //       moment(orden.dia_servicio, "YYYY-MM-DD")
+  //         .format("YYYY-MM-DD")
+  //         .includes(searchText) || // Verifica si la búsqueda coincide con la fecha de la orden
+  //       moment(orden.hora_servicio, "hh:mm a")
+  //         .format("hh:mm a")
+  //         .includes(searchText) // Verifica si la búsqueda coincide con la hora de la orden
+  //   );
+  // }, [newProducts, searchText]);
 
   const columns = [
     {
