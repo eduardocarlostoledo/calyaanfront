@@ -5,8 +5,7 @@ import * as api from "../api";
 import { addMessage } from "./notificationsSlice";
 
 export const login = createAsyncThunk(
-  "auth/login",
-  async ({ userForm, navigate, rute="/servicios" }, thunkAPI) => {
+  "auth/login",  async ({ userForm, navigate, rute="/servicio" }, thunkAPI) => {
     try {
       const response = await api.signIn(userForm);
 
