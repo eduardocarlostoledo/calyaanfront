@@ -2,29 +2,28 @@ export const services = [
   {
     id: 1,
     image:
-      "https://calyaan.b-cdn.net/wp-content/uploads/2022/01/500x500_Mesa-de-trabajo-1-360x360.jpg",
-    text: "Barbería en bogota a domicilio",
+      "https://calyaan.com/wp-content/uploads/2022/09/11-300x300-1.png",
+    text: "Limpieza facial profunda + Masaje descontracturante",
     count: "2",
-    link: "https://calyaan.com/categoria-producto/centro-belleza-bogota/barberia-bogota-domicilio/",
+    link: "https://calyaan.com/producto/limpieza-facial-profunda-masaje-descontracturante/",
   },
   {
     id: 2,
     image:
-      "https://calyaan.b-cdn.net/wp-content/uploads/2022/01/500x500_Mesa-de-trabajo-1-copia-360x360.jpg",
-    text: "Depilación con cera en bogota a domicilio",
+      "https://calyaan.com/wp-content/uploads/2021/06/descontracturante-2.jpg",
+    text: "Masaje descontracturante + Limpieza facial profunda",
     count: "20",
-    link: "https://calyaan.com/categoria-producto/centro-belleza-bogota/depilacion-cera-bogota-domicilio/",
+    link: "https://calyaan.com/producto/masaje-descontracturante-bogota/",
   },
-
-  {
+    {
     id: 3,
     image:
-      "https://calyaan.b-cdn.net/wp-content/uploads/2022/01/500x500_Mesa-de-trabajo-1-copia-8-360x360.jpg",
-    text: "Yoga en bogota a domicilio o virtual",
+      "https://calyaan.com/wp-content/uploads/2022/06/Recurso-5-.jpg",
+    text: "Masaje relajante + Limpieza facial profunda",
     count: "1",
-    link: "https://calyaan.com/categoria-producto/centro-belleza-bogota/yoga-bogota-domicilio-virtual/",
+    link: "https://calyaan.com/producto/masaje-relajante-limpieza-facial-profunda/",
   },
-  {
+    {
     id: 4,
     image:
       "https://calyaan.b-cdn.net/wp-content/uploads/2022/01/500x500_Mesa-de-trabajo-1-copia-3-360x360.jpg",
@@ -32,13 +31,29 @@ export const services = [
     count: "16",
     link: "https://calyaan.com/categoria-producto/centro-belleza-bogota/masaje-relajante-bogota-domicilio/",
   },
+  // {
+  //   id: 5,
+  //   image:
+  //     "https://calyaan.com/wp-content/uploads/2022/03/8AC3899-scaled.jpg",
+  //   text: "Masaje relajante + Spa",
+  //   count: "9",
+  //   link: "https://calyaan.com/producto/masaje-relajante-bogota/",
+  // },
   {
-    id: 5,
+    id: 8,
     image:
-      "https://calyaan.b-cdn.net/wp-content/uploads/2022/01/500x500_Mesa-de-trabajo-1-copia-4-360x360.jpg",
-    text: "Peluquería en bogota",
-    count: "9",
-    link: "https://calyaan.com/categoria-producto/centro-belleza-bogota/peluqueria-en-bogota/",
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "Paquete de reductores x 10",
+    count: "14",
+    link: "https://calyaan.com/producto/paquete-10-masajes-reductores-bogota/",
+  },
+  {
+    id: 7,
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "Masaje reductor",
+    count: "7",
+    link: "https://calyaan.com/producto/masaje-reductor-bogota/",
   },
   {
     id: 6,
@@ -48,23 +63,13 @@ export const services = [
     count: "12",
     link: "https://calyaan.com/categoria-producto/centro-belleza-bogota/spa-en-bogota/",
   },
-  {
-    id: 7,
-    image:
-      "https://calyaan.b-cdn.net/wp-content/uploads/2022/01/500x500_Mesa-de-trabajo-1-copia-2-360x360.jpg",
-    text: "Maquillaje en bogota",
-    count: "7",
-    link: "https://calyaan.com/categoria-producto/centro-belleza-bogota/maquillaje-en-bogota/",
-  },
-  {
-    id: 8,
-    image:
-      "https://calyaan.b-cdn.net/wp-content/uploads/2022/01/500x500_Mesa-de-trabajo-1-copia-6-360x360.jpg",
-    text: "Uñas decoradas en bogota a domicilio",
-    count: "14",
-    link: "https://calyaan.com/categoria-producto/centro-belleza-bogota/unas-decoradas-bogota-domicilio/",
-  },
-];
+
+]
+// ].map(service => ({
+//   ...service,
+//   image: service.image.replace(/-\d+x\d+/, "-300x300")
+// }));
+
 
 export const localidades = [
   "1. Usaquén",
