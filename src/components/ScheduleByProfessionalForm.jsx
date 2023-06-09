@@ -77,7 +77,7 @@ console.log("Updated Array", updatedArray)
           }
         );
   
-        console.log(data);
+        console.log("useeffect", data);
   
         if (data && data.length > 0) {
           const updatedArray = data.map((obj) => ({ ...obj, styles: false }));
@@ -137,7 +137,7 @@ console.log("Updated Array", updatedArray)
   const handleSubmitProfessional = () => {
     localStorage.setItem("ProfessionalService", JSON.stringify(profesional));
   };
-
+console.log("PROFESIONALREQUEST", profesionalesRequest)
   return (
     <>
       <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
