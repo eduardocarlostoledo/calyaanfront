@@ -58,16 +58,16 @@ console.log("Updated Array", updatedArray)
   useEffect(() => {
     const obtenerUsuarios = async () => {
       setCargando(true);
-
+  
       try {
         let nombre = JSON.parse(localStorage.getItem("services"))
           ? JSON.parse(localStorage.getItem("services"))[0]?.nombre
           : "";
-
+  
         let localidad = localStorage.getItem("localidad")
           ? localStorage.getItem("localidad")
           : "";
-
+  
         const { data } = await clienteAxios.post(
           "api/reservas/profesionales/fecha",
           {
@@ -76,23 +76,63 @@ console.log("Updated Array", updatedArray)
             localidad,
           }
         );
-
+  
         console.log(data);
-
-        if (data?.length > 0) {
+  
+        if (data && data.length > 0) {
           const updatedArray = data.map((obj) => ({ ...obj, styles: false }));
           setProfesionalesRequest(updatedArray);
         } else {
-          setProfesionalesRequest(data);
+          setProfesionalesRequest(data || []);
         }
         setCargando(false);
       } catch (err) {
         console.log(err);
       }
     };
-
+  
     obtenerUsuarios();
   }, [date]);
+
+  
+  // useEffect(() => {
+  //   const obtenerUsuarios = async () => {
+  //     setCargando(true);
+
+  //     try {
+  //       let nombre = JSON.parse(localStorage.getItem("services"))
+  //         ? JSON.parse(localStorage.getItem("services"))[0]?.nombre
+  //         : "";
+
+  //       let localidad = localStorage.getItem("localidad")
+  //         ? localStorage.getItem("localidad")
+  //         : "";
+
+  //       const { data } = await clienteAxios.post(
+  //         "api/reservas/profesionales/fecha",
+  //         {
+  //           fecha: date,
+  //           especialidad: [nombre],
+  //           localidad,
+  //         }
+  //       );
+
+  //       console.log(data);
+
+  //       if (data?.length > 0) {
+  //         const updatedArray = data.map((obj) => ({ ...obj, styles: false }));
+  //         setProfesionalesRequest(updatedArray);
+  //       } else {
+  //         setProfesionalesRequest(data);
+  //       }
+  //       setCargando(false);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+
+  //   obtenerUsuarios();
+  // }, [date]);
 
   const handleSubmitProfessional = () => {
     localStorage.setItem("ProfessionalService", JSON.stringify(profesional));
