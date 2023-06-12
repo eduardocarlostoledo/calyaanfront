@@ -213,16 +213,16 @@ console.log("PROFESIONALREQUEST", profesionalesRequest)
                           <img
                             className="w-24 h-24 mb-3 rounded-full shadow-lg"
                             src={
-                              profesional.creador.creador.img
-                                ? profesional.creador.creador.img
+                              profesional.creador?.creador.img
+                                ? profesional.creador?.creador.img
                                 : "https://t3.ftcdn.net/jpg/03/58/90/78/360_F_358907879_Vdu96gF4XVhjCZxN2kCG0THTsSQi8IhT.jpg"
                             }
                           />
                           <h5 className="mb-1 text-xl font-medium text-gray-900">
-                            {profesional.creador.creador.nombre}
+                            {profesional.creador?.creador.nombre}
                           </h5>
                           <span className="text-sm text-gray-500 text-center">
-                            {profesional.creador.descripcion}
+                            {profesional.creador?.descripcion}
                           </span>
                           <span className="text-sm text-gray-500"></span>
                           <div className="flex mt-4 space-x-3 md:mt-6">
