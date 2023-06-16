@@ -23,7 +23,7 @@ const Address = lazy(() => import("./pages/private/Address"));
 const HistoryServicesProfessional = lazy(() =>
   import("./pages/private/professional/HistoryServicesProfessional")
 );
-const Calendar = lazy(() => import("./pages/private/professional/Calendar"));
+const CalendarProfesional = lazy(() => import("./pages/private/professional/CalendarProfesional"));
 const Favorites = lazy(() => import("./pages/private/Favorites"));
 const HistoryServices = lazy(() => import("./pages/private/HistoryServices"));
 const UpdateProfile = lazy(() =>
@@ -65,7 +65,8 @@ import Referencias from "./pages/private/Referencias";
 import { useDispatch, useSelector } from "react-redux";
 import { removeMessage } from "./redux/features/notificationsSlice";
 import Ver from "./pages/ver";
-import PageReferred from "./helpers/Components/PageReferred"; import CalendarDashboard from "./pages/private/dashboard/pages/Calendar";
+import PageReferred from "./helpers/Components/PageReferred"; 
+import CalendarDashboard from "./pages/private/dashboard/pages/Calendar";
 import ProfessionalProfile from "./pages/private/dashboard/pages/ProfessionalProfile";
 import CalendarWeek from "./pages/private/dashboard/pages/CalendarWeek";
 import CalendarDay from "./pages/private/dashboard/pages/CalendarDay";
@@ -170,7 +171,7 @@ function App() {
               element={<HistoryServicesProfessional />}
             />
             <Route path="/horarios" element={<Schedule />} />
-            <Route path="/calendario" element={<Calendar />} />
+            <Route path="/calendario" element={<CalendarProfesional />} />
             <Route path="/perfil-profesional" element={<UpdateProfile />} />
           </Route>
 

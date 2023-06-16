@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import clienteAxios from "../config/axios";
 import mercadopago from "../../src/components/mercadopago/mercadopago";
 import { localidades } from "../data";
+import { localidadesLaborales } from "../data";
 import { AiOutlineArrowDown } from "react-icons/ai";
 import { toast } from "react-toastify";
 
@@ -320,8 +321,9 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                           disabled={true}
                         >
                           <option value="">Localidad</option>
-                          {localidades.map((localidad, index) => (
-                            <option key={index} value={localidad.split(" ")[1]}>
+                          {localidadesLaborales.map((localidad, index) => (
+                            // <option key={index} value={localidad.split(" ")[1]}>
+                            <option key={index} value={localidad}>
                               {localidad}
                             </option>
                           ))}

@@ -267,9 +267,9 @@ const ServiceDetails = () => {
           className={`lg:px-10 md:px-6 md:mt-14 lg:mt-10 lg:flex lg:flex-row flex-row-reverse gap-4 mt-6 ${services.length <= 0 ? "justify-end" : "justify-center"
             } `}
         >
-          {services.length <= 0 && (
+          {/* {services.length <= 0 && (
             <Link
-              to="/wordpress"
+              to="https://calyaan.com/categoria-producto/centro-belleza-bogota/masaje-relajante-bogota-domicilio"
               className="flex border border-gray-300 lg:max-w-[296px] w-full justify-center py-3 gap-2 items-center"
             >
               <svg
@@ -292,7 +292,33 @@ const ServiceDetails = () => {
                 Continuar comprando
               </p>
             </Link>
-          )}
+          )} */}
+{services.length <= 0 && (
+  <a
+    href="https://calyaan.com/categoria-producto/centro-belleza-bogota/masaje-relajante-bogota-domicilio"
+    className="flex border border-gray-300 lg:max-w-[296px] w-full justify-center py-3 gap-2 items-center"
+  >
+    <svg
+      width={16}
+      height={16}
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6.37996 12.5448C6.25329 12.5448 6.12663 12.4981 6.02663 12.3981L1.97996 8.35146C1.78663 8.15812 1.78663 7.83812 1.97996 7.64479L6.02663 3.59812C6.21996 3.40479 6.53996 3.40479 6.73329 3.59812C6.92663 3.79146 6.92663 4.11146 6.73329 4.30479L3.03996 7.99812L6.73329 11.6915C6.92663 11.8848 6.92663 12.2048 6.73329 12.3981C6.63996 12.4981 6.50663 12.5448 6.37996 12.5448Z"
+        fill="#1F2937"
+      />
+      <path
+        d="M13.6663 8.5H2.44629C2.17296 8.5 1.94629 8.27333 1.94629 8C1.94629 7.72667 2.17296 7.5 2.44629 7.5H13.6663C13.9396 7.5 14.1663 7.72667 14.1663 8C14.1663 8.27333 13.9396 8.5 13.6663 8.5Z"
+        fill="#1F2937"
+      />
+    </svg>
+    <p className="text-base font-medium leading-none text-gray-800">
+      Continuar comprando
+    </p>
+  </a>
+)}
 
           <button
             onClick={handleVerifeUser}

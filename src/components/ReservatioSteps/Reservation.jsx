@@ -6,7 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 import ScheduleByDateForm from "../../components/ScheduleByDateForm";
 import ScheduleByProfessionalForm from "../../components/ScheduleByProfessionalForm";
-import { localidades } from "../../data";
+// import { localidades } from "../../data";
+import { localidadesLaborales } from "../../data";
+
+
+
 
 const Reservation = () => {
   const [formProfessional, setFormProfessional] = useState(false);
@@ -45,8 +49,9 @@ const Reservation = () => {
                   value={localidad}
                 >
                   <option value="">Localidad</option>
-                  {localidades.map((localidad, index) => (
-                    <option key={index} value={localidad.split(" ")[1]}>
+                  {localidadesLaborales.map((localidad, index) => (
+                    // <option key={index} value={localidad.split(" ")[1]}>
+                      <option key={index} value={localidad}>
                       {localidad}
                     </option>
                   ))}

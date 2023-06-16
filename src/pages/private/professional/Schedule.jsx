@@ -13,6 +13,10 @@ import { newHourArray } from "../../../data";
 
 const dateCurrent = new Date();
 
+// const dateCurrent = new Date(); // Obténemos la fecha y hora actual
+// dateCurrent.setHours(dateCurrent.getHours() + 5); // Agrega 5 horas a la fecha actual por solicitud de comerciales para anticipar las visitas a domicilio
+
+
 const Schedule = () => {
   const dispatch = useDispatch();
 
@@ -125,7 +129,7 @@ const Schedule = () => {
               <input
                 type="date"
                 onChange={onChangeInputDate}
-                min={dateCurrent.toISOString().split("T")[0]}
+                min={dateCurrent.toISOString().split("T")[0]} /*para definir solamente reservas hacia adelante*/
                 max={
                   dateCurrent.getFullYear() +
                   "-0" +
@@ -162,7 +166,7 @@ const Schedule = () => {
                           >
                             <option value="">Disponibilidad</option>
                             {newHourArray.map((hora, index) => (
-                              <option key={index} value={`${hora.valueHoraInicio}-${hora.valueHoraFin}`}>
+                              <option key={index} value={`${hora.horaInicio}-${hora.horaFin}`}> 
                                 {`${hora.horaInicio} - ${hora.horaFin}`}
                               </option>
                             ))}

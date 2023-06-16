@@ -8,11 +8,11 @@ import { getOrders } from './../../../../redux/features/ordenesSlice';
 const localizer = momentLocalizer(moment);
 const MyCalendar = ({ reservations }) => {
   const events = reservations.map((reservation) => {
-    if (!reservation.hora_servicio && reservation.estadoPago === "approved") {
+    if (!reservation.hora_servicio && !reservation.dia_servicio && reservation.estadoPago === "approved") {
       return null; // O maneja el caso de reserva sin hora de servicio de acuerdo a tus necesidades
     }
   
-    const [start, end] = reservation.hora_servicio.split("-");
+    const [start, end] = reservation?.hora_servicio?.split("-") || [];
     const startDate = moment(`${reservation.dia_servicio} ${start?.trim()}` || null, "YYYY-MM-DD HH:mm");
     const endDate = moment(`${reservation.dia_servicio} ${end?.trim()}` || null, "YYYY-MM-DD HH:mm");
   

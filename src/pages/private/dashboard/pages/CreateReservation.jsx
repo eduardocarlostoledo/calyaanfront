@@ -6,6 +6,7 @@ import clienteAxios from "../../../../config/axios";
 import Spinner from "../../../../components/Spinner";
 import { AiFillCloseCircle } from "react-icons/ai";
 import limpiarHorarios from "../../../../helpers/Logic/limpiarHorarios"
+import swal from "sweetalert";
 
 const CreateReservation = () => {
   const querystring = window.location.search
@@ -395,7 +396,12 @@ const CreateReservation = () => {
         );
         console.log(data);
         if (data?.length > 0) {
-          const updatedArray = data.map((obj) => ({ ...obj, styles: false }));
+          const filteredData = data.filter((obj) => obj.creador !== null); // Filtrar objetos con creador distinto de null
+          const updatedArray = filteredData.map((obj) => ({
+            ...obj,
+            styles: false,
+          }));
+          // const updatedArray = data.map((obj) => ({ ...obj, styles: false }));
           setProfesionalesRequest(updatedArray);
         } else {
           setProfesionalesRequest(data);
@@ -435,7 +441,6 @@ console.log("Updated Array", updatedArray)
     setHoursSelect(limpiarHorarios(horarios));
     console.log("setHoursSelect HOURSELECT", hourSelect)
 
-
     setReserva({
       ...reserva,
       dia_servicio: date,
@@ -447,19 +452,27 @@ console.log("Updated Array", updatedArray)
       profesional_apellido: profesional.creador.creador.apellido,
       profesional_telefono: profesional.creador.creador.telefono   
     })
+    swal({
+      title: "Profesional seleccionado",
+      text: "Has seleccionado un profesional para tu servicio",
+      icon: "success",
+      button: "Aceptar",
+    });
     setConfirmarReserva(true)
   }
 
   const guardarReserva = async () => { 
 
     try {
-      let { data } = await clienteAxios.post(`/pay/finish/order`, reserva);
       let { dataFree } = await clienteAxios.post(`/pay/finish/liberar`, liberar);
+
+      let { data } = await clienteAxios.post(`/pay/finish/order`, reserva);
+      
 
       setConfirmarReserva(false)
 
       toast.success(data.msg);
-      toast.success(dataFree.msg);
+      toast.success(dataFree.msg);      
 
 
     } catch (err) {

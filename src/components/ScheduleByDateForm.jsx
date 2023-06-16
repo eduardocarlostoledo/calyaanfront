@@ -9,12 +9,14 @@ const dateCurrent = new Date();
 
 const ScheduleByDateForm = ({ handleButtonMetodoPago }) => {
   const [inputValue, setInputValue] = useState({
-    address: "",
+    localidadServicio: "",
     date: "",
     time: "",
   });
 
   localStorage.setItem("DateService", JSON.stringify(inputValue));
+
+  
 
   const [pagar, setPagar] = useState(false);
   const [profesional, setProfesional] = useState({});
@@ -45,8 +47,10 @@ const ScheduleByDateForm = ({ handleButtonMetodoPago }) => {
   const handleChange = (e) => {
     setInputValue({
       ...inputValue,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value,    
+      localidadServicio: localStorage.getItem("localidad"),  
     });
+    
   };
 
   useEffect(() => {
