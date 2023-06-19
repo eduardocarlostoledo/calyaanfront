@@ -5,6 +5,8 @@ import limpiarHorarios from "../../../../helpers/Logic/limpiarHorarios";
 import limpiarHorario from "../../../../helpers/Logic/limpiarHorario";
 
 const ModalUser = ({ handleModalView, userState }) => {
+  console.log("handleModalView", handleModalView)
+  console.log("userState", userState)
   return (
     <div className="relative z-10">
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
@@ -14,7 +16,7 @@ const ModalUser = ({ handleModalView, userState }) => {
           <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
             <div className="flex items-start justify-between p-4 border-b rounded-t">
               <h3 className="text-xl font-semibold text-gray-900">
-                Horario del usuario {userState.nombre}
+                Horario del usuario {userState?.nombre}
               </h3>
               <button
                 type="button"
