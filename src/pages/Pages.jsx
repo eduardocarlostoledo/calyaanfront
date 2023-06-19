@@ -223,8 +223,8 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
 
   return (
     <div>
-      <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
-        <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
+      <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center ">
+        <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5 max-lg:w-screen">
           <div className="grid  md:grid-cols-2 gap-4 w-full">
             <div>
               <Link
@@ -361,7 +361,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                       Guardar esta información para la próxima vez.
                     </p> 
                   </div> */}
-                  <div className="div flex w-full block">
+                  <div className="div flex w-full">
                     <button className="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
                       Confirmar Datos
                     </button>
@@ -369,11 +369,11 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                 </form>
                 {botonPago && (
                   <div className="pb-8">
-                    <div className="div flex w-full lg:hidden md:block block">
+                    {/* <div className="div flex w-full lg:hidden md:block">
                       <button className="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">
                         Proceder al pago
                       </button>
-                    </div>
+                    </div> */}
 
                     <div
                       style={{
@@ -395,6 +395,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                           cursor: "pointer",
                           border: "0",
                           textAlign: "center",
+                          marginTop: "1vh",
                         }}
                       >
                         <button className="ButtonCart" onClick={handleCheckout}>
@@ -579,12 +580,6 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
 
 export default Pages;
 
-
-
-
-
-
-
 // import React, { useEffect, useState } from "react";
 // import { NumericFormat } from "react-number-format";
 // import { useSelector } from "react-redux";
@@ -659,8 +654,6 @@ export default Pages;
 //     setBotonPago(true);
 //   };
 
-
-
 //   const [services, setServices] = useState(
 //     JSON.parse(localStorage.getItem("services"))
 //       ? JSON.parse(localStorage.getItem("services"))
@@ -718,7 +711,6 @@ export default Pages;
 //     };
 //   }
 
-
 //   const handleCheckout = async (e) => {
 //     e.preventDefault();
 //     try {
@@ -729,11 +721,11 @@ export default Pages;
 //         },
 //         body: JSON.stringify(reservationData),
 //       });
-  
+
 //       const data = await response.json();
 //       const orderId = data.newOrder;
 //       setOrderId(orderId);
-  
+
 //       const secondResponse = await fetch(`${import.meta.env.VITE_APP_BACK}/pay/create_preference/${orderId}`, {
 //         method: "POST",
 //         headers: {
@@ -741,7 +733,7 @@ export default Pages;
 //         },
 //         body: JSON.stringify(orderData),
 //       });
-  
+
 //       const preference = await secondResponse.json();
 //       createCheckoutButton(preference.id);
 //     } catch (error) {
@@ -899,7 +891,7 @@ export default Pages;
 //                     />
 //                     <p className="text-sm leading-none text-gray-600 pl-2">
 //                       Guardar esta información para la próxima vez.
-//                     </p> 
+//                     </p>
 //                   </div> */}
 //                   <div className="div flex w-full block">
 //                     <button className="text-base font-medium leading-none text-white bg-gray-800 py-4 w-full md:mt-12 mt-8 hover:bg-gray-700 transform duration-300 ease-in-out">

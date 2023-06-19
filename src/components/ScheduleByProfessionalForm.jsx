@@ -9,7 +9,7 @@ const ScheduleByProfessionalForm = () => {
   const [inputValue, setInputValue] = useState({
     address: "",
     date: "",
-    time: "",    
+    time: "",
   });
 
   localStorage.setItem("DateService", JSON.stringify(inputValue));
@@ -121,7 +121,7 @@ const ScheduleByProfessionalForm = () => {
   return (
     <>
       <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
-        <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
+        <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5 max-lg:w-screen">
           <div>
             <h3 className="mb-10 text-lg font-bold text-center leading-none text-gray-900">
               Agenda tu reserva por profesional
@@ -149,6 +149,59 @@ const ScheduleByProfessionalForm = () => {
                   required=""
                 />
               </div>
+
+              {date && (
+                <div className="mx-auto mt-6 flex bg-whitefull-screen flex-wrap items-center justify-around">
+                  {!cargando ? (
+                    profesionalesRequest.length > 0 ? (
+                      profesionalesRequest.map((profesionalMap) => (
+                        <div
+                          key={profesionalMap._id}
+                          className={`w-full max-w-sm rounded-lg shadow-md ${
+                            profesionalMap.styles
+                              ? "bg-gray-100 border border-gray-200"
+                              : ""
+                          }`}
+                        >
+                          <div className="flex flex-col items-center p-6">
+                            <img
+                              className="w-24 h-24 mb-3 rounded-full shadow-lg"
+                              src={
+                                profesionalMap.creador?.creador.img ||
+                                "https://t3.ftcdn.net/jpg/03/58/90/78/360_F_358907879_Vdu96gF4XVhjCZxN2kCG0THTsSQi8IhT.jpg"
+                              }
+                              alt=""
+                            />
+                            <h5 className="mb-1 text-xl font-medium text-gray-900">
+                              {profesionalMap.creador?.creador.nombre}
+                            </h5>
+                            <span className="text-sm text-gray-500 text-center">
+                              {profesionalMap.creador?.descripcion}
+                            </span>
+                            <div className="flex mt-4 space-x-3 md:mt-6">
+                              <div
+                                onClick={() =>
+                                  handleProfesional(profesionalMap)
+                                }
+                                className={`inline-flex items-center px-4 py-2 text-sm font-medium text-center cursor-pointer text-white bg-primary rounded-lg hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover ${
+                                  hourSelect.length > 0 && "hidden"
+                                }`}
+                              >
+                                Seleccionar
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <>{profesionalesRequest.msg}</>
+                    )
+                  ) : (
+                    <Spinner />
+                  )}
+                </div>
+              )}
+
               {hourSelect.length > 0 && (
                 <div>
                   <label
@@ -174,60 +227,12 @@ const ScheduleByProfessionalForm = () => {
                 </div>
               )}
             </div>
-
-            {date && (
-              <div className="mx-auto mt-6 flex bg-whitefull-screen flex-wrap items-center justify-around">
-                {!cargando ? (
-                  profesionalesRequest.length > 0 ? (
-                    profesionalesRequest.map((profesional) => (
-                      <div
-                        key={profesional._id}
-                        className={`w-full max-w-sm rounded-lg shadow-md ${
-                          profesional.styles
-                            ? "bg-gray-100 border border-gray-200"
-                            : ""
-                        }`}
-                      >
-                        <div className="flex flex-col items-center p-6">
-                          <img
-                            className="w-24 h-24 mb-3 rounded-full shadow-lg"
-                            src={
-                              profesional.creador?.creador.img ||
-                              "https://t3.ftcdn.net/jpg/03/58/90/78/360_F_358907879_Vdu96gF4XVhjCZxN2kCG0THTsSQi8IhT.jpg"
-                            }
-                            alt=""
-                          />
-                          <h5 className="mb-1 text-xl font-medium text-gray-900">
-                            {profesional.creador?.creador.nombre}
-                          </h5>
-                          <span className="text-sm text-gray-500 text-center">
-                            {profesional.creador?.descripcion}
-                          </span>
-                          <div className="flex mt-4 space-x-3 md:mt-6">
-                            <div
-                              onClick={() => handleProfesional(profesional)}
-                              className="inline-flex items-center px-4 py-2 text-sm font-medium text-center cursor-pointer text-white bg-primary rounded-lg hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover"
-                            >
-                              Seleccionar
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <>{profesionalesRequest.msg}</>
-                  )
-                ) : (
-                  <Spinner />
-                )}
-              </div>
-            )}
           </form>
           {pagar && time && (
             <Link
               onClick={handleSubmitProfessional}
               to="/pago"
-              className="text-white mt-4 bg-primary hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-40"
+              className="text-white mt-4 bg-primary hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-40 max-lg:w-screen"
             >
               Siguiente paso: información de pago
             </Link>

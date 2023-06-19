@@ -9,7 +9,6 @@ import { GrAddCircle } from "react-icons/gr";
 import { TiDelete } from "react-icons/ti";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
-
 import ModalInfo from "../ModalLogin";
 
 import { ImWhatsapp } from "react-icons/im";
@@ -81,8 +80,10 @@ const ServiceDetails = () => {
 
         data.cantidad = 1;
         data.precioTotal = data.precio;
-        localStorage.setItem("services", JSON.stringify([...services, data]));
-        setServices([...services, data]);
+        localStorage.setItem("services", JSON.stringify([data]));
+        // localStorage.setItem("services", JSON.stringify([...services, data]));
+        // setServices([...services, data]);
+        setServices([data]);
       }
     };
 
@@ -102,31 +103,30 @@ const ServiceDetails = () => {
   const handleVerifeUser = () => {
     if (user) {
       navigate("/reserva");
-      return
+      return;
     }
 
-    setModal(!modal)
-
-  }
+    setModal(!modal);
+  };
 
   return (
     <>
       <div className="lg:max-w-[1440px] md:max-w-[744px] max-w-[375px] w-full lg:px-10 md:px-6 px-4  bg-white mx-auto">
-        <div className="lg:block hidden">
-          <div className="grid grid-cols-6 mt-8 gap-5">
+        <div className="lg:block ">
+          <div className="grid grid-cols-6 mt-8 gap-5 max-lg:grid-cols-2">
             <p className="text-xl font-medium leading-tight text-gray-600 lg:text-xl col-span-2">
               Servicio
             </p>
-            <p className="text-xl font-medium leading-tight text-gray-600 lg:pl-0 pl-28 lg:text-xl">
+            <p className="text-xl font-medium leading-tight text-gray-600 lg:pl-0 pl-28 lg:text-xl max-lg:hidden ">
               Detalle
             </p>
-            <p className="text-xl font-medium leading-tight text-gray-600 lg:block hidden">
+            <p className="text-xl font-medium leading-tight text-gray-600 lg:block max-lg:hidden">
               Remover
             </p>
-            <p className="text-xl font-medium leading-tight text-gray-600 lg:text-xl">
+            <p className="text-xl font-medium leading-tight text-gray-600 lg:text-xl max-lg:hidden ">
               Precio
             </p>
-            <p className="text-xl font-medium leading-tight text-gray-600 lg:text-xl">
+            <p className="text-xl font-medium leading-tight text-gray-600 lg:text-xl max-lg:hidden ">
               Total
             </p>
           </div>
@@ -134,9 +134,8 @@ const ServiceDetails = () => {
           {services.length > 0 ? (
             services?.map((producto, index) => (
               <React.Fragment key={index}>
-               
                 <hr className="mt-6" />
-                <div className="grid grid-cols-6 mt-8 gap-5">
+                <div className="grid justify-center lg:grid-cols-6 mt-8 gap-5 md:grid-cols-[max-content]">
                   <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                     <img
                       src={producto?.img}
@@ -152,7 +151,8 @@ const ServiceDetails = () => {
                   <a
                     href={`${producto?.link}`}
                     target="_blank"
-                    className="text-base font-medium leading-none hover:underline text-gray-800 cursor-pointer mt-2">
+                    className="text-base font-medium leading-none hover:underline text-gray-800 cursor-pointer mt-2"
+                  >
                     Ver detalles
                   </a>
                   {/* <div className="flex items-center justify-center w-20 h-10 p-3 space-x-3 border border-gray-300 ">
@@ -249,8 +249,8 @@ const ServiceDetails = () => {
                     </p>
                   </div>
                 </div>
-                </React.Fragment>
-                            ))
+              </React.Fragment>
+            ))
           ) : (
             <>
               <hr className="mt-6" />
@@ -264,8 +264,9 @@ const ServiceDetails = () => {
           <hr className="mt-6" />
         </div>
         <div
-          className={`lg:px-10 md:px-6 md:mt-14 lg:mt-10 lg:flex lg:flex-row flex-row-reverse gap-4 mt-6 ${services.length <= 0 ? "justify-end" : "justify-center"
-            } `}
+          className={`lg:px-10 md:px-6 md:mt-14 lg:mt-10 lg:flex lg:flex-row flex-row-reverse gap-4 mt-6 ${
+            services.length <= 0 ? "justify-end" : "justify-center"
+          } `}
         >
           {/* {services.length <= 0 && (
             <Link
@@ -293,32 +294,32 @@ const ServiceDetails = () => {
               </p>
             </Link>
           )} */}
-{services.length <= 0 && (
-  <a
-    href="https://calyaan.com/categoria-producto/centro-belleza-bogota/masaje-relajante-bogota-domicilio"
-    className="flex border border-gray-300 lg:max-w-[296px] w-full justify-center py-3 gap-2 items-center"
-  >
-    <svg
-      width={16}
-      height={16}
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6.37996 12.5448C6.25329 12.5448 6.12663 12.4981 6.02663 12.3981L1.97996 8.35146C1.78663 8.15812 1.78663 7.83812 1.97996 7.64479L6.02663 3.59812C6.21996 3.40479 6.53996 3.40479 6.73329 3.59812C6.92663 3.79146 6.92663 4.11146 6.73329 4.30479L3.03996 7.99812L6.73329 11.6915C6.92663 11.8848 6.92663 12.2048 6.73329 12.3981C6.63996 12.4981 6.50663 12.5448 6.37996 12.5448Z"
-        fill="#1F2937"
-      />
-      <path
-        d="M13.6663 8.5H2.44629C2.17296 8.5 1.94629 8.27333 1.94629 8C1.94629 7.72667 2.17296 7.5 2.44629 7.5H13.6663C13.9396 7.5 14.1663 7.72667 14.1663 8C14.1663 8.27333 13.9396 8.5 13.6663 8.5Z"
-        fill="#1F2937"
-      />
-    </svg>
-    <p className="text-base font-medium leading-none text-gray-800">
-      Continuar comprando
-    </p>
-  </a>
-)}
+          {services.length <= 0 && (
+            <a
+              href="https://calyaan.com/categoria-producto/centro-belleza-bogota/masaje-relajante-bogota-domicilio"
+              className="flex border border-gray-300 lg:max-w-[296px] w-full justify-center py-3 gap-2 items-center"
+            >
+              <svg
+                width={16}
+                height={16}
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.37996 12.5448C6.25329 12.5448 6.12663 12.4981 6.02663 12.3981L1.97996 8.35146C1.78663 8.15812 1.78663 7.83812 1.97996 7.64479L6.02663 3.59812C6.21996 3.40479 6.53996 3.40479 6.73329 3.59812C6.92663 3.79146 6.92663 4.11146 6.73329 4.30479L3.03996 7.99812L6.73329 11.6915C6.92663 11.8848 6.92663 12.2048 6.73329 12.3981C6.63996 12.4981 6.50663 12.5448 6.37996 12.5448Z"
+                  fill="#1F2937"
+                />
+                <path
+                  d="M13.6663 8.5H2.44629C2.17296 8.5 1.94629 8.27333 1.94629 8C1.94629 7.72667 2.17296 7.5 2.44629 7.5H13.6663C13.9396 7.5 14.1663 7.72667 14.1663 8C14.1663 8.27333 13.9396 8.5 13.6663 8.5Z"
+                  fill="#1F2937"
+                />
+              </svg>
+              <p className="text-base font-medium leading-none text-gray-800">
+                Continuar comprando
+              </p>
+            </a>
+          )}
 
           <button
             onClick={handleVerifeUser}

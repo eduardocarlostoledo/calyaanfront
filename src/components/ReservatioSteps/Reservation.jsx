@@ -9,9 +9,6 @@ import ScheduleByProfessionalForm from "../../components/ScheduleByProfessionalF
 // import { localidades } from "../../data";
 import { localidadesLaborales } from "../../data";
 
-
-
-
 const Reservation = () => {
   const [formProfessional, setFormProfessional] = useState(false);
 
@@ -20,14 +17,14 @@ const Reservation = () => {
   const [localidad, setLocalidad] = useState("");
 
   const handleOption = (link) => {
-    localStorage.setItem("localidad",localidad)
+    localStorage.setItem("localidad", localidad);
     navigate(link);
   };
 
   return (
     <>
-      <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
-        <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
+      <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center ">
+        <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5 max-lg:w-screen max-lg:shadow-xl">
           <div>
             <h3 className="mb-2 text-lg font-semibold text-center leading-none text-gray-900">
               Agenda tu reserva
@@ -51,7 +48,7 @@ const Reservation = () => {
                   <option value="">Localidad</option>
                   {localidadesLaborales.map((localidad, index) => (
                     // <option key={index} value={localidad.split(" ")[1]}>
-                      <option key={index} value={localidad}>
+                    <option key={index} value={localidad}>
                       {localidad}
                     </option>
                   ))}
@@ -89,10 +86,10 @@ const Reservation = () => {
                 </button> */}
 
                 <button
-                 onClick={() => handleOption("/reserva/profesional")}
-                  disabled={localidad ? false : true}
-                  className={`p-6 bg-gray-100 rounded-lg text-center  ${
-                    !localidad && "disabled:opacity-40"
+                  onClick={() => handleOption("/reserva/profesional")}
+                  // disabled={localidad ? false : true}
+                  className={`p-6 bg-gray-100 rounded-lg text-center mt-5  ${
+                    !localidad && "hidden"
                   }`}
                 >
                   <div className="mb-5">
