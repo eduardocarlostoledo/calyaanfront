@@ -73,7 +73,11 @@ const TableSchedule = () => {
       return [];
     }
     return sortedUsers.filter((user) =>
-      user.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [sortedUsers, searchTerm]);
   
@@ -117,7 +121,7 @@ const TableSchedule = () => {
                     </option>
                   ))}
                 </select>
-                
+
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <MdKeyboardArrowDown className="fill-current h-4 w-4" />
                 </div>
@@ -137,7 +141,7 @@ const TableSchedule = () => {
                 </svg>
               </span>
               <input
-                placeholder="Buscar"
+                placeholder="Nombre, Apellido, Email"
                 className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

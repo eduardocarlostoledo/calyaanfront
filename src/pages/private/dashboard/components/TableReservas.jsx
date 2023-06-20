@@ -43,6 +43,7 @@ const TableReservas = () => {
       setFiltrado(
         paginado.resultados.filter((item) => {
           const searchTermLower = searchTerm.toLowerCase();
+          const idReserva = item._id && item._id.toLowerCase();
           const clienteNombre = item.cliente_nombre && item.cliente_nombre.toLowerCase();
           const clienteApellido = item.cliente_apellido && item.cliente_apellido.toLowerCase();
           const clienteCedula = item.cliente_cedula && item.cliente_cedula.toLowerCase();
@@ -54,7 +55,8 @@ const TableReservas = () => {
             (clienteApellido && clienteApellido.includes(searchTermLower)) ||
             (clienteCedula && clienteCedula.includes(searchTermLower)) ||
             (clienteTelefono && clienteTelefono.includes(searchTermLower)) ||
-            (clienteEmail && clienteEmail.includes(searchTermLower))
+            (clienteEmail && clienteEmail.includes(searchTermLower)) ||
+            (idReserva && idReserva.includes(searchTermLower))
           );
         })
       );
@@ -118,7 +120,7 @@ const TableReservas = () => {
                 </svg>
               </p>
               <input
-                placeholder="Buscar Nombre/ Apellido/ email/ id"
+                placeholder="Nombre, Apellido, Cedula o Email"
                 className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
