@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import Spinner from "../../../../components/Spinner";
 import clienteAxios from "../../../../config/axios";
 import useGetDateTable from "../../../../hooks/useGetDateTable";
-
+import { localidadesLaborales } from "../../../../data";
 import ModalUser from "./ModalUser";
 
 const TableSchedule = () => {
@@ -18,6 +18,8 @@ const TableSchedule = () => {
   const [userState, setUserState] = useState({});
   const [modal, setModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [localidad, setLocalidad] = useState("");
+
 
   const dispatch = useDispatch();
 
@@ -99,9 +101,23 @@ const TableSchedule = () => {
                 </div>
               </div>
               <div className="relative">
-                <select className="h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                  <option>Nombre</option>
+              
+              <select
+                  className="appearance-none  bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  name="localidad"
+                  id="localidad"
+                  onChange={(e) => setLocalidad(e.target.value)}
+                  value={localidad}
+                >
+                  <option value="">Localidad</option>
+                  {localidadesLaborales.map((localidad, index) => (
+                    // <option key={index} value={localidad.split(" ")[1]}>
+                    <option key={index} value={localidad}>
+                      {localidad}
+                    </option>
+                  ))}
                 </select>
+                
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <MdKeyboardArrowDown className="fill-current h-4 w-4" />
                 </div>
@@ -220,15 +236,6 @@ const TableSchedule = () => {
     dispatch={dispatch}
   />
 )}
-
-
-      {/* {modal && (
-        <ModalUser
-          user={userState}
-          handleModalView={handleModalView}
-          dispatch={dispatch}
-        />
-      )} */}
     </>
   );
 };

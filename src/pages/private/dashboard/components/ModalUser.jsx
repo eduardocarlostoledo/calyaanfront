@@ -5,8 +5,8 @@ import limpiarHorarios from "../../../../helpers/Logic/limpiarHorarios";
 import limpiarHorario from "../../../../helpers/Logic/limpiarHorario";
 
 const ModalUser = ({ handleModalView, userState }) => {
-  console.log("handleModalView", handleModalView)
-  console.log("userState", userState)
+  console.log("handleModalView", handleModalView);
+  console.log("userState", userState.horarios);
   return (
     <div className="relative z-10">
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
@@ -30,32 +30,39 @@ const ModalUser = ({ handleModalView, userState }) => {
 
             <div className="p-6 space-y-4">
               {userState?.horarios?.length > 0 ? (
-                userState?.horarios?.slice(userState?.horarios?.length - 5)?.map((horario) => (
-                  <div className="">
-                    <div className="rounded-md shadow-sm">
-                      <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200">
-                        <p className="text-md font-medium text-gray-500">
-                          {horario.fecha}
-                        </p>
+                userState?.horarios
+                  ?.slice(userState?.horarios?.length - 5)
+                  ?.map((horario) => (
+                    <div className="" key={horario._id}>
+                      <div className="rounded-md shadow-sm">
+                        <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200">
+                          <p className="text-md font-medium text-gray-500">
+                            {horario.fecha}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="px-4 py-3 flex flex-wrap gap-4">
+                        {horario?.horarios?.map((horarioDetalle, index) => (
+                          <p
+                            key={horarioDetalle._id}
+                            className={`text-center text-xs font-medium flex items-center px-2.5 py-3 rounded cursor-pointer ${
+                              horarioDetalle.stock
+                                ? "bg-gray-100 text-gray-800 border-gray-500"
+                                : "bg-red-200 text-red-700 border-red-500"
+                            }`}
+                          >
+                            {horarioDetalle.hora}
+                          </p>
+                        ))}
                       </div>
                     </div>
-
-                    <div className=" px-4 py-3  flex flex-wrap gap-4">
-                      {horario?.hora?.map((hora, index) => (
-                        <p
-                          key={index}
-                          className="text-center text-xs font-medium flex items-center px-2.5 py-3 rounded cursor-pointer bg-gray-100 text-gray-800 border-gray-500 "
-                        >
-                          {limpiarHorario(hora)}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                ))
+                  ))
               ) : (
                 <p>No se tiene registro de horarios</p>
               )}
             </div>
+
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
               <button
                 data-modal-hide="staticModal"
