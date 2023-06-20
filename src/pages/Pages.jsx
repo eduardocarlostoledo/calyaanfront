@@ -8,6 +8,7 @@ import { localidades } from "../data";
 import { localidadesLaborales } from "../data";
 import { AiOutlineArrowDown } from "react-icons/ai";
 import { toast } from "react-toastify";
+// import swal from "sweetalert";
 
 const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
   const [customer, setCustomer] = useState({});
@@ -25,22 +26,30 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
         );
 
         const { nombre, apellido, direcciones, telefono, cedula } = data;
-
+        console.log(
+          nombre,
+          apellido,
+          direcciones,
+          telefono,
+          cedula,
+          "ESTE ES EL LOG"
+        );
         setCustomer({
           email: user?.email || "",
           firstName: user?.nombre || data?.nombre || "",
-          lastName: data?.apellido || "",
-          address: data?.direcciones[0].direccion || "",
-          address2: data?.direcciones[0].info || "",
-          ciudad: data?.direcciones[0].ciudad || "",
-          localidad: data?.direcciones[0].localidad || "",
+          lastName: data.apellido || "",
+          address: data.direcciones[0]?.direccion || "",
+          address2: data.direcciones[0]?.info || "",
+          ciudad: data.direcciones[0]?.ciudad || "Bogotá",
+          localidad: data.direcciones[0]?.localidad.split(". ")[1] || "",
           cedula: data?.cedula || "",
           telefono: data?.telefono || "",
         });
       } catch (err) {
-        let error = err.response.data.msg
-          ? err.response.data.msg
-          : err.response && "Estamos presentando problemas internos";
+        console.error(err);
+        let error = err.response?.data?.msg
+          ? err.response?.data?.msg
+          : "Estamos presentando problemas internos";
         return toast.error(error);
       }
     };
@@ -72,21 +81,25 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
     e.preventDefault();
 
     if (
-      [
-        email,
-        firstName,
-        lastName,
-        address,
-        address2,
-        ciudad,
-        localidad,
-        telefono,
-        cedula,
-      ].includes("")
+      !email ||
+      !firstName ||
+      !lastName ||
+      !address ||
+      !address2 ||
+      !localidad ||
+      !telefono ||
+      !cedula
     ) {
-      return toast.error("Todos los campos son obligatorios");
+      console.log(customer, "customer");
+      setBotonPago(false);
+      return swal(
+        "faltan campos por rellenar",
+        "Porfavor rellena todos los campos",
+        "info"
+      );
     }
 
+    console.log(customer.localidad, "customer si ta todo joya");
     localStorage.setItem("data_customer", JSON.stringify(customer));
 
     setBotonPago(true);
@@ -318,7 +331,6 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                           id="localidad"
                           value={localidad}
                           onChange={handleChange}
-                          disabled={true}
                         >
                           <option value="">Localidad</option>
                           {localidadesLaborales.map((localidad, index) => (

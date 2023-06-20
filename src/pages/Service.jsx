@@ -22,6 +22,11 @@ import { HiClipboardCheck, HiIdentification } from "react-icons/hi";
 import { pasosReserva } from "../data";
 import ServiceDetails from "../components/ReservatioSteps/ServiceDetails";
 import Reservation from "../components/ReservatioSteps/Reservation";
+import { useSelector } from "react-redux";
+import clienteAxios from "../config/axios";
+import swal from "sweetalert";
+import { Navigate, useNavigate } from "react-router-dom";
+// import swal from "sweetalert2";
 
 const Service = () => {
   const [formDate, setFormDate] = useState(false);
@@ -32,28 +37,91 @@ const Service = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [complete, setComplete] = useState(false);
 
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState([]);
+
+  // useEffect(() => {
+  //   JSON.parse(localStorage.getItem("profile")) &&
+  //     setProfile(JSON.parse(localStorage.getItem("profile")));
+  // }, [currentStep]);
+
+  useEffect(() => {
+    JSON.parse(localStorage.getItem("profile")) &&
+      setProfile(JSON.parse(localStorage.getItem("profile")));
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      JSON.parse(localStorage.getItem("profile")) &&
+        setProfile(JSON.parse(localStorage.getItem("profile")));
+    }, 3500);
+
+    // Limpiar el temporizador cuando el componente se desmonte o cuando el valor de currentStep cambie
+    return () => clearTimeout(timer);
+  }, [currentStep]);
+
+  useEffect(() => {
+    try {
+      const getUser = async () => {
+        try {
+          console.log(profile, "ESTE ES EL PERFIL DENTRO DEL USE EFECT");
+          if (!profile.email) {
+            return console.log("no hay nada en profile");
+          }
+          let { data } = await clienteAxios.get(
+            `api/usuarios/perfil/${profile._id}`
+          );
+          if (!("telefono" in data) || !("cedula" in data)) {
+            console.log("no existe eso padre");
+            swal(
+              "Para que recibas el mejor servicio Por favor, bríndanos tu teléfono y cédula. ¡Gracias!",
+              "",
+              "info"
+            );
+            navigate("/ajustes");
+          }
+        } catch (err) {
+          let error = err.response.data.msg
+            ? err.response.data.msg
+            : err.response && "Estamos presentando problemas internos";
+          return toast.error(error);
+        }
+      };
+
+      getUser();
+    } catch (err) {
+      let error = err.response.data.msg
+        ? err.response.data.msg
+        : err.response && "Estamos presentando problemas internos";
+      return toast.error(error);
+    }
+  }, [profile]);
+
+  console.log(profile, "ESTE ES EL PERFIL");
+
   return (
     <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
       <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
-
         <div>
           <h3 className="mb-2 text-3xl font-semibold text-center leading-none text-gray-900">
             {pasosReserva[currentStep - 1]}
           </h3>
-          <p className="text-xl font-normal text-center">Si tu servicio seleccionado no se encuentra en nuestro carrito de compras, no te preocupes 😉, agenda mediante alguna de nuestras asesoras mediante 
-          <a
-        href="https://api.whatsapp.com/send/?phone=573242118509&text&type=phone_number&app_absent=0"
-        className="ml-1 text-whatsapp "
-      >
-       Whatsapp.       
-      </a>
+          <p className="text-xl font-normal text-center">
+            Si tu servicio seleccionado no se encuentra en nuestro carrito de
+            compras, no te preocupes 😉, agenda mediante alguna de nuestras
+            asesoras mediante
+            <a
+              href="https://api.whatsapp.com/send/?phone=573242118509&text&type=phone_number&app_absent=0"
+              className="ml-1 text-whatsapp "
+            >
+              Whatsapp.
+            </a>
           </p>
         </div>
         {currentStep == "1" && (
           <ServiceDetails
             currentStep={currentStep}
             pasosReserva={pasosReserva}
-  
             setComplete={setComplete}
             setCurrentStep={setCurrentStep}
           />
@@ -64,7 +132,6 @@ const Service = () => {
 };
 
 export default Service;
-
 
 // import React, { useEffect, useState } from "react";
 
@@ -100,9 +167,6 @@ export default Service;
 //   const [currentStep, setCurrentStep] = useState(1);
 //   const [complete, setComplete] = useState(false);
 
-
-
-
 //   return (
 //     <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
 //       <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
@@ -111,13 +175,13 @@ export default Service;
 //           <h3 className="mb-2 text-3xl font-semibold text-center leading-none text-gray-900">
 //             {pasosReserva[currentStep - 1]}
 //           </h3>
-//           <p className="text-xl font-normal text-center">Si tu servicio seleccionado no se encuentra en nuestro carrito de compras, no te preocupes 😉, agenda mediante alguna de nuestras asesoras mediante 
+//           <p className="text-xl font-normal text-center">Si tu servicio seleccionado no se encuentra en nuestro carrito de compras, no te preocupes 😉, agenda mediante alguna de nuestras asesoras mediante
 //           <a
 //         href="https://api.whatsapp.com/send/?phone=573147428757&text&type=phone_number&app_absent=0"
 //         className="ml-1 text-whatsapp "
 //       >
 //        Whatsapp.
-       
+
 //       </a>
 //           </p>
 //         </div>
@@ -126,13 +190,11 @@ export default Service;
 //           <ServiceDetails
 //             currentStep={currentStep}
 //             pasosReserva={pasosReserva}
-  
+
 //             setComplete={setComplete}
 //             setCurrentStep={setCurrentStep}
 //           />
 //         )}
-
-    
 
 //         {/* {!formDate && !formProfessional && !pago && !sumary ? (
 //           <div className="container mx-auto">
