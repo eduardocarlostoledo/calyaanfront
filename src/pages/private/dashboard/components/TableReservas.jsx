@@ -1,6 +1,5 @@
 import fileDownload from "js-file-download";
-import React from "react";
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { AiOutlineCloudDownload } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -8,23 +7,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Spinner from "../../../../components/Spinner";
 import clienteAxios from "../../../../config/axios";
-import useGetDateTable from "../../../../hooks/useGetDateTable";
 import useGetDateTableReservas from "../../../../hooks/useGetDateTableReservas";
 import { estadoAction } from "../../../../redux/features/authSlice";
-import ModalUser from "./ModalUser";
 import ModalUserInfo from "./ModalUserInfo";
 
 const TableReservas = () => {
   const { paginado, setLimite, limite, pagina, setPagina, loading } =
     useGetDateTableReservas();
-  const [userState, setUserState] = useState({});
+  const [userState, setUserState] = useState(null);
   const [modal, setModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtrado, setFiltrado] = useState([]);
 
   const dispatch = useDispatch();
 
-  const { estado } = useSelector((state) => ({ ...state.auth }));
+  const { estado } = useSelector((state) => state.auth);
 
   const handleDownload = (url, filename) => {
     clienteAxios
@@ -33,36 +30,37 @@ const TableReservas = () => {
       })
       .then((res) => {
         fileDownload(res.data, filename);
+      })
+      .catch((error) => {
+        console.error("Error al descargar el archivo:", error);
       });
   };
 
-  const FilterR = useMemo(
-    (Value) => {
-      if (!paginado || !paginado.resultados) {
-        return [];
-      }
+  useMemo(() => {
+    if (!paginado || !paginado.resultados) {
+      setFiltrado([]);
+    } else {
       setFiltrado(
-        paginado.resultados.filter(
-          (item) =>
-            item.cliente_email
-              ?.toLowerCase()
-              .includes(searchTerm?.toLowerCase()) ||
-            item._id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-            item.cliente_apellido
-              ?.toLowerCase()
-              .includes(searchTerm?.toLowerCase()) ||
-            item.cliente_nombre
-              ?.toLowerCase()
-              .includes(searchTerm?.toLowerCase()) ||
-            ` ${item.cliente_nombre} ${item.cliente_apellido}`
-              ?.toLowerCase()
-              .includes(searchTerm?.toLowerCase())
-        )
+        paginado.resultados.filter((item) => {
+          const searchTermLower = searchTerm.toLowerCase();
+          const clienteNombre = item.cliente_nombre && item.cliente_nombre.toLowerCase();
+          const clienteApellido = item.cliente_apellido && item.cliente_apellido.toLowerCase();
+          const clienteCedula = item.cliente_cedula && item.cliente_cedula.toLowerCase();
+          const clienteTelefono = item.cliente_telefono && item.cliente_telefono.toLowerCase();
+          const clienteEmail = item.cliente_email && item.cliente_email.toLowerCase();
+  
+          return (
+            (clienteNombre && clienteNombre.includes(searchTermLower)) ||
+            (clienteApellido && clienteApellido.includes(searchTermLower)) ||
+            (clienteCedula && clienteCedula.includes(searchTermLower)) ||
+            (clienteTelefono && clienteTelefono.includes(searchTermLower)) ||
+            (clienteEmail && clienteEmail.includes(searchTermLower))
+          );
+        })
       );
-    },
-    [searchTerm]
-  );
-
+    }
+  }, [searchTerm, paginado]);
+  
   const handleState = () => {
     dispatch(estadoAction());
   };

@@ -78,43 +78,80 @@ const ScheduleByProfessionalForm = () => {
     localStorage.setItem("ProfessionalService", JSON.stringify(profesional));
   };
 
-  useEffect(() => {
-    const obtenerUsuarios = async () => {
-      setCargando(true);
 
-      try {
-        const nombre =
-          JSON.parse(localStorage.getItem("services"))?.[0]?.nombre || "";
-        const localidad = localStorage.getItem("localidad") || "";
+useEffect(() => {
+  const obtenerUsuarios = async () => {
+    setCargando(true);
 
-        const { data } = await clienteAxios.post(
-          "api/reservas/profesionales/fecha",
-          {
-            fecha: inputValue.date,
-            especialidad: [nombre],
-            localidad,
-          }
-        );
-        console.log("data de api/reservas/profesionales/fecha", data);
+    try {
+      const services = JSON.parse(localStorage.getItem("services")) || [];
+      const nombre = services[0]?.nombre || "";
+      const localidad = localStorage.getItem("localidad") || "";
 
-        if (data?.length > 0) {
-          const filteredData = data.filter((obj) => obj.creador !== null); // Filtrar objetos con creador distinto de null
-          const updatedArray = filteredData.map((obj) => ({
-            ...obj,
-            styles: false,
-          }));
-          setProfesionalesRequest(updatedArray);
-        } else {
-          setProfesionalesRequest(data);
-        }
+      // Verificar si los datos son inválidos, nulos o no definidos
+      if (!inputValue.date || !nombre) {
+        console.log("Datos inválidos o no definidos");
         setCargando(false);
-      } catch (err) {
-        console.log(err);
+        return;
       }
-    };
 
-    obtenerUsuarios();
-  }, [inputValue.date]);
+      const { data } = await clienteAxios.post(
+        "api/reservas/profesionales/fecha",
+        {
+          fecha: inputValue.date,
+          especialidad: [nombre],
+          localidad,
+        }
+      );
+      console.log("data de api/reservas/profesionales/fecha", data);
+
+      if (data?.length > 0) {
+        // Filtrar objetos con creador distinto de null y con teléfono definido
+        const filteredData = data.filter(
+          (obj) =>
+            obj.creador !== null && 
+            obj.creador !== undefined &&
+            obj.creador?.creador?.telefono !== null &&
+            obj.creador?.creador?.telefono !== undefined &&
+            obj.creador?.creador?.img !== null &&
+            obj.creador?.creador?.img !== undefined
+        );
+        const updatedArray = filteredData.map((obj) => ({
+          ...obj,
+          styles: false,
+        }));
+
+        if (filteredData.length > 0 || updatedArray.length > 0) {
+          swal({
+            title: "Información encontrada",
+            text: "Se encontraron resultados",
+            type: "success",
+            timer: 2000, // Tiempo en milisegundos
+            showConfirmButton: false
+          });
+        } else {
+          swal({
+            title: "No se encontró información",
+            text: "No se encontraron resultados",
+            type: "info",
+            timer: 2000, // Tiempo en milisegundos
+            showConfirmButton: false
+          });
+        }
+
+        setProfesionalesRequest(updatedArray);
+      } else {
+        setProfesionalesRequest(data);
+      }
+      setCargando(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  obtenerUsuarios();
+}, [inputValue.date]);
+
 
   const { date, time } = inputValue;
 
@@ -244,6 +281,7 @@ const ScheduleByProfessionalForm = () => {
 };
 
 export default ScheduleByProfessionalForm;
+
 
 // import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
