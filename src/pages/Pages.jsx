@@ -41,7 +41,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
           address: data.direcciones[0]?.direccion || "",
           address2: data.direcciones[0]?.info || "",
           ciudad: data.direcciones[0]?.ciudad || "Bogotá",
-          localidad: data.direcciones[0]?.localidad.split(". ")[1] || "",
+          localidad: localStorage.getItem("localidad") || "",
           cedula: data?.cedula || "",
           telefono: data?.telefono || "",
         });
