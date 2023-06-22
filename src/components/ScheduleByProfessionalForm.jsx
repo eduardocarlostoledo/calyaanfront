@@ -78,97 +78,95 @@ const ScheduleByProfessionalForm = () => {
     localStorage.setItem("ProfessionalService", JSON.stringify(profesional));
   };
 
+  useEffect(() => {
+    const obtenerUsuarios = async () => {
+      setCargando(true);
 
-useEffect(() => {
-  const obtenerUsuarios = async () => {
-    setCargando(true);
+      try {
+        const services = JSON.parse(localStorage.getItem("services")) || [];
+        const nombre = services[0]?.nombre || "";
+        const localidad = localStorage.getItem("localidad") || "";
 
-    try {
-      const services = JSON.parse(localStorage.getItem("services")) || [];
-      const nombre = services[0]?.nombre || "";
-      const localidad = localStorage.getItem("localidad") || "";
-
-      // Verificar si los datos son inválidos, nulos o no definidos
-      if (!inputValue.date || !nombre) {
-        console.log("Datos inválidos o no definidos");
-        setCargando(false);
-        return;
-      }
-
-      const { data } = await clienteAxios.post(
-        "api/reservas/profesionales/fecha",
-        {
-          fecha: inputValue.date,
-          especialidad: [nombre],
-          localidad,
+        // Verificar si los datos son inválidos, nulos o no definidos
+        if (!inputValue.date || !nombre) {
+          console.log("Datos inválidos o no definidos");
+          setCargando(false);
+          return;
         }
-      );
-      console.log("data de api/reservas/profesionales/fecha", data);
 
-      if (data?.length > 0) {
-        // Filtrar objetos con creador distinto de null y con teléfono definido
-        const filteredData = data.filter(
-          (obj) =>
-            obj.creador !== null && 
-            obj.creador !== undefined &&
-            obj.creador?.creador?.telefono !== null &&
-            obj.creador?.creador?.telefono !== undefined &&
-            obj.creador?.creador?.img !== null &&
-            obj.creador?.creador?.img !== undefined
+        const { data } = await clienteAxios.post(
+          "api/reservas/profesionales/fecha",
+          {
+            fecha: inputValue.date,
+            especialidad: [nombre],
+            localidad,
+          }
         );
-        const updatedArray = filteredData.map((obj) => ({
-          ...obj,
-          styles: false,
-        }));
+        console.log("data de api/reservas/profesionales/fecha", data);
 
-        if (filteredData.length > 0 || updatedArray.length > 0) {
-          swal({
-            title: "Información encontrada",
-            text: "Se encontraron resultados",
-            type: "success",
-            timer: 2000, // Tiempo en milisegundos
-            showConfirmButton: false
-          });
+        if (data?.length > 0) {
+          // Filtrar objetos con creador distinto de null y con teléfono definido
+          const filteredData = data.filter(
+            (obj) =>
+              obj.creador !== null &&
+              obj.creador !== undefined &&
+              obj.creador?.creador?.telefono !== null &&
+              obj.creador?.creador?.telefono !== undefined &&
+              obj.creador?.creador?.img !== null &&
+              obj.creador?.creador?.img !== undefined
+          );
+          const updatedArray = filteredData.map((obj) => ({
+            ...obj,
+            styles: false,
+          }));
+
+          if (filteredData.length > 0 || updatedArray.length > 0) {
+            swal({
+              title: "Información encontrada",
+              text: "Se encontraron resultados",
+              type: "success",
+              timer: 2000, // Tiempo en milisegundos
+              showConfirmButton: false,
+            });
+          } else {
+            swal({
+              title: "No se encontró información",
+              text: "No se encontraron resultados",
+              type: "info",
+              timer: 2000, // Tiempo en milisegundos
+              showConfirmButton: false,
+            });
+          }
+
+          setProfesionalesRequest(updatedArray);
         } else {
-          swal({
-            title: "No se encontró información",
-            text: "No se encontraron resultados",
-            type: "info",
-            timer: 2000, // Tiempo en milisegundos
-            showConfirmButton: false
-          });
+          setProfesionalesRequest(data);
         }
-
-        setProfesionalesRequest(updatedArray);
-      } else {
-        setProfesionalesRequest(data);
+        setCargando(false);
+      } catch (err) {
+        console.log(err);
       }
-      setCargando(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    };
 
-  obtenerUsuarios();
-}, [inputValue.date]);
-
+    obtenerUsuarios();
+  }, [inputValue.date]);
 
   const { date, time } = inputValue;
 
   return (
     <>
-      <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
+      <div className="mx-auto max-lg:my-8 p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
         <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5 max-lg:w-screen">
           <div>
             <h3 className="mb-10 text-lg font-bold text-center leading-none text-gray-900">
               Agenda tu reserva por profesional
             </h3>
           </div>
-          <form>
-            <h4 className="mb-4 font-medium leading-none text-gray-900">
+          <form className="text-center">
+            <h4 className="mb-4 mx-auto font-medium leading-none text-gray-900">
               Selecciona fecha y hora para tu reserva
             </h4>
-            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 mb-4 ">
               <div>
                 <label
                   htmlFor="date"
@@ -188,7 +186,7 @@ useEffect(() => {
               </div>
 
               {date && (
-                <div className="mx-auto mt-6 flex bg-whitefull-screen flex-wrap items-center justify-around">
+                <div className="mx-auto mt-6 flex w-full bg-whitefull-screen flex-wrap items-center justify-around">
                   {!cargando ? (
                     profesionalesRequest.length > 0 ? (
                       profesionalesRequest.map((profesionalMap) => (
@@ -200,7 +198,7 @@ useEffect(() => {
                               : ""
                           }`}
                         >
-                          <div className="flex flex-col items-center p-6">
+                          <div className="flex flex-col items-center p-6 max-lg:my-3">
                             <img
                               className="w-24 h-24 mb-3 rounded-full shadow-lg"
                               src={
@@ -266,13 +264,15 @@ useEffect(() => {
             </div>
           </form>
           {pagar && time && (
-            <Link
-              onClick={handleSubmitProfessional}
-              to="/pago"
-              className="text-white mt-4 bg-primary hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-40 max-lg:w-screen"
-            >
-              Siguiente paso: información de pago
-            </Link>
+            <div className="flex items-center">
+              <Link
+                onClick={handleSubmitProfessional}
+                to="/pago"
+                className="text-white mt-4 mx-auto bg-primary hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-40 max-lg:w-3/4 max-sm:w-full"
+              >
+                Siguiente paso: información de pago
+              </Link>
+            </div>
           )}
         </div>
       </div>
@@ -281,7 +281,6 @@ useEffect(() => {
 };
 
 export default ScheduleByProfessionalForm;
-
 
 // import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";

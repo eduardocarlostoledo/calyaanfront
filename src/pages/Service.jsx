@@ -100,8 +100,8 @@ const Service = () => {
   console.log(profile, "ESTE ES EL PERFIL");
 
   return (
-    <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
-      <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
+    <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-white max-md:w-screen flex-wrap items-center justify-center">
+      <div className="bg-white rounded shadow-lg p-4  px-4 md:p-8 mb-6 w-4/5 max-md:w-full">
         <div>
           <h3 className="mb-2 text-3xl font-semibold text-center leading-none text-gray-900">
             {pasosReserva[currentStep - 1]}

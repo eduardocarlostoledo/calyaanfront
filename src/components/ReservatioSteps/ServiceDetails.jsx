@@ -111,7 +111,7 @@ const ServiceDetails = () => {
 
   return (
     <>
-      <div className="lg:max-w-[1440px] md:max-w-[744px] max-w-[375px] w-full lg:px-10 md:px-6 px-4  bg-white mx-auto">
+      <div className="lg:max-w-[1440px] md:max-w-[744px] max-w-[375px] w-full lg:px-10 md:px-6 px-4   bg-white mx-auto">
         <div className="lg:block ">
           <div className="grid grid-cols-6 mt-8 gap-5 max-lg:grid-cols-2">
             <p className="text-xl font-medium leading-tight text-gray-600 lg:text-xl col-span-2">
@@ -135,8 +135,8 @@ const ServiceDetails = () => {
             services?.map((producto, index) => (
               <React.Fragment key={index}>
                 <hr className="mt-6" />
-                <div className="grid justify-center lg:grid-cols-6 mt-8 gap-5 md:grid-cols-[max-content]">
-                  <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                <div className="grid justify-center max-lg:text-center lg:grid-cols-6 mt-8 gap-5 md:grid-cols-[max-content]">
+                  <div className=" h-28 w-28 max-lg:mx-auto  flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                     <img
                       src={producto?.img}
                       alt=""

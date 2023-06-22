@@ -16,6 +16,21 @@ const dateCurrent = new Date();
 // const dateCurrent = new Date(); // Obténemos la fecha y hora actual
 // dateCurrent.setHours(dateCurrent.getHours() + 5); // Agrega 5 horas a la fecha actual por solicitud de comerciales para anticipar las visitas a domicilio
 
+function verificarHorario(horario, arrayObjetos) {
+  for (let i = 0; i < arrayObjetos.length; i++) {
+    const objeto = arrayObjetos[i];
+    const horas = objeto.hora.split("-"); // Divide el rango de horas en dos partes
+
+    const horaInicio = horas[0].trim(); // Obtiene la hora de inicio sin espacios en blanco
+    const horaFin = horas[1].trim(); // Obtiene la hora de fin sin espacios en blanco
+
+    if (horario >= horaInicio && horario <= horaFin && objeto.stock) {
+      return true; // El horario está dentro del objeto y hay stock disponible
+    }
+  }
+
+  return false; // El horario no se encontró en ninguno de los objetos o no hay stock disponible
+}
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -35,10 +50,12 @@ const Schedule = () => {
   }, [errorProfessional]);
 
   const handleChangeHorarios = (e) => {
-    if (!horariosForm.includes(e.target.value) && e.target.value !== "") {
+    if (
+      !verificarHorario(e.target.value, horariosForm) &&
+      e.target.value !== ""
+    ) {
       setHorariosForm([...horariosForm, { hora: e.target.value, stock: true }]);
     }
-
     setHoraInicio(e.target.value.split("-")[0]);
     setHoraFin(e.target.value.split("-")[1]);
   };
@@ -108,7 +125,7 @@ const Schedule = () => {
   };
 
   return (
-    <div className="flex items-center justify-center mt-5">
+    <div className="flex items-center justify-center my-32 max-lg:my-12">
       <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
         <div className="grid gap-8 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
           <div className="mb-4">
@@ -129,7 +146,9 @@ const Schedule = () => {
               <input
                 type="date"
                 onChange={onChangeInputDate}
-                min={dateCurrent.toISOString().split("T")[0]} /*para definir solamente reservas hacia adelante*/
+                min={
+                  dateCurrent.toISOString().split("T")[0]
+                } /*para definir solamente reservas hacia adelante*/
                 max={
                   dateCurrent.getFullYear() +
                   "-0" +
@@ -166,7 +185,10 @@ const Schedule = () => {
                           >
                             <option value="">Disponibilidad</option>
                             {newHourArray.map((hora, index) => (
-                              <option key={index} value={`${hora.horaInicio}-${hora.horaFin}`}> 
+                              <option
+                                key={index}
+                                value={`${hora.horaInicio}-${hora.horaFin}`}
+                              >
                                 {`${hora.horaInicio} - ${hora.horaFin}`}
                               </option>
                             ))}
@@ -245,7 +267,7 @@ export default Schedule;
 //   //   date: "",
 //   // });
 //   const [horaInicio, setHoraInicio] = useState("");
-//   const [horaFin, setHoraFin] = useState("");  
+//   const [horaFin, setHoraFin] = useState("");
 //   const [horariosForm, setHorariosForm] = useState([]);
 //   const { horario, date } = valueForm;
 

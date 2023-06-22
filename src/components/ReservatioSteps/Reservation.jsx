@@ -23,7 +23,7 @@ const Reservation = () => {
 
   return (
     <>
-      <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center ">
+      <div className="mx-auto max-lg:my-8 p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center ">
         <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5 max-lg:w-screen max-lg:shadow-xl">
           <div>
             <h3 className="mb-2 text-lg font-semibold text-center leading-none text-gray-900">
@@ -63,7 +63,7 @@ const Reservation = () => {
             {/* <p className="text-center my-4">Tenemos dos opciones para ti</p> */}
 
             <div style={{ backgroundColor: "rgb(255, 255, 255)" }}>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2  cursor-pointer">
+              <div className="grid grid-cols-1 gap-4  cursor-pointer">
                 {/* <button
                   onClick={() => handleOption("/reserva/fecha")}
                   disabled={localidad ? false : true}
@@ -88,7 +88,7 @@ const Reservation = () => {
                 <button
                   onClick={() => handleOption("/reserva/profesional")}
                   // disabled={localidad ? false : true}
-                  className={`p-6 bg-gray-100 rounded-lg text-center mt-5  ${
+                  className={`p-6 bg-gray-100 w-3/4 mx-auto  max-lg:w-full rounded-lg text-center mt-5  ${
                     !localidad && "hidden"
                   }`}
                 >
