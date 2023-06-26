@@ -14,7 +14,7 @@ import { IoMdExit } from "react-icons/io";
 import { RiAdminLine, RiSettings3Line, RiUserStarLine } from "react-icons/ri";
 import { GiHealing } from "react-icons/gi";
 import { FaRegCalendarAlt } from "react-icons/fa";
-import {SiContactlesspayment, SiMercedes} from "react-icons/si"
+import { SiContactlesspayment, SiMercedes } from "react-icons/si";
 import { MdOutlinePayment } from "react-icons/md";
 
 const Sidebar = () => {
@@ -152,6 +152,20 @@ const Sidebar = () => {
                     {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span> */}
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="horarios-profesionales"
+                    className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+                  >
+                    <span className="inline-flex justify-center items-center ml-4">
+                      <AiOutlineSchedule className="w-5 h-5" />
+                    </span>
+                    <p className="ml-2 text-sm tracking-wide truncate">
+                      Disponibilidades
+                    </p>
+                    {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span> */}
+                  </Link>
+                </li>
 
                 <li className="px-5">
                   <div className="flex flex-row items-center h-8">
@@ -193,7 +207,7 @@ const Sidebar = () => {
                 <li className="px-5">
                   <div className="flex flex-row items-center h-8">
                     <div className="text-sm font-light tracking-wide text-gray-500">
-                    Transacciones 
+                      Transacciones
                     </div>
                   </div>
                 </li>
@@ -206,9 +220,7 @@ const Sidebar = () => {
                     <span className="inline-flex justify-center items-center ml-4">
                       <SiContactlesspayment className="w-5 h-5" />
                     </span>
-                    <p className="ml-2 text-sm tracking-wide truncate">
-                      Pagos
-                    </p>
+                    <p className="ml-2 text-sm tracking-wide truncate">Pagos</p>
                     {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span> */}
                   </Link>
                 </li>

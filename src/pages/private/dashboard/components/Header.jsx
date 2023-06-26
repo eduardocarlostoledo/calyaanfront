@@ -21,17 +21,17 @@ const Header = () => {
       <div className="header-content flex items-center flex-row">
         <form action="#">
           <div className="hidden md:flex relative">
-            <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+            {/* <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
               <RxMagnifyingGlass className="h-6 w-6" />
-            </div>
+            </div> */}
 
-            <input
+            {/* <input
               id="search"
               type="text"
               name="search"
               className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-300 w-full h-10 focus:outline-none focus:border-indigo-400"
               placeholder="Buscar página..."
-            />
+            /> */}
           </div>
           <div className="flex md:hidden">
             <a
@@ -55,17 +55,16 @@ const Header = () => {
         <div className="flex ml-auto">
           <div className="flex flex-row items-center">
             <Link to="/ajustes">
-        
-            {user?.img ? (
-              <img
-                className="w-full h-full rounded-full"
-                src={user?.img}
-                alt="Imagen de usuario"
-              />
-            ) : (
-              <BsPersonCircle className="w-9 h-9 text-gray-300" />
-            )}
-                </Link>
+              {user?.img ? (
+                <img
+                  className="w-full h-full rounded-full"
+                  src={user?.img}
+                  alt="Imagen de usuario"
+                />
+              ) : (
+                <BsPersonCircle className="w-9 h-9 text-gray-300" />
+              )}
+            </Link>
             <span className="flex flex-col ml-2">
               <span className="truncate w-20 font-semibold tracking-wide leading-none">
                 {user?.nombre}
@@ -74,10 +73,11 @@ const Header = () => {
                 {user?.rol}
               </span>
             </span>
-            <button 
-            onClick={logout}
-            className="mx-2 my-2 bg-red-700 transition duration-150 ease-in-out hover:bg-red-600 rounded text-white px-4 py-2 text-xs">
-            Cerrar Sesion
+            <button
+              onClick={logout}
+              className="mx-2 my-2 bg-red-700 transition duration-150 ease-in-out hover:bg-red-600 rounded text-white px-4 py-2 text-xs"
+            >
+              Cerrar Sesion
             </button>
           </div>
         </div>

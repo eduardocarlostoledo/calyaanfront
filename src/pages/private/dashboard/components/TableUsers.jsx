@@ -68,24 +68,25 @@ const TableUsers = ({ rol = "" }) => {
       a.nombre.localeCompare(b.nombre)
     );
   }, [paginado?.resultados]);
-  console.log("sortedUsers",sortedUsers)
+  console.log("sortedUsers", sortedUsers);
   const filteredUsers = useMemo(() => {
     if (!sortedUsers) {
       return [];
     }
-    return sortedUsers.filter((user) =>
-      user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    return sortedUsers.filter(
+      (user) =>
+        user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          user.apellido.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [sortedUsers, searchTerm]);
 
   return (
     <>
       <div className="py-8">
-        <h2 className="text-2xl font-bold mb-6">Usuarios</h2>
+        <h2 className="text-2xl font-bold mb-6">{rol ? rol : "USUARIOS"}</h2>
         <div className="my-2 flex justify-between mx-4">
           <div className="flex sm:flex-row flex-col">
             <div className="flex flex-row mb-1 sm:mb-0">

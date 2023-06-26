@@ -4,9 +4,13 @@ import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import clienteAxios from "../../../../config/axios";
 import { localidades } from "../../../../data";
+import { AiOutlineEdit, AiOutlineClose, AiOutlineCheck } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { updateProfileAdminDash } from "../../../../redux/features/professionalSlice";
 
 const ProfessionalProfile = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   const [valueForm, setValueForm] = useState({
     nombre: "",
@@ -24,6 +28,7 @@ const ProfessionalProfile = () => {
     profesional: "",
     ultimaConexion: "",
   });
+  const [forEdit, setForEdit] = useState(false);
 
   const {
     nombre,
@@ -42,6 +47,26 @@ const ProfessionalProfile = () => {
     ultimaConexion,
     profesional,
   } = valueForm;
+
+  const handleChange = (e) => {
+    setValueForm({
+      ...valueForm,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if ([nombre, apellido, email].includes("")) {
+      return toast.error(
+        "Los campos nombres,apellidos y correo electrónico son obligatorios"
+      );
+    }
+    console.log("dispachado", valueForm);
+    dispatch(updateProfileAdminDash({ valueForm, toast }));
+    return toast.success("Enviando...");
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -72,7 +97,7 @@ const ProfessionalProfile = () => {
             src="https://img.freepik.com/foto-gratis/peines-tijeras-copia-espacio_23-2148352839.jpg"
             alt
           />
-          <div className="inset-0 m-auto w-24 h-24 absolute bottom-0 -mb-12  rounded border-2 shadow border-white">
+          <div className="inset-0 m-auto w-32 h-32 absolute bottom-0 -mb-12  rounded border-2 shadow border-white">
             {img ? (
               <img
                 className="h-full w-full object-cover shadow"
@@ -90,7 +115,7 @@ const ProfessionalProfile = () => {
         </div>
         <div className="px-5 pb-10">
           <div className="flex justify-center  w-full pt-16 ">
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <svg
                 className="w-4 mr-1 text-yellow-400 icon icon-tabler icon-tabler-star"
                 xmlns="http://www.w3.org/2000/svg"
@@ -176,7 +201,7 @@ const ProfessionalProfile = () => {
                   d="M12 17.75l-6.172 3.245 1.179-6.873-4.993-4.867 6.9-1.002L12 2l3.086 6.253 6.9 1.002-4.993 4.867 1.179 6.873z"
                 />
               </svg>
-            </div>
+            </div> */}
           </div>
           <div className="pt-3  flex flex-col  items-start  justify-between">
             <div className=" w-full ">
@@ -184,7 +209,6 @@ const ProfessionalProfile = () => {
                 <h2 className="mb-3  text-2xl text-gray-800 dark:text-gray-100 font-medium tracking-normal">
                   {nombre} {apellido}
                 </h2>
-
               </div>
               <p className="text-center  mt-2 text-sm tracking-normal text-gray-600 dark:text-gray-400 leading-5">
                 {profesional?.descripcion}
@@ -224,7 +248,6 @@ const ProfessionalProfile = () => {
                 <div className="ml-5 rounded-full bg-green-200 text-green-500 text-sm px-6 py-2 flex justify-center items-center">
                   {estado ? "Cuenta Verificada" : "Cuenta Sin Verificada"}
                 </div>
-
               </div>
             </div>
             <p className="text-gray-800 dark:text-gray-100 text-sm text-center w-full mt-4  leading-5">
@@ -237,7 +260,33 @@ const ProfessionalProfile = () => {
 
       <div className="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-6 gap-8">
         <div className="bg-white dark:bg-gray-800 shadow p-8">
-          <h3>Datos personales</h3>
+          <div
+            className={`grid ${
+              forEdit ? "grid-cols-3" : "grid-cols-2"
+            } justify-items-end items-center`}
+          >
+            <h3 className="text-2xl font tracking-widest">Datos personales</h3>
+            {forEdit && (
+              <AiOutlineCheck
+                size={30}
+                className="cursor-pointer"
+                onClick={(e) => handleSubmit(e)}
+              />
+            )}
+            {!forEdit ? (
+              <AiOutlineEdit
+                size={30}
+                className="cursor-pointer"
+                onClick={() => setForEdit(!forEdit)}
+              />
+            ) : (
+              <AiOutlineClose
+                size={30}
+                className="cursor-pointer"
+                onClick={() => setForEdit(!forEdit)}
+              />
+            )}
+          </div>
 
           <div className="flex lg:flex-row md:flex-col-reverse flex-col-reverse justify-between mt-4  ">
             <div className="text">
@@ -248,9 +297,10 @@ const ProfessionalProfile = () => {
                   name="nombre"
                   id="nombres"
                   value={nombre}
+                  onChange={handleChange}
                   className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                   placeholder="No registrado"
-                  disabled={true}
+                  disabled={!forEdit}
                 />
               </div>
 
@@ -262,6 +312,7 @@ const ProfessionalProfile = () => {
                     name="apellidos"
                     id="apellidos"
                     value={apellido}
+                    onChange={handleChange}
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                     placeholder="No registrado"
                     disabled={true}
@@ -275,6 +326,7 @@ const ProfessionalProfile = () => {
                   name="email"
                   id="email"
                   value={email}
+                  onChange={handleChange}
                   className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                   placeholder="No registrado"
                   disabled={true}
@@ -289,6 +341,7 @@ const ProfessionalProfile = () => {
                     name="telefono"
                     id="telefono"
                     value={telefono}
+                    onChange={handleChange}
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                     placeholder="No registrado"
                     disabled={true}
@@ -301,6 +354,7 @@ const ProfessionalProfile = () => {
                     name="cedula"
                     id="cedula"
                     value={cedula}
+                    onChange={handleChange}
                     placeholder="No registrado"
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                     disabled={true}
@@ -315,6 +369,7 @@ const ProfessionalProfile = () => {
               id="sexo"
               className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
               value={sexo}
+              onChange={handleChange}
               name="sexo"
               disabled={true}
             >
@@ -422,7 +477,7 @@ const ProfessionalProfile = () => {
 
         <div className="bg-white dark:bg-gray-800 shadow container grid grid-row-2 p-8 gap-6">
           <div className="flex  justify-center  flex-wrap lg:flex-col">
-            <h3>Datos Porfesionales</h3>
+            <h3>Datos Profesionales</h3>
 
             <div className="flex lg:flex-row md:flex-col-reverse flex-col-reverse justify-between mt-4  ">
               <div className="text">
@@ -483,10 +538,7 @@ const ProfessionalProfile = () => {
                     {profesional?.especialidad?.length > 0 ? (
                       profesional?.especialidad.map((especialidad, index) => (
                         <div className="w-full">
-                          <div
-
-                            className="bg-white dark:bg-gray-800 p-5 shadow flex rounded cursor-pointer"
-                          >
+                          <div className="bg-white dark:bg-gray-800 p-5 shadow flex rounded cursor-pointer">
                             <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0 ">
                               <p className="text-lg text-gray-800 dark:text-gray-100 font-normal">
                                 {especialidad}
@@ -494,7 +546,6 @@ const ProfessionalProfile = () => {
                             </div>
                           </div>
                         </div>
-
                       ))
                     ) : (
                       <p className="text-center text-xs mt-3 font-medium flex items-center px-2.5 py-3 rounded  bg-gray-100 text-gray-800 border-gray-500 ">
@@ -560,33 +611,37 @@ const ProfessionalProfile = () => {
 
           <div className="flex gap-6 justify-center  flex-wrap lg:flex-col">
             <h3>Últimos servicios</h3>
-            {
-              profesional?.reservas?.map((h) => (
-                <div className="w-full">
-                  <Link
-                    to={`/resumen-admin/${h._id}`}
-                    className="bg-white dark:bg-gray-800 shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
-                  >
-                    <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
-                      <p className="text-lg text-gray-800 dark:text-gray-100 mb-3 font-normal">
-                        {h.servicio}
-                      </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
-                        {h.dia_servicio} - {h.hora_servicio}
-                      </p>
-                    </div>
-                    <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 flex justify-end flex-col xl:items-end lg:items-end md:items-end items-start">
-                      <p className={`text-xs text-white px-3 rounded mb-2 font-normal py-1 bg-yellow-400  ${h.estadoServicio === "Completado" ? "bg-green-400" : h.estadoServicio === "Cancelado" && "bg-red-400"} `}>
-                        {h.estadoServicio}
-                      </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
-                        Atiende a: {h.cliente_nombre}
-                      </p>
-                    </div>
-                  </Link>
-                </div>
-              ))
-            }
+            {profesional?.reservas?.map((h) => (
+              <div className="w-full">
+                <Link
+                  to={`/resumen-admin/${h._id}`}
+                  className="bg-white dark:bg-gray-800 shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
+                >
+                  <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
+                    <p className="text-lg text-gray-800 dark:text-gray-100 mb-3 font-normal">
+                      {h.servicio}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                      {h.dia_servicio} - {h.hora_servicio}
+                    </p>
+                  </div>
+                  <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 flex justify-end flex-col xl:items-end lg:items-end md:items-end items-start">
+                    <p
+                      className={`text-xs text-white px-3 rounded mb-2 font-normal py-1 bg-yellow-400  ${
+                        h.estadoServicio === "Completado"
+                          ? "bg-green-400"
+                          : h.estadoServicio === "Cancelado" && "bg-red-400"
+                      } `}
+                    >
+                      {h.estadoServicio}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                      Atiende a: {h.cliente_nombre}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </div>
