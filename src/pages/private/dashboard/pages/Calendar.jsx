@@ -1,43 +1,54 @@
 import React, { useEffect, useState } from "react";
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { getOrders } from './../../../../redux/features/ordenesSlice';
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrders } from "./../../../../redux/features/ordenesSlice";
 
 const localizer = momentLocalizer(moment);
 const MyCalendar = ({ reservations }) => {
-  const events = reservations.map((reservation) => {
-    if (!reservation.hora_servicio && !reservation.dia_servicio && reservation.estadoPago === "approved") {
-      return null; // O maneja el caso de reserva sin hora de servicio de acuerdo a tus necesidades
-    }
-  
-    const [start, end] = reservation?.hora_servicio?.split("-") || [];
-    const startDate = moment(`${reservation.dia_servicio} ${start?.trim()}` || null, "YYYY-MM-DD HH:mm");
-    const endDate = moment(`${reservation.dia_servicio} ${end?.trim()}` || null, "YYYY-MM-DD HH:mm");
-  
-    return {
-      servicio: reservation.servicio,
-      profesional: reservation.profesional_nombre,
-      dia: reservation.dia_servicio,
-      start: startDate.toDate(),
-      end: endDate.toDate(),
-      estadoPago: reservation.estadoPago, // Agrega el estado de pago al objeto del evento
-    };
-  }).filter((event) => event !== null && event.estadoPago === "approved"); // Filtra eventos nulos y con estado de pago "approved"
-  
+  const events = reservations
+    .map((reservation) => {
+      if (
+        !reservation.hora_servicio &&
+        !reservation.dia_servicio &&
+        reservation.estadoPago === "approved"
+      ) {
+        return null; // O maneja el caso de reserva sin hora de servicio de acuerdo a tus necesidades
+      }
 
-  console.log("events", events);
+      const [start, end] = reservation?.hora_servicio?.split("-") || [];
+      const startDate = moment(
+        `${reservation.dia_servicio} ${start?.trim()}` || null,
+        "YYYY-MM-DD HH:mm"
+      );
+      const endDate = moment(
+        `${reservation.dia_servicio} ${end?.trim()}` || null,
+        "YYYY-MM-DD HH:mm"
+      );
+
+      return {
+        servicio: reservation.servicio,
+        profesional: reservation.profesional_nombre,
+        dia: reservation.dia_servicio,
+        start: startDate.toDate(),
+        end: endDate.toDate(),
+        estadoPago: reservation.estadoPago, // Agrega el estado de pago al objeto del evento
+      };
+    })
+    .filter((event) => event !== null && event.estadoPago === "approved"); // Filtra eventos nulos y con estado de pago "approved"
+
+  // console.log("events", events);
   return (
-    <div style={{ height: '500px' }}>
+    <div style={{ height: "500px" }}>
       <Calendar
         localizer={localizer}
-        events={events.filter((event) => event !== null )} // Filtrar eventos nulos
+        events={events.filter((event) => event !== null)} // Filtrar eventos nulos
         startAccessor="start"
         endAccessor="end"
-        style={{ margin: '100px' }}
+        style={{ margin: "100px" }}
         components={{
-          event: EventComponent
+          event: EventComponent,
         }}
       />
     </div>
@@ -53,14 +64,12 @@ const EventComponent = ({ event }) => {
   );
 };
 
-
-
 const CalendarDashboard = () => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);  
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
-  const reservations =  useSelector((state) => state.ordenes.order || []);
-console.log("reservations", reservations)
+  const reservations = useSelector((state) => state.ordenes.order || []);
+  // console.log("reservations", reservations)
   useEffect(() => {
     dispatch(getOrders())
       .then(() => setLoading(false))

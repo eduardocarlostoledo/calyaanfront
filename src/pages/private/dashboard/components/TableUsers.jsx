@@ -68,7 +68,7 @@ const TableUsers = ({ rol = "" }) => {
       a.nombre.localeCompare(b.nombre)
     );
   }, [paginado?.resultados]);
-  console.log("sortedUsers", sortedUsers);
+  // console.log("sortedUsers", sortedUsers);
   const filteredUsers = useMemo(() => {
     if (!sortedUsers) {
       return [];

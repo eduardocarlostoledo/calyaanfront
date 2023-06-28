@@ -12,15 +12,17 @@ const useGetDateTableReservas = (rol) => {
   useEffect(() => {
     const obtenerReservas = async () => {
       setLoading(true);
-      let { data } = await clienteAxios.get(`api/buscar/ordenes?limite=${limite}&pagina=${pagina}`);
-      
+      let { data } = await clienteAxios.get(
+        `api/buscar/ordenes?limite=${limite}&pagina=${pagina}`
+      );
+
       setPaginado(data);
       setLoading(false);
     };
 
     obtenerReservas();
   }, [limite, pagina]);
-console.log("PAGINA", pagina)
+  // console.log("PAGINA", pagina)
   return {
     paginado,
     pagina,

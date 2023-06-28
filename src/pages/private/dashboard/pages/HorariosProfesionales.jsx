@@ -26,7 +26,7 @@ const HorarioProfessionalAntDesing = () => {
   const orders = useSelector(
     (state) => state.professional.disponibilidad || []
   );
-  console.log(orders);
+  // console.log(orders);
   //// Mapeo ordenes para agregar una key a cada fila
   const newProducts = orders?.map((product) => ({
     ...product,
@@ -36,8 +36,14 @@ const HorarioProfessionalAntDesing = () => {
   const filteredOrdenes = useMemo(() => {
     return newProducts?.filter((orden) => {
       const { creador, fecha, disponibilidad } = orden;
-      const { telefono, email, nombre, apellido, localidadesLaborales, especialidad } =
-        creador?.creador;
+      const {
+        telefono,
+        email,
+        nombre,
+        apellido,
+        localidadesLaborales,
+        especialidad,
+      } = creador?.creador;
 
       const nombreCompleto = `${nombre} ${apellido}`.toLowerCase();
 
@@ -46,7 +52,7 @@ const HorarioProfessionalAntDesing = () => {
       );
 
       const matchEspecialidad = creador.especialidad?.some((especialidades) =>
-      especialidades.toLowerCase().includes(searchText.toLowerCase())
+        especialidades.toLowerCase().includes(searchText.toLowerCase())
       );
 
       const matchHoraServicio = disponibilidad?.some((hora) =>
@@ -54,7 +60,6 @@ const HorarioProfessionalAntDesing = () => {
       );
 
       return (
-        
         telefono?.includes(searchText) ||
         email?.includes(searchText) ||
         nombreCompleto.includes(searchText.toLowerCase()) ||
@@ -62,7 +67,7 @@ const HorarioProfessionalAntDesing = () => {
           apellido?.toLowerCase().includes(searchText.toLowerCase())) ||
         moment(fecha, "YYYY-MM-DD").format("YYYY-MM-DD").includes(searchText) ||
         matchHoraServicio ||
-        matchLocalidad || 
+        matchLocalidad ||
         matchEspecialidad
       );
     });
@@ -87,10 +92,8 @@ const HorarioProfessionalAntDesing = () => {
       dataIndex: "creador",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) =>
-        text.especialidad.map((e) => <p> {e} </p>),
-      
-    },    
+      render: (text) => text.especialidad.map((e) => <p> {e} </p>),
+    },
     {
       title: "Telefono",
       dataIndex: "creador",
@@ -130,15 +133,15 @@ const HorarioProfessionalAntDesing = () => {
   ];
 
   return (
-    
     <div
       style={{ textAlign: "center", alignItems: "center", overflow: "auto" }}
     >
       <p className="p">DISPONIBILIDAD PROFESIONAL</p>
       <p className="p">
-        BUSQUEDA POR NOMBRE, APELLIDO, ESPECIALIDAD, TELEFONO, EMAIL, LOCALIDAD LABORAL, FECHA DE DISPONIBILIDAD, HORA DISPONIBLE.
+        BUSQUEDA POR NOMBRE, APELLIDO, ESPECIALIDAD, TELEFONO, EMAIL, LOCALIDAD
+        LABORAL, FECHA DE DISPONIBILIDAD, HORA DISPONIBLE.
       </p>
-      
+
       <h1 style={{ textAlign: "center", alignItems: "center" }}>
         <Input.Search
           placeholder="Buscar"

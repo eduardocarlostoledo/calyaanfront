@@ -4,7 +4,7 @@ function index() {
   useEffect(() => {
     document.querySelector("body").addEventListener("click", (e) => {
       // e.stopPropagation();
-      console.log("body");
+      // console.log("body");
       if (
         document
           .getElementById("drop-down-div_form_layout_wizard6")

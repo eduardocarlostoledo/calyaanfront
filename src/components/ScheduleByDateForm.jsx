@@ -16,13 +16,11 @@ const ScheduleByDateForm = ({ handleButtonMetodoPago }) => {
 
   localStorage.setItem("DateService", JSON.stringify(inputValue));
 
-  
-
   const [pagar, setPagar] = useState(false);
   const [profesional, setProfesional] = useState({});
   const [cargando, setCargando] = useState(false);
   const [profesionalesRequest, setProfesionalesRequest] = useState([]);
-//  const [hourSelect, setHoursSelect] = useState([]);
+  //  const [hourSelect, setHoursSelect] = useState([]);
 
   const handleProfesional = (profesional) => {
     const updatedArray = profesionalesRequest.map((obj) =>
@@ -32,11 +30,11 @@ const ScheduleByDateForm = ({ handleButtonMetodoPago }) => {
     );
 
     setProfesionalesRequest(updatedArray);
-    console.log("Updated Array", updatedArray)
+    // console.log("Updated Array", updatedArray)
 
     setProfesional(profesional);
     // console.log("PROFESIONAL.HORARIOS",profesional.horarios)
-    // let horarios = profesional.horarios  
+    // let horarios = profesional.horarios
     // setHoursSelect(limpiarHorarios(horarios));
     // console.log("setHoursSelect HOURSELECT", hourSelect)
     setPagar(true);
@@ -47,10 +45,9 @@ const ScheduleByDateForm = ({ handleButtonMetodoPago }) => {
   const handleChange = (e) => {
     setInputValue({
       ...inputValue,
-      [e.target.name]: e.target.value,    
-      localidadServicio: localStorage.getItem("localidad"),  
+      [e.target.name]: e.target.value,
+      localidadServicio: localStorage.getItem("localidad"),
     });
-    
   };
 
   useEffect(() => {
@@ -71,18 +68,16 @@ const ScheduleByDateForm = ({ handleButtonMetodoPago }) => {
         localidad,
       });
 
-console.log(data)
-
+      // console.log(data)
 
       if (data?.length > 0) {
         const updatedArray = data.map((obj) => ({
-          profesional_user_id:obj.creador.creador._id,
+          profesional_user_id: obj.creador.creador._id,
           profesional_id: obj.creador._id,
           profesional_nombre: obj.creador.creador.nombre,
           styles: false,
         }));
         setProfesionalesRequest(updatedArray);
-
       } else {
         setProfesionalesRequest(data);
       }
@@ -93,7 +88,7 @@ console.log(data)
   }, [time]);
 
   const handleSubmitProfessional = () => {
-    console.log(profesional)
+    // console.log(profesional)
     localStorage.setItem("ProfessionalService", JSON.stringify(profesional));
   };
 

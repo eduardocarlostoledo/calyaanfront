@@ -20,7 +20,6 @@ const TableSchedule = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [localidad, setLocalidad] = useState("");
 
-
   const dispatch = useDispatch();
 
   const handleDownload = (url, filename) => {
@@ -34,7 +33,6 @@ const TableSchedule = () => {
   };
 
   const handleUser = async (user) => {
-
     try {
       const { data } = await clienteAxios.get(
         `api/profesional/perfil-profesional-id/${user.profesional}`
@@ -44,16 +42,13 @@ const TableSchedule = () => {
         nombre: user.nombre,
         horarios: data.disponibilidad,
       });
-
-
-
     } catch (err) {
       console.log(err);
     }
 
     setModal(true);
   };
-  console.log("USERSTATE", userState);
+  // console.log("USERSTATE", userState);
 
   const handleModalView = () => {
     setModal(!modal);
@@ -67,20 +62,20 @@ const TableSchedule = () => {
       a.nombre.localeCompare(b.nombre)
     );
   }, [paginado?.resultados]);
-  
+
   const filteredUsers = useMemo(() => {
     if (!sortedUsers) {
       return [];
     }
-    return sortedUsers.filter((user) =>
-    user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    return sortedUsers.filter(
+      (user) =>
+        user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          user.apellido.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [sortedUsers, searchTerm]);
-  
 
   return (
     <>
@@ -105,8 +100,7 @@ const TableSchedule = () => {
                 </div>
               </div>
               <div className="relative">
-              
-              <select
+                <select
                   className="appearance-none  bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   name="localidad"
                   id="localidad"
@@ -234,16 +228,15 @@ const TableSchedule = () => {
         </div>
       </div>
       {modal && userState !== null && userState !== undefined && (
-  <ModalUser
-  userState={userState}
-    handleModalView={handleModalView}
-    dispatch={dispatch}
-  />
-)}
+        <ModalUser
+          userState={userState}
+          handleModalView={handleModalView}
+          dispatch={dispatch}
+        />
+      )}
     </>
   );
 };
-
 
 export default TableSchedule;
 
@@ -280,13 +273,12 @@ export default TableSchedule;
 //   };
 
 //   const handleUser = async (user) => {
-   
 
 //     try {
 //       const { data } = await clienteAxios.get(
 //         `api/profesional/perfil-profesional-id/${user.profesional}`
 //       );
- 
+
 //       setUserState({
 //         nombre:user.nombre,
 //         horarios:data.disponibilidad

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";;
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { NumericFormat } from "react-number-format";
@@ -28,8 +28,7 @@ const TableTransactionHistory = () => {
     setModal(!modal);
   };
 
-
-  console.log(paginado)
+  // console.log(paginado)
 
   const fetchHistorial = useCallback(async () => {
     try {
@@ -58,10 +57,10 @@ const TableTransactionHistory = () => {
 
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
   const [ventas, setVentas] = useState("");
-  const [cargando, setCargando] = useState("")
+  const [cargando, setCargando] = useState("");
 
   const filtrarVentasPorFecha = () => {
-    setCargando(true)
+    setCargando(true);
     let ventasFiltradas = historial.filter(
       (venta) => venta.createdAt.split("T")[0] === fechaSeleccionada
     );
@@ -72,16 +71,15 @@ const TableTransactionHistory = () => {
     );
 
     setTimeout(() => {
-      setCargando(false)
-      setVentas(totalVentas)
-    }, 500)
+      setCargando(false);
+      setVentas(totalVentas);
+    }, 500);
   };
 
-  console.log(historial)
+  // console.log(historial)
 
   return (
     <div className="py-8">
-
       <h2 className="text-2xl font-bold mb-6">Transacciones</h2>
       <div className="my-2 flex justify-between mx-4">
         <div className="flex sm:flex-row flex-col gap-6 mb-6">
@@ -97,32 +95,36 @@ const TableTransactionHistory = () => {
           </div>
 
           <div className="block relative">
-            <button onClick={filtrarVentasPorFecha} className="text-white bg-primary hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 text-cente"> Filtrar ventas </button>
+            <button
+              onClick={filtrarVentasPorFecha}
+              className="text-white bg-primary hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 text-cente"
+            >
+              {" "}
+              Filtrar ventas{" "}
+            </button>
           </div>
 
           <div className="flex justify-center items-center">
-            {
-              cargando ?
-                <Spinner />
-                :
-                ventas !== 0 && ventas ?
-                  <>
-                    <p className="mr-2">Total Ventas:</p>
-                    <NumericFormat
-                      value={ventas}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"$"}
-                    />
-                  </>
-                  :
-                  ventas === 0 &&
-                  <div>
-                    <p className="mr-2">No se reportaron ventas</p>
-                  </div>
-            }
+            {cargando ? (
+              <Spinner />
+            ) : ventas !== 0 && ventas ? (
+              <>
+                <p className="mr-2">Total Ventas:</p>
+                <NumericFormat
+                  value={ventas}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"$"}
+                />
+              </>
+            ) : (
+              ventas === 0 && (
+                <div>
+                  <p className="mr-2">No se reportaron ventas</p>
+                </div>
+              )
+            )}
           </div>
-
         </div>
 
         <div>
@@ -235,27 +237,25 @@ const TableTransactionHistory = () => {
 
                     <td className="px-5 py-5  text-sm border-b border-gray-200 bg-white">
                       {reserva.createdAt.split("T")[0]}
-
                     </td>
 
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
-
-                        <div
-                          className="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight"
-
-                        >
+                        <div className="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
                           <p
                             aria-hidden
-                            className={`absolute inset-0 opacity-50 rounded-full ${reserva.estadoPago === "approved" ? "bg-green-200" : reserva.estadoPago === "pending" ? "bg-yellow-200" : "bg-red-200"}`}
+                            className={`absolute inset-0 opacity-50 rounded-full ${
+                              reserva.estadoPago === "approved"
+                                ? "bg-green-200"
+                                : reserva.estadoPago === "pending"
+                                ? "bg-yellow-200"
+                                : "bg-red-200"
+                            }`}
                           ></p>
                           <p className="relative">{reserva.estadoPago}</p>
                         </div>
-
-
                       </p>
                     </td>
-
 
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
@@ -270,11 +270,13 @@ const TableTransactionHistory = () => {
                     </td>
 
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                      <Link to={`/resumen-admin/${reserva._id}`} className="text-gray-900 whitespace-no-wrap">
+                      <Link
+                        to={`/resumen-admin/${reserva._id}`}
+                        className="text-gray-900 whitespace-no-wrap"
+                      >
                         Ver reserva
                       </Link>
                     </td>
-
                   </tr>
                 ))
               )}
@@ -292,10 +294,11 @@ const TableTransactionHistory = () => {
               <div className="inline-flex mt-2 xs:mt-0">
                 <button
                   onClick={() => pagina !== 1 && setPagina(pagina - 1)}
-                  className={`text-sm font-semibold py-2 px-4 rounded-r ${pagina !== 1
-                    ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
-                    : "disabled:opacity-25"
-                    }`}
+                  className={`text-sm font-semibold py-2 px-4 rounded-r ${
+                    pagina !== 1
+                      ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
+                      : "disabled:opacity-25"
+                  }`}
                   disabled={pagina !== 1 ? false : true}
                 >
                   Ant
@@ -304,10 +307,11 @@ const TableTransactionHistory = () => {
                   onClick={() =>
                     pagina < paginado.totalPaginas && setPagina(pagina + 1)
                   }
-                  className={`text-sm font-semibold py-2 px-4 rounded-r ${pagina < paginado.totalPaginas
-                    ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
-                    : "disabled:opacity-25"
-                    }`}
+                  className={`text-sm font-semibold py-2 px-4 rounded-r ${
+                    pagina < paginado.totalPaginas
+                      ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
+                      : "disabled:opacity-25"
+                  }`}
                   disabled={pagina < paginado.totalPaginas ? false : true}
                 >
                   Sig
@@ -319,12 +323,13 @@ const TableTransactionHistory = () => {
       </div>
 
       {modal && (
-        <ModalUserInfo userState={userState} handleModalView={handleModalView} />
+        <ModalUserInfo
+          userState={userState}
+          handleModalView={handleModalView}
+        />
       )}
-
     </div>
   );
 };
-
 
 export default TableTransactionHistory;

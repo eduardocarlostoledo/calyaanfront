@@ -39,7 +39,7 @@ export const createOrder = createAsyncThunk(
     try {
       const response = await api.createOrderRequest(orderForm);
       const info = response.data;
-      console.log("createOrder", info);
+      // console.log("createOrder", info);
       return info;
     } catch (error) {
       throw new Error("Error al crear las órdenes");
@@ -53,7 +53,7 @@ export const getOrderById = createAsyncThunk(
     try {
       const response = await api.getOrderByIdRequest(orderId);
       const info = response.data;
-      console.log("getOrderById", info);
+      // console.log("getOrderById", info);
       return info;
     } catch (error) {
       throw new Error("Error al obtener las órdenes por Id");
@@ -67,7 +67,7 @@ export const deleteOrder = createAsyncThunk(
     try {
       const response = await api.deleteOrderRequest(orderId);
       const info = response.data;
-      console.log("deleteOrder", info);
+      // console.log("deleteOrder", info);
       return info;
     } catch (error) {
       throw new Error("Error al eliminar las órdenes");
@@ -81,7 +81,7 @@ export const getOrdersByUser = createAsyncThunk(
     try {
       const response = await api.getOrdersByUserIdRequest(userId);
       const info = response.data;
-      console.log("getOrdersByUser", info);
+      // console.log("getOrdersByUser", info);
       return info;
     } catch (error) {
       throw new Error("Error al obtener las órdenes por usuario");

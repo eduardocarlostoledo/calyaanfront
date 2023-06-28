@@ -64,15 +64,15 @@ const Service = () => {
     try {
       const getUser = async () => {
         try {
-          console.log(profile, "ESTE ES EL PERFIL DENTRO DEL USE EFECT");
+          // console.log(profile, "ESTE ES EL PERFIL DENTRO DEL USE EFECT");
           if (!profile.email) {
-            return console.log("no hay nada en profile");
+            return console.log("Ups, algo no salio como se esperaba");
           }
           let { data } = await clienteAxios.get(
             `api/usuarios/perfil/${profile._id}`
           );
           if (!("telefono" in data) || !("cedula" in data)) {
-            console.log("no existe eso padre");
+            // console.log("no existe eso padre");
             swal(
               "Para que recibas el mejor servicio Por favor, bríndanos tu teléfono y cédula. ¡Gracias!",
               "",
@@ -97,7 +97,7 @@ const Service = () => {
     }
   }, [profile]);
 
-  console.log(profile, "ESTE ES EL PERFIL");
+  // console.log(profile, "ESTE ES EL PERFIL");
 
   return (
     <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-white max-md:w-screen flex-wrap items-center justify-center">

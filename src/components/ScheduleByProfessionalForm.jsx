@@ -50,7 +50,7 @@ const ScheduleByProfessionalForm = () => {
 
     if (name === "time") {
       const [startTime] = value.split("-"); // Obtener el valor de inicio de la hora
-      console.log("startTime", startTime);
+      // console.log("startTime", startTime);
       const isValidTime = validateTime(startTime);
       setPagar(isValidTime);
       if (isValidTime) {
@@ -89,7 +89,7 @@ const ScheduleByProfessionalForm = () => {
 
         // Verificar si los datos son inválidos, nulos o no definidos
         if (!inputValue.date || !nombre) {
-          console.log("Datos inválidos o no definidos");
+          // console.log("Datos inválidos o no definidos");
           setCargando(false);
           return;
         }
@@ -102,7 +102,7 @@ const ScheduleByProfessionalForm = () => {
             localidad,
           }
         );
-        console.log("data de api/reservas/profesionales/fecha", data);
+        // console.log("data de api/reservas/profesionales/fecha", data);
 
         if (data?.length > 0) {
           // Filtrar objetos con creador distinto de null y con teléfono definido

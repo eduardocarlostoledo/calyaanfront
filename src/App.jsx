@@ -89,7 +89,7 @@ function App() {
 
   const dispatch = useDispatch();
 
-  console.log(message);
+  // console.log(message);
 
   useEffect(() => {
     message.type === "error"

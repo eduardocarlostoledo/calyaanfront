@@ -8,9 +8,91 @@ import { AiOutlineEdit, AiOutlineClose, AiOutlineCheck } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { updateProfileAdminDash } from "../../../../redux/features/professionalSlice";
 
+// const ProfessionalProfile = () => {
+//   const { id } = useParams();
+//   const dispatch = useDispatch();
+
+//   const [valueForm, setValueForm] = useState({
+//     nombre: "",
+//     apellido: "",
+//     sexo: "",
+//     email: "",
+//     telefono: "",
+//     direccionDefault: "",
+//     direcciones: "",
+//     cedula: "",
+//     reviews: 0,
+//     reservas: [],
+//     estado: "",
+//     img: "",
+//     profesional: "",
+//     ultimaConexion: "",
+//   });
+//   const [forEdit, setForEdit] = useState(false);
+
+//   const {
+//     nombre,
+//     apellido,
+//     sexo,
+//     email,
+//     telefono,
+//     img,
+//     direccionDefault,
+//     direcciones,
+//     cedula,
+//     reviews,
+//     reservas,
+//     estado,
+//     confirmado,
+//     ultimaConexion,
+//     profesional,
+//   } = valueForm;
+
+//   const handleChange = (e) => {
+//     setValueForm({
+//       ...valueForm,
+//       [e.target.name]: e.target.value,
+//     });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if ([nombre, apellido, email].includes("")) {
+//       return toast.error(
+//         "Los campos nombres,apellidos y correo electrónico son obligatorios"
+//       );
+//     }
+//     console.log("dispachado", valueForm);
+//     dispatch(updateProfileAdminDash({ valueForm, toast }));
+//     setForEdit(false);
+//     return toast.success("Enviando...");
+//   };
+
+//   useEffect(() => {
+//     const getUser = async () => {
+//       try {
+//         let { data } = await clienteAxios.get(
+//           `api/profesional/perfil-profesional/${id}`
+//         );
+
+//         console.log(data);
+
+//         setValueForm({ ...valueForm, ...data });
+//       } catch (err) {
+//         let error = err.response.data.msg
+//           ? err.response.data.msg
+//           : err.response && "Estamos presentando problemas internos";
+//         return toast.error(error);
+//       }
+//     };
+//     getUser();
+//   }, [id]);
+
 const ProfessionalProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [forEdit, setForEdit] = useState(false);
 
   const [valueForm, setValueForm] = useState({
     nombre: "",
@@ -25,10 +107,92 @@ const ProfessionalProfile = () => {
     reservas: [],
     estado: "",
     img: "",
-    profesional: "",
+    profesional: {},
     ultimaConexion: "",
   });
-  const [forEdit, setForEdit] = useState(false);
+
+  // const getUser = async () => {
+  //   try {
+  //     const { data } = await clienteAxios.get(
+  //       `api/profesional/perfil-profesional/${id}`
+  //     );
+  //     console.log(data, "informacion de la peticion");
+  //     setValueForm({ ...valueForm, ...data });
+  //   } catch (err) {
+  //     const error =
+  //       err.response?.data.msg || "Estamos experimentando problemas internos";
+  //     toast.error(error);
+  //   }
+  // };
+
+  const getUser = async () => {
+    try {
+      const { data } = await clienteAxios.get(
+        `api/profesional/perfil-profesional/${id}`
+      );
+
+      setValueForm((prevState) => ({
+        ...prevState,
+        nombre: data.nombre || "",
+        apellido: data.apellido || "",
+        sexo: data.sexo || "",
+        email: data.email || "",
+        telefono: data.telefono || "",
+        direccionDefault: data.direccionDefault || "",
+        direcciones: data.direcciones || "",
+        cedula: data.cedula || "",
+        reviews: data.reviews || 0,
+        reservas: data.reservas || [],
+        estado: data.estado || "",
+        img: data.img || "",
+        profesional: data.profesional || {},
+        ultimaConexion: data.ultimaConexion || "",
+      }));
+    } catch (err) {
+      const error =
+        err.response?.data.msg || "Estamos experimentando problemas internos";
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, [id]);
+
+  const handleChange = (e) => {
+    if (e.target.name === "profesional") {
+      return setValueForm((prevState) => ({
+        ...prevState,
+        profesional: {
+          ...prevState.profesional,
+          descripcion: e.target.value,
+        },
+      }));
+    }
+    setValueForm((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+    // console.log(valueForm);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (![nombre, apellido, email].every(Boolean)) {
+      return toast.error(
+        "Los campos nombres, apellidos y correo electrónico son obligatorios"
+      );
+    }
+
+    try {
+      dispatch(updateProfileAdminDash({ valueForm, toast }));
+      setForEdit(false);
+      toast.success("Enviando...");
+    } catch (error) {
+      toast.error("Ha ocurrido un error al enviar los datos");
+    }
+  };
 
   const {
     nombre,
@@ -47,46 +211,6 @@ const ProfessionalProfile = () => {
     ultimaConexion,
     profesional,
   } = valueForm;
-
-  const handleChange = (e) => {
-    setValueForm({
-      ...valueForm,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if ([nombre, apellido, email].includes("")) {
-      return toast.error(
-        "Los campos nombres,apellidos y correo electrónico son obligatorios"
-      );
-    }
-    console.log("dispachado", valueForm);
-    dispatch(updateProfileAdminDash({ valueForm, toast }));
-    return toast.success("Enviando...");
-  };
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        let { data } = await clienteAxios.get(
-          `api/profesional/perfil-profesional/${id}`
-        );
-
-        console.log(data);
-
-        setValueForm({ ...valueForm, ...data });
-      } catch (err) {
-        let error = err.response.data.msg
-          ? err.response.data.msg
-          : err.response && "Estamos presentando problemas internos";
-        return toast.error(error);
-      }
-    };
-    getUser();
-  }, [id]);
 
   return (
     <>
@@ -309,13 +433,13 @@ const ProfessionalProfile = () => {
                   <p className="text-base text-gray-800">Apellidos</p>
                   <input
                     type="text"
-                    name="apellidos"
+                    name="apellido"
                     id="apellidos"
                     value={apellido}
                     onChange={handleChange}
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                     placeholder="No registrado"
-                    disabled={true}
+                    disabled={!forEdit}
                   />
                 </div>
               </div>
@@ -329,7 +453,7 @@ const ProfessionalProfile = () => {
                   onChange={handleChange}
                   className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                   placeholder="No registrado"
-                  disabled={true}
+                  disabled={!forEdit}
                 />
               </div>
 
@@ -344,7 +468,7 @@ const ProfessionalProfile = () => {
                     onChange={handleChange}
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                     placeholder="No registrado"
-                    disabled={true}
+                    disabled={!forEdit}
                   />
                 </div>
                 <div className="lg:mt-0 md:mt-0 mt-4 w-full">
@@ -357,7 +481,7 @@ const ProfessionalProfile = () => {
                     onChange={handleChange}
                     placeholder="No registrado"
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                    disabled={true}
+                    disabled={!forEdit}
                   />
                 </div>
               </div>
@@ -371,7 +495,7 @@ const ProfessionalProfile = () => {
               value={sexo}
               onChange={handleChange}
               name="sexo"
-              disabled={true}
+              disabled={!forEdit}
             >
               <option value="">No registrado</option>
               <option value="Masculino">Masculino</option>
@@ -390,7 +514,7 @@ const ProfessionalProfile = () => {
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 value={direccionDefault.ciudad}
                 name="ciudad"
-                disabled={true}
+                disabled={!forEdit}
               >
                 <option value="">No registrado</option>
                 <option value={direccionDefault.ciudad}>
@@ -405,7 +529,7 @@ const ProfessionalProfile = () => {
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 value={direccionDefault.nombre}
                 name="ciudad"
-                disabled={true}
+                disabled={!forEdit}
               >
                 <option value="">No registrado</option>
                 <option value={direccionDefault.nombre}>
@@ -425,7 +549,7 @@ const ProfessionalProfile = () => {
                 value={direccionDefault._id}
                 placeholder="No registrado"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                disabled={true}
+                disabled={!forEdit}
               />
             </div>
             <div className="lg:mt-0 md:mt-0 mt-4 w-full">
@@ -435,7 +559,7 @@ const ProfessionalProfile = () => {
                 name="localidad"
                 id="localidad"
                 value={direccionDefault.localidad}
-                disabled={true}
+                disabled={!forEdit}
               >
                 <option value="">No registrado</option>
                 {localidades.map((localidad, index) => (
@@ -457,7 +581,7 @@ const ProfessionalProfile = () => {
                 value={direccionDefault.direccion}
                 placeholder="No registrado"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                disabled={true}
+                disabled={!forEdit}
               />
             </div>
             <div className="lg:mt-0 md:mt-0 mt-4 w-full">
@@ -469,7 +593,7 @@ const ProfessionalProfile = () => {
                 value={direccionDefault.info}
                 placeholder="No registrado"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                disabled={true}
+                disabled={!forEdit}
               />
             </div>
           </div>
@@ -523,12 +647,13 @@ const ProfessionalProfile = () => {
                   <p className="text-base text-gray-800">Descripción</p>
                   <input
                     type="text"
-                    name="nombre"
-                    id="nombres"
+                    name="profesional"
+                    id="descripcion"
+                    onChange={handleChange}
                     value={profesional?.descripcion}
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                     placeholder="No registrado"
-                    disabled={true}
+                    disabled={!forEdit}
                   />
                 </div>
 
@@ -589,7 +714,7 @@ const ProfessionalProfile = () => {
                   value={direccionDefault.direccion}
                   placeholder="No registrado"
                   className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                  disabled={true}
+                  disabled={!forEdit}
                 />
               </div>
               <div className="lg:mt-0 md:mt-0 mt-4 w-full">
@@ -603,7 +728,7 @@ const ProfessionalProfile = () => {
                   value={direccionDefault.info}
                   placeholder="No registrado"
                   className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                  disabled={true}
+                  disabled={!forEdit}
                 />
               </div>
             </div>

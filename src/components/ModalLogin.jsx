@@ -19,9 +19,7 @@ import { toast } from "react-toastify";
 import ButtonSpinner from "../components/ButtonSpinner";
 import { useGoogleLogin } from "@react-oauth/google";
 
-
 const ModalLogin = ({ handleModalLogin }) => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,7 +37,7 @@ const ModalLogin = ({ handleModalLogin }) => {
 
     dispatch(googleSignIn({ accessToken, navigate, toast, rute: "/servicio" }));
 
-    handleModalLogin()
+    handleModalLogin();
   }
 
   const logincongoogle = useGoogleLogin({
@@ -60,28 +58,24 @@ const ModalLogin = ({ handleModalLogin }) => {
       return toast.error("Todos los campos son obligatorios");
     }
 
-    const response = await dispatch(login({ userForm, navigate, rute: "/servicio" }));
+    const response = await dispatch(
+      login({ userForm, navigate, rute: "/servicio" })
+    );
 
-    console.log(!response.payload)
+    // console.log(!response.payload)
 
     setUserForm({ email: "", password: "" });
     if (response.payload) {
-      handleModalLogin()
+      handleModalLogin();
     }
-
   };
-
-
-
 
   return (
     <div className="relative z-10">
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
       <div className="fixed inset-0 z-10 overflow-y-auto">
         <div className="flex min-h-full justify-center p-4 text-center items-center sm:p-0">
-          <div
-            className="container mx-auto w-11/12 md:w-2/3 max-w-lg flex justify-center"
-          >
+          <div className="container mx-auto w-11/12 md:w-2/3 max-w-lg flex justify-center">
             <div className="relative w-11/12 sm:w-8/12 md:w-10/12 bg-white dark:bg-gray-800 shadow  rounded">
               <img
                 className="rounded-tl rounded-tr"
@@ -104,7 +98,6 @@ const ModalLogin = ({ handleModalLogin }) => {
                       onChange={handleChange}
                       value={email}
                       name="email"
-
                     />
                   </div>
                   <div className="bg-gray-50 mt-3 dark:bg-gray-700 border rounded dark:border-gray-700 border-gray-200">
@@ -134,11 +127,8 @@ const ModalLogin = ({ handleModalLogin }) => {
                         </p>
                       </button>
                     )}
-
                   </div>
                 </form>
-
-
 
                 <hr className="my-6 border-gray-300 w-full" />
 
@@ -146,7 +136,10 @@ const ModalLogin = ({ handleModalLogin }) => {
                   type="button"
                   className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg p-2 border border-gray-300"
                 >
-                  <button className="flex items-center justify-center w-full" onClick={logincongoogle}>
+                  <button
+                    className="flex items-center justify-center w-full"
+                    onClick={logincongoogle}
+                  >
                     <FcGoogle />
                     <span className="ml-2">Continuar con Google</span>
                   </button>

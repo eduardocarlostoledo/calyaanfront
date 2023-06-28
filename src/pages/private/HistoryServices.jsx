@@ -10,13 +10,13 @@ const HistoryServices = () => {
 
   useEffect(() => {
     const getHistorial = async () => {
-      console.log(user._id);
+      // console.log(user._id);
       try {
         let { data } = await clienteAxios.get(
           `api/usuarios/historial/${user._id}`
-        );        
-          setHistorial(data);
-        console.log(data)
+        );
+        setHistorial(data);
+        // console.log(data)
       } catch (error) {
         console.log(error);
         const errorMsg =
@@ -27,7 +27,7 @@ const HistoryServices = () => {
     getHistorial();
   }, [user._id]);
 
-  console.log(historial);
+  // console.log(historial);
 
   return (
     <div className="flex items-center justify-center mt-5">
@@ -83,10 +83,14 @@ const HistoryServices = () => {
                       </th>
                       <td className="px-6 py-4">{reserva.dia_servicio}</td>
                       <td className="px-6 py-4">{reserva.hora_servicio}</td>
-                      <td className="px-6 py-4">{reserva.profesional_nombre}</td>
+                      <td className="px-6 py-4">
+                        {reserva.profesional_nombre}
+                      </td>
                       <td className="px-6 py-4">{reserva.estadoPago}</td>
-                      <td className="px-6 py-4"> <Link to={`/resumen/${reserva._id}`}> Ver </Link>
- </td>
+                      <td className="px-6 py-4">
+                        {" "}
+                        <Link to={`/resumen/${reserva._id}`}> Ver </Link>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

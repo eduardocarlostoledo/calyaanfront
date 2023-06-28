@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import clienteAxios from "../../../config/axios";
 
@@ -43,12 +43,15 @@ const CalendarioProfesional = () => {
       try {
         setCargando(true);
 
-        const { data } = await clienteAxios.get(`api/profesional/historial/${user.profesionalId}`);
+        const { data } = await clienteAxios.get(
+          `api/profesional/historial/${user.profesionalId}`
+        );
         setReservas(data);
         setCargando(false);
       } catch (err) {
         console.log(err);
-        const error = err.response?.data.msg || "Estamos experimentando problemas internos";
+        const error =
+          err.response?.data.msg || "Estamos experimentando problemas internos";
         setError(error);
         toast.error(error);
         setCargando(false);
@@ -57,14 +60,25 @@ const CalendarioProfesional = () => {
     obtenerReservas();
   }, [user.profesionalId]);
 
-  const eventos = reservas?.map((reserva) => {
-      if (!reserva.hora_servicio || !reserva.dia_servicio || reserva.estadoPago !== "approved") {
+  const eventos = reservas
+    ?.map((reserva) => {
+      if (
+        !reserva.hora_servicio ||
+        !reserva.dia_servicio ||
+        reserva.estadoPago !== "approved"
+      ) {
         return null;
       }
 
       const [inicio, fin] = reserva.hora_servicio.split("-");
-      const fechaInicio = moment(`${reserva.dia_servicio} ${inicio.trim()}`, "YYYY-MM-DD HH:mm");
-      const fechaFin = moment(`${reserva.dia_servicio} ${fin.trim()}`, "YYYY-MM-DD HH:mm");
+      const fechaInicio = moment(
+        `${reserva.dia_servicio} ${inicio.trim()}`,
+        "YYYY-MM-DD HH:mm"
+      );
+      const fechaFin = moment(
+        `${reserva.dia_servicio} ${fin.trim()}`,
+        "YYYY-MM-DD HH:mm"
+      );
 
       return {
         servicio: reserva?.servicio,
@@ -77,7 +91,7 @@ const CalendarioProfesional = () => {
     })
     .filter((evento) => evento !== null && evento.estadoPago === "approved");
 
-  console.log("eventos", eventos);
+  // console.log("eventos", eventos);
 
   return (
     <div>
@@ -86,16 +100,16 @@ const CalendarioProfesional = () => {
       ) : error ? (
         <div>Error: {error}</div>
       ) : (
-        <div style={{ height: '500px' }}>
+        <div style={{ height: "500px" }}>
           {eventos && eventos.length > 0 ? (
             <Calendar
               localizer={localizer}
               events={eventos}
               startAccessor="start"
               endAccessor="end"
-              style={{ margin: '100px' }}
+              style={{ margin: "100px" }}
               components={{
-                event: Evento
+                event: Evento,
               }}
             />
           ) : (
@@ -108,11 +122,6 @@ const CalendarioProfesional = () => {
 };
 
 export default CalendarioProfesional;
-
-
-
-
-
 
 // import React from "react";
 // import { useState } from "react";
@@ -152,7 +161,6 @@ export default CalendarioProfesional;
 //         );
 //         setHistorial(data);
 
-
 //       } catch (err) {
 //         console.log(err);
 //         let error = err.response.data.msg
@@ -173,13 +181,12 @@ export default CalendarioProfesional;
 //       endDatetime: `${item.dia_servicio}T${item.hora_servicio.split("-")[1]}`,
 //     };
 //   });
-  
+
 //   console.log(meetings);
 
 // function classNames(...classes) {
 //   return classes.filter(Boolean).join(" ");
 // }
-
 
 //   let today = startOfToday();
 //   let [selectedDay, setSelectedDay] = useState(today);
@@ -225,8 +232,7 @@ export default CalendarioProfesional;
 //             </div>
 
 //             <div className="flex items-center ">
-             
-            
+
 //                   <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
 //                     <div className="md:pr-14">
 //                       <div className="flex items-center">
@@ -343,7 +349,6 @@ export default CalendarioProfesional;
 //             </div>
 //           </div>
 //         </div>
- 
 
 //   );
 // };
@@ -359,7 +364,6 @@ export default CalendarioProfesional;
 //   "col-start-6",
 //   "col-start-7",
 // ];
-
 
 // import React from "react";
 
@@ -472,8 +476,7 @@ export default CalendarioProfesional;
 //             </div>
 
 //             <div className="flex items-center ">
-             
-            
+
 //                   <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
 //                     <div className="md:pr-14">
 //                       <div className="flex items-center">
@@ -590,7 +593,6 @@ export default CalendarioProfesional;
 //             </div>
 //           </div>
 //         </div>
- 
 
 //   );
 // };

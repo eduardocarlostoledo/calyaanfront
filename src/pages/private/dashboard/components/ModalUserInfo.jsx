@@ -12,7 +12,7 @@ const LinksPerfiles = {
 };
 
 const ModalUserInfo = ({ handleModalView, userState }) => {
-  console.log(userState);
+  // console.log(userState);
 
   return (
     <div className="relative z-10">

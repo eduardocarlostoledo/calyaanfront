@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import AddressCard from "../../components/AddressCard";
@@ -11,18 +10,19 @@ const Address = () => {
   const [addresses, setAddresses] = useState([]);
 
   const handleToggleModalAddress = () => {
-    setModalAddressForm(prevState => !prevState);
+    setModalAddressForm((prevState) => !prevState);
   };
 
   useEffect(() => {
     const getAddresses = async () => {
       try {
         const { data } = await clienteAxios.get("api/usuarios/direcciones");
-        console.log("getAddresses", data);
+        // console.log("getAddresses", data);
 
         setAddresses([...data]);
       } catch (err) {
-        let error = err.response?.data.msg || "Estamos presentando problemas internos";
+        let error =
+          err.response?.data.msg || "Estamos presentando problemas internos";
         toast.error(error);
       }
     };
@@ -32,29 +32,36 @@ const Address = () => {
 
   const crearDireccion = async (direccion) => {
     try {
-      const { data } = await clienteAxios.post("api/usuarios/direcciones", direccion);
-      console.log("crearDireccion", data);
+      const { data } = await clienteAxios.post(
+        "api/usuarios/direcciones",
+        direccion
+      );
+      // console.log("crearDireccion", data);
 
-      setAddresses(prevState => [...prevState, data.direccion]);
+      setAddresses((prevState) => [...prevState, data.direccion]);
 
       toast.success("Dirección creada correctamente");
 
       setModalAddressForm(false);
     } catch (err) {
       console.log(err);
-      let error = err.response?.data.msg || "Estamos presentando problemas internos";
+      let error =
+        err.response?.data.msg || "Estamos presentando problemas internos";
       toast.error(error);
     }
   };
 
   const actualizarDireccion = async (direccion) => {
     try {
-      const { data } = await clienteAxios.put(`api/usuarios/direcciones/${direccion._id}`, {
-        direccion,
-      });
+      const { data } = await clienteAxios.put(
+        `api/usuarios/direcciones/${direccion._id}`,
+        {
+          direccion,
+        }
+      );
 
-      setAddresses(prevState => {
-        const updatedAddresses = prevState.map(address => {
+      setAddresses((prevState) => {
+        const updatedAddresses = prevState.map((address) => {
           if (address._id === direccion._id) {
             return data.direccion;
           }
@@ -68,7 +75,8 @@ const Address = () => {
       setAddressEdit(false);
     } catch (err) {
       console.log(err);
-      let error = err.response?.data.msg || "Estamos presentando problemas internos";
+      let error =
+        err.response?.data.msg || "Estamos presentando problemas internos";
       toast.error(error);
     }
   };
@@ -77,13 +85,14 @@ const Address = () => {
     try {
       await clienteAxios.delete(`api/usuarios/direccion/${id}`);
 
-      setAddresses(prevState =>
-        prevState.filter(direccionState => direccionState._id !== id)
+      setAddresses((prevState) =>
+        prevState.filter((direccionState) => direccionState._id !== id)
       );
 
       toast.success("Dirección eliminada correctamente");
     } catch (err) {
-      let error = err.response?.data.msg || "Estamos presentando problemas internos";
+      let error =
+        err.response?.data.msg || "Estamos presentando problemas internos";
       toast.error(error);
     }
   };

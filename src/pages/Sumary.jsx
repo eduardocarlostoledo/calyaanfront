@@ -10,21 +10,17 @@ const Sumary = () => {
       ? JSON.parse(localStorage.getItem("services"))
       : []
   );
-  
-    const {id} = useParams()
+
+  const { id } = useParams();
 
   const [historial, setHistorial] = useState([]);
 
   useEffect(() => {
     const getHistorial = async () => {
       try {
-       
-          let { data } = await clienteAxios.get(
-            `/ordenes/getordenbyid/${id}`
-          );
-          setHistorial(data);
-          console.log(data)
-        
+        let { data } = await clienteAxios.get(`/ordenes/getordenbyid/${id}`);
+        setHistorial(data);
+        // console.log(data)
       } catch (error) {
         console.log(error);
         const errorMsg =
@@ -46,11 +42,17 @@ const Sumary = () => {
             <div className="lg:flex justify-between gap-4 mt-8">
               <p className="md:text-xl text-base text-gray-800 leading-tight font-medium">
                 Número de orden:{" "}
-                <span className="text-gray-600 font-normal"> {historial._id}</span>
+                <span className="text-gray-600 font-normal">
+                  {" "}
+                  {historial._id}
+                </span>
               </p>
               <p className="md:text-xl text-base text-gray-800 leading-tight font-medium lg:mt-0 md:mt-6 mt-6">
                 Fecha de reserva:{" "}
-                <span className="text-gray-600 font-normal"> {historial.dia_servicio} - {historial.hora_servicio}  </span>
+                <span className="text-gray-600 font-normal">
+                  {" "}
+                  {historial.dia_servicio} - {historial.hora_servicio}{" "}
+                </span>
               </p>
 
               <div className="flex md:gap-8 gap-4">
@@ -59,9 +61,8 @@ const Sumary = () => {
                 </p>
                 <ul className="list-disc">
                   <p className="text-base leading-normal text-gray-600 lg:max-w-[235px] w-full">
-                  {historial.profesional_nombre}
+                    {historial.profesional_nombre}
                   </p>
-            
                 </ul>
               </div>
             </div>
@@ -73,37 +74,35 @@ const Sumary = () => {
                   Resumen de reserva
                 </p>
 
-              
-                  <div className="lg:flex gap-4 justify-between">
-                    <div className="md:flex gap-4 mt-6">
-                      <div>
-                        <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                          <img
-                            src={historial?.servicio_img}
-                            alt=""
-                            className="h-full w-full object-cover object-center"
-                          />
-                        </div>
-                      </div>
-                      <div className="md:mt-0 mt-4">
-                        <p className="text-base leading-none text-gray-600">
-                          {historial?.servicio}
-                        </p>
-                        <p className="text-base font-semibold leading-none text-gray-800 mt-4">
-                          <NumericFormat
-                            value={historial?.precio}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"$"}
-                          />
-                        </p>
-                        <p className="text-base leading-none text-gray-600 mt-4">
-                          Cantidad {historial.cantidad}
-                        </p>
+                <div className="lg:flex gap-4 justify-between">
+                  <div className="md:flex gap-4 mt-6">
+                    <div>
+                      <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                        <img
+                          src={historial?.servicio_img}
+                          alt=""
+                          className="h-full w-full object-cover object-center"
+                        />
                       </div>
                     </div>
+                    <div className="md:mt-0 mt-4">
+                      <p className="text-base leading-none text-gray-600">
+                        {historial?.servicio}
+                      </p>
+                      <p className="text-base font-semibold leading-none text-gray-800 mt-4">
+                        <NumericFormat
+                          value={historial?.precio}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"$"}
+                        />
+                      </p>
+                      <p className="text-base leading-none text-gray-600 mt-4">
+                        Cantidad {historial.cantidad}
+                      </p>
+                    </div>
                   </div>
-            
+                </div>
               </div>
 
               <div>
@@ -113,27 +112,27 @@ const Sumary = () => {
                 <div aria-label="delivery" className="">
                   <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
                     Dirección de reserva
-                  </p>                  
+                  </p>
                   <p className="text-base leading-normal text-gray-600">
-                  {historial.direccion_Servicio}
+                    {historial.direccion_Servicio}
                     <br />
-                   {historial.localidad_Servicio}
+                    {historial.localidad_Servicio}
                   </p>
                   <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
                     Pago de Reserva
-                  </p>                  
+                  </p>
                   <p className="text-base leading-normal text-gray-600">
-                  Nro: {historial.payment_id}
+                    Nro: {historial.payment_id}
                     <br />
-                  Estado: {historial.estadoPago}
+                    Estado: {historial.estadoPago}
                   </p>
                   <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
                     Horario de reserva
                   </p>
                   <p className="text-base leading-normal text-gray-600">
-                    Hora: {" "} {historial.hora_servicio}
+                    Hora: {historial.hora_servicio}
                     <br />
-                    Fecha: {" "}  {historial.dia_servicio}
+                    Fecha: {historial.dia_servicio}
                   </p>
                 </div>
                 <div className="mt-4">
@@ -141,7 +140,7 @@ const Sumary = () => {
                     Contacto
                   </p>
                   <p className="text-base leading-normal text-gray-600">
-                  {historial.cliente_telefono} <br />
+                    {historial.cliente_telefono} <br />
                     {historial.cliente_email}
                   </p>
                 </div>
@@ -174,22 +173,20 @@ const Sumary = () => {
                   Precio Total
                 </p>
                 <p className="text-base font-semibold leading-none text-gray-800">
-               
-                      {" "}
-                      <NumericFormat
-                        value={historial.precio}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"$"}
-                      />
-                 
+                  {" "}
+                  <NumericFormat
+                    value={historial.precio}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"$"}
+                  />
                 </p>
               </div>
             </div>
             <div className="lg:mt-0 md:mt-6 mt-4">
               <p className="text-base leading-normal text-gray-600 lg:max-w-[515px] w-full">
-              Apreciamos tu compra y esperamos que disfrute de tu
-                servicio ¡Gracias!
+                Apreciamos tu compra y esperamos que disfrute de tu servicio
+                ¡Gracias!
               </p>
 
               <p className="text-base text-gray-600 leading-none mt-8">

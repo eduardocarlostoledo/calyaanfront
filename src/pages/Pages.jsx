@@ -26,14 +26,14 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
         );
 
         const { nombre, apellido, direcciones, telefono, cedula } = data;
-        console.log(
-          nombre,
-          apellido,
-          direcciones,
-          telefono,
-          cedula,
-          "ESTE ES EL LOG"
-        );
+        // console.log(
+        //   nombre,
+        //   apellido,
+        //   direcciones,
+        //   telefono,
+        //   cedula,
+        //   "ESTE ES EL LOG"
+        // );
         setCustomer({
           email: user?.email || "",
           firstName: user?.nombre || data?.nombre || "",
@@ -90,7 +90,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       !telefono ||
       !cedula
     ) {
-      console.log(customer, "customer");
+      // console.log(customer, "customer");
       setBotonPago(false);
       return swal(
         "faltan campos por rellenar",
@@ -99,7 +99,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       );
     }
 
-    console.log(customer.localidad, "customer si ta todo joya");
+    // console.log(customer.localidad, "customer si ta todo joya");
     localStorage.setItem("data_customer", JSON.stringify(customer));
 
     setBotonPago(true);
