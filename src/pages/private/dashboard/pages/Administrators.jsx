@@ -84,7 +84,7 @@ const Administrators = () => {
         <div>
           <p>{text}</p>
           <a
-            href={`https://api.whatsapp.com/send/?phone=${text}&text&type=phone_number&app_absent=0`}
+            href={`https://api.whatsapp.com/send/?phone=57${text}&text&type=phone_number&app_absent=0`}
             target="_blank"
             rel="noopener noreferrer"
           >
