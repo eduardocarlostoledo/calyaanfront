@@ -103,7 +103,7 @@ const ProductExpanded = ({
           />
           <div
             className="NameImgDiv"
-            // style={{ display: 'flex', flexDirection: 'row' }}
+          // style={{ display: 'flex', flexDirection: 'row' }}
           >
             <p className="PDivInfo">email: {input.cliente_email}</p>
             <p className="PDivInfo">Nombre: {input.cliente_nombre}</p>
@@ -146,13 +146,13 @@ const ProductExpanded = ({
         <div className="productExpandedDiv">
           <AiOutlineClose
             onClick={() => setEditProduct(0)}
-            // color="red"
-            // size="30px"
-            // style={{ display: 'flex', flexDirection: 'column' }}
+          // color="red"
+          // size="30px"
+          // style={{ display: 'flex', flexDirection: 'column' }}
           />
           <div
             className="NameImgDiv"
-            // style={{ display: 'flex', flexDirection: 'column' }}
+          // style={{ display: 'flex', flexDirection: 'column' }}
           >
             <div>
               <label className="LabelNameImg">
@@ -381,28 +381,39 @@ const FacturacionAntDesing = () => {
   }));
 
   //se filtran las ordenes para renderizado de la tabla
+
   const filteredOrdenes = useMemo(() => {
-    return newProducts?.filter(
-      (orden) =>
-        orden._id?.includes(searchText) ||
-        orden.cliente_cedula?.includes(searchText) ||
-        orden.cliente_telefono?.includes(searchText) ||
-        orden.cliente_nombre
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase()) ||
-        orden.cliente_apellido
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase()) ||
-        orden.cliente_email?.includes(searchText) ||
-        orden.servicio?.toLowerCase().includes(searchText.toLowerCase()) ||
-        orden.direccion_Servicio
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase()) ||
-        moment(orden.createdAt, "YYYY-MM-DD")
-          .format("YYYY-MM-DD")
-          .includes(searchText) // Verifica si la búsqueda coincide con la fecha de la orden
-    );
+    if (!newProducts || newProducts.length === 0) {
+      return [];
+    }
+
+    const searchTextLower = searchText.toLowerCase();
+
+    return newProducts.filter((orden) => {
+
+      const fullNameProfesional = `${orden.profesional_nombre} ${orden.profesional_apellido}`.toLowerCase();
+      const fullNameCliente = `${orden.cliente_nombre} ${orden.cliente_apellido}`.toLowerCase();
+      const fullNameProfesionalInverso = `${orden.profesional_apellido} ${orden.profesional_nombre} `.toLowerCase();
+      const fullNameClienteInverso = `${orden.cliente_apellido} ${orden.cliente_nombre}`.toLowerCase();
+
+      return (
+        fullNameProfesional.includes(searchTextLower) ||
+        fullNameCliente.includes(searchTextLower) ||
+        fullNameProfesionalInverso.includes(searchTextLower) ||
+        fullNameClienteInverso.includes(searchTextLower) ||
+        orden.numeroFacturacion?.includes(searchTextLower) ||
+        orden.payment_id?.includes(searchTextLower) ||
+        orden._id.includes(searchTextLower) ||
+        orden.cliente_cedula.includes(searchTextLower) ||
+        orden.cliente_telefono.includes(searchTextLower) ||
+        orden.cliente_email.includes(searchTextLower) ||
+        orden.servicio.toLowerCase().includes(searchTextLower) ||
+        orden.direccion_Servicio.toLowerCase().includes(searchTextLower) ||
+        moment(orden.createdAt, "YYYY-MM-DD").format("YYYY-MM-DD").includes(searchTextLower)
+      );
+    });
   }, [newProducts, searchText]);
+
 
   const columns = [
     {
@@ -498,27 +509,15 @@ const FacturacionAntDesing = () => {
       defaultSortOrder: "descend",
       render: (text) => <p>{text}</p>,
     },
+
     {
-      title: "Orden",
-      dataIndex: "_id",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Apellido",
-      dataIndex: "cliente_apellido",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Nombre",
+      title: "Cliente",
       dataIndex: "cliente_nombre",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
+      render: (text, record) => <p>{record.cliente_apellido} {text}</p>,
     },
+
     {
       title: "Cedula",
       dataIndex: "cliente_cedula",
@@ -555,25 +554,11 @@ const FacturacionAntDesing = () => {
       render: (text) => <p>{text}</p>,
     },
     {
-      title: "Cant.",
-      dataIndex: "cantidad",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
       title: "Direccion",
-      dataIndex: "direccion_Servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Localidad",
       dataIndex: "localidad_Servicio",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
+      render: (text, record) => <p>{record.direccion_Servicio} {text}</p>,
     },
     {
       title: "DiaVenta",
@@ -583,75 +568,51 @@ const FacturacionAntDesing = () => {
       render: (text) => <p>{moment(text).format("YYYY-MM-DD")}</p>,
     },
     {
-      title: "Nombre Prof.",
+      title: "Profesional",
       dataIndex: "profesional_nombre",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
+      render: (text, record) => <p>{record.profesional_apellido} {text}</p>,
     },
-    {
-      title: "Apellido Prof.",
-      dataIndex: "profesional_apellido",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-
-    // {
-    //   title: "payment_id",
-    //   dataIndex: "payment_id",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    // {
-    //   title: "payment_type",
-    //   dataIndex: "payment_type",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    // {
-    //   title: "merchant_order_id",
-    //   dataIndex: "merchant_order_id",
-    //   render: (text) => <p>{text}</p>,
-    // },
   ];
 
   return (
-    // style={{ width: '100%', height: '400px', overflow: 'auto' }}
     <div
-      style={{ textAlign: "center", alignItems: "center", overflow: "auto" }}
+      style={{ textAlign: "center", alignItems: "center" }}
     >
       <p className="p">FACTURACION </p>
-      <p className="p">
-        Busqueda : Id de Orden, ó Datos de cliente, Datos Profesional, Fecha y
-        Hora del Servicio (YYYY-MM-DD){" "}
-      </p>
-      <h1 style={{ textAlign: "center", alignItems: "center" }}>
+
+      <h1>
+        <p className="p">              Puede realizar búsquedas por Id Pago, Nro Factura, Nombre y Apellido, Cedula, Telefono, Email o Día de la venta.        Hora del Servicio (YYYY-MM-DD){" "}
+
+
+        </p>
+
         <Input.Search
+          style={{ textAlign: "center", alignItems: "center" }}
           placeholder="Buscar Ordenes"
           onChange={(e) => setSearchText(e.target.value)}
-          style={{
-            width: 400,
-            marginBottom: "0px",
-            textAlign: "center",
-            alignItems: "center",
-          }}
         />
       </h1>
-      <p className="p">
-        Puede ordenar ascendente o descendentemente con las flechas en Datos de
-        la tabla
-      </p>
 
       <div
         style={{
-          margin: "0px",
-          marginLeft: "0px",
-          marginTop: "0px",
-          padding: "0px",
-          // width: '100%', height: '1000px', overflowY: "auto", overflowX: 'auto'
+          margin: "1px",
+          marginLeft: "1px",
+          marginTop: "1px",
+          padding: "1px",
         }}
-      >
+      > <p className="p">
+          Aplica Filtros a la tabla por Estado de Pago, Estado de Servicio, Facturacion. Puede realizar búsquedas por Id Pago, Nro Factura, Nombre y Apellido, Cedula, Telefono, Email o Día de la venta, formato de uso (YYYY-MM-DD){" "}
+        </p>
         <Table
-          style={{ backgroundColor: "rgb(245, 245, 235)" }}
+          style={{
+            margin: "1px",
+            marginLeft: "1px",
+            marginTop: "1px",
+            padding: "1px",
+            backgroundColor: "rgb(245, 245, 235)"
+          }}
           columns={columns}
           dataSource={filteredOrdenes}
           expandable={{
@@ -685,14 +646,6 @@ const FacturacionAntDesing = () => {
           }}
         />
       </div>
-
-      {/* <div style={{ marginTop: "80px", padding: "20px" }}>
-        <Table
-          style={{ backgroundColor: "rgb(245, 245, 235)" }}
-          columns={columns}
-          dataSource={orders}
-        />
-      </div> */}
     </div>
   );
 };

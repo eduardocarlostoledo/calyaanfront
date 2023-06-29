@@ -4,6 +4,9 @@ import * as api from "../api";
 
 import { addMessage } from "./notificationsSlice";
 
+
+
+
 export const login = createAsyncThunk(
   "auth/login",  async ({ userForm, navigate, rute="/servicio" }, thunkAPI) => {
     try {
@@ -225,6 +228,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    
     // Login
     builder.addCase(login.pending, (state, action) => {
       state.loading = true;

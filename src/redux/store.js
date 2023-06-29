@@ -4,6 +4,7 @@ import AuthReducer from "./features/authSlice";
 import professionalReducer from "./features/professionalSlice";
 import notificationsReducer from "./features/notificationsSlice";
 import ordenesReducer from "./features/ordenesSlice";
+import usuarioReducer from "./features/usuariosSlice";
 
 export default configureStore({
   reducer: {
@@ -11,5 +12,6 @@ export default configureStore({
     professional: professionalReducer,
     notifications: notificationsReducer,
     ordenes: ordenesReducer,
+    usuarios: usuarioReducer
   },
 });

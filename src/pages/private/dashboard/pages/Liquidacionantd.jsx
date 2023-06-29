@@ -384,69 +384,37 @@ const LiquidacionAntDesing = () => {
   //agrego fullName para q encuentre nombre compuesto y facilitar el trabajo de busqueda
   const filteredOrdenes = useMemo(() => {
     if (!newProducts || newProducts.length === 0) {
-      return []; // Devuelve un array vacío si newProducts está vacío
+      return [];
     }
+  
+    const searchTextLower = searchText.toLowerCase();
+  
+    return newProducts.filter((orden) => {
 
-    return newProducts?.filter((orden) => {
-      const fullNameProfesional =
-        `${orden.profesional_nombre} ${orden.profesional_apellido}`.toLowerCase();
-      const fullNameCliente =
-        `${orden.cliente_nombre} ${orden.cliente_apellido}`.toLowerCase();
-      const searchTextLower = searchText.toLowerCase();
-
+      const fullNameProfesional = `${orden.profesional_nombre} ${orden.profesional_apellido}`.toLowerCase();
+      const fullNameCliente = `${orden.cliente_nombre} ${orden.cliente_apellido}`.toLowerCase();
+      const fullNameProfesionalInverso = `${orden.profesional_apellido} ${orden.profesional_nombre} `.toLowerCase();
+      const fullNameClienteInverso =`${orden.cliente_apellido} ${orden.cliente_nombre}`.toLowerCase();
+      
       return (
-        fullNameProfesional?.includes(searchTextLower) ||
-        fullNameCliente?.includes(searchTextLower) ||
-        orden._id?.includes(searchText) ||
-        orden.cliente_cedula?.includes(searchText) ||
-        orden.cliente_telefono?.includes(searchText) ||
-        orden.cliente_nombre?.toLowerCase().includes(searchTextLower) ||
-        orden.cliente_apellido?.toLowerCase().includes(searchTextLower) ||
-        orden.cliente_email?.includes(searchText) ||
-        orden.servicio?.toLowerCase().includes(searchTextLower) ||
-        orden.direccion_Servicio?.toLowerCase().includes(searchTextLower) ||
-        moment(orden.dia_servicio, "YYYY-MM-DD")
-          .format("YYYY-MM-DD")
-          .includes(searchText) ||
-        moment(orden.hora_servicio, "hh:mm a")
-          .format("hh:mm a")
-          .includes(searchText)
+        fullNameProfesional.includes(searchTextLower) ||
+        fullNameCliente.includes(searchTextLower) ||
+        fullNameProfesionalInverso.includes(searchTextLower) ||
+        fullNameClienteInverso.includes(searchTextLower) ||
+        orden._id.includes(searchText) ||
+        orden.cliente_cedula.includes(searchText) ||
+        orden.cliente_telefono.includes(searchText) ||
+        orden.cliente_nombre.toLowerCase().includes(searchTextLower) ||
+        orden.cliente_apellido.toLowerCase().includes(searchTextLower) ||
+        orden.cliente_email.includes(searchText) ||
+        orden.servicio.toLowerCase().includes(searchTextLower) ||
+        orden.direccion_Servicio.toLowerCase().includes(searchTextLower) ||
+        moment(orden.dia_servicio, "YYYY-MM-DD").format("YYYY-MM-DD").includes(searchText) ||
+        moment(orden.hora_servicio, "hh:mm a").format("hh:mm a").includes(searchText)
       );
     });
   }, [newProducts, searchText]);
-
-  // const filteredOrdenes = useMemo(() => {
-  //   return newProducts?.filter(
-  //     (orden) =>
-
-  //     (orden.profesional_nombre?.toLowerCase().includes(searchText.toLowerCase() + " " + orden.profesional_apellido?.toLowerCase()) || orden.profesional_apellido?.toLowerCase().includes(searchText.toLowerCase())) || orden.profesional_nombre?.toLowerCase().includes(searchText.toLowerCase()) ||
-
-  //     // orden.profesional_nombre?.toLowerCase().includes(searchText.toLowerCase()) && " " &&
-  //     // orden.profesional_apellido?.toLowerCase().includes(searchText.toLowerCase()) ||
-
-  //       orden._id?.includes(searchText) ||
-  //       orden.cliente_cedula?.includes(searchText) ||
-  //       orden.cliente_telefono?.includes(searchText) ||
-  //       orden.cliente_nombre
-  //         ?.toLowerCase()
-  //         .includes(searchText.toLowerCase()) ||
-  //       orden.cliente_apellido
-  //         ?.toLowerCase()
-  //         .includes(searchText.toLowerCase()) ||
-  //       orden.cliente_email?.includes(searchText) ||
-  //       orden.servicio?.toLowerCase().includes(searchText.toLowerCase()) ||
-  //       orden.direccion_Servicio
-  //         ?.toLowerCase()
-  //         .includes(searchText.toLowerCase()) ||
-  //       moment(orden.dia_servicio, "YYYY-MM-DD")
-  //         .format("YYYY-MM-DD")
-  //         .includes(searchText) || // Verifica si la búsqueda coincide con la fecha de la orden
-  //       moment(orden.hora_servicio, "hh:mm a")
-  //         .format("hh:mm a")
-  //         .includes(searchText) // Verifica si la búsqueda coincide con la hora de la orden
-  //   );
-  // }, [newProducts, searchText]);
-
+  
   const columns = [
     {
       title: "EDITAR",
@@ -534,64 +502,21 @@ const LiquidacionAntDesing = () => {
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
       render: (text) => <p>{text}</p>,
-    },
+    },   
     {
-      title: "Orden",
-      dataIndex: "_id",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Nombre Prof.",
+      title: "Profesional",
       dataIndex: "profesional_nombre",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
+      render: (text, record) => <p>{record.profesional_apellido} {text}</p>,
     },
-    {
-      title: "Apellido Prof.",
-      dataIndex: "profesional_apellido",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Nombre",
+       {
+      title: "Cliente",
       dataIndex: "cliente_nombre",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Apellido",
-      dataIndex: "cliente_apellido",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-
-    // {
-    //   title: "Cedula",
-    //   dataIndex: "cliente_cedula",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    // {
-    //   title: "Telefono",
-    //   dataIndex: "cliente_telefono",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    {
-      title: "email",
-      dataIndex: "cliente_email",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
+      render: (text, record) => <p>{record.cliente_apellido} {text}</p>,
+    },       
     {
       title: "SERVICIO",
       dataIndex: "servicio",
@@ -605,28 +530,7 @@ const LiquidacionAntDesing = () => {
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
       render: (text) => <p>{text}</p>,
-    },
-    // {
-    //   title: "Cant.",
-    //   dataIndex: "cantidad",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    // {
-    //   title: "Direccion Servicio",
-    //   dataIndex: "direccion_Servicio",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    // {
-    //   title: "Localidad",
-    //   dataIndex: "localidad_Servicio",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text) => <p>{text}</p>,
-    // },
+    },   
     {
       title: "CITA DIA",
       dataIndex: "dia_servicio",
@@ -640,20 +544,13 @@ const LiquidacionAntDesing = () => {
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
       render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "FECHA VENTA",
-      dataIndex: "createdAt",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{moment(text).format("YYYY-MM-DD")}</p>,
-    },
+    },   
   ];
 
   return (
-    // style={{ width: '100%', height: '400px', overflow: 'auto' }}
+    
     <div
-      style={{ textAlign: "center", alignItems: "center", overflow: "auto" }}
+      style={{ textAlign: "center", alignItems: "center"}}
     >
       <p className="p">LIQUIDACIONES A PERSONAL </p>
       <p className="p">
@@ -683,7 +580,6 @@ const LiquidacionAntDesing = () => {
           marginLeft: "0px",
           marginTop: "0px",
           padding: "0px",
-          // width: '100%', height: '1000px', overflowY: "auto", overflowX: 'auto'
         }}
       >
         <Table
@@ -721,14 +617,6 @@ const LiquidacionAntDesing = () => {
           }}
         />
       </div>
-
-      {/* <div style={{ marginTop: "80px", padding: "20px" }}>
-        <Table
-          style={{ backgroundColor: "rgb(245, 245, 235)" }}
-          columns={columns}
-          dataSource={orders}
-        />
-      </div> */}
     </div>
   );
 };

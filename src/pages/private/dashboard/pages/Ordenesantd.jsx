@@ -382,52 +382,51 @@ const OrdenesAntDesing = () => {
 
   //se filtran las ordenes para renderizado de la tabla
   const filteredOrdenes = useMemo(() => {
-    return newProducts?.filter(
-      (orden) =>
-        orden._id?.includes(searchText) ||
-        orden.cliente_cedula?.includes(searchText) ||
-        orden.cliente_telefono?.includes(searchText) ||
-        orden.cliente_nombre
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase()) ||
-        orden.cliente_apellido
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase()) ||
-        orden.cliente_email?.includes(searchText) ||
-        orden.servicio?.toLowerCase().includes(searchText.toLowerCase()) ||
-        orden.direccion_Servicio
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase()) ||
+    if (!newProducts || newProducts.length === 0) {
+      return [];
+    }
+
+    const searchTextLower = searchText.toLowerCase();
+
+    return newProducts.filter((orden) => {
+
+      const fullNameProfesional = `${orden.profesional_nombre} ${orden.profesional_apellido}`.toLowerCase();
+      const fullNameCliente = `${orden.cliente_nombre} ${orden.cliente_apellido}`.toLowerCase();
+      const fullNameProfesionalInverso = `${orden.profesional_apellido} ${orden.profesional_nombre} `.toLowerCase();
+      const fullNameClienteInverso = `${orden.cliente_apellido} ${orden.cliente_nombre}`.toLowerCase();
+
+      return (
+        fullNameProfesional.includes(searchTextLower) ||
+        fullNameCliente.includes(searchTextLower) ||
+        fullNameProfesionalInverso.includes(searchTextLower) ||
+        fullNameClienteInverso.includes(searchTextLower) ||
+        orden.numeroFacturacion?.includes(searchTextLower) ||
+        orden.payment_id?.includes(searchTextLower) ||
+        orden._id.includes(searchTextLower) ||
+        orden.cliente_cedula.includes(searchTextLower) ||
+        orden.cliente_telefono.includes(searchTextLower) ||
+        orden.cliente_email.includes(searchTextLower) ||
+        orden.servicio.toLowerCase().includes(searchTextLower) ||
+        orden.direccion_Servicio.toLowerCase().includes(searchTextLower) ||
         moment(orden.dia_servicio, "YYYY-MM-DD")
           .format("YYYY-MM-DD")
           .includes(searchText) || // Verifica si la búsqueda coincide con la fecha de la orden
-        moment(orden.hora_servicio, "hh:mm a")
+        moment(orden.hora_servicio, "hh:mm-hh:mm")
           .format("hh:mm a")
           .includes(searchText) // Verifica si la búsqueda coincide con la hora de la orden
     );
-  }, [newProducts, searchText]);
+  });
 
+  }, [newProducts, searchText]);
+  
   const columns = [
+   
     {
-      title: "Orden",
-      dataIndex: "_id",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Apellido",
-      dataIndex: "cliente_apellido",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Nombre",
+      title: "Cliente",
       dataIndex: "cliente_nombre",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
+      render: (text, record) => <p>{record.cliente_apellido} {text}</p>,
     },
     {
       title: "Cedula",
@@ -463,48 +462,27 @@ const OrdenesAntDesing = () => {
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
       render: (text) => <p>{text}</p>,
-    },
+    }, 
     {
-      title: "Cant.",
-      dataIndex: "cantidad",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Direccion Servicio",
-      dataIndex: "direccion_Servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Localidad",
+      title: "Direccion",
       dataIndex: "localidad_Servicio",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
+      render: (text, record) => <p>{record.direccion_Servicio} {text}</p>,
     },
     {
-      title: "Dia",
+      title: "Hora/Dia",
       dataIndex: "dia_servicio",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Hora",
-      dataIndex: "hora_servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
+      render: (text, record) => <p>{record.hora_servicio} {text}</p>,
+    },   
     {
       title: "Profesional",
       dataIndex: "profesional_nombre",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
+      render: (text, record) => <p>{record.profesional_apellido} {text}</p>,
     },
     {
       title: "Telefono",
