@@ -141,7 +141,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
 
   //capturo de localstorage DateService, ProfessionalService, profile, services, y guardo para la preferencia de respaldo
 
-  const reservationData = {
+  let reservationData = {
     DateService: localStorage.getItem("DateService"),
     ProfessionalService: localStorage.getItem("ProfessionalService"),
     profile: localStorage.getItem("profile"),
@@ -168,20 +168,35 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
 
   //Obtenemos del localstorage los servicios que contrato el cliente para el renderizado del resumen
   let localServices = [];
-  let orderData = {};
 
-  if (localStorage.getItem("services")) {
-    localServices = JSON.parse(localStorage.getItem("services"));
 
-    orderData = {
-      quantity: 1,
-      description: localServices[0]?.nombre.toString(),
-      price: localServices[0]?.precioTotal,
-    };
-  }
 
   const handleCheckout = async (e) => {
+
+    let reservationData = {
+      DateService: localStorage.getItem("DateService"),
+      ProfessionalService: localStorage.getItem("ProfessionalService"),
+      profile: localStorage.getItem("profile"),
+      services: localStorage.getItem("services"),
+      dataCustomer: localStorage.getItem("data_customer"),
+    };
+
+    let orderData = {};
+
+    if (localStorage.getItem("services")) {
+      localServices = JSON.parse(localStorage.getItem("services"));
+  
+      orderData = {
+        quantity: 1,
+        description: localServices[0]?.nombre.toString(),
+        price:  localServices[0].valorTotal ? localServices[0].valorTotal : localServices[0]?.precioTotal,
+      };
+    }
+
+
+
     e.preventDefault();
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_APP_BACK}/pay/preference`,
@@ -210,7 +225,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       );
 
       const preference = await secondResponse.json();
-      createCheckoutButton(preference.id);
+      createCheckoutButton(preference.id); 
     } catch (error) {
       console.log(error);
       alert("Unexpected error");
@@ -233,6 +248,54 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
     localStorage.clear();
     localStorage.setItem("profile", profile);
   };
+
+  const [coupon, setCoupon] = useState("")
+  const [couponApply, setCouponApply] = useState({
+    codigo: "",
+    descuento: "",
+    tipoDescuento: "",
+    valor: "",
+    valorTotal: "",
+  })
+
+  const applyCoupon = async (e) => {
+    e.preventDefault()
+
+    try {
+      let valor = services?.map((producto) => producto.precioTotal)
+
+      let { data } = await clienteAxios.post(`/api/coupon/discount`, { coupon, valor: valor[0] });
+
+      console.log(data)
+
+      const servicesLocal = JSON.parse(localStorage.getItem("services"));
+
+      const updatedServices = servicesLocal.map((service) => {
+        return {
+          ...service,
+          codigo: data.codigo,
+          descuentos: data.descuento,
+          valorTotal:data.valorTotal,
+          _idCodigo: data._idCodigo
+        };
+      });
+
+      console.log(updatedServices);
+
+      localStorage.setItem("services", JSON.stringify(updatedServices)); 
+
+      setCouponApply(data)
+
+    } catch (error) {
+      console.log(error);
+      const errorMsg =
+        error.response?.data?.msg ||
+        error.response?.data?.message ||
+        "Estamos presentando problemas internos";
+      toast.error(errorMsg);
+    }
+  };
+
 
   return (
     <div>
@@ -492,6 +555,62 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                         </>
                       ))}
 
+                      {
+                        couponApply.codigo ?
+                          <>
+                            <div className="div flex justify-between mt-6">
+                              <div className="title">
+                                <p className="text-lg leading-none text-gray-600">
+                                  Cupón promocional
+                                </p>
+                              </div>
+                              <div className="price">
+                                <p className="text-lg font-semibold leading-none text-gray-600">
+                                  {couponApply.codigo}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="div flex justify-between mt-6">
+                              <div className="title">
+                                <p className="text-lg leading-none text-gray-600">
+                                  Descuento
+                                </p>
+                              </div>
+                              <div className="price">
+                                {
+                                  couponApply.tipoDescuento === "porcentaje" ?
+                                    <p className="text-lg font-semibold leading-none text-gray-600">
+                                      {couponApply.descuento} %
+                                    </p>
+                                    :
+                                    <NumericFormat
+                                      value={couponApply.descuento}
+                                      displayType={"text"}
+                                      thousandSeparator={true}
+                                      prefix={"$"}
+                                    />
+                                }
+                              </div>
+                            </div>
+                          </> :
+                          <div>
+                            <form onSubmit={applyCoupon}>
+                              <p className="text-base font-semibold text-gray-800 mt-6">
+                                Cupón promocional
+                              </p>
+                              <div className="md:flex gap-4 mt-4">
+                                <input onChange={(e) => setCoupon(e.target.value)} type="text" placeholder="Ingresa Cupón" className=" w-full focus:outline-none border border-gray-300 py-3 px-3" />
+                                <button className="bg-gray-800 text-white py-2 w-full  md:mt-0 mt-4 hover:bg-gray-700 duration-300 ease-in-out transition">
+                                  Aplicar
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                      }
+
+                      <hr className="w-full bg-gray-200 border mt-10 h-[1px]" />
+
                       <div className="div flex justify-between mt-6">
                         <div className="title">
                           <p className="text-lg leading-none text-gray-600">
@@ -553,28 +672,40 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                         </div>
                         <div className="price">
                           <p className="text-2xl font-semibold leading-normal text-gray-800">
-                            {services.length > 1 ? (
-                              <p>
-                                {" "}
+                            {
+                              !couponApply.codigo ?
+
+
+                                services.length > 1 ? (
+                                  <p>
+                                    {" "}
+                                    <NumericFormat
+                                      value={services.reduce(
+                                        (a, b) =>
+                                          Number(a.precioTotal) +
+                                          Number(b.precioTotal)
+                                      )}
+                                      displayType={"text"}
+                                      thousandSeparator={true}
+                                      prefix={"$"}
+                                    />
+                                  </p>
+                                ) : (
+                                  <NumericFormat
+                                    value={services?.map((a) => a.precioTotal)[0]}
+                                    displayType={"text"}
+                                    thousandSeparator={true}
+                                    prefix={"$"}
+                                  />
+                                )
+                                :
                                 <NumericFormat
-                                  value={services.reduce(
-                                    (a, b) =>
-                                      Number(a.precioTotal) +
-                                      Number(b.precioTotal)
-                                  )}
+                                  value={couponApply.valorTotal}
                                   displayType={"text"}
                                   thousandSeparator={true}
                                   prefix={"$"}
                                 />
-                              </p>
-                            ) : (
-                              <NumericFormat
-                                value={services?.map((a) => a.precioTotal)[0]}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"$"}
-                              />
-                            )}
+                            }
                           </p>
                         </div>
                       </div>

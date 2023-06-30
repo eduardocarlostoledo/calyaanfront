@@ -10,10 +10,10 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { AiOutlineLink, AiOutlineSchedule } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
 import { HiOutlineSparkles, HiOutlineUsers } from "react-icons/hi";
-import { IoMdExit } from "react-icons/io";
+import { VscTools } from "react-icons/vsc";
 import { RiAdminLine, RiSettings3Line, RiUserStarLine } from "react-icons/ri";
 import { GiHealing } from "react-icons/gi";
-import { FaRegCalendarAlt } from "react-icons/fa";
+import { FaRegCalendarAlt, FaTools } from "react-icons/fa";
 import { SiContactlesspayment, SiMercedes } from "react-icons/si";
 import { MdOutlinePayment } from "react-icons/md";
 
@@ -61,6 +61,20 @@ const Sidebar = () => {
                     </span>
                     <p className="ml-2 text-sm tracking-wide truncate">
                       Dashboard
+                    </p>
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="/herramientas"
+                    className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+                  >
+                    <span className="inline-flex justify-center items-center ml-4">
+                      <VscTools className="w-5 h-5" />
+                    </span>
+                    <p className="ml-2 text-sm tracking-wide truncate">
+                      Herramientas
                     </p>
                   </Link>
                 </li>

@@ -83,6 +83,7 @@ import OrdenesAntDesing from "./pages/private/dashboard/pages/Ordenesantd";
 import FacturacionAntDesing from "./pages/private/dashboard/pages/Facturacionantd";
 import LiquidacionAntDesing from "./pages/private/dashboard/pages/Liquidacionantd";
 import HorarioProfessionalAntDesing from "./pages/private/dashboard/pages/HorariosProfesionales";
+import Tools from "./pages/private/dashboard/pages/Tools";
 import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
 
 function App() {
@@ -191,6 +192,7 @@ function App() {
 
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/herramientas" element={<Tools />} />
             <Route path="/usuarios" element={<Users />} />
             <Route path="/profesionales" element={<Professionals />} />
             <Route path="/clientes" element={<Customers />} />

@@ -8,6 +8,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import limpiarHorarios from "../../../../helpers/Logic/limpiarHorarios";
 import { localidadesLaborales } from "../../../../data";
 import swal from "sweetalert";
+import { NumericFormat } from "react-number-format";
 
 const CreateReservation = () => {
   const querystring = window.location.search;
@@ -46,6 +47,8 @@ const CreateReservation = () => {
     ciudad: "Bogota",
     telefono_Servicio: "",
     nuevo: true,
+    coupon:"",
+    valorTotal:""
   });
 
   const [productos, setProdcutos] = useState([]);
@@ -169,6 +172,33 @@ const CreateReservation = () => {
     a.nombre.localeCompare(b.nombre)
   );
 
+  const [coupon, setCoupon] = useState("")
+
+  const applyCoupon = async (e) => {
+    e.preventDefault()
+
+    try {
+      let { data } = await clienteAxios.post(`/api/coupon/discount`, { coupon, valor: servicios[0]?.precio });
+
+      servicios[0].valorTotal = data.valorTotal
+      servicios[0]._idCodigo = data._idCodigo
+
+      setReserva({
+        ...reserva,
+        coupon: data._idCodigo,
+        valorTotal: servicios[0].valorTotal = data.valorTotal
+      });
+
+    } catch (error) {
+      console.log(error);
+      const errorMsg =
+        error.response?.data?.msg ||
+        error.response?.data?.message ||
+        "Estamos presentando problemas internos";
+      toast.error(errorMsg);
+    }
+  };
+
   const handleChangeServicio = (e) => {
     if (!servicios.includes(e.target.value) && e.target.value !== "") {
       let busqueda = productos.filter(
@@ -201,7 +231,7 @@ const CreateReservation = () => {
 
   function generarPreferencias() {
     let producto = servicios[0].nombre;
-    let precio = servicios[0].precio;
+    let precio = servicios[0].valorTotal ? servicios[0].valorTotal : servicios[0].precio;
 
     setCargando2(true);
 
@@ -216,6 +246,8 @@ const CreateReservation = () => {
       ciudad: "Bogotá",
       localidad: reserva.localidad_Servicio,
     };
+
+    console.log(reserva)
 
     if (reserva.nuevo) {
       clienteAxios
@@ -247,9 +279,8 @@ const CreateReservation = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                import.meta.env.VITE_APP_MERCADOPAGO_ACCESS_TOKEN
-              }`,
+              Authorization: `Bearer ${import.meta.env.VITE_APP_MERCADOPAGO_ACCESS_TOKEN
+                }`,
             },
             body: JSON.stringify({
               items: [
@@ -260,15 +291,12 @@ const CreateReservation = () => {
                 },
               ],
               back_urls: {
-                success: `${
-                  import.meta.env.VITE_APP_BACK
-                }/pay/feedback/success/manual`,
-                failure: `${
-                  import.meta.env.VITE_APP_BACK
-                }/pay/feedback/failure/manual`,
-                pending: `${
-                  import.meta.env.VITE_APP_BACK
-                }/pay/feedback/pending/manual`,
+                success: `${import.meta.env.VITE_APP_BACK
+                  }/pay/feedback/success/manual`,
+                failure: `${import.meta.env.VITE_APP_BACK
+                  }/pay/feedback/failure/manual`,
+                pending: `${import.meta.env.VITE_APP_BACK
+                  }/pay/feedback/pending/manual`,
               },
               auto_return: "approved",
               payment_methods: {
@@ -309,14 +337,17 @@ const CreateReservation = () => {
       //servicio: serviciosSearch[0].nombre,
       //servicio_img: serviciosSearch[0].img,
       cantidad: 1,
-      precio: servicios[0].precio,
+      precio: servicios[0].valorTotal ? servicios[0].valorTotal : servicios[0].precio,
       direccion_Servicio: reserva.direccion_Servicio,
       adicional_direccion_Servicio: reserva.adicional_direccion_Servicio,
       ciudad_Servicio: reserva.ciudad,
       localidad_Servicio: reserva.localidad_Servicio,
       telefono_Servicio: reserva.cliente_telefono,
+      coupon: reserva.coupon,
+      valorTotal: reserva.valorTotal
     };
 
+    console.log(reserva.coupon)
     fetch(`${import.meta.env.VITE_APP_BACK}/pay/preference-manual`, {
       method: "POST",
       headers: {
@@ -330,9 +361,8 @@ const CreateReservation = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              import.meta.env.VITE_APP_MERCADOPAGO_ACCESS_TOKEN
-            }`,
+            Authorization: `Bearer ${import.meta.env.VITE_APP_MERCADOPAGO_ACCESS_TOKEN
+              }`,
           },
           body: JSON.stringify({
             items: [
@@ -343,15 +373,12 @@ const CreateReservation = () => {
               },
             ],
             back_urls: {
-              success: `${
-                import.meta.env.VITE_APP_BACK
-              }/pay/feedback/success/manual`,
-              failure: `${
-                import.meta.env.VITE_APP_BACK
-              }/pay/feedback/failure/manual`,
-              pending: `${
-                import.meta.env.VITE_APP_BACK
-              }/pay/feedback/pending/manual`,
+              success: `${import.meta.env.VITE_APP_BACK
+                }/pay/feedback/success/manual`,
+              failure: `${import.meta.env.VITE_APP_BACK
+                }/pay/feedback/failure/manual`,
+              pending: `${import.meta.env.VITE_APP_BACK
+                }/pay/feedback/pending/manual`,
             },
             auto_return: "approved",
             payment_methods: {
@@ -513,6 +540,9 @@ const CreateReservation = () => {
       return toast.error(error);
     }
   };
+
+  console.log(servicios)
+
   // console.log("LIBERAR", liberar)
   return (
     <div className="w-full mx-auto ">
@@ -618,8 +648,6 @@ const CreateReservation = () => {
                       placeholder="Correo Electrónico"
                     />
                   </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -636,6 +664,8 @@ const CreateReservation = () => {
                       onChange={handleChange}
                     />
                   </div>
+                </div>
+                <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -652,8 +682,7 @@ const CreateReservation = () => {
                       onChange={handleChange}
                     />
                   </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
+
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -670,6 +699,9 @@ const CreateReservation = () => {
                       onChange={handleChange}
                     />
                   </div>
+
+                </div>
+                <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -818,10 +850,9 @@ const CreateReservation = () => {
 
           <div className="flex flex-wrap">
             <div className="w-full lg:w-6/12 px-4">
-              <div className="relative w-full mb-3">
+              <div className="relative w-full mb-6">
                 <label
                   className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                  htmlFor="grid-password"
                 >
                   Servicios
                 </label>
@@ -840,6 +871,32 @@ const CreateReservation = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div className="relative w-full mb-3">
+                <form onSubmit={applyCoupon}>
+                  <div>
+                    <label
+                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                      htmlFor="grid-password"
+                    >
+                      Cupón
+                    </label>
+                    <input
+                      type="text"
+                      value={coupon}
+                      onChange={(e) => setCoupon(e.target.value)}
+                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                      placeholder="Ingresa Cupón"
+                    />
+                  </div>
+                  <div>
+                    <button className="mt-4 p-3 bg-primary hover:bg-bgHover focus:bg-bgHover  rounded focus:outline-none">
+                      <p className="text-sm font-medium leading-none text-white">
+                        Aplicar Cupón
+                      </p>
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
 
@@ -867,9 +924,12 @@ const CreateReservation = () => {
                           <p className="text-sm leading-none mt-2 text-gray-600">
                             Cantidad: 1{" "}
                           </p>
-                          <p className="text-xl font-semibold leading-5 mt-5 text-gray-800">
-                            ${servicio.precio}
-                          </p>
+                          <NumericFormat
+                            value={servicio.precio}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"$"}
+                          />
                         </div>
                       </div>
 
@@ -902,7 +962,40 @@ const CreateReservation = () => {
                         Total
                       </p>
                       <p className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-gray-800">
-                        $ {servicios[0].precio}
+                      {
+                              !servicios[0]._idCodigo ?
+
+
+                                servicios.length > 1 ? (
+                                  <p>
+                                    {" "}
+                                    <NumericFormat
+                                      value={servicios.reduce(
+                                        (a, b) =>
+                                          Number(a.precio) +
+                                          Number(b.precio)
+                                      )}
+                                      displayType={"text"}
+                                      thousandSeparator={true}
+                                      prefix={"$"}
+                                    />
+                                  </p>
+                                ) : (
+                                  <NumericFormat
+                                    value={servicios?.map((a) => a.precio)[0]}
+                                    displayType={"text"}
+                                    thousandSeparator={true}
+                                    prefix={"$"}
+                                  />
+                                )
+                                :
+                                <NumericFormat
+                                  value={servicios[0].valorTotal}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"$"}
+                                />
+                            }
                       </p>
                     </div>
                   </div>
@@ -1026,7 +1119,7 @@ const CreateReservation = () => {
                         placeholder="username.example"
                         required=""
                         onChange={handleChangeProfesional}
-                        // value={date}
+                      // value={date}
                       />
                     </div>
 
@@ -1046,7 +1139,7 @@ const CreateReservation = () => {
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-full p-2.5 "
                           required=""
                           onChange={handleChangeProfesional}
-                          //value={time}
+                        //value={time}
                         >
                           <option value="">Hora</option>
                           {hourSelect?.map((hour, index) => (
@@ -1066,10 +1159,9 @@ const CreateReservation = () => {
                           profesionalesRequest.map((profesional) => (
                             <div
                               key={profesional._id} // Agregando la clave 'key'
-                              className={`w-full max-w-sm rounded-lg shadow-md ${
-                                profesional.styles &&
+                              className={`w-full max-w-sm rounded-lg shadow-md ${profesional.styles &&
                                 "bg-gray-100 border border-gray-200 "
-                              }`}
+                                }`}
                             >
                               <div className="flex flex-col items-center p-6">
                                 <img
