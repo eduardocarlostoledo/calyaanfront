@@ -17,8 +17,6 @@ const HorarioProfessionalAntDesing = () => {
   const [editProduct, setEditProduct] = useState(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
-
-  
   useEffect(() => {
     dispatch(disponibilidadesTotalesGet())
       .then(() => setLoading(false))
@@ -136,15 +134,14 @@ const HorarioProfessionalAntDesing = () => {
 
   const onSelectChange = (selectedRowKeys) => {
     setSelectedRowKeys(selectedRowKeys);
-  
+
     // Obtener los datos de las filas seleccionadas
-    const selectedRows = filteredOrdenes.filter(
-      (orden) => selectedRowKeys.includes(orden.key)
+    const selectedRows = filteredOrdenes.filter((orden) =>
+      selectedRowKeys.includes(orden.key)
     );
     console.log(selectedRows);
   };
 
-  
   return (
     <div
       style={{ textAlign: "center", alignItems: "center", overflow: "auto" }}
@@ -261,7 +258,7 @@ export default HorarioProfessionalAntDesing;
 //       );
 
 //       return (
-        
+
 //         telefono?.includes(searchText) ||
 //         email?.includes(searchText) ||
 //         nombreCompleto.includes(searchText.toLowerCase()) ||
@@ -269,7 +266,7 @@ export default HorarioProfessionalAntDesing;
 //           apellido?.toLowerCase().includes(searchText.toLowerCase())) ||
 //         moment(fecha, "YYYY-MM-DD").format("YYYY-MM-DD").includes(searchText) ||
 //         matchHoraServicio ||
-//         matchLocalidad || 
+//         matchLocalidad ||
 //         matchEspecialidad
 //       );
 //     });
@@ -296,8 +293,8 @@ export default HorarioProfessionalAntDesing;
 //       defaultSortOrder: "descend",
 //       render: (text) =>
 //         text.especialidad.map((e) => <p> {e} </p>),
-      
-//     },    
+
+//     },
 //     {
 //       title: "Telefono",
 //       dataIndex: "creador",
@@ -337,7 +334,7 @@ export default HorarioProfessionalAntDesing;
 //   ];
 
 //   return (
-    
+
 //     <div
 //       style={{ textAlign: "center", alignItems: "center", overflow: "auto" }}
 //     >
@@ -345,7 +342,7 @@ export default HorarioProfessionalAntDesing;
 //       <p className="p">
 //         BUSQUEDA POR NOMBRE, APELLIDO, ESPECIALIDAD, TELEFONO, EMAIL, LOCALIDAD LABORAL, FECHA DE DISPONIBILIDAD, HORA DISPONIBLE.
 //       </p>
-      
+
 //       <h1 style={{ textAlign: "center", alignItems: "center" }}>
 //         <Input.Search
 //           placeholder="Buscar"

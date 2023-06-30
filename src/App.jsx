@@ -83,6 +83,7 @@ import OrdenesAntDesing from "./pages/private/dashboard/pages/Ordenesantd";
 import FacturacionAntDesing from "./pages/private/dashboard/pages/Facturacionantd";
 import LiquidacionAntDesing from "./pages/private/dashboard/pages/Liquidacionantd";
 import HorarioProfessionalAntDesing from "./pages/private/dashboard/pages/HorariosProfesionales";
+import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
 
 function App() {
   const { message } = useSelector((state) => ({ ...state.notifications }));
@@ -116,6 +117,11 @@ function App() {
         <Route path="/" element={<Login />} />
 
         <Route path="/registro" element={<PageReferred />} />
+
+        <Route
+          path="/Proximos-Horarios"
+          element={<CardsProfessionalAntDesing />}
+        />
 
         <Route
           path="/registro/confirmar/:idtoken"

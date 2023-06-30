@@ -4,6 +4,7 @@ import clienteAxios from "../config/axios";
 import limpiarHorarios from "../helpers/Logic/limpiarHorarios";
 import Spinner from "./Spinner";
 import swal from "sweetalert";
+import RecomendationCards from "./RecomendationCards";
 
 const ScheduleByProfessionalForm = () => {
   const [inputValue, setInputValue] = useState({
@@ -17,6 +18,7 @@ const ScheduleByProfessionalForm = () => {
   const [pagar, setPagar] = useState(false);
   const [profesional, setProfesional] = useState({});
   const [cargando, setCargando] = useState(false);
+  const [selectCard, setSelectCard] = useState(false);
   const [profesionalesRequest, setProfesionalesRequest] = useState([]);
   const [hourSelect, setHoursSelect] = useState([]);
 
@@ -185,7 +187,7 @@ const ScheduleByProfessionalForm = () => {
                 />
               </div>
 
-              {date && (
+              {date && !selectCard && (
                 <div className="mx-auto mt-6 flex w-full bg-whitefull-screen flex-wrap items-center justify-around">
                   {!cargando ? (
                     profesionalesRequest.length > 0 ? (
@@ -276,6 +278,18 @@ const ScheduleByProfessionalForm = () => {
           )}
         </div>
       </div>
+      <RecomendationCards
+        // profesional={profesional}
+        // setProfesional={setProfesional}
+        // setProfesionalesRequest={setProfesionalesRequest}
+        // profesionalesRequest={profesionalesRequest}
+        // limpiarHorarios={limpiarHorarios}
+        // setHoursSelect={setHoursSelect}
+        handleProfesional={handleProfesional}
+        setInputValue={setInputValue}
+        inputValue={inputValue}
+        setSelectCard={setSelectCard}
+      />
     </>
   );
 };
