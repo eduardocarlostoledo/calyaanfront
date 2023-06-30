@@ -3,15 +3,46 @@ import { useDispatch, useSelector } from "react-redux";
 import { Table, List, Spin, Alert, Tag, Input } from "antd";
 import { FaWhatsapp } from "react-icons/fa";
 import { obtenerUsuarios } from "../../../../redux/features/usuariosSlice";
+import ModalUserInfo from "../components/ModalUserInfo";
+import fileDownload from "js-file-download";
+import Spinner from "../../../../components/Spinner";
+import { AiOutlineCloudDownload } from "react-icons/ai";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { BsPersonCircle } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import clienteAxios from "../../../../config/axios";
+
+
+const LinksPerfiles = {
+  CLIENTE: "/dashboard/perfil-cliente",
+  ADMIN: "/dashboard/perfil-admin",
+  PROFESIONAL: "/dashboard/perfil-profesional",
+};
+
 
 const Professionals = () => {
+  const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
-
+  const [userState, setUserState] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");  
   const [editProduct, setEditProduct] = useState(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const handleDownload = (url, filename) => {
+    clienteAxios
+      .get(url, {
+        responseType: "blob",
+      })
+      .then((res) => {
+        fileDownload(res.data, filename);
+      })
+      .catch((error) => {
+        // Manejo de error de la solicitud
+        console.error("Error en la solicitud:", error);
+      });
+  };
 
   useEffect(() => {
     dispatch(obtenerUsuarios())
@@ -84,7 +115,7 @@ const Professionals = () => {
         <div>
           <p>{text}</p>
           <a
-            href={`https://api.whatsapp.com/send/?phone=57${text}&text&type=phone_number&app_absent=0`}
+            href={`https://api.whatsapp.com/send/?phone=+57${text}&text&type=phone_number&app_absent=0`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -99,10 +130,34 @@ const Professionals = () => {
       defaultSortOrder: "descend",
       render: (text) => <p>{text}</p>,
     },
+    {
+      title: "Perfil",
+      dataIndex: "_id",
+      defaultSortOrder: "descend",
+      render: (text, record) => (
+        <>
+          {modal &&  (<ModalUserInfo
+            userState={record}
+            handleModalView={handleModalView}
+            key={text}
+          />)}
+          <Link
+            to={`${LinksPerfiles[record.rol]}/${text}`}
+            type="button"
+            className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          >
+            Ver perfil
+          </Link>
+        </>
+      ),
+    },
+
+
   ];
 
   const onSelectChange = (selectedRowKeys) => {
     setSelectedRowKeys(selectedRowKeys);
+    // setModal(!modal);
 
     const selectedRows = filteredOrdenes.filter((orden) =>
       selectedRowKeys.includes(orden.key)
@@ -143,16 +198,36 @@ const Professionals = () => {
           rowSelection={{
             selectedRowKeys,
             onChange: onSelectChange,
-          }}
+          }}          
         />
       </div>
+      <div>
+            <button
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              onClick={() => {
+                if ([rol].includes("")) {
+                  handleDownload(
+                    `api/usuarios/excel-usuarios`,
+                    `usuarios.xlsx`
+                  );
+                } else {
+                  handleDownload(
+                    `api/usuarios/excel-${rol.toLocaleLowerCase()}`,
+                    `${rol.toLocaleLowerCase() + ".xlsx"}`
+                  );
+                }
+              }}
+            >
+              <AiOutlineCloudDownload />
+              <span className="sr-only">Exportar Excel</span>
+            </button>    
+          </div>
     </div>
   );
 };
 
 export default Professionals;
-
-
 
 
 
