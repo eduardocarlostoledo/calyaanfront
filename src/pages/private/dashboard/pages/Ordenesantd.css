@@ -1,9 +1,6 @@
 .productExpandedDiv {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-gap: 20px;
-    min-height: 250px;
-    align-items: center;
+    flex-wrap: wrap;
+ 
   }
   
   /* .productExpandedDiv {
@@ -46,8 +43,10 @@
 }
 
 .NameImgDiv {
-    display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+
+    /* display: flex;
+    flex-direction: column; */
 }
 
 .restoDePropsDiv {
@@ -56,12 +55,13 @@
 }
 
 .InputsEdits {
-    width: 100%;
+    flex-wrap: wrap;
+    width: 20%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 7px;
     box-sizing: border-box;
 }
 
@@ -106,8 +106,12 @@
 }
 
 .LabelNameImg {
-  position: absolute;
-  border-radius: 5px;
-  margin-left: 10px;
-  background-color: #F8F9FA;
+    flex-wrap: wrap;
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    box-sizing: border-box;
 }
