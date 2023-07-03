@@ -74,6 +74,7 @@ const ScheduleByProfessionalForm = () => {
     setProfesional(profesional);
     setHoursSelect(limpiarHorarios(profesional.horarios));
     swal("¡Bien!", "Profesional seleccionado, elige la Hora", "success");
+    window.scrollTo(0, 0);
   };
 
   const handleSubmitProfessional = () => {
@@ -121,23 +122,24 @@ const ScheduleByProfessionalForm = () => {
             ...obj,
             styles: false,
           }));
-
-          if (filteredData.length > 0 || updatedArray.length > 0) {
-            swal({
-              title: "Información encontrada",
-              text: "Se encontraron resultados",
-              type: "success",
-              timer: 2000, // Tiempo en milisegundos
-              showConfirmButton: false,
-            });
-          } else {
-            swal({
-              title: "No se encontró información",
-              text: "No se encontraron resultados",
-              type: "info",
-              timer: 2000, // Tiempo en milisegundos
-              showConfirmButton: false,
-            });
+          if (!selectCard) {
+            if (filteredData.length > 0 || updatedArray.length > 0) {
+              swal({
+                title: "Información encontrada",
+                text: "Se encontraron resultados",
+                type: "success",
+                timer: 2000, // Tiempo en milisegundos
+                showConfirmButton: false,
+              });
+            } else {
+              swal({
+                title: "No se encontró información",
+                text: "No se encontraron resultados",
+                type: "info",
+                timer: 2000, // Tiempo en milisegundos
+                showConfirmButton: false,
+              });
+            }
           }
 
           setProfesionalesRequest(updatedArray);
@@ -169,23 +171,25 @@ const ScheduleByProfessionalForm = () => {
               Selecciona fecha y hora para tu reserva
             </h4>
             <div className="grid gap-4 grid-cols-1 mb-4 ">
-              <div>
-                <label
-                  htmlFor="date"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Fecha
-                </label>
-                <input
-                  type="date"
-                  name="date"
-                  id="date"
-                  onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-full p-2.5"
-                  placeholder="username.example"
-                  required=""
-                />
-              </div>
+              {!profesional._id && (
+                <div>
+                  <label
+                    htmlFor="date"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Fecha
+                  </label>
+                  <input
+                    type="date"
+                    name="date"
+                    id="date"
+                    onChange={handleChange}
+                    className="bg-gray-50 border m-auto border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-96 p-2.5"
+                    placeholder="username.example"
+                    required=""
+                  />
+                </div>
+              )}
 
               {date && !selectCard && (
                 <div className="mx-auto mt-6 flex w-full bg-whitefull-screen flex-wrap items-center justify-around">
@@ -251,7 +255,7 @@ const ScheduleByProfessionalForm = () => {
                     name="time"
                     id="time"
                     onChange={handleChange}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-full p-2.5"
+                    className="bg-gray-50 border m-auto border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-96 p-2.5"
                     required=""
                   >
                     <option value="">Horas</option>
