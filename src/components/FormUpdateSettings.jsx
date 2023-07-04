@@ -8,6 +8,9 @@ import { deleteError, updateInformation } from "../redux/features/authSlice";
 import clienteAxios from "../config/axios";
 import { localidades } from "../data";
 
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+
 const FormUpdateSettings = () => {
   const dispatch = useDispatch();
 
@@ -22,17 +25,17 @@ const FormUpdateSettings = () => {
     email: "",
     telefono: "",
     direccionDefault: "",
-    cedula:""
+    cedula: ""
   });
 
-  const { nombre, apellido, sexo, email, telefono, direccionDefault,cedula } =
+  const { nombre, apellido, sexo, email, telefono, direccionDefault, cedula } =
     valueForm;
 
   useEffect(() => {
     const getUser = async () => {
       try {
         let { data } = await clienteAxios.get("api/usuarios/perfil");
-       
+
         setValueForm({ ...valueForm, ...data });
       } catch (err) {
         let error = err.response.data.msg
@@ -71,12 +74,22 @@ const FormUpdateSettings = () => {
     });
   };
 
+  const handleChangePhone = (telefono) => {
+
+    setValueForm({
+      ...valueForm,
+      telefono,
+    });
+
+
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if ([nombre, apellido, email].includes("")) {
+    if ([nombre, apellido, email,telefono].includes("") || telefono.toString().length < 6 ) {
       return toast.error(
-        "Los campos nombres,apellidos y correo electrónico son obligatorios"
+        "Los campos nombres,apellidos,teléfono y correo electrónico son obligatorios"
       );
     }
 
@@ -150,7 +163,18 @@ const FormUpdateSettings = () => {
 
       <div className="md:col-span-2">
         <label htmlFor="telefono">Teléfono</label>
-        <input
+
+        <PhoneInput
+          international
+          countryCallingCodeEditable={false}
+          defaultCountry="CO"
+          name="telefono"
+          className="h-10 border mt-1 rounded px-4 w-full bg-gray-200 focus:border-bgHover focus:bg-white focus:outline-none"
+          value={telefono}
+          onChange={handleChangePhone}
+        />
+
+        {/*         <input
           type="number"
           name="telefono"
           id="telefono"
@@ -158,7 +182,7 @@ const FormUpdateSettings = () => {
           onChange={handleChange}
           className="h-10 border mt-1 rounded px-4 w-full bg-gray-200 focus:border-bgHover focus:bg-white focus:outline-none"
           placeholder="Teléfono"
-        />
+        /> */}
       </div>
 
       <div className="md:col-span-2">
