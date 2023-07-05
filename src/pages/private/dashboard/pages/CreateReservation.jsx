@@ -114,17 +114,17 @@ const CreateReservation = () => {
 
       setReserva({
         ...reserva,
-        cliente_id: data._id,
-        cliente_email: data.email,
-        cliente_nombre: data.nombre,
-        cliente_apellido: data.apellido,
-        cliente_cedula: data.cedula,
-        cliente_telefono: data.telefono,
-        direccion_Servicio: data.direccionDefault.direccion,
-        adicional_direccion_Servicio: data.direccionDefault.info,
-        ciudad_Servicio: data.direccionDefault.ciudad,
-        localidad_Servicio: data.direccionDefault.localidad,
-        telefono_Servicio: data.telefono,
+        cliente_id: data?._id,
+        cliente_email: data?.email,
+        cliente_nombre: data?.nombre,
+        cliente_apellido: data?.apellido,
+        cliente_cedula: data?.cedula,
+        cliente_telefono: data?.telefono,
+        direccion_Servicio: data?.direccionDefault?.direccion,
+        adicional_direccion_Servicio: data?.direccionDefault?.info,
+        ciudad_Servicio: data?.direccionDefault?.ciudad,
+        localidad_Servicio: data?.direccionDefault?.localidad,
+        telefono_Servicio: data?.telefono,
         nuevo: false,
       });
 
