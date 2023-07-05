@@ -76,23 +76,23 @@ const ModalLogin = ({ handleModalLogin }) => {
       <div className="fixed inset-0 z-10 overflow-y-auto">
         <div className="flex min-h-full justify-center p-4 text-center items-center sm:p-0">
           <div className="container mx-auto w-11/12 md:w-2/3 max-w-lg flex justify-center">
-            <div className="relative w-11/12 sm:w-8/12 md:w-10/12 bg-white dark:bg-gray-800 shadow  rounded">
+            <div className="relative w-11/12 sm:w-8/12 md:w-10/12 bg-white shadow  rounded">
               <img
                 className="rounded-tl rounded-tr"
                 src="https://gifts.gouldsalonspa.com/wp-content/uploads/2020/03/Relaxation-Massage-768x512.jpeg"
               />
               <div className="md:px-10 py-4 px-5 md:py-6">
-                <p className="text-2xl font-bold leading-normal text-gray-800 dark:text-gray-100">
+                <p className="text-2xl font-bold leading-normal text-gray-800 ">
                   Iniciar sesión
                 </p>
-                <p className="text-sm leading-3 mt-4 mb-5 text-gray-600 dark:text-gray-300">
+                <p className="text-sm leading-3 mt-4 mb-5 text-gray-600 ">
                   Disfruta de todos los beneficios especiales que tenemos para
                   ti
                 </p>
                 <form onSubmit={handleSubmit}>
-                  <div className="bg-gray-50 dark:bg-gray-700 border rounded dark:border-gray-700 border-gray-200">
+                  <div className="bg-gray-50  border rounded  border-gray-200">
                     <input
-                      className="py-3 pl-4 bg-transparent text-sm font-medium leading-none text-gray-600 placeholder-gray-600 dark:placeholder-gray-300 dark:text-gray-300 w-full focus:outline-none"
+                      className="py-3 pl-4 bg-transparent text-sm font-medium leading-none text-gray-600 placeholder-gray-600  w-full focus:outline-none"
                       type="email"
                       placeholder="Ingresa tu dirección de correo electrónico"
                       onChange={handleChange}
@@ -100,9 +100,9 @@ const ModalLogin = ({ handleModalLogin }) => {
                       name="email"
                     />
                   </div>
-                  <div className="bg-gray-50 mt-3 dark:bg-gray-700 border rounded dark:border-gray-700 border-gray-200">
+                  <div className="bg-gray-50 mt-3  border-gray-200">
                     <input
-                      className="py-3 pl-4 bg-transparent text-sm font-medium leading-none text-gray-600 placeholder-gray-600 dark:placeholder-gray-300 dark:text-gray-300 w-full focus:outline-none"
+                      className="py-3 pl-4 bg-transparent text-sm font-medium leading-none text-gray-600 placeholder-gray-600  w-full focus:outline-none"
                       type="password"
                       placeholder="••••••••"
                       onChange={handleChange}
@@ -113,7 +113,7 @@ const ModalLogin = ({ handleModalLogin }) => {
                   <div className="md:flex  justify-between flex-col gap-2 mt-4 md:mt-6">
                     <Link
                       to="/olvide-password"
-                      className="text-xs leading-3 text-right text-gray-600 dark:text-gray-300 hover:text-bgHover focus:text-bgHover"
+                      className="text-xs leading-3 text-right text-gray-600  hover:text-bgHover focus:text-bgHover"
                     >
                       ¿Has olvidado tu contraseña?
                     </Link>
@@ -146,7 +146,7 @@ const ModalLogin = ({ handleModalLogin }) => {
                 </div>
 
                 <div className="md:flex items-center justify-between flex-col gap-2 mt-4 md:mt-6">
-                  <p className="text-xs leading-3 text-gray-600 dark:text-gray-300 hover:text-bgHover focus:text-bgHover">
+                  <p className="text-xs leading-3 text-gray-600  hover:text-bgHover focus:text-bgHover">
                     ¿No tienes cuenta?{" "}
                     <Link
                       to="/registro"

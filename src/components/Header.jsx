@@ -44,11 +44,11 @@ const Header2 = () => {
                 <div className="dropdown inline-block relative">
                   <AiOutlineBell className="w-6 h-6 text-gray-400 hover:text-primary cursor-pointer" />
                   <div className="z-40 w-64 right-4 p-1  bg-white divide-y dropdown-menu absolute hidden  text-gray-700  border    divide-gray-100 rounded-lg shadow ">
-                    <div className=" px-4 py-2 z-40 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white">
+                    <div className=" px-4 py-2 z-40 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50">
                       Notificaciones
                     </div>
                   
-                    <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                    <div className="divide-y divide-gray-100">
                       <Link
                         to={
                           user?.rol === "PROFESIONAL"
@@ -57,7 +57,7 @@ const Header2 = () => {
                             ? "/resumen"
                             : "/resumen-admin"
                         }
-                        className="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="flex px-4 py-3 hover:bg-gray-100"
                       >
                         <div className="flex-shrink-0">
                           <div className="cursor-pointer font-semibold w-10 h-10 bg-blue-200 text-blue-600 flex items-center justify-center rounded-full">
@@ -65,12 +65,12 @@ const Header2 = () => {
                           </div>
                         </div>
                         <div className="w-full pl-3">
-                          <div className="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
+                          <div className="text-gray-500 text-sm mb-1.5 ">
                             {user?.rol === "PROFESIONAL"
                               ? "Nueva reserva"
                               : "Se genero una nueva serva"}
 
-                            <div className="text-xs text-blue-600 dark:text-blue-500">
+                            <div className="text-xs text-blue-600 ">
                               Hace 1 minuto
                             </div>
                           </div>
@@ -79,11 +79,11 @@ const Header2 = () => {
                     </div>
                     <a
                       href="#"
-                      className="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
+                      className="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100 "
                     >
                       <div className="inline-flex items-center ">
                         <svg
-                          className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400"
+                          className="w-4 h-4 mr-2 text-gray-500"
                           aria-hidden="true"
                           fill="currentColor"
                           viewBox="0 0 20 20"

@@ -214,7 +214,7 @@ const ProfessionalProfile = () => {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-800 shadow rounded mx-auto w-full">
+      <div className="bg-white  shadow rounded mx-auto w-full">
         <div className="relative">
           <img
             className="h-56 shadow rounded-t w-full object-cover object-center"
@@ -330,36 +330,36 @@ const ProfessionalProfile = () => {
           <div className="pt-3  flex flex-col  items-start  justify-between">
             <div className=" w-full ">
               <div className="text-center  mb-3  flex flex-col  items-center justify-between ">
-                <h2 className="mb-3  text-2xl text-gray-800 dark:text-gray-100 font-medium tracking-normal">
+                <h2 className="mb-3  text-2xl text-gray-800  font-medium tracking-normal">
                   {nombre} {apellido}
                 </h2>
               </div>
-              <p className="text-center  mt-2 text-sm tracking-normal text-gray-600 dark:text-gray-400 leading-5">
+              <p className="text-center  mt-2 text-sm tracking-normal text-gray-600  leading-5">
                 {profesional?.descripcion}
               </p>
             </div>
             <div className=" w-full py-5 flex items-start justify-center ">
               <div className="mr-6 ">
-                <h2 className="text-gray-600 dark:text-gray-400 font-bold text-xl  leading-6 mb-2 text-center">
+                <h2 className="text-gray-600  font-bold text-xl  leading-6 mb-2 text-center">
                   0
                 </h2>
-                <p className="text-gray-800 dark:text-gray-100 text-sm leading-5">
+                <p className="text-gray-800  text-sm leading-5">
                   Reviews
                 </p>
               </div>
               <div className="mr-6 ">
-                <h2 className="text-gray-600 dark:text-gray-400 font-bold text-xl  leading-6 mb-2 text-center">
+                <h2 className="text-gray-600  font-bold text-xl  leading-6 mb-2 text-center">
                   {profesional?.reservas?.length}
                 </h2>
-                <p className="text-gray-800 dark:text-gray-100 text-sm leading-5">
+                <p className="text-gray-800  text-sm leading-5">
                   Servicos
                 </p>
               </div>
               <div>
-                <h2 className="text-gray-600 dark:text-gray-400 font-bold text-xl  leading-6 mb-2 text-center">
+                <h2 className="text-gray-600  font-bold text-xl  leading-6 mb-2 text-center">
                   {profesional?.reservas?.length}
                 </h2>
-                <p className="text-gray-800 dark:text-gray-100 text-sm  leading-5">
+                <p className="text-gray-800  text-sm  leading-5">
                   Completados
                 </p>
               </div>
@@ -374,7 +374,7 @@ const ProfessionalProfile = () => {
                 </div>
               </div>
             </div>
-            <p className="text-gray-800 dark:text-gray-100 text-sm text-center w-full mt-4  leading-5">
+            <p className="text-gray-800  text-sm text-center w-full mt-4  leading-5">
               Última conexión {ultimaConexion?.split("T")[0]} -{" "}
               {ultimaConexion?.split("T")[1]?.slice(0, 5)}
             </p>
@@ -383,7 +383,7 @@ const ProfessionalProfile = () => {
       </div>
 
       <div className="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-6 gap-8">
-        <div className="bg-white dark:bg-gray-800 shadow p-8">
+        <div className="bg-white  shadow p-8">
           <div
             className={`grid ${
               forEdit ? "grid-cols-3" : "grid-cols-2"
@@ -599,7 +599,7 @@ const ProfessionalProfile = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 shadow container grid grid-row-2 p-8 gap-6">
+        <div className="bg-white  shadow container grid grid-row-2 p-8 gap-6">
           <div className="flex  justify-center  flex-wrap lg:flex-col">
             <h3>Datos Profesionales</h3>
 
@@ -663,9 +663,9 @@ const ProfessionalProfile = () => {
                     {profesional?.especialidad?.length > 0 ? (
                       profesional?.especialidad.map((especialidad, index) => (
                         <div className="w-full">
-                          <div className="bg-white dark:bg-gray-800 p-5 shadow flex rounded cursor-pointer">
+                          <div className="bg-white  p-5 shadow flex rounded cursor-pointer">
                             <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0 ">
-                              <p className="text-lg text-gray-800 dark:text-gray-100 font-normal">
+                              <p className="text-lg text-gray-800  font-normal">
                                 {especialidad}
                               </p>
                             </div>
@@ -740,13 +740,13 @@ const ProfessionalProfile = () => {
               <div className="w-full">
                 <Link
                   to={`/resumen-admin/${h._id}`}
-                  className="bg-white dark:bg-gray-800 shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
+                  className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
                 >
                   <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
-                    <p className="text-lg text-gray-800 dark:text-gray-100 mb-3 font-normal">
+                    <p className="text-lg text-gray-800  mb-3 font-normal">
                       {h.servicio}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                    <p className="text-sm text-gray-600  font-normal">
                       {h.dia_servicio} - {h.hora_servicio}
                     </p>
                   </div>
@@ -760,7 +760,7 @@ const ProfessionalProfile = () => {
                     >
                       {h.estadoServicio}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                    <p className="text-sm text-gray-600  font-normal">
                       Atiende a: {h.cliente_nombre}
                     </p>
                   </div>
@@ -771,7 +771,7 @@ const ProfessionalProfile = () => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 shadow p-8 mt-5">
+      <div className="bg-white  shadow p-8 mt-5">
         <div className="mx-2 my-2 px-6 flex flex-wrap justify-center">
           <Link
             to={`/calendario-semanal/${id}`}

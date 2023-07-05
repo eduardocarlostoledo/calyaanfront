@@ -101,7 +101,7 @@ const Referencias = () => {
               <div className="md:col-span-5 w-full">
                 <label
                   for="website-admin"
-                  className="block mb-2 font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 font-medium text-gray-900 "
                 >
                   Código de referido
                 </label>
@@ -110,7 +110,7 @@ const Referencias = () => {
                     id="codigo-referido"
                     className={`${
                       button1 && "bg-green-200"
-                    } cursor-pointer inline-flex items-center justify-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600`}
+                    } cursor-pointer inline-flex items-center justify-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md `}
                     onClick={handleClickCopy}
                   >
                     {button1 ? (
@@ -128,7 +128,7 @@ const Referencias = () => {
                   <input
                     type="text"
                     id="website-admin"
-                    className="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5"
                     disabled={true}
                     value={codigoreferido}
                   />
@@ -138,7 +138,7 @@ const Referencias = () => {
               <div className="md:col-span-5 w-full mt-4">
                 <label
                   for="website-admin"
-                  className="block mb-2 font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 font-medium text-gray-900"
                 >
                   Enlace de referido
                 </label>
@@ -147,7 +147,7 @@ const Referencias = () => {
                     id="enlace-referido"
                     className={`${
                       button2 && "bg-green-200"
-                    } cursor-pointer inline-flex items-center justify-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600`}
+                    } cursor-pointer inline-flex items-center justify-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md`}
                     onClick={handleClickCopy}
                   >
                     {button2 ? (
@@ -165,7 +165,7 @@ const Referencias = () => {
                   <input
                     type="text"
                     id="website-admin"
-                    className="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5"
                     value={`https://calyaan.com.co?referido=${codigoreferido}`}
                     disabled={true}
                   />

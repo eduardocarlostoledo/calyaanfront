@@ -173,7 +173,7 @@ const FormUpdateProfile = () => {
         <>
           <label
             htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center mt-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100"
+            className="flex flex-col items-center justify-center mt-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100"
           >
             <div className="flex flex-col items-center justify-center pt-5 pb-6 rounded">
               <svg
@@ -191,7 +191,7 @@ const FormUpdateProfile = () => {
                   d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                 ></path>
               </svg>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-gray-500 ">
                 SVG, PNG o JPG (MAX. 2MB)
               </p>
             </div>
@@ -227,15 +227,15 @@ const FormUpdateProfile = () => {
 
       <form onSubmit={handleSubmit} className="mt-2">
         <label htmlFor="descripcion">Descripción profesional</label>
-        <div className="w-full my-2 p-2 border border-gray-200 rounded-lg bg-gray-200 dark:bg-gray-700 dark:border-gray-600">
-          <div className="p-2 bg-gray-200 rounded-b-lg dark:bg-gray-800">
+        <div className="w-full my-2 p-2 border border-gray-200 rounded-lg bg-gray-200 ">
+          <div className="p-2 bg-gray-200 rounded-b-lg ">
             <textarea
               id="descripcion"
               value={descripcion}
               onChange={handleChange}
               name="descripcion"
               rows="8"
-              className="block w-full px-0 text-sm outline-none text-gray-800 bg-gray-200 border-0  dark:bg-gray-800  focus:ring-0 dark:text-white dark:placeholder-gray-400"
+              className="block w-full px-0 text-sm outline-none text-gray-800 bg-gray-200 border-0    focus:ring-0  "
               placeholder="Escribe un poco sobre ti..."
             ></textarea>
           </div>
@@ -502,7 +502,7 @@ export default FormUpdateProfile;
 //         <>
 //           <label
 //             htmlFor="dropzone-file"
-//             className="flex flex-col items-center justify-center mt-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100"
+//             className="flex flex-col items-center justify-center mt-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100"
 //           >
 //             <div className="flex flex-col items-center justify-center pt-5 pb-6 rounded">
 //               <svg
@@ -527,7 +527,7 @@ export default FormUpdateProfile;
 //                   d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
 //                 ></path> */}
 //               </svg>
-//               <p className="text-xs text-gray-500 dark:text-gray-400">
+//               <p className="text-xs text-gray-500 ">
 //                 SVG, PNG o JPG (MAX. 2MB)
 //               </p>
 //             </div>
@@ -563,15 +563,15 @@ export default FormUpdateProfile;
 
 //       <form onSubmit={handleSubmit} className="mt-2">
 //         <label htmlFor="descripcion">Descripción profesional</label>
-//         <div className="w-full my-2 p-2 border border-gray-200 rounded-lg bg-gray-200 dark:bg-gray-700 dark:border-gray-600">
-//           <div className="p-2 bg-gray-200 rounded-b-lg dark:bg-gray-800">
+//         <div className="w-full my-2 p-2 border border-gray-200 rounded-lg bg-gray-200 ">
+//           <div className="p-2 bg-gray-200 rounded-b-lg ">
 //             <textarea
 //               id="descripcion"
 //               value={descripcion}
 //               onChange={handleChange}
 //               name="descripcion"
 //               rows="8"
-//               className="block w-full px-0 text-sm outline-none text-gray-800 bg-gray-200 border-0  dark:bg-gray-800  focus:ring-0 dark:text-white dark:placeholder-gray-400"
+//               className="block w-full px-0 text-sm outline-none text-gray-800 bg-gray-200 border-0    focus:ring-0 "
 //               placeholder="Escribe un poco sobre ti..."
 //             ></textarea>
 //           </div>

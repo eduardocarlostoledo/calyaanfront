@@ -32,7 +32,7 @@ const Fidelidad = () => {
                         Fidelidad Calyaan
                       </h1>
                       <div className="my-5">
-                        <h4 className="text-md text-gray-900 dark:text-gray-100 mb-3">
+                        <h4 className="text-md text-gray-900  mb-3">
                     
 
                         Recuerda que acumulas el 10% de cada compra en puntos para que realices tu próximo servicio (aplica T/C).

@@ -410,7 +410,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                     </div>
                   </div>
                   <input
-                    type="number"
+                    type="text"
                     name="telefono"
                     value={telefono}
                     onChange={handleChange}

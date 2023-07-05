@@ -58,7 +58,7 @@ const AdminProfile = () => {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-800 shadow rounded mx-auto w-full">
+      <div className="bg-white shadow rounded mx-auto w-full">
         <div className="relative">
           <img
             className="h-56 shadow rounded-t w-full object-cover object-center"
@@ -78,13 +78,13 @@ const AdminProfile = () => {
           <div className="pt-18  flex flex-col  items-start  justify-between">
             <div className=" w-full ">
               <div className="text-center   flex flex-col  items-center justify-between ">
-                <h2 className="  text-2xl text-gray-800 dark:text-gray-100 font-medium tracking-normal">
+                <h2 className="  text-2xl text-gray-800 font-medium tracking-normal">
                   {nombre} {apellido}
                 </h2>
               </div>
             </div>
 
-            <p className="text-gray-800 dark:text-gray-100 text-sm text-center w-full mt-4  leading-5">
+            <p className="text-gray-800  text-sm text-center w-full mt-4  leading-5">
               Última conexión {ultimaConexion?.split("T")[0]} -{" "}
               {ultimaConexion?.split("T")[1]?.slice(0, 5)}
             </p>
@@ -93,7 +93,7 @@ const AdminProfile = () => {
       </div>
 
       <div className="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-6 gap-8">
-        <div className="bg-white dark:bg-gray-800 shadow p-8">
+        <div className="bg-white shadow p-8">
           <h3>Datos personales</h3>
 
           <div className="flex lg:flex-row md:flex-col-reverse flex-col-reverse justify-between mt-4  ">
@@ -210,20 +210,20 @@ const AdminProfile = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 shadow p-8">
+        <div className="bg-white  shadow p-8">
           <h3>Últimas reservas agendas</h3>
 
           <div className="flex gap-6 justify-center mx-auto  flex-wrap lg:flex-col mt-4">
             <div className="w-full">
               <Link
                 to="/reserva/1"
-                className="bg-white dark:bg-gray-800 shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
+                className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
               >
                 <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
-                  <p className="text-lg text-gray-800 dark:text-gray-100 mb-3 font-normal">
+                  <p className="text-lg text-gray-800  mb-3 font-normal">
                     Depilación
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                  <p className="text-sm text-gray-600  font-normal">
                     10 Abril 2023 - 08:00 am
                   </p>
                 </div>
@@ -231,7 +231,7 @@ const AdminProfile = () => {
                   <p className="text-xs text-white bg-green-400 px-3 rounded mb-2 font-normal py-1">
                     Completado
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                  <p className="text-sm text-gray-600  font-normal">
                     Atendido por: Andrea Gomez
                   </p>
                 </div>
@@ -240,13 +240,13 @@ const AdminProfile = () => {
             <div className="w-full">
               <Link
                 to="/reserva/1"
-                className="bg-white dark:bg-gray-800 shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
+                className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
               >
                 <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
-                  <p className="text-lg text-gray-800 dark:text-gray-100 mb-3 font-normal">
+                  <p className="text-lg text-gray-800  mb-3 font-normal">
                     Depilación
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                  <p className="text-sm text-gray-600  font-normal">
                     10 Abril 2023 - 08:00 am
                   </p>
                 </div>
@@ -254,7 +254,7 @@ const AdminProfile = () => {
                   <p className="text-xs text-white bg-yellow-400 px-3 rounded mb-2 font-normal py-1">
                     Pendiente
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                  <p className="text-sm text-gray-600  font-normal">
                     Atendido por: Andrea Gomez
                   </p>
                 </div>
@@ -264,13 +264,13 @@ const AdminProfile = () => {
             <div className="w-full">
               <Link
                 to="/reserva/1"
-                className="bg-white dark:bg-gray-800 shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
+                className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
               >
                 <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0 ">
-                  <p className="text-lg text-gray-800 dark:text-gray-100 mb-3 font-normal">
+                  <p className="text-lg text-gray-800 mb-3 font-normal">
                     Depilación
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                  <p className="text-sm text-gray-600  font-normal">
                     10 Abril 2023 - 08:00 am
                   </p>
                 </div>
@@ -278,7 +278,7 @@ const AdminProfile = () => {
                   <p className="text-xs text-white bg-red-400 px-3 rounded mb-2 font-normal py-1">
                     Cancelado
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
+                  <p className="text-sm text-gray-600  font-normal">
                     Atendido por: Andrea Gomez
                   </p>
                 </div>
@@ -287,7 +287,7 @@ const AdminProfile = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white dark:bg-gray-800 shadow p-8 mt-5">
+      <div className="bg-white  shadow p-8 mt-5">
         <div className="mx-2 my-2 px-6 flex flex-wrap justify-center">
           <Link
             to={`/historial-servicios/admin/${id}`}

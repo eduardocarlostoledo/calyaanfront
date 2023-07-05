@@ -48,7 +48,7 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                 <form className="mt-11">
                   <div className="flex items-center space-x-9">
                     <div className="flex flex-col w-1/2">
-                      <label className="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
+                      <label className="text-xs font-semibold leading-3 text-gray-800 ">
                         {" "}
                         Nombre{" "}
                       </label>
@@ -56,11 +56,11 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                         value={`${userState?.nombre} ${userState?.apellido}`}
                         placeholder="Nombre"
                         disabled={true}
-                        className="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
+                        className="text-xs font-medium leading-3 text-gray-500 resize-none bg-gray-50 border rounded-lg border-gray-200  focus:outline-none px-4 py-3 mt-2"
                       />
                     </div>
                     <div className="flex flex-col w-1/2">
-                      <label className="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
+                      <label className="text-xs font-semibold leading-3 text-gray-800 ">
                         {" "}
                         Cédula{" "}
                       </label>
@@ -68,13 +68,13 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                         value={`${userState?.cedula ? userState?.cedula : ""}`}
                         placeholder="Cédula"
                         disabled={true}
-                        className="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
+                        className="text-xs font-medium leading-3 text-gray-500  resize-none bg-gray-50  border rounded-lg border-gray-200  focus:outline-none px-4 py-3 mt-2"
                       />
                     </div>
                   </div>
                   <div className="flex items-center space-x-9 mt-8">
                     <div className="flex flex-col w-1/2">
-                      <label className="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
+                      <label className="text-xs font-semibold leading-3 text-gray-800 ">
                         {" "}
                         Email{" "}
                       </label>
@@ -82,11 +82,11 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                         value={`${userState?.email}`}
                         placeholder="Email"
                         disabled={true}
-                        className="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
+                        className="text-xs font-medium leading-3 text-gray-500  resize-none bg-gray-50  border rounded-lg border-gray-200  focus:outline-none px-4 py-3 mt-2"
                       />
                     </div>
                     <div className="flex flex-col w-1/2">
-                      <label className="text-xs font-semibold leading-3 text-gray-800 dark:text-gray-100">
+                      <label className="text-xs font-semibold leading-3 text-gray-800 ">
                         {" "}
                         Ciudad{" "}
                       </label>
@@ -94,7 +94,7 @@ const ModalUserInfo = ({ handleModalView, userState }) => {
                         value={`${userState?.ciudad}`}
                         placeholder="Bogota"
                         disabled={true}
-                        className="text-xs font-medium leading-3 text-gray-500 dark:text-gray-400 resize-none bg-gray-50 dark:bg-gray-700 border rounded-lg border-gray-200 dark:border-gray-700 focus:outline-none px-4 py-3 mt-2"
+                        className="text-xs font-medium leading-3 text-gray-500  resize-none bg-gray-50 border rounded-lg border-gray-200 focus:outline-none px-4 py-3 mt-2"
                       />
                     </div>
                   </div>

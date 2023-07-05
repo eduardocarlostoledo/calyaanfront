@@ -136,7 +136,7 @@ const Tools = () => {
             <div className="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-6 gap-8">
                 <div className="rounded bg-white  shadow p-6">
                     <div className="relative w-full mb-10">
-                        <h3 className="focus:outline-none text-gray-800 dark:text-gray-100 leading-4 tracking-normal text-base mb-6 font-bold">
+                        <h3 className="focus:outline-none text-gray-800  leading-4 tracking-normal text-base mb-6 font-bold">
                             Cupones
                         </h3>
 
@@ -226,7 +226,7 @@ const Tools = () => {
                     </div>
 
                     <div className=" mb-10 w-full">
-                        <h3 className="focus:outline-none text-gray-800 dark:text-gray-100 leading-4 tracking-normal text-base mb-6 font-bold">
+                        <h3 className="focus:outline-none text-gray-800  leading-4 tracking-normal text-base mb-6 font-bold">
                             Cupones vigentes
                         </h3>
                         {cuponesVigentes.length > 0 ? (
@@ -249,7 +249,7 @@ const Tools = () => {
                                                     <div className="flex items-center justify-between transition-all duration-1000">
                                                         <div className="flex items-center">
 
-                                                            <p className="focus:outline-none font-medium text-gray-600 dark:text-gray-400 text-base tracking-normal leading-4">
+                                                            <p className="focus:outline-none font-medium text-gray-600  text-base tracking-normal leading-4">
                                                                 {cupon.codigo} -{" "}
                                                                 {cupon.vencimiento.split("T")[0]} -{" "}
                                                             </p>
@@ -278,7 +278,7 @@ const Tools = () => {
                                                                 onClick={(e) =>
                                                                     eliminarCupon({ _id: cupon._id, vigente: true })
                                                                 }
-                                                                className="focus:ring-2 focus:ring-offset-2 focus:ring-red-700 focus:outline-none px-6 py-2 bg-white dark:bg-transparent dark:hover:bg-red-400 hover:bg-red-700 hover:text-white border border-red-700 text-red-700 font-normal text-xs leading-3 rounded"
+                                                                className="focus:ring-2 focus:ring-offset-2 focus:ring-red-700 focus:outline-none px-6 py-2 bg-white  hover:bg-red-700 hover:text-white border border-red-700 text-red-700 font-normal text-xs leading-3 rounded"
                                                             >
                                                                 Eliminar
                                                             </button>
@@ -337,7 +337,7 @@ const Tools = () => {
                     </div>
 
                     <div className="  w-full">
-                        <h3 className="focus:outline-none text-gray-800 dark:text-gray-100 leading-4 tracking-normal text-base mb-6 font-bold">
+                        <h3 className="focus:outline-none text-gray-800  leading-4 tracking-normal text-base mb-6 font-bold">
                             Cupones vencidos
                         </h3>
                         {cuponesNoVigentes.length > 0 ? (
@@ -360,7 +360,7 @@ const Tools = () => {
                                                     <div className="flex items-center justify-between transition-all duration-1000">
                                                         <div className="flex items-center">
 
-                                                            <p className="focus:outline-none font-medium text-gray-600 dark:text-gray-400 text-base tracking-normal leading-4">
+                                                            <p className="focus:outline-none font-medium text-gray-600  text-base tracking-normal leading-4">
                                                                 {cupon.codigo} -{" "}
                                                                 {cupon.vencimiento.split("T")[0]} -{" "}
                                                             </p>
@@ -389,7 +389,7 @@ const Tools = () => {
                                                                 onClick={(e) =>
                                                                     eliminarCupon({ _id: cupon._id, vigente: true })
                                                                 }
-                                                                className="focus:ring-2 focus:ring-offset-2 focus:ring-red-700 focus:outline-none px-6 py-2 bg-white dark:bg-transparent dark:hover:bg-red-400 hover:bg-red-700 hover:text-white border border-red-700 text-red-700 font-normal text-xs leading-3 rounded"
+                                                                className="focus:ring-2 focus:ring-offset-2 focus:ring-red-700 focus:outline-none px-6 py-2 bg-white  hover:bg-red-700 hover:text-white border border-red-700 text-red-700 font-normal text-xs leading-3 rounded"
                                                             >
                                                                 Eliminar
                                                             </button>
@@ -444,7 +444,7 @@ const Tools = () => {
                     </div>
                 </div>
 
-                <div className="rounded border-gray-300 dark:border-gray-700 border-dashed border-2 h-24"></div>
+                <div className="rounded border-gray-300  border-dashed border-2 h-24"></div>
             </div>
         </div>
     );

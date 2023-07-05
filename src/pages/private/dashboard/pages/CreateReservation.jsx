@@ -559,19 +559,19 @@ const CreateReservation = () => {
             <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
               Información de usuario
             </h6>
-            <div className="border border-gray-300 dark:border-gray-700 shadow-sm w-56 rounded flex relative">
+            <div className="border border-gray-300  shadow-sm w-56 rounded flex relative">
               <select
                 onChange={(e) => setEstado(e.target.value)}
                 value={estado}
-                className="bg-white dark:bg-gray-800 appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800 dark:text-gray-100 rounded"
+                className="bg-white  appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800  rounded"
               >
                 <option value="">Estado</option>
                 <option value="registrado">Registrado</option>
                 <option value="nuevo">Nuevo usuario</option>
               </select>
               <div
-                className="px-4 flex items-center border-l border-gray-300 dark:border-gray-700 flex-col justify-center text-gray-500
-                                      dark:text-gray-400 absolute right-0 bottom-0 top-0 mx-auto z-20 pointer-events-none "
+                className="px-4 flex items-center border-l border-gray-300  flex-col justify-center text-gray-500
+                                       absolute right-0 bottom-0 top-0 mx-auto z-20 pointer-events-none "
               >
                 <svg
                   tabIndex={0}
@@ -859,7 +859,7 @@ const CreateReservation = () => {
 
                 <select
                   id="servicios"
-                  className="bg-white dark:bg-gray-800 appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800 dark:text-gray-100 rounded"
+                  className="bg-white  appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800  rounded"
                   //value={especialidad}
                   onChange={handleChangeServicio}
                   name="servicios"
@@ -1676,18 +1676,18 @@ export default CreateReservation;
 //             <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
 //               Información de usuario
 //             </h6>
-//             <div className="border border-gray-300 dark:border-gray-700 shadow-sm w-56 rounded flex relative">
+//             <div className="border border-gray-300  shadow-sm w-56 rounded flex relative">
 //               <select
 //                 onChange={(e) => setEstado(e.target.value)}
 //                 value={estado}
-//                 className="bg-white dark:bg-gray-800 appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800 dark:text-gray-100 rounded">
+//                 className="bg-white  appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800  rounded">
 //                 <option value="">Estado</option>
 //                 <option value="registrado">Registrado</option>
 //                 <option value="nuevo">Nuevo usuario</option>
 //               </select>
 //               <div
-//                 className="px-4 flex items-center border-l border-gray-300 dark:border-gray-700 flex-col justify-center text-gray-500
-//                                       dark:text-gray-400 absolute right-0 bottom-0 top-0 mx-auto z-20 pointer-events-none "
+//                 className="px-4 flex items-center border-l border-gray-300  flex-col justify-center text-gray-500
+//                                        absolute right-0 bottom-0 top-0 mx-auto z-20 pointer-events-none "
 //               >
 //                 <svg
 //                   tabIndex={0}
@@ -1971,7 +1971,7 @@ export default CreateReservation;
 
 //                 <select
 //                   id="servicios"
-//                   className="bg-white dark:bg-gray-800 appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800 dark:text-gray-100 rounded"
+//                   className="bg-white  appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800  rounded"
 //                   //value={especialidad}
 //                   onChange={handleChangeServicio}
 //                   name="servicios"
@@ -2733,18 +2733,18 @@ export default CreateReservation;
 //             <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
 //               Información de usuario
 //             </h6>
-//             <div className="border border-gray-300 dark:border-gray-700 shadow-sm w-56 rounded flex relative">
+//             <div className="border border-gray-300  shadow-sm w-56 rounded flex relative">
 //               <select
 //                 onChange={(e) => setEstado(e.target.value)}
 //                 value={estado}
-//                 className="bg-white dark:bg-gray-800 appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800 dark:text-gray-100 rounded">
+//                 className="bg-white  appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800  rounded">
 //                 <option value="">Estado</option>
 //                 <option value="registrado">Registrado</option>
 //                 <option value="nuevo">Nuevo usuario</option>
 //               </select>
 //               <div
-//                 className="px-4 flex items-center border-l border-gray-300 dark:border-gray-700 flex-col justify-center text-gray-500
-//                                       dark:text-gray-400 absolute right-0 bottom-0 top-0 mx-auto z-20 pointer-events-none "
+//                 className="px-4 flex items-center border-l border-gray-300  flex-col justify-center text-gray-500
+//                                        absolute right-0 bottom-0 top-0 mx-auto z-20 pointer-events-none "
 //               >
 //                 <svg
 //                   tabIndex={0}
@@ -3028,7 +3028,7 @@ export default CreateReservation;
 
 //                 <select
 //                   id="servicios"
-//                   className="bg-white dark:bg-gray-800 appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800 dark:text-gray-100 rounded"
+//                   className="bg-white  appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800  rounded"
 //                   //value={especialidad}
 //                   onChange={handleChangeServicio}
 //                   name="servicios"
@@ -3751,18 +3751,18 @@ export default CreateReservation;
 // //             <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
 // //               Información de usuario
 // //             </h6>
-// //             <div className="border border-gray-300 dark:border-gray-700 shadow-sm w-56 rounded flex relative">
+// //             <div className="border border-gray-300  shadow-sm w-56 rounded flex relative">
 // //               <select
 // //                 onChange={(e) => setEstado(e.target.value)}
 // //                 value={estado}
-// //                 className="bg-white dark:bg-gray-800 appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800 dark:text-gray-100 rounded">
+// //                 className="bg-white  appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800  rounded">
 // //                 <option value="">Estado</option>
 // //                 <option value="registrado">Registrado</option>
 // //                 <option value="nuevo">Nuevo usuario</option>
 // //               </select>
 // //               <div
-// //                 className="px-4 flex items-center border-l border-gray-300 dark:border-gray-700 flex-col justify-center text-gray-500
-// //                                       dark:text-gray-400 absolute right-0 bottom-0 top-0 mx-auto z-20 pointer-events-none "
+// //                 className="px-4 flex items-center border-l border-gray-300  flex-col justify-center text-gray-500
+// //                                        absolute right-0 bottom-0 top-0 mx-auto z-20 pointer-events-none "
 // //               >
 // //                 <svg
 // //                   tabIndex={0}
@@ -4046,7 +4046,7 @@ export default CreateReservation;
 
 // //                 <select
 // //                   id="servicios"
-// //                   className="bg-white dark:bg-gray-800 appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800 dark:text-gray-100 rounded"
+// //                   className="bg-white  appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700  text-gray-800  rounded"
 // //                   //value={especialidad}
 // //                   onChange={handleChangeServicio}
 // //                   name="servicios"
