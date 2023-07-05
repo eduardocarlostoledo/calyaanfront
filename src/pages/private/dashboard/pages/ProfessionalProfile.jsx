@@ -155,6 +155,32 @@ const ProfessionalProfile = () => {
     }
   };
 
+  function insertarSaltosDeLinea(texto, caracteresPorLinea) {
+    if (!texto) return [];
+
+    const palabras = texto.split(" ");
+    let lineaActual = "";
+    const lineas = [];
+
+    for (let i = 0; i < palabras.length; i++) {
+      const palabra = palabras[i];
+      const nuevaLinea = lineaActual + " " + palabra;
+
+      if (nuevaLinea.length > caracteresPorLinea) {
+        lineas.push(lineaActual.trim());
+        lineaActual = palabra;
+      } else {
+        lineaActual = nuevaLinea;
+      }
+    }
+
+    if (lineaActual.trim() !== "") {
+      lineas.push(lineaActual.trim());
+    }
+
+    return lineas;
+  }
+
   useEffect(() => {
     getUser();
   }, [id]);
@@ -211,7 +237,7 @@ const ProfessionalProfile = () => {
     ultimaConexion,
     profesional,
   } = valueForm;
-
+  // console.log(valueForm);
   return (
     <>
       <div className="bg-white  shadow rounded mx-auto w-full">
@@ -334,34 +360,40 @@ const ProfessionalProfile = () => {
                   {nombre} {apellido}
                 </h2>
               </div>
-              <p className="text-center  mt-2 text-sm tracking-normal text-gray-600  leading-5">
-                {profesional?.descripcion}
+              <p className="text-center mt-2 text-sm tracking-normal text-gray-600 leading-5">
+                {insertarSaltosDeLinea(profesional?.descripcion, 170).map(
+                  (linea, index) => (
+                    <span key={index}>
+                      {linea}
+                      <br />
+                    </span>
+                  )
+                )}
               </p>
+              {/* <p className="text-center mt-2 text-sm tracking-normal text-gray-600 leading-5">
+                {profesional?.descripcion
+                  ? insertarSaltosDeLinea(profesional.descripcion, 170)
+                  : "Descripción no disponible"}
+              </p> */}
             </div>
             <div className=" w-full py-5 flex items-start justify-center ">
               <div className="mr-6 ">
                 <h2 className="text-gray-600  font-bold text-xl  leading-6 mb-2 text-center">
                   0
                 </h2>
-                <p className="text-gray-800  text-sm leading-5">
-                  Reviews
-                </p>
+                <p className="text-gray-800  text-sm leading-5">Reviews</p>
               </div>
               <div className="mr-6 ">
                 <h2 className="text-gray-600  font-bold text-xl  leading-6 mb-2 text-center">
                   {profesional?.reservas?.length}
                 </h2>
-                <p className="text-gray-800  text-sm leading-5">
-                  Servicos
-                </p>
+                <p className="text-gray-800  text-sm leading-5">Servicos</p>
               </div>
               <div>
                 <h2 className="text-gray-600  font-bold text-xl  leading-6 mb-2 text-center">
                   {profesional?.reservas?.length}
                 </h2>
-                <p className="text-gray-800  text-sm  leading-5">
-                  Completados
-                </p>
+                <p className="text-gray-800  text-sm  leading-5">Completados</p>
               </div>
             </div>
             <div className="w-full flex-col  justify-center  ">
@@ -389,7 +421,9 @@ const ProfessionalProfile = () => {
               forEdit ? "grid-cols-3" : "grid-cols-2"
             } justify-items-end items-center`}
           >
-            <h3 className="text-2xl font tracking-widest">Datos personales</h3>
+            <h3 className="text-2xl font tracking-widest mr-auto">
+              Datos personales
+            </h3>
             {forEdit && (
               <AiOutlineCheck
                 size={30}
@@ -481,7 +515,7 @@ const ProfessionalProfile = () => {
                     onChange={handleChange}
                     placeholder="No registrado"
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                    disabled={!forEdit}
+                    disabled={true}
                   />
                 </div>
               </div>
@@ -495,7 +529,7 @@ const ProfessionalProfile = () => {
               value={sexo}
               onChange={handleChange}
               name="sexo"
-              disabled={!forEdit}
+              disabled={true}
             >
               <option value="">No registrado</option>
               <option value="Masculino">Masculino</option>
@@ -522,7 +556,7 @@ const ProfessionalProfile = () => {
                 </option>
               </select>
             </div>
-            <div className="lg:mt-0 md:mt-0 mt-4 w-full">
+            {/* <div className="lg:mt-0 md:mt-0 mt-4 w-full">
               <p className="text-base leading-none text-gray-800">Nombre</p>
               <select
                 id="ciudad"
@@ -536,11 +570,11 @@ const ProfessionalProfile = () => {
                   {direccionDefault.nombre}
                 </option>
               </select>
-            </div>
+            </div> */}
           </div>
 
           <div className="lg:flex md:flex block gap-8  mt-6">
-            <div className="w-full">
+            {/* <div className="w-full">
               <p className="text-base leading-none text-gray-800">ID</p>
               <input
                 type="text"
@@ -551,7 +585,7 @@ const ProfessionalProfile = () => {
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 disabled={!forEdit}
               />
-            </div>
+            </div> */}
             <div className="lg:mt-0 md:mt-0 mt-4 w-full">
               <p className="text-base leading-none text-gray-800">Localidad</p>
               <select
@@ -584,7 +618,7 @@ const ProfessionalProfile = () => {
                 disabled={!forEdit}
               />
             </div>
-            <div className="lg:mt-0 md:mt-0 mt-4 w-full">
+            {/* <div className="lg:mt-0 md:mt-0 mt-4 w-full">
               <p className="text-base leading-none text-gray-800">Localidad</p>
               <input
                 type="text"
@@ -595,19 +629,19 @@ const ProfessionalProfile = () => {
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 disabled={!forEdit}
               />
-            </div>
+            </div> */}
           </div>
         </div>
 
-        <div className="bg-white  shadow container grid grid-row-2 p-8 gap-6">
+        <div className="bg-white  shadow container grid p-8 gap-6">
           <div className="flex  justify-center  flex-wrap lg:flex-col">
             <h3>Datos Profesionales</h3>
 
-            <div className="flex lg:flex-row md:flex-col-reverse flex-col-reverse justify-between mt-4  ">
-              <div className="text">
+            <div className="flex lg:flex-row md:flex-col-reverse w-full flex-col-reverse justify-between mt-4  ">
+              <div className="text w-full">
                 <div className>
                   <div className="">
-                    <p className="text-base text-gray-800">
+                    <p className="text-base my-4 text-gray-800">
                       Codigo de referido
                     </p>
                     <input
@@ -621,8 +655,8 @@ const ProfessionalProfile = () => {
                     />
                   </div>
                 </div>
-                <div className="mt-4">
-                  <p className="text-base leading-none text-gray-800">
+                <div className="mt-4  ">
+                  <p className="text-base leading-none my-4 text-gray-800">
                     Referidos
                   </p>
                   <div className=" flex flex-wrap gap-4">
@@ -644,7 +678,7 @@ const ProfessionalProfile = () => {
                 </div>
 
                 <div className="mt-6">
-                  <p className="text-base text-gray-800">Descripción</p>
+                  <p className="text-base my-4 text-gray-800">Descripción</p>
                   <input
                     type="text"
                     name="profesional"
@@ -657,13 +691,13 @@ const ProfessionalProfile = () => {
                   />
                 </div>
 
-                <div className="  mt-4">
-                  <p className="text-base text-gray-800">Especialidades</p>
+                <div className="mt-4 w-full">
+                  <p className="text-base my-4 text-gray-800">Especialidades</p>
                   <div className="flex gap-6 justify-center  flex-wrap lg:flex-col">
                     {profesional?.especialidad?.length > 0 ? (
                       profesional?.especialidad.map((especialidad, index) => (
-                        <div className="w-full">
-                          <div className="bg-white  p-5 shadow flex rounded cursor-pointer">
+                        <div className="w-5/6 mx-auto">
+                          <div className="bg-white  p-5 shadow flex rounded">
                             <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0 ">
                               <p className="text-lg text-gray-800  font-normal">
                                 {especialidad}
@@ -683,7 +717,9 @@ const ProfessionalProfile = () => {
             </div>
 
             <div className="  mt-4">
-              <p className="text-base text-gray-800">Localidades Laborales</p>
+              <p className="text-base my-4 text-gray-900">
+                Localidades Laborales
+              </p>
               <div className=" flex flex-wrap gap-4">
                 {profesional?.localidadesLaborales?.length > 0 ? (
                   profesional?.localidadesLaborales?.map((localidad, index) => (
@@ -702,7 +738,7 @@ const ProfessionalProfile = () => {
               </div>
             </div>
 
-            <div className="lg:flex md:flex block gap-8  mt-4">
+            {/* <div className="lg:flex md:flex block gap-8  mt-4">
               <div className="w-full">
                 <p className="text-base leading-none text-gray-800">
                   Dirección
@@ -731,43 +767,45 @@ const ProfessionalProfile = () => {
                   disabled={!forEdit}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
 
-          <div className="flex gap-6 justify-center  flex-wrap lg:flex-col">
-            <h3>Últimos servicios</h3>
-            {profesional?.reservas?.map((h) => (
-              <div className="w-full">
-                <Link
-                  to={`/resumen-admin/${h._id}`}
-                  className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
-                >
-                  <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
-                    <p className="text-lg text-gray-800  mb-3 font-normal">
-                      {h.servicio}
-                    </p>
-                    <p className="text-sm text-gray-600  font-normal">
-                      {h.dia_servicio} - {h.hora_servicio}
-                    </p>
-                  </div>
-                  <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 flex justify-end flex-col xl:items-end lg:items-end md:items-end items-start">
-                    <p
-                      className={`text-xs text-white px-3 rounded mb-2 font-normal py-1 bg-yellow-400  ${
-                        h.estadoServicio === "Completado"
-                          ? "bg-green-400"
-                          : h.estadoServicio === "Cancelado" && "bg-red-400"
-                      } `}
-                    >
-                      {h.estadoServicio}
-                    </p>
-                    <p className="text-sm text-gray-600  font-normal">
-                      Atiende a: {h.cliente_nombre}
-                    </p>
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
+          {profesional.reservas?.length > 0 && (
+            <div className="flex gap-6 justify-center  flex-wrap lg:flex-col">
+              <h3>Últimos servicios</h3>
+              {profesional?.reservas?.map((h) => (
+                <div className="w-full">
+                  <Link
+                    to={`/resumen-admin/${h._id}`}
+                    className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
+                  >
+                    <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
+                      <p className="text-lg text-gray-800  mb-3 font-normal">
+                        {h.servicio}
+                      </p>
+                      <p className="text-sm text-gray-600  font-normal">
+                        {h.dia_servicio} - {h.hora_servicio}
+                      </p>
+                    </div>
+                    <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 flex justify-end flex-col xl:items-end lg:items-end md:items-end items-start">
+                      <p
+                        className={`text-xs text-white px-3 rounded mb-2 font-normal py-1 bg-yellow-400  ${
+                          h.estadoServicio === "Completado"
+                            ? "bg-green-400"
+                            : h.estadoServicio === "Cancelado" && "bg-red-400"
+                        } `}
+                      >
+                        {h.estadoServicio}
+                      </p>
+                      <p className="text-sm text-gray-600  font-normal">
+                        Atiende a: {h.cliente_nombre}
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

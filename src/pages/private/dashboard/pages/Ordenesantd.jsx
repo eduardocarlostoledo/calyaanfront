@@ -75,14 +75,14 @@ const ProductExpanded = ({
   }, [dispatch, change]);
   // }, [orders, change]);
 
-  useEffect(() => {
-    setLoading(true); // updateinprogress
-    dispatch(updateOrder(false))
-      // dispatch(getOrders())
+  // useEffect(() => {
+  //   setLoading(true); // updateinprogress
+  //   dispatch(updateOrder(false))
+  //     // dispatch(getOrders())
 
-      .then(() => setLoading(false))
-      .catch((error) => setError(error.message));
-  }, [dispatch, change, orders]);
+  //     .then(() => setLoading(false))
+  //     .catch((error) => setError(error.message));
+  // }, [dispatch, change, orders]);
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -565,11 +565,11 @@ const OrdenesAntDesing = (props) => {
       .catch((error) => setError(error.message));
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(updateOrder(false))
-      .then(() => setLoading(false))
-      .catch((error) => setError(error.message));
-  }, [change]);
+  // useEffect(() => {
+  //   dispatch(updateOrder(false))
+  //     .then(() => setLoading(false))
+  //     .catch((error) => setError(error.message));
+  // }, [change]);
 
   const orders = useSelector((state) => state.ordenes.order || []);
 
@@ -588,6 +588,12 @@ const OrdenesAntDesing = (props) => {
     console.log(dates);
     dates ? setStartDate(dateNow) : setStartDate("");
     dates ? setEndDate(dateNow2) : setEndDate("");
+  };
+
+  const refreshData = () => {
+    dispatch(getOrders())
+      .then(() => setLoading(false))
+      .catch((error) => setError(error.message));
   };
 
   //se filtran las ordenes para renderizado de la tabla
@@ -703,7 +709,8 @@ const OrdenesAntDesing = (props) => {
       defaultSortOrder: "descend",
       render: (text, record) => (
         <p>
-          {record.direccion_Servicio.slice(0, 20)} ... <br />
+          {record.direccion_Servicio && record.direccion_Servicio.slice(0, 20)}{" "}
+          ... <br />
           {text}
         </p>
       ),
@@ -886,6 +893,8 @@ const OrdenesAntDesing = (props) => {
                 adicional_direccion_Servicio={
                   record.adicional_direccion_Servicio
                 }
+                estadoPago={record.estadoPago}
+                payment_id={record.payment_id}
                 localidad_Servicio={record.localidad_Servicio}
                 telefono_Servicio={record.telefono_Servicio}
                 estadoServicio={record?.estadoServicio}
