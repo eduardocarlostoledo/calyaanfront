@@ -197,34 +197,55 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
 
     e.preventDefault();
 
+
+    const objeto = {
+      "cliente_id":"64236ffd00f492f3c924fcf1",
+      "profesional_id":"6425982952001cacc34c8485",
+      "cita_servicio":"07/07/2023",
+      "hora_servicio":"08:30",
+      "direccion_servicio":"Cra 99 bis 14-61",
+      "info_direccion_servicio":"Pueblonuevo",
+      "localidad_serivicio":"Fontibon",
+      "telefono_servicio":"3224430332",
+      "estado_servicio":"Pendiente",
+      "servicios":["929"],
+      "cupon":""
+  }
+
     try {
+
       const response = await fetch(
-        `${import.meta.env.VITE_APP_BACK}/pay/preference`,
+        `${import.meta.env.VITE_APP_BACK}/api/pay/preference`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(reservationData),
+          body: JSON.stringify(objeto),
         }
       );
 
       const data = await response.json();
-      const orderId = data.newOrder;
+      console.log(data)
+      const orderId = data.factura._id;
       setOrderId(orderId);
 
       const secondResponse = await fetch(
-        `${import.meta.env.VITE_APP_BACK}/pay/create_preference/${orderId}`,
+        `${import.meta.env.VITE_APP_BACK}/api/pay/create_preference/${orderId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(orderData),
+   
         }
       );
 
+     
+
+
       const preference = await secondResponse.json();
+      console.log(preference)
       createCheckoutButton(preference.id); 
     } catch (error) {
       console.log(error);
