@@ -3,10 +3,22 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import clienteAxios from "../../../../config/axios";
-import { localidades } from "../../../../data";
-import { AiOutlineEdit, AiOutlineClose, AiOutlineCheck } from "react-icons/ai";
+import {
+  especialidadesHabilitadas,
+  localidades,
+  localidadesLaborales,
+} from "../../../../data";
+import {
+  AiOutlineEdit,
+  AiOutlineClose,
+  AiOutlineCheck,
+  AiFillCloseCircle,
+} from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { updateProfileAdminDash } from "../../../../redux/features/professionalSlice";
+import {
+  updateProfileAdmin,
+  updateProfileAdminDash,
+} from "../../../../redux/features/professionalSlice";
 
 // const ProfessionalProfile = () => {
 //   const { id } = useParams();
@@ -111,6 +123,10 @@ const ProfessionalProfile = () => {
     ultimaConexion: "",
   });
 
+  const [especialidadesForm, setEspecialidadForm] = useState([]);
+  const [localidadForm, setLocalidadForm] = useState([]);
+  const [descriptionForm, setDescriptionForm] = useState("");
+
   // const getUser = async () => {
   //   try {
   //     const { data } = await clienteAxios.get(
@@ -148,6 +164,10 @@ const ProfessionalProfile = () => {
         profesional: data.profesional || {},
         ultimaConexion: data.ultimaConexion || "",
       }));
+      console.log(data);
+      setDescriptionForm(data.profesional.descripcion);
+      setEspecialidadForm(data.profesional.especialidad);
+      setLocalidadForm(data.profesional.localidadesLaborales);
     } catch (err) {
       const error =
         err.response?.data.msg || "Estamos experimentando problemas internos";
@@ -212,12 +232,52 @@ const ProfessionalProfile = () => {
     }
 
     try {
+      const dataP = {
+        _id: valueForm.profesional._id,
+        descripcion: descriptionForm,
+        especialidades: especialidadesForm,
+        localidades: localidadForm,
+      };
+      console.log(dataP, "info");
       dispatch(updateProfileAdminDash({ valueForm, toast }));
+      dispatch(updateProfileAdmin({ dataP, toast }));
       setForEdit(false);
       toast.success("Enviando...");
     } catch (error) {
       toast.error("Ha ocurrido un error al enviar los datos");
     }
+  };
+
+  // updateProfileAdmin
+
+  const handleChangeEspecialidades = (e) => {
+    if (!especialidadesForm.includes(e.target.value) && e.target.value !== "") {
+      setEspecialidadForm([...especialidadesForm, e.target.value]);
+    }
+
+    setValueForm({ ...valueForm, especialidad: e.target.value });
+  };
+
+  const eliminarEspecialidad = (especialidad) => {
+    setEspecialidadForm(
+      especialidadesForm.filter(
+        (especialidadState) => especialidadState !== especialidad
+      )
+    );
+  };
+
+  const handleChangeLocalidad = (e) => {
+    // console.log("e.target.value", e.target.value);
+    // console.log("localidadForm", localidadForm);
+    if (!localidadForm.includes(e.target.value) && e.target.value !== "") {
+      setLocalidadForm([...localidadForm, e.target.value]);
+    }
+  };
+
+  const eliminarLocalidad = (localidad) => {
+    setLocalidadForm(
+      localidadForm.filter((localidadState) => localidadState !== localidad)
+    );
   };
 
   const {
@@ -427,6 +487,7 @@ const ProfessionalProfile = () => {
             {forEdit && (
               <AiOutlineCheck
                 size={30}
+                color="green"
                 className="cursor-pointer"
                 onClick={(e) => handleSubmit(e)}
               />
@@ -440,6 +501,7 @@ const ProfessionalProfile = () => {
             ) : (
               <AiOutlineClose
                 size={30}
+                color="red"
                 className="cursor-pointer"
                 onClick={() => setForEdit(!forEdit)}
               />
@@ -515,7 +577,7 @@ const ProfessionalProfile = () => {
                     onChange={handleChange}
                     placeholder="No registrado"
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                    disabled={true}
+                    disabled={!forEdit}
                   />
                 </div>
               </div>
@@ -529,7 +591,7 @@ const ProfessionalProfile = () => {
               value={sexo}
               onChange={handleChange}
               name="sexo"
-              disabled={true}
+              disabled={!forEdit}
             >
               <option value="">No registrado</option>
               <option value="Masculino">Masculino</option>
@@ -548,9 +610,9 @@ const ProfessionalProfile = () => {
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 value={direccionDefault.ciudad}
                 name="ciudad"
-                disabled={!forEdit}
+                disabled={true}
               >
-                <option value="">No registrado</option>
+                <option value="">Bogota</option>
                 <option value={direccionDefault.ciudad}>
                   {direccionDefault.ciudad}
                 </option>
@@ -683,8 +745,8 @@ const ProfessionalProfile = () => {
                     type="text"
                     name="profesional"
                     id="descripcion"
-                    onChange={handleChange}
-                    value={profesional?.descripcion}
+                    onChange={({ target }) => setDescriptionForm(target.value)}
+                    value={descriptionForm}
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                     placeholder="No registrado"
                     disabled={!forEdit}
@@ -693,20 +755,57 @@ const ProfessionalProfile = () => {
 
                 <div className="mt-4 w-full">
                   <p className="text-base my-4 text-gray-800">Especialidades</p>
+                  <div className="mt-2 mb-4">
+                    <select
+                      id="especialidad"
+                      className="border border-gray-300 text-gray-900 text-sm rounded-lg bg-gray-200 focus:border-bgHover focus:bg-white focus:outline-none block w-full p-3"
+                      // value={especialidad}
+                      disabled={!forEdit}
+                      onChange={handleChangeEspecialidades}
+                      name="especialidad"
+                    >
+                      <option value="">Especialidades</option>
+                      {especialidadesHabilitadas.map((especialidad, index) => (
+                        <option key={index} value={especialidad}>
+                          {especialidad}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <div className="flex gap-6 justify-center  flex-wrap lg:flex-col">
                     {profesional?.especialidad?.length > 0 ? (
-                      profesional?.especialidad.map((especialidad, index) => (
-                        <div className="w-5/6 mx-auto">
-                          <div className="bg-white  p-5 shadow flex rounded">
-                            <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0 ">
-                              <p className="text-lg text-gray-800  font-normal">
-                                {especialidad}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ))
+                      <div className="my-4 flex flex-wrap gap-4">
+                        {especialidadesForm.map((especialidad, index) => (
+                          <p
+                            key={index}
+                            className="text-center text-xs font-medium flex items-center px-2.5 py-3 rounded bg-gray-100 text-gray-800 border-gray-500 "
+                          >
+                            {especialidad}
+                            {forEdit && (
+                              <AiFillCloseCircle
+                                className="ml-2 cursor-pointer"
+                                onClick={() =>
+                                  eliminarEspecialidad(especialidad)
+                                }
+                              />
+                            )}
+                          </p>
+                        ))}
+                      </div>
                     ) : (
+                      // (
+                      //   profesional?.especialidad.map((especialidad, index) => (
+                      //     <div className="w-5/6 mx-auto">
+                      //       <div className="bg-white  p-5 shadow flex rounded">
+                      //         <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0 ">
+                      //           <p className="text-lg text-gray-800  font-normal">
+                      //             {especialidad}
+                      //           </p>
+                      //         </div>
+                      //       </div>
+                      //     </div>
+                      //   ))
+                      // )
                       <p className="text-center text-xs mt-3 font-medium flex items-center px-2.5 py-3 rounded  bg-gray-100 text-gray-800 border-gray-500 ">
                         No tiene registrado
                       </p>
@@ -720,8 +819,25 @@ const ProfessionalProfile = () => {
               <p className="text-base my-4 text-gray-900">
                 Localidades Laborales
               </p>
+              <div className="mt-2 mb-4">
+                <select
+                  id="areasLaborales"
+                  className="border border-gray-300 text-gray-900 text-sm rounded-lg bg-gray-200 focus:border-bgHover focus:bg-white focus:outline-none block w-full p-3"
+                  // value={areasLaborales}
+                  onChange={handleChangeLocalidad}
+                  disabled={!forEdit}
+                  name="areasLaborales"
+                >
+                  <option value="">Localidades</option>
+                  {localidadesLaborales?.map((localidad, index) => (
+                    <option key={index} value={localidad}>
+                      {localidad}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div className=" flex flex-wrap gap-4">
-                {profesional?.localidadesLaborales?.length > 0 ? (
+                {/* {profesional?.localidadesLaborales?.length > 0 ? (
                   profesional?.localidadesLaborales?.map((localidad, index) => (
                     <p
                       key={index}
@@ -734,6 +850,25 @@ const ProfessionalProfile = () => {
                   <p className="text-center text-xs mt-3 font-medium flex items-center px-2.5 py-3 rounded  bg-gray-100 text-gray-800 border-gray-500 ">
                     No tiene registrado
                   </p>
+                )} */}
+
+                {localidadForm?.length > 0 && (
+                  <div className="my-4 flex flex-wrap gap-4">
+                    {localidadForm.map((localidad, index) => (
+                      <div
+                        key={index}
+                        className="text-center text-xs font-medium flex items-center px-2.5 py-3 rounded  bg-gray-100 text-gray-800 border-gray-500"
+                      >
+                        {localidad}
+                        {forEdit && (
+                          <AiFillCloseCircle
+                            className="ml-2 cursor-pointer"
+                            onClick={() => eliminarLocalidad(localidad)}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>

@@ -154,7 +154,6 @@ const ScheduleByProfessionalForm = () => {
 
     obtenerUsuarios();
   }, [inputValue.date]);
-
   const { date, time } = inputValue;
 
   return (
@@ -282,6 +281,7 @@ const ScheduleByProfessionalForm = () => {
           )}
         </div>
       </div>
+
       <RecomendationCards
         // profesional={profesional}
         // setProfesional={setProfesional}

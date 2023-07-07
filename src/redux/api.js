@@ -27,15 +27,17 @@ export const updateInformationRequest = (userForm) =>
   clienteAxios.put("api/usuarios/actualizar-perfil", userForm);
 export const updatePasswordRequest = (valueForm) =>
   clienteAxios.put("api/usuarios/cambiar-password", valueForm);
-  export const obtenerTodosUsuarios = () => clienteAxios.get("api/buscar/obtenertodosusuarios");
-
+export const obtenerTodosUsuarios = () =>
+  clienteAxios.get("api/buscar/obtenertodosusuarios");
 
 // Professional
 export const updateProfileRequest = (valueForm) =>
   clienteAxios.put("api/profesional/actualizar-profesional", valueForm);
+export const updateProfileRequestDash = (valueForm) =>
+  clienteAxios.put("api/profesional/actualizar-profesional-admin", valueForm);
 export const updateProfileRequestDashAdmin = (valueForm) =>
   clienteAxios.put(
-    "api/profesional/actualizar-profesional-AdminDash",
+    "api/profesional/actualizar-profesional-admin-dash",
     valueForm
   );
 export const createScheduleRequest = (valueForm) =>

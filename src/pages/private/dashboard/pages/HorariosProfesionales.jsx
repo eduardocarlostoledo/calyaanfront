@@ -1,21 +1,24 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Table, List, Spin, Alert, Tag, Input } from "antd";
-import { AiFillSetting, AiOutlineClose } from "react-icons/ai";
+import { Table, Input, Select } from "antd";
 import { BiEditAlt } from "react-icons/bi";
 import moment from "moment";
-import swal from "sweetalert";
 import "./Ordenesantd.css";
 import { disponibilidadesTotalesGet } from "../../../../redux/features/professionalSlice";
-// import { newHourArray,localidadesLaborales } from "../../../../data";
+import { localidadesLaborales } from "../../../../data";
+import { especialidadesHabilitadas } from "../../../../data";
+
+const { Option } = Select;
 
 const HorarioProfessionalAntDesing = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");
-  const [editProduct, setEditProduct] = useState(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedEspecialidad, setSelectedEspecialidad] = useState(null);
+  const [selectedLocalidad, setSelectedLocalidad] = useState(null);
+  const [filteredOrdenes, setFilteredOrdenes] = useState([]);
 
   useEffect(() => {
     dispatch(disponibilidadesTotalesGet())
@@ -26,15 +29,68 @@ const HorarioProfessionalAntDesing = () => {
   const orders = useSelector(
     (state) => state.professional.disponibilidad || []
   );
-  // console.log(orders);
-  //// Mapeo ordenes para agregar una key a cada fila
-  const newProducts = orders?.map((product) => ({
-    ...product,
-    key: product._id,
-  }));
 
-  const filteredOrdenes = useMemo(() => {
-    return newProducts?.filter((orden) => {
+  useEffect(() => {
+    filterOrdenes();
+  }, [orders, searchText, selectedEspecialidad, selectedLocalidad]);
+
+  console.log("selects", selectedEspecialidad, selectedLocalidad);
+
+  const columns = [
+    {
+      title: "Nombre",
+      dataIndex: "creador",
+      defaultSortOrder: "descend",
+      render: (creador) => (
+        <p>
+          <b>
+            {creador.creador.nombre} {creador.creador.apellido}
+          </b>
+        </p>
+      ),
+    },
+    {
+      title: "Especialidad",
+      dataIndex: "creador",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => text.especialidad.map((e) => <p> {e} </p>),
+    },
+    {
+      title: "Telefono",
+      dataIndex: "creador",
+      defaultSortOrder: "descend",
+      render: (creador) => <p>{creador.creador.telefono}</p>,
+    },
+    {
+      title: "email",
+      dataIndex: "creador",
+      defaultSortOrder: "descend",
+      render: (creador) => <p>{creador.creador.email}</p>,
+    },
+    {
+      title: "Localidad",
+      dataIndex: "creador",
+      defaultSortOrder: "descend",
+      render: (text) =>
+        text.localidadesLaborales.map((localidad) => <p> {localidad} </p>),
+    },
+    {
+      title: "Fecha",
+      dataIndex: "fecha",
+      defaultSortOrder: "descend",
+      render: (text) => <p>{text}</p>,
+    },
+    {
+      title: "Hora",
+      dataIndex: "disponibilidad",
+      defaultSortOrder: "descend",
+      render: (text) => text.map((localidad) => <p> {localidad.hora} </p>),
+    },
+  ];
+
+  const filterOrdenes = () => {
+    const filtered = orders.filter((orden) => {
       const { creador, fecha, disponibilidad } = orden;
       const {
         telefono,
@@ -55,9 +111,40 @@ const HorarioProfessionalAntDesing = () => {
         especialidades.toLowerCase().includes(searchText.toLowerCase())
       );
 
+      const coincideConSelectLocalidadesLaborales =
+        creador.localidadesLaborales?.some((localidad) =>
+          localidad.toLowerCase().includes(selectedLocalidad?.toLowerCase())
+        );
+
+      const coincideConSelectEspecialidad = creador.especialidad?.some(
+        (especialidades) =>
+          especialidades
+            .toLowerCase()
+            .includes(selectedEspecialidad?.toLowerCase())
+      );
+
       const matchHoraServicio = disponibilidad?.some((hora) =>
         hora.hora.toLowerCase().includes(searchText.toLowerCase())
       );
+
+      if (selectedEspecialidad || selectedLocalidad) {
+        return (
+          (telefono?.includes(searchText) ||
+            email?.includes(searchText) ||
+            nombreCompleto.includes(searchText.toLowerCase()) ||
+            (nombre?.toLowerCase().includes(searchText.toLowerCase()) &&
+              apellido?.toLowerCase().includes(searchText.toLowerCase())) ||
+            moment(fecha, "YYYY-MM-DD")
+              .format("YYYY-MM-DD")
+              .includes(searchText) ||
+            matchHoraServicio) &&
+          (selectedEspecialidad && selectedLocalidad
+            ? coincideConSelectEspecialidad &&
+              coincideConSelectLocalidadesLaborales
+            : coincideConSelectEspecialidad ||
+              coincideConSelectLocalidadesLaborales)
+        );
+      }
 
       return (
         telefono?.includes(searchText) ||
@@ -66,76 +153,16 @@ const HorarioProfessionalAntDesing = () => {
         (nombre?.toLowerCase().includes(searchText.toLowerCase()) &&
           apellido?.toLowerCase().includes(searchText.toLowerCase())) ||
         moment(fecha, "YYYY-MM-DD").format("YYYY-MM-DD").includes(searchText) ||
-        matchHoraServicio ||
-        matchLocalidad ||
-        matchEspecialidad
+        matchHoraServicio
       );
     });
-  }, [newProducts, searchText]);
 
-  const columns = [
-    {
-      title: "Nombre",
-      dataIndex: "creador",
-      //   sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (creador) => (
-        <p>
-          <b>
-            {creador.creador.nombre} {creador.creador.apellido}
-          </b>
-        </p>
-      ),
-    },
-    {
-      title: "Especialidad",
-      dataIndex: "creador",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => text.especialidad.map((e) => <p> {e} </p>),
-    },
-    {
-      title: "Telefono",
-      dataIndex: "creador",
-      //   sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (creador) => <p>{creador.creador.telefono}</p>,
-    },
-    {
-      title: "email",
-      dataIndex: "creador",
-      //   sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (creador) => <p>{creador.creador.email}</p>,
-    },
-    {
-      title: "Localidad",
-      dataIndex: "creador",
-      //   sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) =>
-        text.localidadesLaborales.map((localidad) => <p> {localidad} </p>),
-    },
-    {
-      title: "Fecha",
-      dataIndex: "fecha",
-      //   sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Hora",
-      dataIndex: "disponibilidad",
-      //   sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => text.map((localidad) => <p> {localidad.hora} </p>),
-    },
-  ];
+    setFilteredOrdenes(filtered);
+  };
 
   const onSelectChange = (selectedRowKeys) => {
     setSelectedRowKeys(selectedRowKeys);
 
-    // Obtener los datos de las filas seleccionadas
     const selectedRows = filteredOrdenes.filter((orden) =>
       selectedRowKeys.includes(orden.key)
     );
@@ -164,10 +191,45 @@ const HorarioProfessionalAntDesing = () => {
           }}
         />
       </h1>
-      {/* <p className="p">
-        Puede ordenar ascendente o descendentemente con las flechas en Datos de
-        la tabla
-      </p> */}
+
+      <div
+        style={{
+          marginBottom: "10px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <div>
+          <p>Especialidades</p>
+          <Select
+            placeholder="Filtrar por especialidad"
+            style={{ width: 200, marginRight: "10px" }}
+            onChange={(value) => setSelectedEspecialidad(value)}
+          >
+            <Option value={null}>Todos</Option>
+            {especialidadesHabilitadas.map((especialidad, index) => (
+              <Option key={index} value={especialidad}>
+                {especialidad}
+              </Option>
+            ))}
+          </Select>
+        </div>
+        <div>
+          <p>Localidades</p>
+          <Select
+            placeholder="Filtrar por localidad"
+            style={{ width: 200 }}
+            onChange={(value) => setSelectedLocalidad(value)}
+          >
+            <Option value={null}>Todos</Option>
+            {localidadesLaborales?.map((localidad, index) => (
+              <Option key={index} value={localidad}>
+                {localidad}
+              </Option>
+            ))}
+          </Select>
+        </div>
+      </div>
 
       <div
         style={{
@@ -175,7 +237,6 @@ const HorarioProfessionalAntDesing = () => {
           marginLeft: "0px",
           marginTop: "0px",
           padding: "0px",
-          // width: '100%', height: '1000px', overflowY: "auto", overflowX: 'auto'
         }}
       >
         <Table
@@ -188,19 +249,215 @@ const HorarioProfessionalAntDesing = () => {
           }}
         />
       </div>
-
-      {/* <div style={{ marginTop: "80px", padding: "20px" }}>
-        <Table
-          style={{ backgroundColor: "rgb(245, 245, 235)" }}
-          columns={columns}
-          dataSource={orders}
-        />
-      </div> */}
     </div>
   );
 };
 
 export default HorarioProfessionalAntDesing;
+
+// import React, { useEffect, useState, useMemo } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { Table, List, Spin, Alert, Tag, Input } from "antd";
+// import { AiFillSetting, AiOutlineClose } from "react-icons/ai";
+// import { BiEditAlt } from "react-icons/bi";
+// import moment from "moment";
+// import swal from "sweetalert";
+// import "./Ordenesantd.css";
+// import { disponibilidadesTotalesGet } from "../../../../redux/features/professionalSlice";
+// // import { newHourArray,localidadesLaborales } from "../../../../data";
+
+// const HorarioProfessionalAntDesing = () => {
+//   const dispatch = useDispatch();
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [searchText, setSearchText] = useState("");
+//   const [editProduct, setEditProduct] = useState(0);
+//   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+//   useEffect(() => {
+//     dispatch(disponibilidadesTotalesGet())
+//       .then(() => setLoading(false))
+//       .catch((error) => setError(error.message));
+//   }, [dispatch]);
+
+//   const orders = useSelector(
+//     (state) => state.professional.disponibilidad || []
+//   );
+//   // console.log(orders);
+//   //// Mapeo ordenes para agregar una key a cada fila
+//   const newProducts = orders?.map((product) => ({
+//     ...product,
+//     key: product._id,
+//   }));
+
+//   const filteredOrdenes = useMemo(() => {
+//     return newProducts?.filter((orden) => {
+//       const { creador, fecha, disponibilidad } = orden;
+//       const {
+//         telefono,
+//         email,
+//         nombre,
+//         apellido,
+//         localidadesLaborales,
+//         especialidad,
+//       } = creador?.creador;
+
+//       const nombreCompleto = `${nombre} ${apellido}`.toLowerCase();
+
+//       const matchLocalidad = creador.localidadesLaborales?.some((localidad) =>
+//         localidad.toLowerCase().includes(searchText.toLowerCase())
+//       );
+
+//       const matchEspecialidad = creador.especialidad?.some((especialidades) =>
+//         especialidades.toLowerCase().includes(searchText.toLowerCase())
+//       );
+
+//       const matchHoraServicio = disponibilidad?.some((hora) =>
+//         hora.hora.toLowerCase().includes(searchText.toLowerCase())
+//       );
+
+//       return (
+//         telefono?.includes(searchText) ||
+//         email?.includes(searchText) ||
+//         nombreCompleto.includes(searchText.toLowerCase()) ||
+//         (nombre?.toLowerCase().includes(searchText.toLowerCase()) &&
+//           apellido?.toLowerCase().includes(searchText.toLowerCase())) ||
+//         moment(fecha, "YYYY-MM-DD").format("YYYY-MM-DD").includes(searchText) ||
+//         matchHoraServicio ||
+//         matchLocalidad ||
+//         matchEspecialidad
+//       );
+//     });
+//   }, [newProducts, searchText]);
+
+//   const columns = [
+//     {
+//       title: "Nombre",
+//       dataIndex: "creador",
+//       //   sorter: (a, b) => a.id - b.id,
+//       defaultSortOrder: "descend",
+//       render: (creador) => (
+//         <p>
+//           <b>
+//             {creador.creador.nombre} {creador.creador.apellido}
+//           </b>
+//         </p>
+//       ),
+//     },
+//     {
+//       title: "Especialidad",
+//       dataIndex: "creador",
+//       sorter: (a, b) => a.id - b.id,
+//       defaultSortOrder: "descend",
+//       render: (text) => text.especialidad.map((e) => <p> {e} </p>),
+//     },
+//     {
+//       title: "Telefono",
+//       dataIndex: "creador",
+//       //   sorter: (a, b) => a.id - b.id,
+//       defaultSortOrder: "descend",
+//       render: (creador) => <p>{creador.creador.telefono}</p>,
+//     },
+//     {
+//       title: "email",
+//       dataIndex: "creador",
+//       //   sorter: (a, b) => a.id - b.id,
+//       defaultSortOrder: "descend",
+//       render: (creador) => <p>{creador.creador.email}</p>,
+//     },
+//     {
+//       title: "Localidad",
+//       dataIndex: "creador",
+//       //   sorter: (a, b) => a.id - b.id,
+//       defaultSortOrder: "descend",
+//       render: (text) =>
+//         text.localidadesLaborales.map((localidad) => <p> {localidad} </p>),
+//     },
+//     {
+//       title: "Fecha",
+//       dataIndex: "fecha",
+//       //   sorter: (a, b) => a.id - b.id,
+//       defaultSortOrder: "descend",
+//       render: (text) => <p>{text}</p>,
+//     },
+//     {
+//       title: "Hora",
+//       dataIndex: "disponibilidad",
+//       //   sorter: (a, b) => a.id - b.id,
+//       defaultSortOrder: "descend",
+//       render: (text) => text.map((localidad) => <p> {localidad.hora} </p>),
+//     },
+//   ];
+
+//   const onSelectChange = (selectedRowKeys) => {
+//     setSelectedRowKeys(selectedRowKeys);
+
+//     // Obtener los datos de las filas seleccionadas
+//     const selectedRows = filteredOrdenes.filter((orden) =>
+//       selectedRowKeys.includes(orden.key)
+//     );
+//     console.log(selectedRows);
+//   };
+
+//   return (
+//     <div
+//       style={{ textAlign: "center", alignItems: "center", overflow: "auto" }}
+//     >
+//       <p className="p">DISPONIBILIDAD PROFESIONAL</p>
+//       <p className="p">
+//         BUSQUEDA POR NOMBRE, APELLIDO, ESPECIALIDAD, TELEFONO, EMAIL, LOCALIDAD
+//         LABORAL, FECHA DE DISPONIBILIDAD, HORA DISPONIBLE.
+//       </p>
+
+//       <h1 style={{ textAlign: "center", alignItems: "center" }}>
+//         <Input.Search
+//           placeholder="Buscar"
+//           onChange={(e) => setSearchText(e.target.value)}
+//           style={{
+//             width: 400,
+//             marginBottom: "0px",
+//             textAlign: "center",
+//             alignItems: "center",
+//           }}
+//         />
+//       </h1>
+//       {/* <p className="p">
+//         Puede ordenar ascendente o descendentemente con las flechas en Datos de
+//         la tabla
+//       </p> */}
+
+//       <div
+//         style={{
+//           margin: "0px",
+//           marginLeft: "0px",
+//           marginTop: "0px",
+//           padding: "0px",
+//           // width: '100%', height: '1000px', overflowY: "auto", overflowX: 'auto'
+//         }}
+//       >
+//         <Table
+//           style={{ backgroundColor: "rgb(245, 245, 235)" }}
+//           columns={columns}
+//           dataSource={filteredOrdenes}
+//           rowSelection={{
+//             selectedRowKeys,
+//             onChange: onSelectChange,
+//           }}
+//         />
+//       </div>
+
+//       {/* <div style={{ marginTop: "80px", padding: "20px" }}>
+//         <Table
+//           style={{ backgroundColor: "rgb(245, 245, 235)" }}
+//           columns={columns}
+//           dataSource={orders}
+//         />
+//       </div> */}
+//     </div>
+//   );
+// };
+
+// export default HorarioProfessionalAntDesing;
 
 // import React, { useEffect, useState, useMemo } from "react";
 // import { useDispatch, useSelector } from "react-redux";

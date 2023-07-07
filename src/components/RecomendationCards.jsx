@@ -90,6 +90,7 @@ const RecomendationCards = ({
     }
     return texto;
   }
+
   const renderCards = () => {
     return paginatedData.map((orden) => {
       const { creador, fecha, disponibilidad } = orden;
@@ -216,6 +217,10 @@ const RecomendationCards = ({
     setSelectCard(true);
     handleProfesional(profesional);
   };
+
+  if (!filteredOrdenes?.length > 0) {
+    return [];
+  }
 
   return (
     <div

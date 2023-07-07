@@ -24,8 +24,25 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
+// Update profesional desde la admin dash ( descripcion,localidades y especialidades)
+export const updateProfileAdmin = createAsyncThunk(
+  "professional/actualizar-profesional-admin",
+  async ({ dataP, toast }, { rejectWithValue }) => {
+    try {
+      const { data } = await api.updateProfileRequestDash(dataP);
+      toast.success(data.msg);
+    } catch (err) {
+      console.log(err);
+      let error =
+        err.response?.data?.msg || "Estamos presentando problemas internos";
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// Update perfil usuario del profesional(nombre,apellido,email,etc...)
 export const updateProfileAdminDash = createAsyncThunk(
-  "professional/actualizar-profesional-AdminDash",
+  "professional/actualizar-profesional-admin-dash",
   async ({ valueForm, toast }, { rejectWithValue }) => {
     try {
       const { data } = await api.updateProfileRequestDashAdmin(valueForm);
@@ -131,6 +148,17 @@ const professionalSlice = createSlice({
       .addCase(updateProfileAdminDash.fulfilled, (state) => {
         state.loadingProfessional = false;
       });
+
+    // .addCase(updateProfileAdmin.pending, (state) => {
+    //   state.loadingProfessional = true;
+    // })
+    // .addCase(updateProfileAdmin.rejected, (state, action) => {
+    //   state.loadingProfessional = false;
+    //   state.errorProfessional = action.payload;
+    // })
+    // .addCase(updateProfileAdmin.fulfilled, (state) => {
+    //   state.loadingProfessional = false;
+    // });
 
     // Create Schedule
     builder
