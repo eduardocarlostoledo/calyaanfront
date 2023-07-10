@@ -197,12 +197,13 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
 
     e.preventDefault();
 
+    console.log(reservationData)
 
     const objeto = {
       "cliente_id":"64236ffd00f492f3c924fcf1",
-      "profesional_id":"6425982952001cacc34c8485",
-      "cita_servicio":"07/07/2023",
-      "hora_servicio":"08:30",
+      "profesional_id":"64ac17b8fe9370e8d7a9a30e",
+      "cita_servicio":"2023-07-18",
+      "hora_servicio":"07:00-08:00",
       "direccion_servicio":"Cra 99 bis 14-61",
       "info_direccion_servicio":"Pueblonuevo",
       "localidad_serivicio":"Fontibon",
@@ -212,6 +213,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       "cupon":""
   }
 
+  
     try {
 
       const response = await fetch(
