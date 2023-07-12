@@ -8,7 +8,7 @@ const initialState = {
   update: false,
 };
 
-export const getOrders = createAsyncThunk("orders/get", async () => {
+export const getOrders = createAsyncThunk("api/orders/get", async () => {
   try {
     const response = await api.getAllOrdersRequest();
     const info = response.data;
@@ -20,7 +20,7 @@ export const getOrders = createAsyncThunk("orders/get", async () => {
 });
 
 export const updateOrder = createAsyncThunk(
-  "orders/update",
+  "api/orders/update",
   async (orderForm) => {
     try {
       const response = await api.updateOrderRequest(orderForm);
@@ -34,7 +34,7 @@ export const updateOrder = createAsyncThunk(
 );
 
 export const createOrder = createAsyncThunk(
-  "orders/create",
+  "api/orders/create",
   async (orderForm) => {
     try {
       const response = await api.createOrderRequest(orderForm);
@@ -48,7 +48,7 @@ export const createOrder = createAsyncThunk(
 );
 
 export const getOrderById = createAsyncThunk(
-  "orders/getById",
+  "api/orders/getById",
   async (orderId) => {
     try {
       const response = await api.getOrderByIdRequest(orderId);
@@ -62,7 +62,7 @@ export const getOrderById = createAsyncThunk(
 );
 
 export const deleteOrder = createAsyncThunk(
-  "orders/delete",
+  "api/orders/delete",
   async (orderId) => {
     try {
       const response = await api.deleteOrderRequest(orderId);
@@ -76,7 +76,7 @@ export const deleteOrder = createAsyncThunk(
 );
 
 export const getOrdersByUser = createAsyncThunk(
-  "orders/getByUser",
+  "api/orders/getByUser",
   async (userId) => {
     try {
       const response = await api.getOrdersByUserIdRequest(userId);

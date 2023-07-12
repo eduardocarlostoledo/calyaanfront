@@ -46,16 +46,16 @@ export const createScheduleRequest = (valueForm) =>
 export const disponibilidadesTotales = () =>
   clienteAxios.get("api/profesional/disponibilidades-totales");
 // Order
-export const getAllOrdersRequest = () => clienteAxios.get("ordenes/orden");
+export const getAllOrdersRequest = () => clienteAxios.get("api/ordenes/orden");
 
 export const createOrderRequest = (orderForm) =>
-  clienteAxios.post("ordenes/orden", orderForm);
+  clienteAxios.post("api/ordenes/orden", orderForm);
 export const updateOrderRequest = (orderForm) =>
-  clienteAxios.put("ordenes/updateorden", orderForm);
+  clienteAxios.put("api/ordenes/updateorden", orderForm);
 
 export const getOrderByIdRequest = (orderId) =>
-  clienteAxios.get(`ordenes/getordenbyid/${orderId}`);
+  clienteAxios.get(`api/ordenes/getordenbyid/${orderId}`);
 export const deleteOrderRequest = (orderId) =>
-  clienteAxios.delete(`ordenes/orden/${orderId}`);
+  clienteAxios.delete(`api/ordenes/orden/${orderId}`);
 export const getOrdersByUserIdRequest = (userId) =>
-  clienteAxios.get(`ordenes/ordenbyuserid/${userId}`);
+  clienteAxios.get(`api/ordenes/ordenbyuserid/${userId}`);

@@ -16,50 +16,44 @@ const { RangePicker } = DatePicker;
 
 const ProductExpanded = ({
   _id,
-  cliente_email,
-  cliente_nombre,
-  cliente_apellido,
-  cliente_cedula,
-  cliente_telefono,
+  cliente_id,
   direccion_Servicio,
-  adicional_direccion_Servicio,
-  localidad_Servicio,
-  telefono_Servicio,
   estadoServicio,
-  estadoFacturacion,
-  payment_id,
   estadoPago,
-  numeroFacturacion,
-  estadoLiquidacion,
-  numeroLiquidacion,
-  profesional_email,
-  profesional_nombre,
-  profesional_apellido,
+  payment_id,
+  factura,
+  // _id,
+  // cliente_email,
+  // cliente_nombre,
+  // cliente_apellido,
+  // cliente_cedula,
+  // cliente_telefono,
+  // direccion_Servicio,
+  // adicional_direccion_Servicio,
+  // localidad_Servicio,
+  // telefono_Servicio,
+  // estadoServicio,
+  // estadoFacturacion,
+  // payment_id,
+  // estadoPago,
+  // numeroFacturacion,
+  // estadoLiquidacion,
+  // numeroLiquidacion,
+  // profesional_email,
+  // profesional_nombre,
+  // profesional_apellido,
   editProduct,
   setEditProduct,
 }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({
     _id,
-    cliente_email,
-    cliente_nombre,
-    cliente_apellido,
-    cliente_cedula,
-    cliente_telefono,
+    cliente_id,
     direccion_Servicio,
-    adicional_direccion_Servicio,
-    localidad_Servicio,
-    telefono_Servicio,
-    payment_id,
-    estadoPago,
     estadoServicio,
-    profesional_email,
-    profesional_nombre,
-    profesional_apellido,
-    estadoFacturacion,
-    numeroFacturacion,
-    estadoLiquidacion,
-    numeroLiquidacion,
+    estadoPago,
+    payment_id,
+    factura,
   });
 
   const [loading, setLoading] = useState(true);
@@ -135,6 +129,60 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
+                <b>Localidad:</b> {input.localidad_Servicio}
+              </p>
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "2px",
+                  borderRadius: "3px",
+                  fontSize: "17px",
+                }}
+              >
+                <b>Dirección de servicio:</b> {input.direccion_Servicio}
+              </p>
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "2px",
+                  borderRadius: "3px",
+                  fontSize: "17px",
+                  backgroundColor:
+                    input.estadoPago === "approved"
+                      ? "#96e382"
+                      : input.estadoPago === "rejected"
+                      ? "#f16e6a"
+                      : input.estadoPago === "pending"
+                      ? "#f1ef6a"
+                      : "transparent",
+                }}
+              >
+                <b> Estado pago:</b>
+                {input.estadoPago}
+              </p>
+
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "2px",
+                  borderRadius: "3px",
+                  fontSize: "17px",
+                }}
+              >
+                <b>Origen del pago:</b> {input?.factura.origen}
+              </p>
+              {/* <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "2px",
+                  borderRadius: "3px",
+                  fontSize: "17px",
+                }}
+              >
                 Email: {input.cliente_email}
               </p>
               <p
@@ -166,7 +214,7 @@ const ProductExpanded = ({
                   padding: "2px",
                   borderRadius: "3px",
                   fontSize: "17px",
-                }}
+                }} 
               >
                 Cédula: {input.cliente_cedula}
               </p>
@@ -180,19 +228,9 @@ const ProductExpanded = ({
                 }}
               >
                 Teléfono: {input.cliente_telefono}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Dirección de servicio: {input.direccion_Servicio}
-              </p>
-              <p
+              </p> */}
+
+              {/* <p
                 className="PDivInfo"
                 style={{
                   border: "1px solid gray",
@@ -203,27 +241,7 @@ const ProductExpanded = ({
               >
                 Dirección adicional de servicio: <br />
                 {input.adicional_direccion_Servicio}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                  backgroundColor:
-                    input.estadoPago === "approved"
-                      ? "#96e382"
-                      : input.estadoPago === "rejected"
-                      ? "#f16e6a"
-                      : input.estadoPago === "pending"
-                      ? "#f1ef6a"
-                      : "transparent",
-                }}
-              >
-                Estado pago:
-                {input.estadoPago}
-              </p>
+              </p> */}
             </div>
 
             <div style={{ width: "50%" }}>
@@ -236,7 +254,31 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Localidad: {input.localidad_Servicio}
+                <b>Estado de facturación:</b>
+                {input.factura.estado_facturacion}
+              </p>
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "2px",
+                  borderRadius: "3px",
+                  fontSize: "17px",
+                }}
+              >
+                <b>Número de facturación:</b>
+                {input.factura.nro_factura}
+              </p>
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "2px",
+                  borderRadius: "3px",
+                  fontSize: "17px",
+                }}
+              >
+                <b>N°Pago:</b> {input.factura.payment_id}
               </p>
               {/* <p
                 className="PDivInfo"
@@ -249,7 +291,7 @@ const ProductExpanded = ({
               >
                 Teléfono de servicio: {input.telefono_Servicio}
               </p> */}
-              <p
+              {/* <p
                 className="PDivInfo"
                 style={{
                   border: "1px solid gray",
@@ -258,33 +300,10 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Estado del servicio: {input.estadoServicio}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Estado de facturación:
-                {input.estadoFacturacion}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Número de facturación:
-                <br /> {input.numeroFacturacion}
-              </p>
-              <p
+                Estado de facturación: {input.estadoServicio}
+              </p> */}
+
+              {/* <p
                 className="PDivInfo"
                 style={{
                   border: "1px solid gray",
@@ -294,8 +313,8 @@ const ProductExpanded = ({
                 }}
               >
                 Estado de liquidación: {input.estadoLiquidacion}
-              </p>
-              <p
+              </p> */}
+              {/* <p
                 className="PDivInfo"
                 style={{
                   border: "1px solid gray",
@@ -305,18 +324,7 @@ const ProductExpanded = ({
                 }}
               >
                 Número de liquidación: {input.numeroLiquidacion}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                N°Pago: {input.payment_id}
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
@@ -340,7 +348,7 @@ const ProductExpanded = ({
             }}
           >
             <div style={{ width: "50%" }}>
-              <div>
+              {/* <div>
                 <label className="LabelNameImg">
                   <strong>Email </strong>
                 </label>
@@ -351,9 +359,9 @@ const ProductExpanded = ({
                   name="cliente_email"
                   placeholder="Email del cliente"
                 ></input>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="LabelNameImg">
                   <strong>Nombre </strong>
                 </label>
@@ -364,9 +372,9 @@ const ProductExpanded = ({
                   name="cliente_nombre"
                   placeholder="Nombre"
                 ></input>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="LabelNameImg">
                   <strong>Apellido </strong>
                 </label>
@@ -403,9 +411,9 @@ const ProductExpanded = ({
                   name="cliente_telefono"
                   placeholder="Teléfono del cliente"
                 ></input>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="LabelNameImg">
                   <strong>Dirección </strong>
                 </label>
@@ -416,9 +424,9 @@ const ProductExpanded = ({
                   name="direccion_Servicio"
                   placeholder="Dirección de servicio"
                 ></input>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="LabelNameImg">
                   <strong>Datos Adicionales</strong>
                 </label>
@@ -429,9 +437,8 @@ const ProductExpanded = ({
                   name="adicional_direccion_Servicio"
                   placeholder="Dirección adicional de servicio"
                 ></input>
-              </div>
-            </div>
-            <div style={{ width: "50%" }}>
+              </div> */}
+              {/* <div style={{ width: "50%" }}>
               <div>
                 <label className="LabelNameImg">
                   <strong>Localidad</strong>
@@ -444,24 +451,20 @@ const ProductExpanded = ({
                   placeholder="Localidad de servicio"
                 ></input>
               </div>
+            </div> */}
 
-              {/* <div>
+              <div>
                 <label className="LabelNameImg">
-                  <strong>Estado del servicio</strong>
+                  <strong>Origen del Pago</strong>
                 </label>
-                <select
+                <input
                   className="InputsEdits"
-                  // defaultValue="Pendiente"
-                  value={input.estadoServicio}
+                  value={input.factura?.origen}
                   onChange={(e) => handleChange(e)}
-                  name="estadoServicio"
-                  placeholder="Estado del servicio"
-                >
-                  <option value="Pendiente">Pendiente</option>
-                  <option value="Completado">Completado</option>
-                  <option value="Cancelado">Cancelado</option>
-                </select>
-              </div> */}
+                  name="origen"
+                  placeholder="Origen del Pago"
+                ></input>
+              </div>
 
               <div>
                 <label className="LabelNameImg">
@@ -495,7 +498,7 @@ const ProductExpanded = ({
                 ></input>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="LabelNameImg">
                   <strong>Liquidación</strong>
                 </label>
@@ -511,9 +514,9 @@ const ProductExpanded = ({
                   <option value="NoLiquidado">No liquidado</option>
                   <option value="Error">Error</option>
                 </select>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="LabelNameImg">
                   <strong>NºLiquidación</strong>
                 </label>
@@ -525,7 +528,7 @@ const ProductExpanded = ({
                   name="numeroLiquidacion"
                   placeholder="Número de liquidación"
                 ></input>
-              </div>
+              </div> */}
               <div>
                 <label className="LabelNameImg">
                   <strong>Estado pago</strong>
@@ -626,13 +629,13 @@ const FacturacionAntDesing = () => {
     const searchTextLower = searchText.toLowerCase();
     return newProducts.filter((orden) => {
       const fullNameProfesional =
-        `${orden.profesional_nombre} ${orden.profesional_apellido}`.toLowerCase();
+        `${orden.cliente_id.nombre} ${orden.cliente_id.apellido}`.toLowerCase();
       const fullNameCliente =
-        `${orden.cliente_nombre} ${orden.cliente_apellido}`.toLowerCase();
+        `${orden.cliente_id.nombre} ${orden.cliente_id.apellido}`.toLowerCase();
       const fullNameProfesionalInverso =
         `${orden.profesional_apellido} ${orden.profesional_nombre} `.toLowerCase();
       const fullNameClienteInverso =
-        `${orden.cliente_apellido} ${orden.cliente_nombre}`.toLowerCase();
+        `${orden.cliente_id.apellido} ${orden.cliente_id.nombre}`.toLowerCase();
 
       const orderDate = moment(orden.createdAt, "YYYY/MM/DD");
 
@@ -642,16 +645,18 @@ const FacturacionAntDesing = () => {
             fullNameCliente?.includes(searchTextLower) ||
             fullNameProfesionalInverso?.includes(searchTextLower) ||
             fullNameClienteInverso?.includes(searchTextLower) ||
-            orden.numeroFacturacion?.includes(searchTextLower) ||
-            orden.payment_id?.includes(searchTextLower) ||
+            orden.factura?.nro_factura?.includes(searchTextLower) ||
+            orden.factura?.payment_id?.includes(searchTextLower) ||
             orden._id?.includes(searchTextLower) ||
-            orden.cliente_cedula?.includes(searchTextLower) ||
-            orden.cliente_telefono?.includes(searchTextLower) ||
-            orden.cliente_email?.includes(searchTextLower) ||
-            orden.servicio?.toLowerCase().includes(searchTextLower) ||
+            // orden.cliente_id?.cedula.includes(searchTextLower) ||
+            orden.cliente_id?.telefono?.includes(searchTextLower) ||
+            orden.cliente_id?.email?.includes(searchTextLower) ||
+            orden.servicios[0]?.nombre
+              .toLowerCase()
+              ?.includes(searchTextLower) ||
             orden.direccion_Servicio
               ?.toLowerCase()
-              .includes(searchTextLower)) &&
+              ?.includes(searchTextLower)) &&
           orderDate.isBetween(startDate, endDate, null, "[]")
         );
       }
@@ -660,14 +665,14 @@ const FacturacionAntDesing = () => {
         fullNameCliente?.includes(searchTextLower) ||
         fullNameProfesionalInverso?.includes(searchTextLower) ||
         fullNameClienteInverso?.includes(searchTextLower) ||
-        orden.numeroFacturacion?.includes(searchTextLower) ||
-        orden.payment_id?.includes(searchTextLower) ||
+        orden.factura?.nro_factura?.includes(searchTextLower) ||
+        orden.factura?.payment_id?.includes(searchTextLower) ||
         orden._id?.includes(searchTextLower) ||
-        orden.cliente_cedula?.includes(searchTextLower) ||
-        orden.cliente_telefono?.includes(searchTextLower) ||
-        orden.cliente_email?.includes(searchTextLower) ||
-        orden.servicio?.toLowerCase().includes(searchTextLower) ||
-        orden.direccion_Servicio?.toLowerCase().includes(searchTextLower)
+        orden.cliente_id?.cedula.toString().includes(searchTextLower) ||
+        orden.cliente_id?.telefono?.includes(searchTextLower) ||
+        orden.cliente_id?.email?.includes(searchTextLower) ||
+        orden.servicios[0]?.nombre.toLowerCase()?.includes(searchTextLower) ||
+        orden.direccion_Servicio?.toLowerCase()?.includes(searchTextLower)
       );
     });
   }, [newProducts, searchText, startDate, endDate]);
@@ -691,7 +696,7 @@ const FacturacionAntDesing = () => {
   //   .format("YYYY-MM-DD")
   //   ?.includes(searchTextLower) &&
   //   isDateInRange)
-
+  console.log(filteredOrdenes);
   const columns = [
     // {
     //   title: "EDITAR",
@@ -708,25 +713,96 @@ const FacturacionAntDesing = () => {
     //   ),
     // },
     Table.EXPAND_COLUMN,
+    // {
+    //   title: "Cliente",
+    //   dataIndex: "cliente_nombre",
+    //   render: (text, record) => (
+    //     <p>
+    //       {record.cliente_apellido} {text}
+    //     </p>
+    //   ),
+    // },
     {
       title: "Cliente",
-      dataIndex: "cliente_nombre",
-      render: (text, record) => (
-        <p>
-          {record.cliente_apellido} {text}
-        </p>
+      dataIndex: "cliente_id",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => (
+        <div>
+          <div>
+            <b>Nombre y apellido</b>
+            <p>
+              {text.apellido} {text.nombre}
+            </p>
+          </div>
+          <hr />
+          <div>
+            <b>Cedula</b>
+            <p>{text.cedula}</p>
+          </div>
+          <hr />
+          <div>
+            <b>Telefono</b>
+            <p>{text.telefono}</p>
+          </div>
+          <hr />
+          <div>
+            <b>Email</b>
+            <p>{text.email}</p>
+          </div>
+        </div>
       ),
     },
     {
+      title: "Profesional",
+      dataIndex: "profesional_id",
+      sorter: (a, b) => a.id - b.id,
+      defaultSortOrder: "descend",
+      render: (text) => (
+        <div>
+          <div>
+            <b>Nombre y apellido</b>
+            <p>
+              {text.apellido} {text.nombre}
+            </p>
+          </div>
+          <hr />
+          <div>
+            <b>Cedula</b>
+            <p>{text.cedula}</p>
+          </div>
+          <hr />
+          <div>
+            <b>Telefono</b>
+            <p>{text.telefono}</p>
+          </div>
+          <hr />
+          <div>
+            <b>Email</b>
+            <p>{text.email}</p>
+          </div>
+        </div>
+      ),
+    },
+    // {
+    //   title: "Profesional",
+    //   dataIndex: "profesional_nombre",
+    //   render: (text, record) => (
+    //     <p>
+    //       {record.profesional_apellido} {text}
+    //     </p>
+    //   ),
+    // },
+    {
       title: "Estado Pago",
-      dataIndex: "estadoPago",
+      dataIndex: "factura",
       filters: [
         { text: "Pending", value: "pending" },
         { text: "Rejected", value: "rejected" },
         { text: "Approved", value: "approved" },
       ],
-      onFilter: (value, record) => record.estadoPago === value,
-      render: (estadoPago) => (
+      onFilter: (value, record) => record?.estadoPago === value,
+      render: ({ estadoPago }) => (
         <>
           {estadoPago === "approved" ? (
             <Tag color="green">Aprobado</Tag>
@@ -740,8 +816,13 @@ const FacturacionAntDesing = () => {
     },
     {
       title: "Id Pago",
-      dataIndex: "payment_id",
-      render: (text) => <p>{text}</p>,
+      dataIndex: "factura",
+      render: (text) => <p>{text.payment_id}</p>,
+    },
+    {
+      title: "Origen del pago",
+      dataIndex: "factura",
+      render: (text) => <p>{text.origen}</p>,
     },
     {
       title: "Estado Servicio",
@@ -766,18 +847,18 @@ const FacturacionAntDesing = () => {
     },
     {
       title: "Facturacion",
-      dataIndex: "estadoFacturacion",
+      dataIndex: "factura",
       filters: [
         { text: "Facturado", value: "Facturado" },
         { text: "NoFacturado", value: "NoFacturado" },
         { text: "Error", value: "Error" },
       ],
-      onFilter: (value, record) => record?.estadoFacturacion === value,
-      render: (estadoFacturacion) => (
+      onFilter: (value, record) => record?.estado_facturacion === value,
+      render: ({ estado_facturacion }) => (
         <>
-          {estadoFacturacion === "Facturado" ? (
+          {estado_facturacion === "Facturado" ? (
             <Tag color="green">Facturado</Tag>
-          ) : estadoFacturacion === "Error" ? (
+          ) : estado_facturacion === "Error" ? (
             <Tag color="red">Error</Tag>
           ) : (
             <Tag color="yellow">No Facturado</Tag>
@@ -787,36 +868,36 @@ const FacturacionAntDesing = () => {
     },
     {
       title: "Nro. Factura",
-      dataIndex: "numeroFacturacion",
-      render: (text) => <p>{text}</p>,
+      dataIndex: "factura",
+      render: (text) => <p>{text.nro_factura}</p>,
     },
 
-    {
-      title: "Cedula",
-      dataIndex: "cliente_cedula",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Telefono",
-      dataIndex: "cliente_telefono",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "email",
-      dataIndex: "cliente_email",
-      render: (text) => <p>{text}</p>,
-    },
+    // {
+    //   title: "Cedula",
+    //   dataIndex: "cliente_cedula",
+    //   render: (text) => <p>{text}</p>,
+    // },
+    // {
+    //   title: "Telefono",
+    //   dataIndex: "cliente_telefono",
+    //   render: (text) => <p>{text}</p>,
+    // },
+    // {
+    //   title: "email",
+    //   dataIndex: "cliente_email",
+    //   render: (text) => <p>{text}</p>,
+    // },
     {
       title: "Servicio",
-      dataIndex: "servicio",
-      render: (text) => <p>{text}</p>,
+      dataIndex: "servicios",
+      render: (text) => text?.map((t) => <p>{t.nombre}</p>),
     },
     {
       title: "Precio",
-      dataIndex: "precio",
+      dataIndex: "factura",
       sorter: (a, b) => a.precio - b.precio,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
+      render: (text) => <p>{text.precioTotal}</p>,
     },
     // {
     //   title: "Direccion",
@@ -831,18 +912,11 @@ const FacturacionAntDesing = () => {
     // },
 
     {
-      title: "Profesional",
-      dataIndex: "profesional_nombre",
-      render: (text, record) => (
-        <p>
-          {record.profesional_apellido} {text}
-        </p>
+      title: "Dia de Venta",
+      dataIndex: "factura",
+      render: (text) => (
+        <p>{moment(text.fecha_venta).format("YYYY-MM-DD HH:mm:ss")}</p>
       ),
-    },
-    {
-      title: "DiaVenta",
-      dataIndex: "createdAt",
-      render: (text) => <p>{moment(text).format("YYYY-MM-DD")}</p>,
     },
   ];
 
@@ -931,27 +1005,33 @@ const FacturacionAntDesing = () => {
               <ProductExpanded
                 key={record._id}
                 _id={record._id}
-                cliente_email={record.cliente_email}
-                cliente_nombre={record.cliente_nombre}
-                cliente_apellido={record.cliente_apellido}
-                cliente_cedula={record.cliente_cedula}
-                cliente_telefono={record.cliente_telefono}
-                profesional_email={record.profesional_email}
-                profesional_nombre={record.profesional_nombre}
-                profesional_apellido={record.profesional_apellido}
-                direccion_Servicio={record.direccion_Servicio}
-                adicional_direccion_Servicio={
-                  record.adicional_direccion_Servicio
-                }
-                estadoPago={record.estadoPago}
-                payment_id={record.payment_id}
-                localidad_Servicio={record.localidad_Servicio}
-                telefono_Servicio={record.telefono_Servicio}
-                estadoServicio={record?.estadoServicio}
-                estadoFacturacion={record?.estadoFacturacion}
-                numeroFacturacion={record?.numeroFacturacion}
-                estadoLiquidacion={record?.estadoLiquidacion}
-                numeroLiquidacion={record?.numeroLiquidacion}
+                cliente_id={record.cliente_id}
+                direccion_servicio={record.direccion_servicio}
+                estadoPago={record.factura?.estadoPago}
+                payment_id={record.factura?.payment_id}
+                estadoServicio={record?.estado_servicio}
+                factura={record?.factura}
+                // cliente_email={record.cliente_email}
+                // cliente_nombre={record.cliente_nombre}
+                // cliente_apellido={record.cliente_apellido}
+                // cliente_cedula={record.cliente_cedula}
+                // cliente_telefono={record.cliente_telefono}
+                // profesional_email={record.profesional_email}
+                // profesional_nombre={record.profesional_nombre}
+                // profesional_apellido={record.profesional_apellido}
+                // direccion_Servicio={record.direccion_Servicio}
+                // adicional_direccion_Servicio={
+                //   record.adicional_direccion_Servicio
+                // }
+                // estadoPago={record.estadoPago}
+                // payment_id={record.payment_id}
+                // localidad_Servicio={record.localidad_Servicio}
+                // telefono_Servicio={record.telefono_Servicio}
+                // estadoServicio={record?.estadoServicio}
+                // estadoFacturacion={record?.estadoFacturacion}
+                // numeroFacturacion={record?.numeroFacturacion}
+                // estadoLiquidacion={record?.estadoLiquidacion}
+                // numeroLiquidacion={record?.numeroLiquidacion}
                 editProduct={editProduct}
                 setEditProduct={setEditProduct}
               />
