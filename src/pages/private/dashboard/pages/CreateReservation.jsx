@@ -10,6 +10,8 @@ import { localidadesLaborales } from "../../../../data";
 import swal from "sweetalert";
 import { NumericFormat } from "react-number-format";
 
+import { FaArrowsAltV } from "react-icons/fa"
+
 const CreateReservation = () => {
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
@@ -21,34 +23,24 @@ const CreateReservation = () => {
   const [cargando, setCargando] = useState(false);
   const [cargando2, setCargando2] = useState(false);
   const [reserva, setReserva] = useState({
-    // username: "",
     cliente_id: "",
     cliente_email: "",
     cliente_nombre: "",
     cliente_apellido: "",
     cliente_cedula: "",
     cliente_telefono: "",
-    user_profesional_id: "",
     profesional_id: "",
-    profesional_email: "",
-    profesional_nombre: "",
-    profesional_apellido: "",
-    profesional_telefono: "",
     servicio: "",
-    //servicio_img,
     cantidad: "",
     precio: "",
-    dia_servicio: "",
+    cita_servicio: "",
     hora_servicio: " ",
-    direccion_Servicio: "",
-    adicional_direccion_Servicio: "",
-    ciudad_Servicio: "",
-    localidad_Servicio: "",
-    ciudad: "Bogota",
-    telefono_Servicio: "",
+    direccion_servicio: "",
+    info_direccion_servicio: "",
+    localidad_serivicio: "",
+    telefono_servicio: "",
     nuevo: true,
-    coupon:"",
-    valorTotal:""
+    coupon: "",
   });
 
   const [productos, setProdcutos] = useState([]);
@@ -168,9 +160,9 @@ const CreateReservation = () => {
   } = reserva;
 
   // Ordenar los productos alfabéticamente por nombre
-  const productosOrdenados = productos?.sort((a, b) =>
+   const productosOrdenados = productos?.sort((a, b) =>
     a.nombre.localeCompare(b.nombre)
-  );
+  ); 
 
   const [coupon, setCoupon] = useState("")
 
@@ -200,7 +192,7 @@ const CreateReservation = () => {
   };
 
   const handleChangeServicio = (e) => {
-    if (!servicios.includes(e.target.value) && e.target.value !== "") {
+    if (!servicios.includes(e.target.value) && e.target.value !== "" && servicios.length < 1) {
       let busqueda = productos.filter(
         (servicio) => servicio._id === e.target.value
       );
@@ -215,7 +207,7 @@ const CreateReservation = () => {
     const getProductos = async () => {
       try {
         let { data } = await clienteAxios.get(`/api/products`);
-
+console.log(data)
         setProdcutos(data);
       } catch (err) {
         let error = err.response.data.msg
@@ -292,11 +284,11 @@ const CreateReservation = () => {
               ],
               back_urls: {
                 success: `${import.meta.env.VITE_APP_BACK
-                  }/pay/feedback/success/manual`,
+                  }/api/pay/feedback/success/manual`,
                 failure: `${import.meta.env.VITE_APP_BACK
-                  }/pay/feedback/failure/manual`,
+                  }/api/pay/feedback/failure/manual`,
                 pending: `${import.meta.env.VITE_APP_BACK
-                  }/pay/feedback/pending/manual`,
+                  }/api/pay/feedback/pending/manual`,
               },
               auto_return: "approved",
               payment_methods: {
@@ -324,31 +316,21 @@ const CreateReservation = () => {
 
     const serviciosRequest = servicios.map((servicio) => servicio.idWP);
 
+    console.log(servicios)
+    console.log("productos",productos)
+
     let reservaRequest = {
       cliente_id: reserva.cliente_id,
-      usuario: {
-        cliente_email: reserva.cliente_email,
-        cliente_nombre: reserva.cliente_nombre,
-        cliente_apellido: reserva.cliente_apellido,
-        cliente_cedula: reserva.cliente_cedula,
-        cliente_telefono: reserva.cliente_telefono,
-      },
-      serviciosIds: serviciosRequest,
-      //servicio: serviciosSearch[0].nombre,
-      //servicio_img: serviciosSearch[0].img,
-      cantidad: 1,
-      precio: servicios[0].valorTotal ? servicios[0].valorTotal : servicios[0].precio,
-      direccion_Servicio: reserva.direccion_Servicio,
-      adicional_direccion_Servicio: reserva.adicional_direccion_Servicio,
-      ciudad_Servicio: reserva.ciudad,
-      localidad_Servicio: reserva.localidad_Servicio,
-      telefono_Servicio: reserva.cliente_telefono,
+      servicios: serviciosRequest,
+      direccion_servicio: reserva.direccion_servicio,
+      info_direccion_servicio: reserva.info_direccion_servicio,
+      localidad_serivicio: reserva.localidad_serivicio,
+      telefono_servicio: reserva.telefono_servicio,
       coupon: reserva.coupon,
-      valorTotal: reserva.valorTotal
     };
 
     console.log(reserva.coupon)
-    fetch(`${import.meta.env.VITE_APP_BACK}/pay/preference-manual`, {
+    fetch(`${import.meta.env.VITE_APP_BACK}/api/pay/preference-manual`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -542,6 +524,8 @@ const CreateReservation = () => {
   };
 
   console.log(servicios)
+  console.log(typeof productos)
+
 
   // console.log("LIBERAR", liberar)
   return (
@@ -573,38 +557,7 @@ const CreateReservation = () => {
                 className="px-4 flex items-center border-l border-gray-300  flex-col justify-center text-gray-500
                                        absolute right-0 bottom-0 top-0 mx-auto z-20 pointer-events-none "
               >
-                <svg
-                  tabIndex={0}
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon icon-tabler icon-tabler-chevron-up"
-                  width={16}
-                  height={16}
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" />
-                  <polyline points="6 15 12 9 18 15" />
-                </svg>
-                <svg
-                  tabIndex={0}
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon icon-tabler icon-tabler-chevron-down"
-                  width={16}
-                  height={16}
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" />
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
+                <FaArrowsAltV className="w-4 h-4" />
               </div>
             </div>
           </div>
@@ -612,25 +565,6 @@ const CreateReservation = () => {
           {estado === "nuevo" ? (
             <>
               <div className="flex flex-wrap">
-                {/* <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                        htmlFor="grid-password"
-                      >
-                        Nombre de usuario
-                      </label>
-                      <input
-                        type="text"
-                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        placeholder="Nombre de usuario"
-                        name="username"
-                        value={username}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div> */}
-
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
@@ -869,35 +803,37 @@ const CreateReservation = () => {
                     <option key={index} value={servicio._id}>
                       {servicio.nombre}
                     </option>
-                  ))}
+                  ))} 
                 </select>
               </div>
-              <div className="relative w-full mb-3">
-                <form onSubmit={applyCoupon}>
-                  <div>
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Cupón
-                    </label>
-                    <input
-                      type="text"
-                      value={coupon}
-                      onChange={(e) => setCoupon(e.target.value)}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Ingresa Cupón"
-                    />
-                  </div>
-                  <div>
-                    <button className="mt-4 p-3 bg-primary hover:bg-bgHover focus:bg-bgHover  rounded focus:outline-none">
-                      <p className="text-sm font-medium leading-none text-white">
-                        Aplicar Cupón
-                      </p>
-                    </button>
-                  </div>
-                </form>
-              </div>
+              {servicios?.length > 0 &&
+                <div className="relative w-full mb-3">
+                  <form onSubmit={applyCoupon}>
+                    <div>
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        Cupón
+                      </label>
+                      <input
+                        type="text"
+                        value={coupon}
+                        onChange={(e) => setCoupon(e.target.value)}
+                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        placeholder="Ingresa Cupón"
+                      />
+                    </div>
+                    <div>
+                      <button className="mt-4 p-3 bg-primary hover:bg-bgHover focus:bg-bgHover  rounded focus:outline-none">
+                        <p className="text-sm font-medium leading-none text-white">
+                          Aplicar Cupón
+                        </p>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              }
             </div>
 
             {servicios?.length > 0 && (
@@ -921,8 +857,8 @@ const CreateReservation = () => {
                           <p className="text-base leading-4 text-gray-800">
                             {servicio.nombre}
                           </p>
-                          <p className="text-sm leading-none mt-2 text-gray-600">
-                            Cantidad: 1{" "}
+                          <p className="text-sm leading-none my-2 text-gray-600">
+                            Cantidad: 1
                           </p>
                           <NumericFormat
                             value={servicio.precio}
@@ -962,40 +898,40 @@ const CreateReservation = () => {
                         Total
                       </p>
                       <p className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-gray-800">
-                      {
-                              !servicios[0]._idCodigo ?
+                        {
+                          !servicios[0]._idCodigo ?
 
 
-                                servicios.length > 1 ? (
-                                  <p>
-                                    {" "}
-                                    <NumericFormat
-                                      value={servicios.reduce(
-                                        (a, b) =>
-                                          Number(a.precio) +
-                                          Number(b.precio)
-                                      )}
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={"$"}
-                                    />
-                                  </p>
-                                ) : (
-                                  <NumericFormat
-                                    value={servicios?.map((a) => a.precio)[0]}
-                                    displayType={"text"}
-                                    thousandSeparator={true}
-                                    prefix={"$"}
-                                  />
-                                )
-                                :
+                            servicios.length > 1 ? (
+                              <p>
+                                {" "}
                                 <NumericFormat
-                                  value={servicios[0].valorTotal}
+                                  value={servicios.reduce(
+                                    (a, b) =>
+                                      Number(a.precio) +
+                                      Number(b.precio)
+                                  )}
                                   displayType={"text"}
                                   thousandSeparator={true}
                                   prefix={"$"}
                                 />
-                            }
+                              </p>
+                            ) : (
+                              <NumericFormat
+                                value={servicios?.map((a) => a.precio)[0]}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"$"}
+                              />
+                            )
+                            :
+                            <NumericFormat
+                              value={servicios[0].valorTotal}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"$"}
+                            />
+                        }
                       </p>
                     </div>
                   </div>

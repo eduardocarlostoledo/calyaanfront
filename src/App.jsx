@@ -85,6 +85,7 @@ import LiquidacionAntDesing from "./pages/private/dashboard/pages/Liquidacionant
 import HorarioProfessionalAntDesing from "./pages/private/dashboard/pages/HorariosProfesionales";
 import Tools from "./pages/private/dashboard/pages/Tools";
 import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
+import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails"
 
 function App() {
   const { message } = useSelector((state) => ({ ...state.notifications }));
@@ -193,6 +194,7 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/herramientas" element={<Tools />} />
+            <Route path="/detalles-orden" element={<OrdenDetails />} />
             <Route path="/usuarios" element={<Users />} />
             <Route path="/profesionales" element={<Professionals />} />
             <Route path="/clientes" element={<Customers />} />

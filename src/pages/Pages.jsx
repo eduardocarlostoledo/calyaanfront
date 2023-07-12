@@ -200,7 +200,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
     console.log(reservationData)
 
     const objeto = {
-      "cliente_id":"64236ffd00f492f3c924fcf1",
+      "cliente_id":"649b5dfe8ca9a0b728329e62",
       "profesional_id":"64ac17b8fe9370e8d7a9a30e",
       "cita_servicio":"2023-07-18",
       "hora_servicio":"07:00-08:00",
