@@ -59,3 +59,22 @@ export const deleteOrderRequest = (orderId) =>
   clienteAxios.delete(`api/ordenes/orden/${orderId}`);
 export const getOrdersByUserIdRequest = (userId) =>
   clienteAxios.get(`api/ordenes/ordenbyuserid/${userId}`);
+
+  // Liquidaciones
+export const getAllLiquidacionRequest = () => 
+clienteAxios.get("api/liquidaciones/settlement");
+
+export const createLiquidacionRequest = (orderForm) =>
+  clienteAxios.post("api/liquidaciones/settlement", orderForm);
+
+export const updateLiquidacionRequest = (orderForm) =>
+  clienteAxios.put("api/liquidaciones/updatesettlement", orderForm);
+
+export const getLiquidacionByIdRequest = (liquidacionId) =>
+  clienteAxios.get(`api/liquidaciones/getsettlementbyid/${liquidacionId}`);
+
+export const deleteLiquidacionRequest = (liquidacionId) =>
+  clienteAxios.delete(`api/liquidaciones/settlement/${liquidacionId}`);
+
+export const getLiquidacionByUserIdRequest = (userId) =>
+  clienteAxios.get(`api/liquidaciones/settlementbyuserid/${userId}`);
