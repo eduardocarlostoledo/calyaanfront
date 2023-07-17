@@ -19,9 +19,8 @@ const Sumary = () => {
   useEffect(() => {
     const getHistorial = async () => {
       try {
-        let { data } = await clienteAxios.get(`/ordenes/getordenbyid/${id}`);
+        let { data } = await clienteAxios.get(`api/ordenes/getordenbyid/${id}`);
         setHistorial(data);
-        // console.log(data)
       } catch (error) {
         console.log(error);
         const errorMsg =
@@ -38,12 +37,9 @@ const Sumary = () => {
         <div className="lg:max-w-[1440px] md:max-w-[744px] max-w-[373px] lg:px-10 md:px-6 px-4 py-12 bg-white mx-auto">
           <div className="lg:max-w-[1063px] w-full mx-auto">
             <p className="lg:text-4xl text-3xl text-center font-semibold leading-9 text-gray-800">
-              Contamos contigo para dar lo mejor en el servicio
+              ¡Contamos contigo para brindar el mejor servicio!
             </p>
             <div className="lg:max-w-[1063px] w-full mx-auto">
-              <p className="lg:text-4xl text-3xl text-center font-semibold leading-9 text-gray-800">
-                Servicio # 345432
-              </p>
               <div className="lg:flex justify-between gap-4 mt-8">
                 <p className="md:text-xl text-base text-gray-800 leading-tight font-medium">
                   Número de orden:{" "}
@@ -56,7 +52,7 @@ const Sumary = () => {
                   Fecha de reserva:{" "}
                   <span className="text-gray-600 font-normal">
                     {" "}
-                    {historial.dia_servicio} - {historial.hora_servicio}{" "}
+                    {historial?.dia_servicio} - {historial?.hora_servicio}{" "}
                   </span>
                 </p>
 
@@ -65,9 +61,7 @@ const Sumary = () => {
                     Cliente
                   </p>
                   <ul className="list-disc">
-                    <li className="text-base leading-normal text-gray-600 lg:max-w-[235px] w-full lg:mt-0 mt-6">
-                      {historial.cliente_nombre}
-                    </li>
+                    {historial?.cliente_id?.nombre || "Pendiente"}
                   </ul>
                 </div>
               </div>
@@ -82,31 +76,37 @@ const Sumary = () => {
 
                 <div className="lg:flex gap-4 justify-between">
                   <div className="md:flex gap-4 mt-6">
-                    <div>
-                      <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                        <img
-                          src={historial?.img}
-                          alt=""
-                          className="h-full w-full object-cover object-center"
-                        />
-                      </div>
-                    </div>
-                    <div className="md:mt-0 mt-4">
-                      <p className="text-base leading-none text-gray-600">
-                        {historial?.servicio}
-                      </p>
-                      <p className="text-base font-semibold leading-none text-gray-800 mt-4">
-                        <NumericFormat
-                          value={historial?.precio}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"$"}
-                        />
-                      </p>
-                      <p className="text-base leading-none text-gray-600 mt-4">
-                        Cantidad {historial.cantidad}
-                      </p>
-                    </div>
+                    {
+                      historial?.servicios?.map((servicio) => (
+                        <>
+                          <div >
+                            <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                              <img
+                                src={servicio?.img}
+                                alt=""
+                                className="h-full w-full object-cover object-center"
+                              />
+                            </div>
+                          </div>
+                          <div className="md:mt-0 mt-4">
+                            <p className="text-base leading-none text-gray-600">
+                              {servicio?.nombre}
+                            </p>
+                            <p className="text-base font-semibold leading-none text-gray-800 mt-4">
+                              <NumericFormat
+                                value={servicio?.precio}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"$"}
+                              />
+                            </p>
+                            <p className="text-base leading-none text-gray-600 mt-4">
+                              Cantidad {servicio?.cantidad ? servicio?.cantidad : 1}
+                            </p>
+                          </div>
+                        </>
+                      ))
+                    }
                   </div>
                 </div>
               </div>
@@ -119,42 +119,36 @@ const Sumary = () => {
                     Dirección de reserva
                   </p>
                   <p className="text-base leading-normal text-gray-600">
-                    {historial.direccion_Servicio}
+                    {historial?.cliente_id?.nombre || "Pendiente"}
                     <br />
-                    {historial.localidad_Servicio}
-                  </p>
-
-                  <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
-                    Pago de Reserva
-                  </p>
-                  <p className="text-base leading-normal text-gray-600">
-                    Nro: {historial.payment_id}
+                    {historial?.direccion_servicio || "Pendiente"}
                     <br />
-                    Estado: {historial.estadoPago}
+                    {historial?.direccion_servicio || "Pendiente"}
                   </p>
 
                   <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
                     Horario de reserva
                   </p>
                   <p className="text-base leading-normal text-gray-600">
-                    Hora: {historial.hora_servicio}
+                    Hora:  {historial?.hora_servicio || "Pendiente"}
                     <br />
-                    Fecha: {historial.dia_servicio}
+                    Fecha: {historial?.cita_servicio || "Pendiente"}
                   </p>
                 </div>
                 <div className="mt-4">
                   <p className="mb-4 text-base font-semibold leading-none text-gray-800 ">
                     Contacto
                   </p>
-                  <Link
-                    to=""
+                  <a
+                    href="https://api.whatsapp.com/send/?phone=573147428757&text&type=phone_number&app_absent=0"
                     className="flex border bg-whatsapp   mt-6 p-5 border-gray-300 lg:max-w-[296px] w-full justify-center py-3 gap-2 items-center"
+                    target="_blank"
                   >
                     <p className="text-base font-medium leading-none text-white">
                       Consultas
                     </p>
                     <ImWhatsapp className="w-4 h-4 text-white" />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
@@ -167,27 +161,13 @@ const Sumary = () => {
           <div className="lg:flex gap-4 justify-between">
             <div className="lg:max-w-[405px] w-full">
               <div className="flex justify-between mt-4">
-                <p className="text-base leading-none text-gray-800">
-                  Servicios Totales
-                </p>
-                <p className="text-base leading-none text-gray-800">
-                  {historial.cantidad}
-                </p>
-              </div>
-              <div className="flex justify-between mt-4">
-                <p className="text-base leading-none text-gray-800">
-                  Ganancia por Fidelidad
-                </p>
-                <p className="text-base leading-none text-gray-800">0</p>
-              </div>
-              <div className="flex justify-between mt-4">
                 <p className="text-base font-semibold leading-none text-gray-800">
-                  Ganancias Total
+                  Costo de reserva
                 </p>
                 <p className="text-base font-semibold leading-none text-gray-800">
                   <p>
                     <NumericFormat
-                      value={historial.precio}
+                      value={historial?.factura?.precioTotal}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"$"}

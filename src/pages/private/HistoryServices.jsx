@@ -15,6 +15,9 @@ const HistoryServices = () => {
         let { data } = await clienteAxios.get(
           `api/usuarios/historial/${user._id}`
         );
+
+          console.log(data)
+
         setHistorial(data);
         // console.log(data)
       } catch (error) {
@@ -79,14 +82,14 @@ const HistoryServices = () => {
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                       >
-                        {reserva.servicio}
+                        {reserva?.servicios?.map((servicio)=>servicio.nombre)}
                       </th>
-                      <td className="px-6 py-4">{reserva.dia_servicio}</td>
+                      <td className="px-6 py-4">{reserva.cita_servicio}</td>
                       <td className="px-6 py-4">{reserva.hora_servicio}</td>
                       <td className="px-6 py-4">
-                        {reserva.profesional_nombre}
+                        {reserva.profesional_id.creador.nombre}
                       </td>
-                      <td className="px-6 py-4">{reserva.estadoPago}</td>
+                      <td className="px-6 py-4">{reserva.estado_servicio}</td>
                       <td className="px-6 py-4">
                         {" "}
                         <Link to={`/resumen/${reserva._id}`}> Ver </Link>

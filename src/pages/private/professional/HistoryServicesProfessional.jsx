@@ -65,7 +65,7 @@ const HistoryServicesProfessional = () => {
                       Hora
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Profesional
+                      Cliente
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Estado
@@ -81,13 +81,14 @@ const HistoryServicesProfessional = () => {
                       <th
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        {reserva.servicio}
+                      >    {reserva?.servicios?.map((servicio)=>servicio.nombre)}
                       </th>
-                      <td className="px-6 py-4">{reserva.dia_servicio}</td>
+                      <td className="px-6 py-4">{reserva.cita_servicio}</td>
                       <td className="px-6 py-4">{reserva.hora_servicio}</td>
-                      <td className="px-6 py-4">{reserva.profesional_nombre}</td>
-                      <td className="px-6 py-4">{reserva.estadoPago}</td>
+                      <td className="px-6 py-4">
+                        {reserva?.cliente_id?.nombre}
+                      </td>
+                      <td className="px-6 py-4">{reserva.estado_servicio}</td>
                       <td className="px-6 py-4"> <Link to={`/resumen-profesional/${reserva._id}`}> Ver </Link>
                       </td>
                     </tr>
