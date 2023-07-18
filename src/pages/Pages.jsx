@@ -201,7 +201,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
 
     const objeto = {
       "cliente_id":"64b4647b0b71b88662979ce5",
-      "profesional_id":"64ac17b8fe9370e8d7a9a30e",
+      "profesional_id":"6482229ede7d1e4ceffc839f",
       "cita_servicio":"2023-07-18",
       "hora_servicio":"07:00-08:00",
       "direccion_servicio":"Cra 99 bis 14-61",

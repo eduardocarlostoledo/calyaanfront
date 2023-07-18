@@ -20,6 +20,12 @@ const CreateReservation = () => {
   let id = params.get("id");
 
 
+  const [idOrder, setIDOrder] = useState(id)
+  const [datosPago,setDatosPago] = useState({
+    origen:"",
+    payment_id:""
+  })
+
   const [linkPago, setLinkPago] = useState("");
 
   // Estado para saber si el usuario es nuevo o toca registrarlo 
@@ -44,7 +50,8 @@ const CreateReservation = () => {
     cantidad: "",
     precio: "",
     cita_servicio: "",
-    hora_servicio: " ",
+    hora_servicio: "",
+    direccion_servicio:"",
     adicional_direccion_servicio: "",
     localidad_servicio: "",
     telefono_servicio: "",
@@ -84,11 +91,12 @@ const CreateReservation = () => {
               cliente_apellido: data.cliente_id.apellido,
               cliente_cedula: data.cliente_id.cedula,
               cliente_telefono: data.cliente_id.telefono_servicio,
-              profesional_id: "",
-              cita_servicio: data.cliente_id.telefono_servicio,
-              hora_servicio: "",
-              localidad_servicio: "",
-              adicional_direccion_servicio: "",
+              profesional_id: data.profesional_id,
+              cita_servicio: data.cita_servicio,
+              hora_servicio: data.hora_servicio,
+              localidad_servicio: data.localidad_servicio,
+              direccion_servicio:data.direccion_servicio,
+              adicional_direccion_servicio: data.adicional_direccion_servicio,
               coupon: "",
               metodo_pago: data.factura.metodo_pago,
               link_pago: data.factura.link_pago
@@ -102,10 +110,11 @@ const CreateReservation = () => {
               cliente_nombre: data.cliente_id.nombre,
               cliente_apellido: data.cliente_id.apellido,
               cliente_cedula: data.cliente_id.cedula,
-              cliente_telefono: data.cliente_id.telefono_servicio,
+              cliente_telefono: data.cliente_id.telefono,
               profesional_id: "",
-              cita_servicio: data.cliente_id.telefono_servicio,
+              cita_servicio: data.cliente_id.cita_servicio,
               hora_servicio: "",
+              direccion_servicio:"",
               localidad_servicio: data.localidad_servicio,
               adicional_direccion_servicio: "",
               coupon: "",
@@ -118,6 +127,11 @@ const CreateReservation = () => {
           console.log("arreglo de servicios", data)
 
           setServicios(data.servicios);
+
+          setDatosPago({
+            origen:data.factura.origen,
+            payment_id:data.factura.payment_id
+          });
 
           setEstado("nuevo");
 
@@ -148,7 +162,7 @@ const CreateReservation = () => {
 
   const [metodoexterno, setMetodoExterno] = useState(false)
 
-  async function generarPreferencias() {
+  async function generarPreferencias(metodo) {
 
 
     setCargando2(true);
@@ -190,7 +204,7 @@ const CreateReservation = () => {
           adicional_direccion_servicio: reserva.adicional_direccion_servicio,
           telefono_servicio: reserva.telefono_servicio,
           coupon: reserva.coupon,
-          metodo_pago: metodoexterno ? "Externo" : "Interno",
+          metodo_pago: metodo,
           link_pago: linkPago
         };
 
@@ -217,42 +231,48 @@ const CreateReservation = () => {
 
     const datos1 = respuesta1.data;
 
-    const respuesta2 = await axios.post(
-      "https://api.mercadopago.com/checkout/preferences",
-      {
-        items: [
-          {
-            title: producto,
-            unit_price: Number(precio),
-            quantity: 1,
-          },
-        ],
-        back_urls: {
-          success: `${import.meta.env.VITE_APP_BACK}/api/pay/feedback/success/manual`,
-          failure: `${import.meta.env.VITE_APP_BACK}/api/pay/feedback/failure/manual`,
-          pending: `${import.meta.env.VITE_APP_BACK}/api/pay/feedback/pending/manual`,
-        },
-        auto_return: "approved",
-        payment_methods: {
-          excluded_payment_types: [
-            { id: "ticket" },
-            { id: "bank_transfer" },
+    setIDOrder(datos1.order)
+
+    if (reservaRequest.metodo_pago !== "Externo") {
+
+      const respuesta2 = await axios.post(
+        "https://api.mercadopago.com/checkout/preferences",
+        {
+          items: [
+            {
+              title: producto,
+              unit_price: Number(precio),
+              quantity: 1,
+            },
           ],
+          back_urls: {
+            success: `${import.meta.env.VITE_APP_BACK}/api/pay/feedback/success/manual`,
+            failure: `${import.meta.env.VITE_APP_BACK}/api/pay/feedback/failure/manual`,
+            pending: `${import.meta.env.VITE_APP_BACK}/api/pay/feedback/pending/manual`,
+          },
+          auto_return: "approved",
+          payment_methods: {
+            excluded_payment_types: [
+              { id: "ticket" },
+              { id: "bank_transfer" },
+            ],
+          },
+          statement_descriptor: "CALYAAN COLOMBIA",
+          external_reference: datos1.factura,
         },
-        statement_descriptor: "CALYAAN COLOMBIA",
-        external_reference: datos1.factura,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_APP_MERCADOPAGO_ACCESS_TOKEN}`,
-        },
-      }
-    );
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_APP_MERCADOPAGO_ACCESS_TOKEN}`,
+          },
+        }
+      );
 
-    const datos2 = respuesta2.data;
+      const datos2 = respuesta2.data;
 
-    setLinkPago(datos2.init_point);
+      setLinkPago(datos2.init_point);
+    }
+
   }
 
 
@@ -392,9 +412,34 @@ const CreateReservation = () => {
     }
   };
 
+  const actualizarPago = async(e)=>{
 
-  console.log(reserva)
+    e.preventDefault()
 
+    try{
+      
+      if ([datosPago.payment_id, datosPago.origen].includes("")) {
+        return toast.error("Se requieren los campos de Nro de pago y Origen de pago");
+      }
+
+      let {data} = await clienteAxios.post(
+        `api/pay/actualizar-pago`,
+        {
+          ...datosPago,
+          id: idOrder
+        }
+      );
+
+      toast.success(data.msg)
+
+    }catch (err) {
+      let error = err.response.data.msg
+        ? err.response.data.msg
+        : err.response && "Estamos presentando problemas internos";
+      return toast.error(error);
+    }
+
+  }
 
   // console.log("LIBERAR", liberar)
   return (
@@ -459,7 +504,7 @@ const CreateReservation = () => {
                   <p>La generación de enlaces de pago permite enviar un enlace al cliente para que realice el pago correspondiente. Una vez que se ha efectuado el pago, el cliente puede programar sus citas, ya que el pago ha sido aprobado.</p>
 
                   <button
-                    onClick={() => { generarPreferencias() }
+                    onClick={() => { generarPreferencias("Interno") }
                     }
                     className="mt-4 p-3 bg-primary hover:bg-bgHover focus:bg-bgHover  rounded focus:outline-none"
                   >
@@ -476,7 +521,10 @@ const CreateReservation = () => {
                   <p>Al utilizar este método de pago externo, se deben actualizar los campos correspondientes al pago en la tabla de facturación al confirmar el pago. Sin embargo, se permitirá agendar una cita con la profesional antes de realizar el pago.</p>
 
                   <button
-                    onClick={(e) => { setMetodoExterno(!metodoexterno) }}
+                    onClick={(e) => {
+                      setMetodoExterno(!metodoexterno)
+                      generarPreferencias("Externo")
+                    }}
                     className="mt-4 p-3 bg-primary hover:bg-bgHover focus:bg-bgHover  rounded focus:outline-none"
                   >
                     <p className="text-sm font-medium leading-none text-white">
@@ -499,6 +547,29 @@ const CreateReservation = () => {
                   </h6>
                 </div>
 
+                <p>El metodo utilizado fue interno</p>
+
+                <hr className="mt-6 border-b-1 border-blueGray-300" />
+
+                <div className="flex justify-between py-2 ">
+                  <h6 className="text-blueGray-400 text-sm mt-3 font-bold uppercase">
+                    Agenda de servicio
+                  </h6>
+                </div>
+
+                <ScheduleProfessional id={idOrder} reserva={reserva} setReserva={setReserva} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
+
+              </>
+              : (reserva.metodo_pago === "Externo" || metodoexterno) &&
+              <>
+                <hr className="mt-6 border-b-1 border-blueGray-300" />
+
+                <div className="flex justify-between py-2 ">
+                  <h6 className="text-blueGray-400 text-sm mt-3 font-bold uppercase">
+                    Formas de pago
+                  </h6>
+                </div>
+
                 <p>El metodo utilizado fue externo</p>
 
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
@@ -509,21 +580,62 @@ const CreateReservation = () => {
                   </h6>
                 </div>
 
-                <ScheduleProfessional id={id} reserva={reserva} setReserva={setReserva} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
+                <ScheduleProfessional id={idOrder} reserva={reserva} setReserva={setReserva} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
 
-
-              </>
-              : reserva.metodo_pago === "Externo" &&
-              <>
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
 
-                <div className="flex justify-between py-2 ">
-                  <h6 className="text-blueGray-400 text-sm mt-3 font-bold uppercase">
-                    Agenda de servicio
+                <div className="flex justify-between py-2">
+                  <h6 className="text-blueGray-400 text-sm my-6 font-bold uppercase">
+                    Datos de pago
                   </h6>
                 </div>
 
-                <ScheduleProfessional id={id} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
+                <form className="flex flex-wrap" onSubmit={actualizarPago}>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        ID Pago
+                      </label>
+                      <input
+                        type="text"
+                        value={datosPago.payment_id}
+                        onChange={(e)=>setDatosPago({
+                          ...datosPago,
+                          payment_id:e.target.value
+                        })}
+                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        placeholder="123123213123"
+                      />
+                    </div>
+                    <div className="relative w-full mb-3">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        Origen
+                      </label>
+                      <input
+                        type="text"
+                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        placeholder="Bancolombia"
+                        value={datosPago.origen}
+                        onChange={(e)=>setDatosPago({
+                          ...datosPago,
+                          origen:e.target.value
+                        })}
+                      />
+                    </div>
+
+                    <button type="submit" className="text-white mt-4 mx-auto bg-primary hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-40 max-lg:w-3/4 max-sm:w-full">
+                      Guardar
+                    </button>
+
+                  </div>
+                </form>
+
               </>
           }
 

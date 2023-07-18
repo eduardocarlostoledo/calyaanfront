@@ -24,6 +24,7 @@ const FormUserEmail = ({userEmail,setUserEmail,setEstado,setReserva,reserva}) =>
 
             setEstado("nuevo");
 
+            console.log(data)
             setReserva({
                 ...reserva,
                 cliente_id: data?._id,
@@ -32,7 +33,8 @@ const FormUserEmail = ({userEmail,setUserEmail,setEstado,setReserva,reserva}) =>
                 cliente_apellido: data?.apellido,
                 cliente_cedula: data?.cedula,
                 cliente_telefono: data?.telefono,
-                localidad_servicio: data?.direccionDefault?.direccion,
+                direccion_servicio:data?.direccionDefault?.direccion,
+                localidad_servicio: data?.direccionDefault?.localidad,
                 adicional_direccion_Servicio: data?.direccionDefault?.info,
                 ciudad_Servicio: data?.direccionDefault?.ciudad,
                 telefono_Servicio: data?.telefono,
