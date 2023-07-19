@@ -78,7 +78,10 @@ const ScheduleByProfessionalForm = () => {
   };
 
   const handleSubmitProfessional = () => {
-    localStorage.setItem("ProfessionalService", JSON.stringify({profesional_id:profesional.creador._id}));
+    localStorage.setItem(
+      "ProfessionalService",
+      JSON.stringify({ profesional_id: profesional.creador._id })
+    );
   };
 
   useEffect(() => {
@@ -106,7 +109,7 @@ const ScheduleByProfessionalForm = () => {
           }
         );
 
-      console.log("data de api/reservas/profesionales/fecha", data);
+        console.log("data de api/reservas/profesionales/fecha", data);
 
         if (data?.length > 0) {
           // Filtrar objetos con creador distinto de null y con teléfono definido
@@ -117,7 +120,8 @@ const ScheduleByProfessionalForm = () => {
               obj.creador?.creador?.telefono !== null &&
               obj.creador?.creador?.telefono !== undefined &&
               obj.creador?.creador?.img !== null &&
-              obj.creador?.creador?.img !== undefined
+              obj.creador?.creador?.img !== undefined &&
+              obj.horarios.some((horario) => horario.stock === true)
           );
           const updatedArray = filteredData.map((obj) => ({
             ...obj,
@@ -157,8 +161,7 @@ const ScheduleByProfessionalForm = () => {
   }, [inputValue.date]);
   const { date, time } = inputValue;
 
-  console.log(profesional)
-
+  console.log(profesional);
 
   return (
     <>

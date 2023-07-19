@@ -145,7 +145,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                email: {input.cliente_id.email}
+                email: {input?.cliente_id?.email}
               </p>
               <p
                 className="PDivInfo"
@@ -156,7 +156,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Nombre: {input.cliente_id.nombre}
+                Nombre: {input?.cliente_id?.nombre}
               </p>
               <p
                 className="PDivInfo"
@@ -167,7 +167,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Apellido: {input.cliente_id.apellido}
+                Apellido: {input?.cliente_id?.apellido}
               </p>
               <p
                 className="PDivInfo"
@@ -178,7 +178,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Cédula: {input.cliente_id.cedula}
+                Cédula: {input?.cliente_id?.cedula}
               </p>
               <p
                 className="PDivInfo"
@@ -189,7 +189,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Teléfono: {input.cliente_id.telefono}
+                Teléfono: {input?.cliente_id?.telefono}
               </p>
               {/* <p
                 className="PDivInfo"
