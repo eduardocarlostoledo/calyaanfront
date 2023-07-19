@@ -643,14 +643,14 @@ const OrdenesAntDesing = (props) => {
             fullNameCliente?.includes(searchTextLower) ||
             fullNameProfesionalInverso?.includes(searchTextLower) ||
             fullNameClienteInverso?.includes(searchTextLower) ||
-            orden.factura?.nrofacturacion?.includes(searchTextLower) ||
-            orden.factura?.payment_id?.includes(searchTextLower) ||
-            orden._id?.includes(searchTextLower) ||
-            orden.cliente_id.cedula?.toString()?.includes(searchTextLower) ||
-            orden.cliente_id.telefono?.includes(searchTextLower) ||
-            orden.cliente_id.email?.includes(searchTextLower) ||
-            orden.servicio?.toLowerCase().includes(searchTextLower) ||
-            orden.direccion_servicio
+            orden?.factura?.nrofacturacion?.includes(searchTextLower) ||
+            orden?.factura?.payment_id?.includes(searchTextLower) ||
+            orden?._id?.includes(searchTextLower) ||
+            orden?.cliente_id?.cedula?.toString()?.includes(searchTextLower) ||
+            orden?.cliente_id?.telefono?.includes(searchTextLower) ||
+            orden?.cliente_id?.email?.includes(searchTextLower) ||
+            orden?.servicio?.toLowerCase().includes(searchTextLower) ||
+            orden?.direccion_servicio
               ?.toLowerCase()
               .includes(searchTextLower)) &&
           orderDate.isBetween(startDate, endDate, null, "[]")
@@ -665,11 +665,11 @@ const OrdenesAntDesing = (props) => {
         orden.factura?.nrofacturacion?.includes(searchTextLower) ||
         orden.factura?.payment_id?.includes(searchTextLower) ||
         orden._id?.includes(searchTextLower) ||
-        orden.cliente_id.cedula?.toString()?.includes(searchTextLower) ||
-        orden.cliente_id.telefono?.includes(searchTextLower) ||
-        orden.cliente_id.email?.includes(searchTextLower) ||
-        orden.servicio?.toLowerCase().includes(searchTextLower) ||
-        orden.direccion_servicio?.toLowerCase().includes(searchTextLower)
+        orden?.cliente_id?.cedula?.toString()?.includes(searchTextLower) ||
+        orden?.cliente_id?.telefono?.includes(searchTextLower) ||
+        orden?.cliente_id?.email?.includes(searchTextLower) ||
+        orden?.servicio?.toLowerCase().includes(searchTextLower) ||
+        orden?.direccion_servicio?.toLowerCase().includes(searchTextLower)
       );
     });
   }, [newProducts, searchText, startDate, endDate]);
@@ -821,7 +821,7 @@ const OrdenesAntDesing = (props) => {
       render: (text, record) =>
         text ? (
           <div>
-            <b>{text[0].nombre}</b>
+            <b>{text[0]?.nombre}</b>
 
             {record?.direccion_servicio && (
               <p>
