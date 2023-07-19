@@ -145,7 +145,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                email: {input.cliente_id.email}
+                email: {input?.cliente_id?.email}
               </p>
               <p
                 className="PDivInfo"
@@ -156,7 +156,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Nombre: {input.cliente_id.nombre}
+                Nombre: {input?.cliente_id?.nombre}
               </p>
               <p
                 className="PDivInfo"
@@ -167,7 +167,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Apellido: {input.cliente_id.apellido}
+                Apellido: {input?.cliente_id?.apellido}
               </p>
               <p
                 className="PDivInfo"
@@ -178,19 +178,9 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Cédula: {input.cliente_id.cedula}
+                Cédula: {input?.cliente_id?.cedula}
               </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "12px",
-                  borderRadius: "5px",
-                  fontSize: "17px",
-                }}
-              >
-                Teléfono: {input.cliente_id.telefono}
-              </p>
+
               {/* <p
                 className="PDivInfo"
                 style={{
@@ -239,6 +229,17 @@ const ProductExpanded = ({
               >
                 Teléfono de servicio: {input.telefono_Servicio}
               </p> */}
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "12px",
+                  borderRadius: "5px",
+                  fontSize: "17px",
+                }}
+              >
+                Teléfono: {input?.cliente_id?.telefono}
+              </p>
               <p
                 className="PDivInfo"
                 style={{
@@ -378,32 +379,6 @@ const ProductExpanded = ({
                 ></input>
               </div>
 
-              <div>
-                <label className="LabelNameImg">
-                  <strong>Cédula </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.cliente_id.cedula}
-                  onChange={(e) => handleChange(e)}
-                  name="cliente_cedula"
-                  placeholder="Cédula del cliente"
-                ></input>
-              </div>
-
-              <div>
-                <label className="LabelNameImg">
-                  <strong>Teléfono </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.cliente_id.telefono}
-                  onChange={(e) => handleChange(e)}
-                  name="cliente_telefono"
-                  placeholder="Teléfono del cliente"
-                ></input>
-              </div>
-
               {/* <div>
                 <label className="LabelNameImg">
                   <strong>Dirección </strong>
@@ -446,6 +421,31 @@ const ProductExpanded = ({
             <div style={{ width: "50%" }}>
               <div>
                 <label className="LabelNameImg">
+                  <strong>Cédula </strong>
+                </label>
+                <input
+                  className="InputsEdits"
+                  value={input.cliente_id.cedula}
+                  onChange={(e) => handleChange(e)}
+                  name="cliente_cedula"
+                  placeholder="Cédula del cliente"
+                ></input>
+              </div>
+
+              <div>
+                <label className="LabelNameImg">
+                  <strong>Teléfono </strong>
+                </label>
+                <input
+                  className="InputsEdits"
+                  value={input.cliente_id.telefono}
+                  onChange={(e) => handleChange(e)}
+                  name="cliente_telefono"
+                  placeholder="Teléfono del cliente"
+                ></input>
+              </div>
+              <div>
+                <label className="LabelNameImg">
                   <strong>Estado del servicio</strong>
                 </label>
                 <select
@@ -463,7 +463,7 @@ const ProductExpanded = ({
                 </select>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="LabelNameImg">
                   <strong>Estado del Pago</strong>
                 </label>
@@ -493,7 +493,7 @@ const ProductExpanded = ({
                   name="payment_id"
                   placeholder="Número de payment_id"
                 ></input>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="LabelNameImg">
@@ -643,14 +643,14 @@ const OrdenesAntDesing = (props) => {
             fullNameCliente?.includes(searchTextLower) ||
             fullNameProfesionalInverso?.includes(searchTextLower) ||
             fullNameClienteInverso?.includes(searchTextLower) ||
-            orden.factura?.nrofacturacion?.includes(searchTextLower) ||
-            orden.factura?.payment_id?.includes(searchTextLower) ||
-            orden._id?.includes(searchTextLower) ||
-            orden.cliente_id.cedula?.toString()?.includes(searchTextLower) ||
-            orden.cliente_id.telefono?.includes(searchTextLower) ||
-            orden.cliente_id.email?.includes(searchTextLower) ||
-            orden.servicio?.toLowerCase().includes(searchTextLower) ||
-            orden.direccion_servicio
+            orden?.factura?.nrofacturacion?.includes(searchTextLower) ||
+            orden?.factura?.payment_id?.includes(searchTextLower) ||
+            orden?._id?.includes(searchTextLower) ||
+            orden?.cliente_id?.cedula?.toString()?.includes(searchTextLower) ||
+            orden?.cliente_id?.telefono?.includes(searchTextLower) ||
+            orden?.cliente_id?.email?.includes(searchTextLower) ||
+            orden?.servicio?.toLowerCase().includes(searchTextLower) ||
+            orden?.direccion_servicio
               ?.toLowerCase()
               .includes(searchTextLower)) &&
           orderDate.isBetween(startDate, endDate, null, "[]")
@@ -665,11 +665,11 @@ const OrdenesAntDesing = (props) => {
         orden.factura?.nrofacturacion?.includes(searchTextLower) ||
         orden.factura?.payment_id?.includes(searchTextLower) ||
         orden._id?.includes(searchTextLower) ||
-        orden.cliente_id.cedula?.toString()?.includes(searchTextLower) ||
-        orden.cliente_id.telefono?.includes(searchTextLower) ||
-        orden.cliente_id.email?.includes(searchTextLower) ||
-        orden.servicio?.toLowerCase().includes(searchTextLower) ||
-        orden.direccion_servicio?.toLowerCase().includes(searchTextLower)
+        orden?.cliente_id?.cedula?.toString()?.includes(searchTextLower) ||
+        orden?.cliente_id?.telefono?.includes(searchTextLower) ||
+        orden?.cliente_id?.email?.includes(searchTextLower) ||
+        orden?.servicio?.toLowerCase().includes(searchTextLower) ||
+        orden?.direccion_servicio?.toLowerCase().includes(searchTextLower)
       );
     });
   }, [newProducts, searchText, startDate, endDate]);
@@ -821,7 +821,15 @@ const OrdenesAntDesing = (props) => {
       render: (text, record) =>
         text ? (
           <div>
-            <b>{text[0].nombre}</b>
+            {record?._id && (
+              <p>
+                <b>Id de orden </b> <br />
+                {record?._id}
+                <br />
+                <hr></hr>
+              </p>
+            )}
+            <b>Servicio: {text[0]?.nombre}</b>
 
             {record?.direccion_servicio && (
               <p>
