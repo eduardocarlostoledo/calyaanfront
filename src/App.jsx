@@ -88,6 +88,7 @@ import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
 import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails"
 import LiquidacionAllAntDesing from "./pages/private/dashboard/pages/liquidacionesAll";
 import clienteAxios from "./config/axios";
+import { setUser } from "./redux/features/authSlice";
 
 function App() {
   const { message } = useSelector((state) => ({ ...state.notifications }));
@@ -113,7 +114,7 @@ function App() {
           Authorization: `Bearer ${token}`,
         };
         const response = await clienteAxios.get("api/usuarios/obtener-usuario",headers);
-    
+
         dispatch(setUser(response.data))
       }
     }catch(err){

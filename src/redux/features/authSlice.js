@@ -8,7 +8,7 @@ import { addMessage } from "./notificationsSlice";
 
 
 export const login = createAsyncThunk(
-  "auth/login",  async ({ userForm, navigate, rute="/servicio" }, thunkAPI) => {
+  "auth/login", async ({ userForm, navigate, rute = "/servicio" }, thunkAPI) => {
     try {
       const response = await api.signIn(userForm);
 
@@ -214,7 +214,7 @@ const authSlice = createSlice({
     setLogout: (state, action) => {
       let servicios = localStorage.getItem('services');
       localStorage.clear();
-      localStorage.setItem('services',servicios)
+      localStorage.setItem('services', servicios)
       state.user = null;
     },
     deleteError: (state, action) => {
@@ -226,7 +226,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    
+
     // Login
     builder.addCase(login.pending, (state, action) => {
       state.loading = true;
@@ -237,7 +237,14 @@ const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
-      localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
+      localStorage.setItem("profile", JSON.stringify({
+        confirmado: action.payload.confirmado,
+        email: action.payload.email,
+        nombre: action.payload.nombre,
+        profesionalId: action.payload.profesionalId,
+        token: action.payload.token,
+        _id: action.payload._id
+      }));
       state.user = action.payload;
     });
 
