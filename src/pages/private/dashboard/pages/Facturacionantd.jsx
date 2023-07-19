@@ -776,18 +776,18 @@ const FacturacionAntDesing = () => {
     // },
     {
       title: "Estado Servicio",
-      dataIndex: "estadoServicio",
+      dataIndex: "estado_servicio",
       filters: [
         { text: "Pendiente", value: "Pendiente" },
         { text: "Completado", value: "Completado" },
         { text: "Cancelado", value: "Cancelado" },
       ],
-      onFilter: (value, record) => record?.estadoServicio === value,
-      render: (estadoServicio) => (
+      onFilter: (value, record) => record?.estado_servicio === value,
+      render: (estado_servicio) => (
         <>
-          {estadoServicio === "Completado" ? (
+          {estado_servicio === "Completado" ? (
             <Tag color="green">Completado</Tag>
-          ) : estadoServicio === "Cancelado" ? (
+          ) : estado_servicio === "Cancelado" ? (
             <Tag color="red">Cancelado</Tag>
           ) : (
             <Tag color="yellow">Pendiente</Tag>

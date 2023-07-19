@@ -180,17 +180,7 @@ const ProductExpanded = ({
               >
                 Cédula: {input?.cliente_id?.cedula}
               </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "12px",
-                  borderRadius: "5px",
-                  fontSize: "17px",
-                }}
-              >
-                Teléfono: {input?.cliente_id?.telefono}
-              </p>
+
               {/* <p
                 className="PDivInfo"
                 style={{
@@ -239,6 +229,17 @@ const ProductExpanded = ({
               >
                 Teléfono de servicio: {input.telefono_Servicio}
               </p> */}
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "12px",
+                  borderRadius: "5px",
+                  fontSize: "17px",
+                }}
+              >
+                Teléfono: {input?.cliente_id?.telefono}
+              </p>
               <p
                 className="PDivInfo"
                 style={{
@@ -378,32 +379,6 @@ const ProductExpanded = ({
                 ></input>
               </div>
 
-              <div>
-                <label className="LabelNameImg">
-                  <strong>Cédula </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.cliente_id.cedula}
-                  onChange={(e) => handleChange(e)}
-                  name="cliente_cedula"
-                  placeholder="Cédula del cliente"
-                ></input>
-              </div>
-
-              <div>
-                <label className="LabelNameImg">
-                  <strong>Teléfono </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.cliente_id.telefono}
-                  onChange={(e) => handleChange(e)}
-                  name="cliente_telefono"
-                  placeholder="Teléfono del cliente"
-                ></input>
-              </div>
-
               {/* <div>
                 <label className="LabelNameImg">
                   <strong>Dirección </strong>
@@ -446,6 +421,31 @@ const ProductExpanded = ({
             <div style={{ width: "50%" }}>
               <div>
                 <label className="LabelNameImg">
+                  <strong>Cédula </strong>
+                </label>
+                <input
+                  className="InputsEdits"
+                  value={input.cliente_id.cedula}
+                  onChange={(e) => handleChange(e)}
+                  name="cliente_cedula"
+                  placeholder="Cédula del cliente"
+                ></input>
+              </div>
+
+              <div>
+                <label className="LabelNameImg">
+                  <strong>Teléfono </strong>
+                </label>
+                <input
+                  className="InputsEdits"
+                  value={input.cliente_id.telefono}
+                  onChange={(e) => handleChange(e)}
+                  name="cliente_telefono"
+                  placeholder="Teléfono del cliente"
+                ></input>
+              </div>
+              <div>
+                <label className="LabelNameImg">
                   <strong>Estado del servicio</strong>
                 </label>
                 <select
@@ -463,7 +463,7 @@ const ProductExpanded = ({
                 </select>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="LabelNameImg">
                   <strong>Estado del Pago</strong>
                 </label>
@@ -493,7 +493,7 @@ const ProductExpanded = ({
                   name="payment_id"
                   placeholder="Número de payment_id"
                 ></input>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="LabelNameImg">
