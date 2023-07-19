@@ -200,9 +200,7 @@ export const updatePassword = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: localStorage.getItem("profile")
-      ? JSON.parse(localStorage.getItem("profile"))
-      : null,
+    user: null,
     error: "",
     loading: false,
     estado: localStorage.getItem("estado")

@@ -2,9 +2,8 @@ import clienteAxios from "../config/axios";
 
 clienteAxios.interceptors.request.use((req) => {
   if (localStorage.getItem("profile")) {
-    req.headers.Authorization = `Bearer ${
-      JSON.parse(localStorage.getItem("profile")).token
-    }`;
+    req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem("profile")).token
+      }`;
   }
   return req;
 });
@@ -60,9 +59,9 @@ export const deleteOrderRequest = (orderId) =>
 export const getOrdersByUserIdRequest = (userId) =>
   clienteAxios.get(`api/ordenes/ordenbyuserid/${userId}`);
 
-  // Liquidaciones
-export const getAllLiquidacionRequest = () => 
-clienteAxios.get("api/liquidaciones/settlement");
+// Liquidaciones
+export const getAllLiquidacionRequest = () =>
+  clienteAxios.get("api/liquidaciones/settlement");
 
 export const createLiquidacionRequest = (orderForm) =>
   clienteAxios.post("api/liquidaciones/settlement", orderForm);

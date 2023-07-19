@@ -14,6 +14,8 @@ const TabsSettings = () => {
 
   const { user } = useSelector((state) => ({ ...state.auth }));
 
+  console.log(user)
+
   return (
     <div className="border-b border-gray-200">
       <ul className="flex flex-wrap -mb-px text-sm font-medium text-center justify-center items-center text-gray-500 ">

@@ -86,6 +86,8 @@ import HorarioProfessionalAntDesing from "./pages/private/dashboard/pages/Horari
 import Tools from "./pages/private/dashboard/pages/Tools";
 import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
 import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails"
+import { setUser } from "./redux/features/authSlice";
+import clienteAxios from "./config/axios";
 
 function App() {
   const { message } = useSelector((state) => ({ ...state.notifications }));
@@ -103,6 +105,28 @@ function App() {
       dispatch(removeMessage());
     }, 2000);
   }, [message]);
+
+  useEffect(() => {
+   const obtenerUsuario = async ()=>{
+    try{
+      const token = JSON.parse(localStorage.getItem("profile"))?.token;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      const response = await clienteAxios.get("api/usuarios/obtener-usuario",headers);
+  
+      dispatch(setUser(response.data))
+    }catch(err){
+        console.log(err)
+    }
+
+
+   }
+   obtenerUsuario()
+  }, [dispatch]);
+  const user = useSelector((state) => state.auth.user);
+
+  console.log(user)
 
   return (
     <Router>

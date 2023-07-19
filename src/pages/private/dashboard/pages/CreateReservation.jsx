@@ -116,7 +116,6 @@ const CreateReservation = () => {
               profesional_id: "",
               cita_servicio: data.cliente_id.cita_servicio,
               hora_servicio: "",
-              cita_servicio:"",
               direccion_servicio:data.direccion_servicio,
               localidad_servicio: data.localidad_servicio,
               adicional_direccion_servicio: data.adicional_direccion_servicio,
