@@ -56,6 +56,11 @@ const RecomendationCards = ({
     return newProducts?.filter((orden) => {
       const { creador } = orden;
 
+      const horas = separarHoras(orden.disponibilidad);
+      if (horas === null) {
+        return;
+      }
+
       const matchLocalidad = creador.localidadesLaborales?.some((loca) =>
         loca?.toLowerCase().includes(localidad?.toLowerCase())
       );
