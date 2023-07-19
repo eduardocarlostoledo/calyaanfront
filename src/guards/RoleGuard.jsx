@@ -2,12 +2,12 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
-const RoleGuard = ({rol}) => {
+const RoleGuard = ({ rol }) => {
 
-    const { user } = useSelector((state) => ({ ...state.auth }));
+    const { trafficLightBase128 } = useSelector((state) => ({ ...state.auth }));
 
     return (
-        rol.includes(user?.rol) ? <Outlet /> : <Navigate to="/servicios" replace={true} />
+        rol.includes(trafficLightBase128) ? <Outlet /> : <Navigate to="/servicios" replace={true} />
     )
 }
 

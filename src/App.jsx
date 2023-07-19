@@ -105,7 +105,8 @@ function App() {
     }, 2000);
   }, [message]);
 
-  useEffect(() => {
+  
+/*   useEffect(() => {
    const obtenerUsuario = async ()=>{
     try{
       const token = JSON.parse(localStorage.getItem("profile"))?.token;
@@ -115,14 +116,22 @@ function App() {
         };
         const response = await clienteAxios.get("api/usuarios/obtener-usuario",headers);
 
-        dispatch(setUser(response.data))
+        dispatch(setUser({
+          confirmado: response.data.confirmado,
+          email: response.data.email,
+          nombre: response.data.nombre,
+          profesionalId: response.data.profesionalId,
+          token: response.data.token,
+          rol: ROLES[response.data.rol],
+          _id: response.data._id,
+        }))
       }
     }catch(err){
         console.log(err)
     }
    }
    obtenerUsuario()
-  }, [dispatch]);
+  }, [dispatch]); */
 
   return (
     <Router>

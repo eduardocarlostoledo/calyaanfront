@@ -1,11 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import swal from "sweetalert";
 import * as api from "../api";
-
 import { addMessage } from "./notificationsSlice";
-
-
-
+import { ROLES } from "../../helpers/Logic/roles";
 
 export const login = createAsyncThunk(
   "auth/login", async ({ userForm, navigate, rute = "/servicio" }, thunkAPI) => {
@@ -200,7 +197,12 @@ export const updatePassword = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
+    user: localStorage.getItem("profile")
+      ? JSON.parse(localStorage.getItem("profile"))
+      : null,
+    trafficLightBase128: localStorage.getItem("trafficLightBase128")
+      ? JSON.parse(localStorage.getItem("trafficLightBase128"))
+      : null,
     error: "",
     loading: false,
     estado: localStorage.getItem("estado")
@@ -216,6 +218,7 @@ const authSlice = createSlice({
       localStorage.clear();
       localStorage.setItem('services', servicios)
       state.user = null;
+      state.trafficLightBase128 = null;
     },
     deleteError: (state, action) => {
       state.error = "";
@@ -243,8 +246,12 @@ const authSlice = createSlice({
         nombre: action.payload.nombre,
         profesionalId: action.payload.profesionalId,
         token: action.payload.token,
-        _id: action.payload._id
+        _id: action.payload._id,
       }));
+
+      localStorage.setItem("trafficLightBase128", JSON.stringify(ROLES[action.payload.rol]));
+
+      state.trafficLightBase128 = ROLES[action.payload.rol];
       state.user = action.payload;
     });
 
@@ -258,7 +265,18 @@ const authSlice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, action) => {
       state.loading = false;
-      localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
+      localStorage.setItem("profile", JSON.stringify({
+        confirmado: action.payload.confirmado,
+        email: action.payload.email,
+        nombre: action.payload.nombre,
+        profesionalId: action.payload.profesionalId,
+        token: action.payload.token,
+        _id: action.payload._id,
+      }));
+
+      localStorage.setItem("trafficLightBase128", JSON.stringify(ROLES[action.payload.rol]));
+
+      state.trafficLightBase128 = ROLES[action.payload.rol];
       state.user = action.payload;
     });
 
@@ -272,7 +290,18 @@ const authSlice = createSlice({
     });
     builder.addCase(googleSignIn.fulfilled, (state, action) => {
       state.loading = false;
-      localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
+      localStorage.setItem("profile", JSON.stringify({
+        confirmado: action.payload.confirmado,
+        email: action.payload.email,
+        nombre: action.payload.nombre,
+        profesionalId: action.payload.profesionalId,
+        token: action.payload.token,
+        _id: action.payload._id,
+      }));
+
+      localStorage.setItem("trafficLightBase128", JSON.stringify(ROLES[action.payload.rol]));
+
+      state.trafficLightBase128 = ROLES[action.payload.rol];
       state.user = action.payload;
     });
 
