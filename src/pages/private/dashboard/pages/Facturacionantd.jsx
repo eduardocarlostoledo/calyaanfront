@@ -22,38 +22,17 @@ const ProductExpanded = ({
   estadoPago,
   payment_id,
   factura,
-  // _id,
-  // cliente_email,
-  // cliente_nombre,
-  // cliente_apellido,
-  // cliente_cedula,
-  // cliente_telefono,
-  // direccion_Servicio,
-  // adicional_direccion_Servicio,
-  // localidad_Servicio,
-  // telefono_Servicio,
-  // estadoServicio,
-  // estadoFacturacion,
-  // payment_id,
-  // estadoPago,
-  // numeroFacturacion,
-  // estadoLiquidacion,
-  // numeroLiquidacion,
-  // profesional_email,
-  // profesional_nombre,
-  // profesional_apellido,
   editProduct,
   setEditProduct,
 }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({
-    _id,
-    cliente_id,
-    direccion_Servicio,
-    estadoServicio,
-    estadoPago,
-    payment_id,
-    factura,
+    estadoPago: factura.estadoPago,
+    estado_facturacion: factura.estado_facturacion,
+    origen: factura.origen,
+    nro_factura: factura.nro_factura,
+    payment_id: factura.payment_id,
+    _id: factura._id,
   });
 
   const [loading, setLoading] = useState(true);
@@ -64,42 +43,55 @@ const ProductExpanded = ({
   //separo los useEffect para que no se renderize todo junto
 
   useEffect(() => {
-    setLoading(true); // updateinprogress
-    // dispatch(updateOrder(false))
-    // dispatch(getOrders())
-
-    // .then(() => setLoading(false))
-    // .catch((error) => setError(error.message));
-  }, [dispatch, change, orders]);
+    dispatch(getOrders())
+      .then(() => setLoading(false))
+      .catch((error) => setError(error.message));
+  }, [loading]);
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
+    setLoading(false);
     e.preventDefault();
     console.log("INPUT", input);
     const data = new FormData();
     Object.keys(input).forEach((key) => data.append(key, input[key]));
-    dispatch(updateOrder(input));
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_BACK}/api/facturas/updateinvoice`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(input),
+        }
+      );
+      setLoading(true);
+      swal("success", "ORDEN MODIFICADA", "success");
+    } catch (error) {
+      console.log(error);
+      alert("Unexpected error");
+    }
     setEditProduct(0);
-    swal("success", "ORDEN MODIFICADA", "success");
   }
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      setLoading(true);
-      try {
-        await dispatch(getOrders());
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-    console.log("act");
-    fetchOrders();
-  }, [dispatch, editProduct]);
+  // useEffect(() => {
+  //   const fetchOrders = async () => {
+  //     setLoading(true);
+  //     try {
+  //       await dispatch(getOrders());
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setError(error.message);
+  //       setLoading(false);
+  //     }
+  //   };
+  //   console.log("act");
+  //   fetchOrders();
+  // }, [loading]);
 
   return (
     <div>
@@ -172,7 +164,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                <b>Origen del pago:</b> {input?.factura.origen}
+                <b>Origen del pago:</b> {input?.factura?.origen}
               </p>
               {/* <p
                 className="PDivInfo"
@@ -255,7 +247,7 @@ const ProductExpanded = ({
                 }}
               >
                 <b>Estado de facturación:</b>
-                {input.factura.estado_facturacion}
+                {input.factura?.estado_facturacion}
               </p>
               <p
                 className="PDivInfo"
@@ -267,7 +259,7 @@ const ProductExpanded = ({
                 }}
               >
                 <b>Número de facturación:</b>
-                {input.factura.nro_factura}
+                {input.factura?.nro_factura}
               </p>
               <p
                 className="PDivInfo"
@@ -278,7 +270,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                <b>N°Pago:</b> {input.factura.payment_id}
+                <b>N°Pago:</b> {input.factura?.payment_id}
               </p>
               {/* <p
                 className="PDivInfo"
@@ -348,118 +340,13 @@ const ProductExpanded = ({
             }}
           >
             <div style={{ width: "50%" }}>
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Email </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.cliente_email}
-                  onChange={(e) => handleChange(e)}
-                  name="cliente_email"
-                  placeholder="Email del cliente"
-                ></input>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Nombre </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.cliente_nombre}
-                  onChange={(e) => handleChange(e)}
-                  name="cliente_nombre"
-                  placeholder="Nombre"
-                ></input>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Apellido </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.cliente_apellido}
-                  onChange={(e) => handleChange(e)}
-                  name="cliente_apellido"
-                  placeholder="Apellido del cliente"
-                ></input>
-              </div>
-
-              <div>
-                <label className="LabelNameImg">
-                  <strong>Cédula </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.cliente_cedula}
-                  onChange={(e) => handleChange(e)}
-                  name="cliente_cedula"
-                  placeholder="Cédula del cliente"
-                ></input>
-              </div>
-
-              <div>
-                <label className="LabelNameImg">
-                  <strong>Teléfono </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.cliente_telefono}
-                  onChange={(e) => handleChange(e)}
-                  name="cliente_telefono"
-                  placeholder="Teléfono del cliente"
-                ></input>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Dirección </strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.direccion_Servicio}
-                  onChange={(e) => handleChange(e)}
-                  name="direccion_Servicio"
-                  placeholder="Dirección de servicio"
-                ></input>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Datos Adicionales</strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.adicional_direccion_Servicio}
-                  onChange={(e) => handleChange(e)}
-                  name="adicional_direccion_Servicio"
-                  placeholder="Dirección adicional de servicio"
-                ></input>
-              </div> */}
-              {/* <div style={{ width: "50%" }}>
-              <div>
-                <label className="LabelNameImg">
-                  <strong>Localidad</strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.localidad_Servicio}
-                  onChange={(e) => handleChange(e)}
-                  name="localidad_Servicio"
-                  placeholder="Localidad de servicio"
-                ></input>
-              </div>
-            </div> */}
-
               <div>
                 <label className="LabelNameImg">
                   <strong>Origen del Pago</strong>
                 </label>
                 <input
                   className="InputsEdits"
-                  value={input.factura?.origen}
+                  value={input.origen}
                   onChange={(e) => handleChange(e)}
                   name="origen"
                   placeholder="Origen del Pago"
@@ -472,10 +359,9 @@ const ProductExpanded = ({
                 </label>
                 <select
                   className="InputsEdits"
-                  // defaultValue="NoFacturado"
-                  value={input.estadoFacturacion}
+                  value={input.estado_facturacion}
                   onChange={(e) => handleChange(e)}
-                  name="estadoFacturacion"
+                  name="estado_facturacion"
                   placeholder="Estado de facturación"
                 >
                   <option value="Facturado">Facturado</option>
@@ -491,44 +377,12 @@ const ProductExpanded = ({
                 <input
                   className="InputsEdits"
                   // defaultValue=""
-                  value={input.numeroFacturacion}
+                  value={input.nro_factura}
                   onChange={(e) => handleChange(e)}
-                  name="numeroFacturacion"
+                  name="nro_factura"
                   placeholder="Número de facturación"
                 ></input>
               </div>
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Liquidación</strong>
-                </label>
-                <select
-                  className="InputsEdits"
-                  // defaultValue="NoLiquidado"
-                  value={input.estadoLiquidacion}
-                  onChange={(e) => handleChange(e)}
-                  name="estadoLiquidacion"
-                  placeholder="Estado de liquidación"
-                >
-                  <option value="Liquidado">Liquidado</option>
-                  <option value="NoLiquidado">No liquidado</option>
-                  <option value="Error">Error</option>
-                </select>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>NºLiquidación</strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  // defaultValue=""
-                  value={input.numeroLiquidacion}
-                  onChange={(e) => handleChange(e)}
-                  name="numeroLiquidacion"
-                  placeholder="Número de liquidación"
-                ></input>
-              </div> */}
               <div>
                 <label className="LabelNameImg">
                   <strong>Estado pago</strong>
@@ -592,17 +446,17 @@ const FacturacionAntDesing = () => {
     dates ? setEndDate(dateNow2) : setEndDate("");
   };
   //separo los useEffect para que no se renderize todo junto
-  useEffect(() => {
-    dispatch(getOrders())
-      .then(() => setLoading(false))
-      .catch((error) => setError(error.message));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getOrders())
+  //     .then(() => setLoading(false))
+  //     .catch((error) => setError(error.message));
+  // }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(getOrders())
-      .then(() => setLoading(false))
-      .catch((error) => setError(error.message));
-  }, [dispatch, change]);
+  // useEffect(() => {
+  //   dispatch(getOrders())
+  //     .then(() => setLoading(false))
+  //     .catch((error) => setError(error.message));
+  // }, [dispatch, change]);
   // }, [orders, change]);
 
   // useEffect(() => {
@@ -628,6 +482,11 @@ const FacturacionAntDesing = () => {
 
     const searchTextLower = searchText.toLowerCase();
     return newProducts.filter((orden) => {
+      const { profesional_id } = orden;
+      if (!profesional_id) {
+        return;
+      }
+
       const fullNameProfesional =
         `${orden.cliente_id.nombre} ${orden.cliente_id.apellido}`.toLowerCase();
       const fullNameCliente =
@@ -648,7 +507,7 @@ const FacturacionAntDesing = () => {
             orden.factura?.nro_factura?.includes(searchTextLower) ||
             orden.factura?.payment_id?.includes(searchTextLower) ||
             orden._id?.includes(searchTextLower) ||
-            // orden.cliente_id?.cedula.includes(searchTextLower) ||
+            orden.cliente_id?.cedula.includes(searchTextLower) ||
             orden.cliente_id?.telefono?.includes(searchTextLower) ||
             orden.cliente_id?.email?.includes(searchTextLower) ||
             orden.servicios[0]?.nombre
@@ -696,37 +555,12 @@ const FacturacionAntDesing = () => {
   //   .format("YYYY-MM-DD")
   //   ?.includes(searchTextLower) &&
   //   isDateInRange)
-  console.log(filteredOrdenes);
+  // console.log(filteredOrdenes);
   const columns = [
-    // {
-    //   title: "EDITAR",
-    //   dataIndex: "",
-    //   render: (value) => (
-    //     <div className="ActionsDiv">
-    //       <button
-    //         className="ButtonsActions"
-    //         onClick={() => setEditProduct(value._id)}
-    //       >
-    //         <BiEditAlt />
-    //       </button>
-    //     </div>
-    //   ),
-    // },
     Table.EXPAND_COLUMN,
-    // {
-    //   title: "Cliente",
-    //   dataIndex: "cliente_nombre",
-    //   render: (text, record) => (
-    //     <p>
-    //       {record.cliente_apellido} {text}
-    //     </p>
-    //   ),
-    // },
     {
       title: "Cliente",
       dataIndex: "cliente_id",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
       render: (text) => (
         <div>
           <div>
@@ -756,8 +590,6 @@ const FacturacionAntDesing = () => {
     {
       title: "Profesional",
       dataIndex: "profesional_id",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
       render: (text) => (
         <div>
           <div>
@@ -782,6 +614,78 @@ const FacturacionAntDesing = () => {
             <p>{text.email}</p>
           </div>
         </div>
+      ),
+    },
+    {
+      title: "Facturacion",
+      dataIndex: "factura",
+      filters: [
+        { text: "Facturado", value: "Facturado" },
+        { text: "NoFacturado", value: "NoFacturado" },
+        { text: "Error", value: "Error" },
+      ],
+      onFilter: (value, record) => record?.estado_facturacion === value,
+      render: ({
+        estado_facturacion,
+        nro_factura,
+        fecha_venta,
+        precioTotal,
+        payment_id,
+        origen,
+      }) => (
+        <>
+          {estado_facturacion === "Facturado" ? (
+            <Tag style={{ margin: "auto" }} color="green">
+              Facturado
+            </Tag>
+          ) : estado_facturacion === "Error" ? (
+            <Tag style={{ margin: "auto" }} color="red">
+              Error
+            </Tag>
+          ) : (
+            <Tag style={{ margin: "auto" }} color="yellow">
+              No Facturado
+            </Tag>
+          )}
+          {payment_id && (
+            <div style={{ marginTop: ".5rem" }}>
+              <b>id del pago: </b>
+              <p>{payment_id}</p>
+              <hr></hr>
+            </div>
+          )}
+
+          {origen && (
+            <div style={{ marginTop: ".5rem" }}>
+              <b>Origen del pago: </b>
+              <p>{origen}</p>
+              <hr></hr>
+            </div>
+          )}
+
+          {nro_factura && (
+            <div style={{ marginTop: ".5rem" }}>
+              <hr />
+              <b>Nro de factura: </b>
+              {nro_factura}
+              <hr></hr>
+            </div>
+          )}
+          {precioTotal && (
+            <div style={{ marginTop: ".5rem" }}>
+              <b>Precio: </b>
+              {precioTotal}
+              <hr></hr>
+            </div>
+          )}
+          {fecha_venta && (
+            <div style={{ marginTop: ".5rem" }}>
+              <b>Dia de venta: </b>
+              {moment(fecha_venta).format("YYYY-MM-DD HH:mm:ss")}
+              <hr></hr>
+            </div>
+          )}
+        </>
       ),
     },
     // {
@@ -814,16 +718,25 @@ const FacturacionAntDesing = () => {
         </>
       ),
     },
-    {
-      title: "Id Pago",
-      dataIndex: "factura",
-      render: (text) => <p>{text.payment_id}</p>,
-    },
-    {
-      title: "Origen del pago",
-      dataIndex: "factura",
-      render: (text) => <p>{text.origen}</p>,
-    },
+    // {
+    //   title: "Pago",
+    //   dataIndex: "factura",
+    //   render: ({ payment_id, origen }) => (
+    //     <div>
+    //       <b>id del pago: </b>
+    //       <p>{payment_id}</p>
+    //       <hr></hr>
+    //       <b>Origen del pago: </b>
+    //       <p>{origen}</p>
+    //       <hr></hr>
+    //     </div>
+    //   ),
+    // },
+    // {
+    //   title: "Origen del pago",
+    //   dataIndex: "factura",
+    //   render: (text) => <p>{text.origen}</p>,
+    // },
     {
       title: "Estado Servicio",
       dataIndex: "estadoServicio",
@@ -846,31 +759,16 @@ const FacturacionAntDesing = () => {
       ),
     },
     {
-      title: "Facturacion",
-      dataIndex: "factura",
-      filters: [
-        { text: "Facturado", value: "Facturado" },
-        { text: "NoFacturado", value: "NoFacturado" },
-        { text: "Error", value: "Error" },
-      ],
-      onFilter: (value, record) => record?.estado_facturacion === value,
-      render: ({ estado_facturacion }) => (
-        <>
-          {estado_facturacion === "Facturado" ? (
-            <Tag color="green">Facturado</Tag>
-          ) : estado_facturacion === "Error" ? (
-            <Tag color="red">Error</Tag>
-          ) : (
-            <Tag color="yellow">No Facturado</Tag>
-          )}
-        </>
-      ),
+      title: "Servicio",
+      dataIndex: "servicios",
+      render: (text) => text?.map((t) => <p>{t.nombre}</p>),
     },
-    {
-      title: "Nro. Factura",
-      dataIndex: "factura",
-      render: (text) => <p>{text.nro_factura}</p>,
-    },
+
+    // {
+    //   title: "Nro. Factura",
+    //   dataIndex: "factura",
+    //   render: (text) => <p>{text.nro_factura}</p>,
+    // },
 
     // {
     //   title: "Cedula",
@@ -887,18 +785,14 @@ const FacturacionAntDesing = () => {
     //   dataIndex: "cliente_email",
     //   render: (text) => <p>{text}</p>,
     // },
-    {
-      title: "Servicio",
-      dataIndex: "servicios",
-      render: (text) => text?.map((t) => <p>{t.nombre}</p>),
-    },
-    {
-      title: "Precio",
-      dataIndex: "factura",
-      sorter: (a, b) => a.precio - b.precio,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text.precioTotal}</p>,
-    },
+
+    // {
+    //   title: "Precio",
+    //   dataIndex: "factura",
+    //   sorter: (a, b) => a.precio - b.precio,
+    //   defaultSortOrder: "descend",
+    //   render: (text) => <p>{text.precioTotal}</p>,
+    // },
     // {
     //   title: "Direccion",
     //   dataIndex: "localidad_Servicio",
@@ -911,13 +805,13 @@ const FacturacionAntDesing = () => {
     //   ),
     // },
 
-    {
-      title: "Dia de Venta",
-      dataIndex: "factura",
-      render: (text) => (
-        <p>{moment(text.fecha_venta).format("YYYY-MM-DD HH:mm:ss")}</p>
-      ),
-    },
+    // {
+    //   title: "Dia de Venta",
+    //   dataIndex: "factura",
+    //   render: (text) => (
+    //     <p>{moment(text.fecha_venta).format("YYYY-MM-DD HH:mm:ss")}</p>
+    //   ),
+    // },
   ];
 
   const refreshData = () => {

@@ -18,7 +18,7 @@ const TableTransactionHistory = () => {
 
   const [userState, setUserState] = useState({});
   const [modal, setModal] = useState(false);
-
+  console.log(paginado);
   const handleUser = (user) => {
     setUserState(user);
     setModal(true);
@@ -33,7 +33,7 @@ const TableTransactionHistory = () => {
   const fetchHistorial = useCallback(async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_APP_BACK}/ordenes/orden`,
+        `${import.meta.env.VITE_APP_BACK}/api/ordenes/orden`,
         {
           method: "GET",
           headers: {
@@ -76,7 +76,8 @@ const TableTransactionHistory = () => {
     }, 500);
   };
 
-  // console.log(historial)
+  console.log(historial, "historial");
+  console.log(ventas, "ventas");
 
   return (
     <div className="py-8">
@@ -207,12 +208,16 @@ const TableTransactionHistory = () => {
                               className="w-full h-full rounded-full"
                               src={user?.img}
                               alt="Imagen de usuario"
-                              onClick={() => handleUser(reserva?.cliente_id)}
+                              onClick={() =>
+                                handleUser(reserva?.cliente_id?._id)
+                              }
                             />
                           ) : (
                             <BsPersonCircle
                               className="w-full h-full text-gray-300"
-                              onClick={() => handleUser(reserva?.cliente_id)}
+                              onClick={() =>
+                                handleUser(reserva?.cliente_id?._id)
+                              }
                             />
                           )}
                         </div>
@@ -220,14 +225,14 @@ const TableTransactionHistory = () => {
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <div className="flex items-center">
-                        {reserva?.servicio}
+                        {reserva?.servicios[0]}
                       </div>
                     </td>
 
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
                         <NumericFormat
-                          value={reserva?.precio}
+                          value={reserva?.factura?.precioTotal}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"$"}
@@ -245,27 +250,31 @@ const TableTransactionHistory = () => {
                           <p
                             aria-hidden
                             className={`absolute inset-0 opacity-50 rounded-full ${
-                              reserva.estadoPago === "approved"
+                              reserva.factura === "approved"
                                 ? "bg-green-200"
-                                : reserva.estadoPago === "pending"
+                                : reserva === "pending"
                                 ? "bg-yellow-200"
                                 : "bg-red-200"
                             }`}
                           ></p>
-                          <p className="relative">{reserva.estadoPago}</p>
+                          <p className="relative">
+                            {" "}
+                            Factura
+                            {/* {reserva.factura} */}
+                          </p>
                         </div>
                       </p>
                     </td>
 
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
-                        {reserva.estadoServicio}
+                        {reserva.factura}
                       </p>
                     </td>
 
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
-                        {reserva.payment_type}
+                        {reserva.factura}
                       </p>
                     </td>
 

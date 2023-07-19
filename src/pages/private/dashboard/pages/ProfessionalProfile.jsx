@@ -107,6 +107,7 @@ const ProfessionalProfile = () => {
   const [forEdit, setForEdit] = useState(false);
 
   const [valueForm, setValueForm] = useState({
+    _id: "",
     nombre: "",
     apellido: "",
     sexo: "",
@@ -149,6 +150,7 @@ const ProfessionalProfile = () => {
 
       setValueForm((prevState) => ({
         ...prevState,
+        _id: data._id,
         nombre: data.nombre || "",
         apellido: data.apellido || "",
         sexo: data.sexo || "",
@@ -297,7 +299,6 @@ const ProfessionalProfile = () => {
     ultimaConexion,
     profesional,
   } = valueForm;
-  // console.log(valueForm);
   return (
     <>
       <div className="bg-white  shadow rounded mx-auto w-full">

@@ -85,7 +85,8 @@ import LiquidacionAntDesing from "./pages/private/dashboard/pages/Liquidacionant
 import HorarioProfessionalAntDesing from "./pages/private/dashboard/pages/HorariosProfesionales";
 import Tools from "./pages/private/dashboard/pages/Tools";
 import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
-import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails"
+import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails";
+import LiquidacionAllAntDesing from "./pages/private/dashboard/pages/liquidacionesAll";
 
 function App() {
   const { message } = useSelector((state) => ({ ...state.notifications }));
@@ -245,6 +246,10 @@ function App() {
             <Route
               path="/liquidacionantdesing"
               element={<LiquidacionAntDesing />}
+            />
+            <Route
+              path="/liquidacionestotales"
+              element={<LiquidacionAllAntDesing />}
             />
           </Route>
         </Route>
