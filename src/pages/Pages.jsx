@@ -78,8 +78,11 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
     });
   };
 
+  const [cargandoOnSubmit,setCargandoOnSubmit] = useState(false)
+
   const onSubmit = (e) => {
     e.preventDefault();
+    setCargandoOnSubmit(true)
 
     if (
       !email ||
@@ -104,6 +107,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
     localStorage.setItem("data_customer", JSON.stringify(customer));
 
     setBotonPago(true);
+    setCargandoOnSubmit(false)
   };
 
   const [services, setServices] = useState(
@@ -171,6 +175,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
   let localServices = [];
 
   const [cargandoButton, setCargandoButton] = useState(false)
+  const [pagarButton, setPagarButton] = useState(false)
 
   const handleCheckout = async (e) => {
     setCargandoButton(true)
@@ -229,8 +234,9 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       );
 
       const preference = await secondResponse.json();
-console.log(preference)
+
       setCargandoButton(false)
+      setPagarButton(true)
       createCheckoutButton(preference.id);
    
     } catch (error) {
@@ -463,7 +469,7 @@ console.log(preference)
                       }}
                     >
                       {
-                        !cargandoButton ?
+                        !cargandoButton && !pagarButton ?
                           <>
                             <div
                               style={{

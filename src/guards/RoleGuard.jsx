@@ -4,10 +4,10 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 const RoleGuard = ({ rol }) => {
 
-    const { trafficLightBase128 } = useSelector((state) => ({ ...state.auth }));
+    const { user } = useSelector((state) => ({ ...state.auth }));
 
     return (
-        rol.includes(trafficLightBase128?.time) ? <Outlet /> : <Navigate to="/servicios" replace={true} />
+        rol.includes(user?.trafficLightBase128) ? <Outlet /> : <Navigate to="/servicios" replace={true} />
     )
 }
 

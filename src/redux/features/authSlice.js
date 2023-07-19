@@ -200,9 +200,9 @@ const authSlice = createSlice({
     user: localStorage.getItem("profile")
       ? JSON.parse(localStorage.getItem("profile"))
       : null,
-    trafficLightBase128: localStorage.getItem("trafficLightBase128")
-      ? JSON.parse(localStorage.getItem("trafficLightBase128"))
-      : null,
+    /*     trafficLightBase128: localStorage.getItem("trafficLightBase128")
+          ? JSON.parse(localStorage.getItem("trafficLightBase128"))
+          : null, */
     error: "",
     loading: false,
     estado: localStorage.getItem("estado")
@@ -247,12 +247,21 @@ const authSlice = createSlice({
         profesionalId: action.payload.profesionalId,
         token: action.payload.token,
         _id: action.payload._id,
+        trafficLightBase128: ROLES[action.payload.rol]
       }));
 
-      localStorage.setItem("trafficLightBase128", JSON.stringify({time:ROLES[action.payload.rol]}));
+      //localStorage.setItem("trafficLightBase128", JSON.stringify({ time: ROLES[action.payload.rol] }));
 
-      state.trafficLightBase128 = {time:ROLES[action.payload.rol]};
-      state.user = action.payload;
+      //state.trafficLightBase128 = { time: ROLES[action.payload.rol] };
+      state.user = {
+        confirmado: action.payload.confirmado,
+        email: action.payload.email,
+        nombre: action.payload.nombre,
+        profesionalId: action.payload.profesionalId,
+        token: action.payload.token,
+        _id: action.payload._id,
+        trafficLightBase128: ROLES[action.payload.rol]
+      };
     });
 
     // Register
@@ -274,9 +283,9 @@ const authSlice = createSlice({
         _id: action.payload._id,
       }));
 
-      localStorage.setItem("trafficLightBase128", JSON.stringify({time:ROLES[action.payload.rol]}));
+      localStorage.setItem("trafficLightBase128", JSON.stringify({ time: ROLES[action.payload.rol] }));
 
-      state.trafficLightBase128 = {time:ROLES[action.payload.rol]};
+      state.trafficLightBase128 = { time: ROLES[action.payload.rol] };
       state.user = action.payload;
     });
 
@@ -299,9 +308,9 @@ const authSlice = createSlice({
         _id: action.payload._id,
       }));
 
-      localStorage.setItem("trafficLightBase128", JSON.stringify({time:ROLES[action.payload.rol]}));
+      localStorage.setItem("trafficLightBase128", JSON.stringify({ time: ROLES[action.payload.rol] }));
 
-      state.trafficLightBase128 = {time:ROLES[action.payload.rol]};
+      state.trafficLightBase128 = { time: ROLES[action.payload.rol] };
       state.user = action.payload;
     });
 

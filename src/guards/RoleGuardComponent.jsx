@@ -3,12 +3,12 @@ import { useSelector } from 'react-redux';
 
 const RoleGuardComponent = ({ children, rol }) => {
 
-    const { trafficLightBase128 } = useSelector((state) => ({ ...state.auth }));
+    const { user } = useSelector((state) => ({ ...state.auth }));
 
-    console.log(trafficLightBase128)
+    console.log(user,rol)
 
     return (
-        rol.includes(trafficLightBase128?.time) && children?.map((item) => item) 
+        rol.includes(user?.trafficLightBase128) && children?.map((item) => item) 
     )
 }
 
