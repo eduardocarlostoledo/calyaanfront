@@ -86,6 +86,7 @@ import HorarioProfessionalAntDesing from "./pages/private/dashboard/pages/Horari
 import Tools from "./pages/private/dashboard/pages/Tools";
 import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
 import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails"
+import LiquidacionAllAntDesing from "./pages/private/dashboard/pages/liquidacionesAll";
 
 function App() {
   const { message } = useSelector((state) => ({ ...state.notifications }));
