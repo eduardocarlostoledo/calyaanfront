@@ -5,8 +5,6 @@ const RoleGuardComponent = ({ children, rol }) => {
 
     const { trafficLightBase128 } = useSelector((state) => ({ ...state.auth }));
 
-    console.log(rol)
-
     return (
         rol.includes(trafficLightBase128) && children?.map((item) => item) 
     )

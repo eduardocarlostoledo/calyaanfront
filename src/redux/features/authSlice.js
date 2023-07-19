@@ -201,7 +201,7 @@ const authSlice = createSlice({
       ? JSON.parse(localStorage.getItem("profile"))
       : null,
     trafficLightBase128: localStorage.getItem("trafficLightBase128")
-      ? JSON.parse(localStorage.getItem("trafficLightBase128"))
+      ? localStorage.getItem("trafficLightBase128")
       : null,
     error: "",
     loading: false,

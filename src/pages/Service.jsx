@@ -65,7 +65,6 @@ const Service = () => {
       const getUser = async () => {
         try {
           // console.log(profile, "ESTE ES EL PERFIL DENTRO DEL USE EFECT");
-          console.log(profile)
           if (!profile.email) {
             return console.log("Ups, algo no salio como se esperaba");
           }
