@@ -175,7 +175,8 @@ const CreateReservation = () => {
       apellido: reserva.cliente_apellido,
       cedula: reserva.cliente_cedula,
       telefono: reserva.cliente_telefono,
-      direccion: reserva.localidad_servicio,
+      direccion: reserva.direccion_servicio,
+      localidad:reserva.localidad_servicio,
       info: reserva.adicional_direccion_servicio,
       ciudad: "Bogotá",
     };

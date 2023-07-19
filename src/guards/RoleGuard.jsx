@@ -7,7 +7,7 @@ const RoleGuard = ({ rol }) => {
     const { trafficLightBase128 } = useSelector((state) => ({ ...state.auth }));
 
     return (
-        rol.includes(trafficLightBase128) ? <Outlet /> : <Navigate to="/servicios" replace={true} />
+        rol.includes(trafficLightBase128?.time) ? <Outlet /> : <Navigate to="/servicios" replace={true} />
     )
 }
 
