@@ -565,13 +565,19 @@ const LiquidacionAntDesing = () => {
   // }, [change]);
 
   useEffect(() => {
+    let total;
     if (!selectedRows[0]) {
       setSelectedProfesional(null);
     } else {
-      const total = selectedRows.reduce(
-        (acc, row) => acc + row.factura.precioTotal,
-        0
-      );
+      if (selectedRows.length === 1) {
+        total = selectedRows[0].factura.precioTotal;
+      } else {
+        total = selectedRows.reduce(
+          (acc, row) => acc + row.factura.precioTotal,
+          0
+        );
+      }
+
       setSelectedRowsPorcProfesional(total * 0.61);
       setSelectedRowsPorcCaalyan(total * 0.39);
       setSelectedRowsTotal(total);
@@ -653,13 +659,13 @@ const LiquidacionAntDesing = () => {
       setSelectedProfesional(selectedRows[0].profesional_id);
       // console.log(selectedRows[0].profesional_id, "seteado");
     }
-    if (!selectedRows) {
+    if (selectedRows.length == 0) {
       setSelectedProfesional(null);
-    }
-    if (selectedProfesional) {
+      setSelectedRows([]);
+    } else {
       let resultado = verificacionProfesional(
         selectedRows,
-        selectedProfesional
+        selectedRows[0].profesional_id
       );
 
       if (!resultado) {
