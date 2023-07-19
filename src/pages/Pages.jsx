@@ -173,11 +173,14 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
 
   const handleCheckout = async (e) => {
 
+    let servicesArray = JSON.parse(localStorage.getItem("services"))
+    const idWPArray = servicesArray.map((objeto) => objeto.idWP);
+
     let reservationData = {
       DateService: localStorage.getItem("DateService"),
       ProfessionalService: localStorage.getItem("ProfessionalService"),
       profile: localStorage.getItem("profile"),
-      services: localStorage.getItem("services"),
+      servicios: idWPArray,
       dataCustomer: localStorage.getItem("data_customer"),
     };
 
@@ -193,27 +196,8 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       };
     }
 
-
-
     e.preventDefault();
 
-    console.log(reservationData)
-
-    const objeto = {
-      "cliente_id":"64b4647b0b71b88662979ce5",
-      "profesional_id":"6482229ede7d1e4ceffc839f",
-      "cita_servicio":"2023-07-18",
-      "hora_servicio":"07:00-08:00",
-      "direccion_servicio":"Cra 99 bis 14-61",
-      "info_direccion_servicio":"Pueblonuevo",
-      "localidad_serivicio":"Fontibon",
-      "telefono_servicio":"3224430332",
-      "estado_servicio":"Pendiente",
-      "servicios":["929"],
-      "cupon":""
-  }
-
-  
     try {
 
       const response = await fetch(
@@ -223,7 +207,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(objeto),
+          body: JSON.stringify(reservationData),
         }
       );
 
@@ -242,9 +226,6 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
    
         }
       );
-
-     
-
 
       const preference = await secondResponse.json();
       console.log(preference)
