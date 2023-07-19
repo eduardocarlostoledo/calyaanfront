@@ -228,18 +228,6 @@ const Sidebar = () => {
 
                 <li>
                   <Link
-                    to="/transacciones"
-                    className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
-                  >
-                    <span className="inline-flex justify-center items-center ml-4">
-                      <SiContactlesspayment className="w-5 h-5" />
-                    </span>
-                    <p className="ml-2 text-sm tracking-wide truncate">Pagos</p>
-                    {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span> */}
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     to="/ordenesantdesing"
                     className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
                   >
@@ -249,7 +237,9 @@ const Sidebar = () => {
                     <p className="ml-2 text-sm tracking-wide truncate">
                       Ordenes
                     </p>
-                    {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span> */}
+                    {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">
+                      15
+                    </span> */}
                   </Link>
                 </li>
                 <li>
@@ -278,6 +268,22 @@ const Sidebar = () => {
                       Liquidacion
                     </p>
                     {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span> */}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/liquidacionestotales"
+                    className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+                  >
+                    <span className="inline-flex justify-center items-center ml-4">
+                      <SiContactlesspayment className="w-5 h-5" />
+                    </span>
+                    <p className="ml-2 text-sm tracking-wide truncate">
+                      Lquidaciones totales
+                    </p>{" "}
+                    {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">
+                      15
+                    </span> */}
                   </Link>
                 </li>
               </ul>

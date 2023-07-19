@@ -86,8 +86,6 @@ import HorarioProfessionalAntDesing from "./pages/private/dashboard/pages/Horari
 import Tools from "./pages/private/dashboard/pages/Tools";
 import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
 import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails"
-import { setUser } from "./redux/features/authSlice";
-import clienteAxios from "./config/axios";
 
 function App() {
   const { message } = useSelector((state) => ({ ...state.notifications }));
@@ -269,6 +267,10 @@ function App() {
             <Route
               path="/liquidacionantdesing"
               element={<LiquidacionAntDesing />}
+            />
+            <Route
+              path="/liquidacionestotales"
+              element={<LiquidacionAllAntDesing />}
             />
           </Route>
         </Route>

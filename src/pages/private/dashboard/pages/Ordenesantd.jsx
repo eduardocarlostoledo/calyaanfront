@@ -17,8 +17,9 @@ const { RangePicker } = DatePicker;
 const ProductExpanded = ({
   _id,
   cliente_id,
-  direccion_Servicio,
-  estadoServicio,
+  direccion_servicio,
+  estado_servicio,
+  servicios,
   estadoPago,
   payment_id,
   // cliente_email,
@@ -43,8 +44,9 @@ const ProductExpanded = ({
   const [input, setInput] = useState({
     _id,
     cliente_id,
-    direccion_Servicio,
-    estadoServicio,
+    servicios,
+    direccion_servicio,
+    estado_servicio,
     estadoPago,
     payment_id,
     // _id,
@@ -76,12 +78,19 @@ const ProductExpanded = ({
   const change = useSelector((state) => state.ordenes.update);
   const orders = useSelector((state) => state.ordenes.order || []);
   //separo los useEffect para que no se renderize todo junto
+  // useEffect(() => {
+  //   dispatch(getOrders())
+  //     .then(() => setLoading(false))
+  //     .catch((error) => setError(error.message));
+  // }, [dispatch, change]);
+  // }, [orders, change]);
+
   useEffect(() => {
+    // dispatch(updateOrder(false))
     dispatch(getOrders())
       .then(() => setLoading(false))
       .catch((error) => setError(error.message));
-  }, [dispatch, change]);
-  // }, [orders, change]);
+  }, [loading]);
 
   // useEffect(() => {
   //   setLoading(true); // updateinprogress
@@ -98,14 +107,17 @@ const ProductExpanded = ({
 
   function handleSubmit(e) {
     e.preventDefault();
-    // console.log("INPUT",input);
+    setLoading(false);
+    console.log("INPUT", input);
     const data = new FormData();
     Object.keys(input).forEach((key) => data.append(key, input[key]));
     dispatch(updateOrder(input));
+    console.log(input, "input");
     setEditProduct(0);
     swal("success", "ORDEN MODIFICADA", "success");
+    setLoading(true);
   }
-  console.log(input);
+  // console.log(input);
   return (
     <div>
       {!(editProduct === _id) && (
@@ -236,7 +248,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Estado del servicio: {input.estadoServicio}
+                Estado del servicio: {input.estado_servicio}
               </p>
               <p
                 className="PDivInfo"
@@ -439,12 +451,13 @@ const ProductExpanded = ({
                 <select
                   className="InputsEdits"
                   // defaultValue="Pendiente"
-                  value={input.estadoServicio}
+                  value={input.estado_servicio}
                   onChange={(e) => handleChange(e)}
-                  name="estadoServicio"
+                  name="estado_servicio"
                   placeholder="Estado del servicio"
                 >
                   <option value="Pendiente">Pendiente</option>
+                  <option value="Agendar">Agendar</option>
                   <option value="Completado">Completado</option>
                   <option value="Cancelado">Cancelado</option>
                 </select>
@@ -580,7 +593,7 @@ const OrdenesAntDesing = (props) => {
   // }, [change]);
 
   const orders = useSelector((state) => state.ordenes.order || []);
-
+  // console.log(orders, "order");
   //// Mapeo ordenes para agregar una key a cada fila
   const newProducts = orders?.map((product) => ({
     ...product,
@@ -613,15 +626,14 @@ const OrdenesAntDesing = (props) => {
 
     const searchTextLower = searchText.toLowerCase();
     return newProducts.filter((orden) => {
-      // orden.estadoPago orden.estadoServicio
       const fullNameProfesional =
-        `${orden.profesional_nombre} ${orden.profesional_apellido}`.toLowerCase();
+        `${orden.profesional_id?.nombre} ${orden.profesional_id?.apellido}`.toLowerCase();
       const fullNameCliente =
-        `${orden.cliente_nombre} ${orden.cliente_apellido}`.toLowerCase();
+        `${orden.cliente_id?.nombre} ${orden.cliente_id?.apellido}`.toLowerCase();
       const fullNameProfesionalInverso =
-        `${orden.profesional_apellido} ${orden.profesional_nombre} `.toLowerCase();
+        `${orden.profesional_id?.apellido} ${orden.profesional_id?.nombre} `.toLowerCase();
       const fullNameClienteInverso =
-        `${orden.cliente_apellido} ${orden.cliente_nombre}`.toLowerCase();
+        `${orden.cliente_id?.apellido} ${orden.cliente_id?.nombre}`.toLowerCase();
 
       const orderDate = moment(orden.createdAt, "YYYY/MM/DD");
 
@@ -631,14 +643,14 @@ const OrdenesAntDesing = (props) => {
             fullNameCliente?.includes(searchTextLower) ||
             fullNameProfesionalInverso?.includes(searchTextLower) ||
             fullNameClienteInverso?.includes(searchTextLower) ||
-            orden.numeroFacturacion?.includes(searchTextLower) ||
-            orden.payment_id?.includes(searchTextLower) ||
+            orden.factura?.nrofacturacion?.includes(searchTextLower) ||
+            orden.factura?.payment_id?.includes(searchTextLower) ||
             orden._id?.includes(searchTextLower) ||
-            orden.cliente_cedula?.includes(searchTextLower) ||
-            orden.cliente_telefono?.includes(searchTextLower) ||
-            orden.cliente_email?.includes(searchTextLower) ||
+            orden.cliente_id.cedula?.toString()?.includes(searchTextLower) ||
+            orden.cliente_id.telefono?.includes(searchTextLower) ||
+            orden.cliente_id.email?.includes(searchTextLower) ||
             orden.servicio?.toLowerCase().includes(searchTextLower) ||
-            orden.direccion_Servicio
+            orden.direccion_servicio
               ?.toLowerCase()
               .includes(searchTextLower)) &&
           orderDate.isBetween(startDate, endDate, null, "[]")
@@ -650,14 +662,14 @@ const OrdenesAntDesing = (props) => {
         fullNameCliente?.includes(searchTextLower) ||
         fullNameProfesionalInverso?.includes(searchTextLower) ||
         fullNameClienteInverso?.includes(searchTextLower) ||
-        orden.numeroFacturacion?.includes(searchTextLower) ||
-        orden.payment_id?.includes(searchTextLower) ||
+        orden.factura?.nrofacturacion?.includes(searchTextLower) ||
+        orden.factura?.payment_id?.includes(searchTextLower) ||
         orden._id?.includes(searchTextLower) ||
-        orden.cliente_cedula?.includes(searchTextLower) ||
-        orden.cliente_telefono?.includes(searchTextLower) ||
-        orden.cliente_email?.includes(searchTextLower) ||
+        orden.cliente_id.cedula?.toString()?.includes(searchTextLower) ||
+        orden.cliente_id.telefono?.includes(searchTextLower) ||
+        orden.cliente_id.email?.includes(searchTextLower) ||
         orden.servicio?.toLowerCase().includes(searchTextLower) ||
-        orden.direccion_Servicio?.toLowerCase().includes(searchTextLower)
+        orden.direccion_servicio?.toLowerCase().includes(searchTextLower)
       );
     });
   }, [newProducts, searchText, startDate, endDate]);
@@ -667,30 +679,28 @@ const OrdenesAntDesing = (props) => {
     {
       title: "Cliente",
       dataIndex: "cliente_id",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
       render: (text) => (
         <div>
           <div>
             <b>Nombre y apellido</b>
             <p>
-              {text.apellido} {text.nombre}
+              {text?.apellido} {text?.nombre}
             </p>
           </div>
           <hr />
           <div>
             <b>Cedula</b>
-            <p>{text.cedula}</p>
+            <p>{text?.cedula}</p>
           </div>
           <hr />
           <div>
             <b>Telefono</b>
-            <p>{text.telefono}</p>
+            <p>{text?.telefono}</p>
           </div>
           <hr />
           <div>
             <b>Email</b>
-            <p>{text.email}</p>
+            <p>{text?.email}</p>
           </div>
         </div>
       ),
@@ -698,32 +708,220 @@ const OrdenesAntDesing = (props) => {
     {
       title: "Profesional",
       dataIndex: "profesional_id",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
+      // sorter: (a, b) => a.id - b.id,
+      // defaultSortOrder: "descend",
+      render: (text) =>
+        text ? (
+          <div>
+            <div>
+              <b>Nombre y apellido</b>
+              <p>
+                {text?.apellido} {text?.nombre}
+              </p>
+            </div>
+            <hr />
+            <div>
+              <b>Cedula</b>
+              <p>{text?.cedula}</p>
+            </div>
+            <hr />
+            <div>
+              <b>Telefono</b>
+              <p>{text?.telefono}</p>
+            </div>
+            <hr />
+            <div>
+              <b>Email</b>
+              <p>{text?.email}</p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <b>Profesional no seleccionado</b>
+          </div>
+        ),
+    },
+    // {
+    //   title: "Facturacion",
+    //   dataIndex: "factura",
+    //   filters: [
+    //     { text: "Facturado", value: "Facturado" },
+    //     { text: "NoFacturado", value: "NoFacturado" },
+    //     { text: "Error", value: "Error" },
+    //   ],
+    //   onFilter: (value, record) => record?.estado_facturacion === value,
+    //   render: ({
+    //     estado_facturacion,
+    //     nro_factura,
+    //     fecha_venta,
+    //     precioTotal,
+    //     payment_id,
+    //     origen,
+    //   }) => (
+    //     <>
+    //       {estado_facturacion === "Facturado" ? (
+    //         <Tag style={{ margin: "auto" }} color="green">
+    //           Facturado
+    //         </Tag>
+    //       ) : estado_facturacion === "Error" ? (
+    //         <Tag style={{ margin: "auto" }} color="red">
+    //           Error
+    //         </Tag>
+    //       ) : (
+    //         <Tag style={{ margin: "auto" }} color="yellow">
+    //           No Facturado
+    //         </Tag>
+    //       )}
+    //       {payment_id && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <b>id del pago: </b>
+    //           <p>{payment_id}</p>
+    //           <hr></hr>
+    //         </div>
+    //       )}
+
+    //       {origen && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <b>Origen del pago: </b>
+    //           <p>{origen}</p>
+    //           <hr></hr>
+    //         </div>
+    //       )}
+
+    //       {nro_factura && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <hr />
+    //           <b>Nro de factura: </b>
+    //           {nro_factura}
+    //           <hr></hr>
+    //         </div>
+    //       )}
+    //       {precioTotal && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <b>Precio: </b>
+    //           {precioTotal}
+    //           <hr></hr>
+    //         </div>
+    //       )}
+    //       {fecha_venta && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <b>Dia de venta: </b>
+    //           {moment(fecha_venta).format("YYYY-MM-DD HH:mm:ss")}
+    //           <hr></hr>
+    //         </div>
+    //       )}
+    //     </>
+    //   ),
+    // },
+    {
+      title: "Servicio",
+      dataIndex: "servicios",
+      // sorter: (a, b) => a.id - b.id,
+      // defaultSortOrder: "descend",
+      render: (text, record) =>
+        text ? (
+          <div>
+            <b>{text[0].nombre}</b>
+
+            {record?.direccion_servicio && (
+              <p>
+                <hr></hr>
+                <b>Direccion</b> <br />
+                {record?.direccion_servicio.slice(0, 20)} ... <br />
+              </p>
+            )}
+            {record?.localidad_servicio && (
+              <p>
+                <hr></hr>
+                <b>Localidad</b> <br />
+                {record?.localidad_servicio} <br />
+              </p>
+            )}
+          </div>
+        ) : (
+          <div>
+            <b>Sin servicio</b>
+          </div>
+        ),
+    },
+    // {
+    //   title: "Direccion",
+    //   dataIndex: "direccion_servicio",
+    //   // sorter: (a, b) => a.id - b.id,
+    //   // defaultSortOrder: "descend",
+    //   render: (text) => (
+    //     <p>
+    //       {text && text.slice(0, 20)} ... <br />
+    //     </p>
+    //   ),
+    // },
+    {
+      title: "Fecha",
+      dataIndex: "cita_servicio",
+      // sorter: (a, b) => a.id - b.id,
+      // defaultSortOrder: "descend",
+      render: (text, record) =>
+        text ? (
+          <p>
+            {text}
+            <hr />
+            {record.hora_servicio} <b>hs</b>
+          </p>
+        ) : (
+          <b>Sin horario</b>
+        ),
+    },
+    // {
+    //   title: "Hora",
+    //   dataIndex: "hora_servicio",
+    //   // sorter: (a, b) => a.id - b.id,
+    //   // defaultSortOrder: "descend",
+    //   render: (text) => <p>{text}</p>,
+    // },
+    {
+      title: "Estado Pago",
+      dataIndex: "factura",
+      filters: [
+        { text: "Pending", value: "pending" },
+        { text: "Rejected", value: "rejected" },
+        { text: "Approved", value: "approved" },
+      ],
+      onFilter: (value, record) => record?.estadoPago?.indexOf(value) === 0,
       render: (text) => (
-        <div>
-          <div>
-            <b>Nombre y apellido</b>
-            <p>
-              {text.apellido} {text.nombre}
-            </p>
-          </div>
-          <hr />
-          <div>
-            <b>Cedula</b>
-            <p>{text.cedula}</p>
-          </div>
-          <hr />
-          <div>
-            <b>Telefono</b>
-            <p>{text.telefono}</p>
-          </div>
-          <hr />
-          <div>
-            <b>Email</b>
-            <p>{text.email}</p>
-          </div>
-        </div>
+        <>
+          {text?.estadoPago === "approved" ? (
+            <Tag color="green">Aprobado</Tag>
+          ) : text?.estadoPago === "rejected" ? (
+            <Tag color="red">Rechazado</Tag>
+          ) : (
+            <Tag color="yellow">Pendiente</Tag>
+          )}
+        </>
+      ),
+    },
+    {
+      title: "Estado Servicio",
+      dataIndex: "estado_servicio",
+      filters: [
+        { text: "Pendiente", value: "Pendiente" },
+        { text: "Agendar", value: "Agendar" },
+        { text: "Completado", value: "Completado" },
+        { text: "Cancelado", value: "Cancelado" },
+      ],
+      onFilter: (value, record) =>
+        record?.estado_servicio?.indexOf(value) === 0,
+      render: (estado_servicio) => (
+        <>
+          {estado_servicio === "Completado" ? (
+            <Tag color="green">Completado</Tag>
+          ) : estado_servicio === "Cancelado" ? (
+            <Tag color="red">Cancelado</Tag>
+          ) : estado_servicio === "Agendar" ? (
+            <Tag color="orange">Agendar</Tag>
+          ) : (
+            <Tag color="yellow">Pendiente</Tag>
+          )}
+        </>
       ),
     },
     // {
@@ -747,45 +945,15 @@ const OrdenesAntDesing = (props) => {
     //   defaultSortOrder: "descend",
     //   render: (text) => <p>{text.email}</p>,
     // },
-    {
-      title: "Servicio",
-      dataIndex: "servicios",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => text?.map((t) => <p>{t.nombre}</p>),
-    },
-    {
-      title: "Precio",
-      dataIndex: "factura",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text.precioTotal}</p>,
-    },
-    {
-      title: "Direccion",
-      dataIndex: "direccion_servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text, record) => (
-        <p>
-          {text && text.slice(0, 20)} ... <br />
-        </p>
-      ),
-    },
-    {
-      title: "Hora",
-      dataIndex: "cita_servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Hora",
-      dataIndex: "hora_servicio",
-      sorter: (a, b) => a.id - b.id,
-      defaultSortOrder: "descend",
-      render: (text) => <p>{text}</p>,
-    },
+
+    // {
+    //   title: "Precio",
+    //   dataIndex: "factura",
+    //   sorter: (a, b) => a.id - b.id,
+    //   defaultSortOrder: "descend",
+    //   render: (text) => <p>{text.precioTotal}</p>,
+    // },
+
     // {
     //   title: "Profesional",
     //   dataIndex: "profesional_id",
@@ -804,48 +972,6 @@ const OrdenesAntDesing = (props) => {
     //   defaultSortOrder: "descend",
     //   render: (text) => <p>{text}</p>,
     // },
-    {
-      title: "Estado Pago",
-      dataIndex: "factura",
-      filters: [
-        { text: "Pending", value: "pending" },
-        { text: "Rejected", value: "rejected" },
-        { text: "Approved", value: "approved" },
-      ],
-      onFilter: (value, record) => record?.estadoPago?.indexOf(value) === 0,
-      render: ({ estadoPago }) => (
-        <>
-          {estadoPago === "Aprobado" ? (
-            <Tag color="green">Aprobado</Tag>
-          ) : estadoPago === "Rechazado" ? (
-            <Tag color="red">Rechazado</Tag>
-          ) : (
-            <Tag color="yellow">Pendiente</Tag>
-          )}
-        </>
-      ),
-    },
-    {
-      title: "Estado Servicio",
-      dataIndex: "estado_servicio",
-      filters: [
-        { text: "Pendiente", value: "Pendiente" },
-        { text: "Completado", value: "Completado" },
-        { text: "Cancelado", value: "Cancelado" },
-      ],
-      onFilter: (value, record) => record?.estadoServicio?.indexOf(value) === 0,
-      render: (estadoServicio) => (
-        <>
-          {estadoServicio === "Completado" ? (
-            <Tag color="green">Completado</Tag>
-          ) : estadoServicio === "Cancelado" ? (
-            <Tag color="red">Cancelado</Tag>
-          ) : (
-            <Tag color="yellow">Pendiente</Tag>
-          )}
-        </>
-      ),
-    },
 
     // {
     //   title: "EDITAR",
@@ -942,10 +1068,11 @@ const OrdenesAntDesing = (props) => {
                 key={record.key}
                 _id={record._id}
                 cliente_id={record.cliente_id}
+                servicios={record.servicios}
                 direccion_servicio={record.direccion_servicio}
                 estadoPago={record.factura?.estadoPago}
                 payment_id={record.factura?.payment_id}
-                estadoServicio={record?.estado_servicio}
+                estado_servicio={record?.estado_servicio}
                 editProduct={editProduct}
                 setEditProduct={setEditProduct}
                 // cliente_nombre={record.cliente_nombre}
