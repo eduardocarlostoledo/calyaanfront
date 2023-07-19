@@ -197,7 +197,7 @@ function App() {
         </Route>
 
         {/* Private Routes - Professional */}
-        <Route element={<RoleGuard rol={[ROLES.PROFESSIONAL, ROLES.ADMIN]} />}>
+        <Route element={<RoleGuard rol={[ROLES.PROFESIONAL, ROLES.ADMIN]} />}>
           <Route element={<ProfileLayout />}>
             <Route
               path="/historial-servicios"

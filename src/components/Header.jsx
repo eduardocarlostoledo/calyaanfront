@@ -124,7 +124,7 @@ const Header2 = () => {
                       </Link>
                     </li>
 
-                    <RoleGuardComponent rol={[ROLES.USER]}>
+                    <RoleGuardComponent rol={[ROLES.CLIENTE]}>
                       <li>
                         <Link
                           className="py-2 px-4 block whitespace-no-wrap text-left hover:text-primary hover:bg-gray-200"
@@ -173,7 +173,7 @@ const Header2 = () => {
                       </li>
                     </RoleGuardComponent>
 
-                    <RoleGuardComponent rol={[ROLES.PROFESSIONAL]}>
+                    <RoleGuardComponent rol={[ROLES.PROFESIONAL]}>
                       <li>
                         <Link
                           className="py-2 px-4 block whitespace-no-wrap text-left hover:text-primary hover:bg-gray-200"

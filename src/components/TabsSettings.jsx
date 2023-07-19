@@ -46,7 +46,7 @@ const TabsSettings = () => {
         </li>
 
         {/* Acceso solo para clientes y admin */}
-        <RoleGuardComponent rol={[ROLES.USER, ROLES.ADMIN]}>
+        <RoleGuardComponent rol={[ROLES.CLIENTE, ROLES.ADMIN]}>
           <li className="mr-2">
             <Link
               to="/historial"
@@ -90,7 +90,7 @@ const TabsSettings = () => {
           </li>
         </RoleGuardComponent>
 
-        <RoleGuardComponent rol={[ROLES.PROFESSIONAL, ROLES.ADMIN]}>
+        <RoleGuardComponent rol={[ROLES.PROFESIONAL, ROLES.ADMIN]}>
           <li className="mr-2">
             <Link
               to="/historial-servicios"

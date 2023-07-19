@@ -181,8 +181,6 @@ const CreateReservation = () => {
       ciudad: "Bogotá",
     };
 
-    console.log("aqui hp",reserva);
-
     try {
       if (reserva.nuevo) {
         const datos1 = await clienteAxios.post(

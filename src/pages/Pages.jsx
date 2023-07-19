@@ -469,7 +469,8 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                       }}
                     >
                       {
-                        !cargandoButton && !pagarButton ?
+                        !cargandoButton ?
+                        !pagarButton &&
                           <>
                             <div
                               style={{

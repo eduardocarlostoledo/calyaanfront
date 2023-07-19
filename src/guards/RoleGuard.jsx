@@ -12,8 +12,3 @@ const RoleGuard = ({ rol }) => {
 }
 
 export default RoleGuard
-
-
-
-
-
