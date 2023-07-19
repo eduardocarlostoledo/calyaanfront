@@ -821,7 +821,15 @@ const OrdenesAntDesing = (props) => {
       render: (text, record) =>
         text ? (
           <div>
-            <b>{text[0]?.nombre}</b>
+            {record?._id && (
+              <p>
+                <b>Id de orden </b> <br />
+                {record?._id}
+                <br />
+                <hr></hr>
+              </p>
+            )}
+            <b>Servicio: {text[0]?.nombre}</b>
 
             {record?.direccion_servicio && (
               <p>

@@ -698,6 +698,43 @@ const FacturacionAntDesing = () => {
     //   ),
     // },
     {
+      title: "Servicio",
+      dataIndex: "servicios",
+      render: (text, record) =>
+        text ? (
+          <div>
+            {record?._id && (
+              <p>
+                <b>Id de orden </b> <br />
+                {record?._id}
+                <br />
+                <hr></hr>
+              </p>
+            )}
+            <b>Servicio: {text[0]?.nombre}</b>
+
+            {record?.direccion_servicio && (
+              <p>
+                <hr></hr>
+                <b>Direccion</b> <br />
+                {record?.direccion_servicio.slice(0, 20)} ... <br />
+              </p>
+            )}
+            {record?.localidad_servicio && (
+              <p>
+                <hr></hr>
+                <b>Localidad</b> <br />
+                {record?.localidad_servicio} <br />
+              </p>
+            )}
+          </div>
+        ) : (
+          <div>
+            <b>Sin servicio</b>
+          </div>
+        ),
+    },
+    {
       title: "Estado Pago",
       dataIndex: "factura",
       filters: [
@@ -757,11 +794,6 @@ const FacturacionAntDesing = () => {
           )}
         </>
       ),
-    },
-    {
-      title: "Servicio",
-      dataIndex: "servicios",
-      render: (text) => text?.map((t) => <p>{t.nombre}</p>),
     },
 
     // {
