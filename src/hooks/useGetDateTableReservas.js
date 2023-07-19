@@ -16,9 +16,12 @@ const useGetDateTableReservas = (rol) => {
         `api/buscar/ordenes?limite=${limite}&pagina=${pagina}`
       );
 
+      console.log(data)
       setPaginado(data);
       setLoading(false);
     };
+
+
 
     obtenerReservas();
   }, [limite, pagina]);
