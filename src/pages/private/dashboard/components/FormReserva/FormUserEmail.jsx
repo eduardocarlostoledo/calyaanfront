@@ -35,9 +35,9 @@ const FormUserEmail = ({userEmail,setUserEmail,setEstado,setReserva,reserva}) =>
                 cliente_telefono: data?.telefono,
                 direccion_servicio:data?.direccionDefault?.direccion,
                 localidad_servicio: data?.direccionDefault?.localidad,
-                adicional_direccion_Servicio: data?.direccionDefault?.info,
+                adicional_direccion_servicio: data?.direccionDefault?.info,
                 ciudad_Servicio: data?.direccionDefault?.ciudad,
-                telefono_Servicio: data?.telefono,
+                telefono_servicio: data?.telefono,
                 nuevo: false,
             });
 

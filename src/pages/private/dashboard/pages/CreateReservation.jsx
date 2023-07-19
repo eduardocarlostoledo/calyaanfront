@@ -90,7 +90,8 @@ const CreateReservation = () => {
               cliente_nombre: data.cliente_id.nombre,
               cliente_apellido: data.cliente_id.apellido,
               cliente_cedula: data.cliente_id.cedula,
-              cliente_telefono: data.cliente_id.telefono_servicio,
+              cliente_telefono: data.telefono_servicio,
+              telefono_servicio:data.telefono_servicio,
               profesional_id: data.profesional_id,
               cita_servicio: data.cita_servicio,
               hora_servicio: data.hora_servicio,
@@ -110,13 +111,15 @@ const CreateReservation = () => {
               cliente_nombre: data.cliente_id.nombre,
               cliente_apellido: data.cliente_id.apellido,
               cliente_cedula: data.cliente_id.cedula,
-              cliente_telefono: data.cliente_id.telefono,
+              cliente_telefono: data.telefono,
+              telefono_servicio:data.telefono_servicio,
               profesional_id: "",
               cita_servicio: data.cliente_id.cita_servicio,
               hora_servicio: "",
-              direccion_servicio:"",
+              cita_servicio:"",
+              direccion_servicio:data.direccion_servicio,
               localidad_servicio: data.localidad_servicio,
-              adicional_direccion_servicio: "",
+              adicional_direccion_servicio: data.adicional_direccion_servicio,
               coupon: "",
               estado_servicio: data.estado_servicio,
               metodo_pago: data.factura.metodo_pago,
@@ -174,11 +177,11 @@ const CreateReservation = () => {
       cedula: reserva.cliente_cedula,
       telefono: reserva.cliente_telefono,
       direccion: reserva.localidad_servicio,
-      info: reserva.adicional_direccion_Servicio,
+      info: reserva.adicional_direccion_servicio,
       ciudad: "Bogotá",
     };
 
-    console.log(reserva);
+    console.log("aqui hp",reserva);
 
     try {
       if (reserva.nuevo) {
@@ -197,12 +200,15 @@ const CreateReservation = () => {
       } else {
         const serviciosRequest = servicios.map((servicio) => servicio.idWP);
 
+        console.log(reserva)
+
         const reservaRequest = {
           cliente_id: reserva.cliente_id,
           servicios: serviciosRequest,
           localidad_servicio: reserva.localidad_servicio,
           adicional_direccion_servicio: reserva.adicional_direccion_servicio,
           telefono_servicio: reserva.telefono_servicio,
+          direccion_servicio:reserva.direccion_servicio,
           coupon: reserva.coupon,
           metodo_pago: metodo,
           link_pago: linkPago
