@@ -105,9 +105,6 @@ function App() {
     }, 2000);
   }, [message]);
 
-
-  console.log(localStorage.getItem("trafficLightBase128"))
-
 /*   useEffect(() => {
    const obtenerUsuario = async ()=>{
     try{

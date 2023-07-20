@@ -241,26 +241,26 @@ const authSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
       localStorage.setItem("profile", JSON.stringify({
-        confirmado: action.payload.confirmado,
-        email: action.payload.email,
-        nombre: action.payload.nombre,
-        profesionalId: action.payload.profesionalId,
-        token: action.payload.token,
-        _id: action.payload._id,
-        trafficLightBase128: ROLES[action.payload.rol]
+        confirmado: action?.payload?.confirmado,
+        email: action.payload?.email,
+        nombre: action.payload?.nombre,
+        profesionalId: action.payload?.profesionalId,
+        token: action.payload?.token,
+        _id: action.payload?._id,
+        trafficLightBase128: ROLES[action.payload?.rol]
       }));
 
       //localStorage.setItem("trafficLightBase128", JSON.stringify({ time: ROLES[action.payload.rol] }));
 
       //state.trafficLightBase128 = { time: ROLES[action.payload.rol] };
       state.user = {
-        confirmado: action.payload.confirmado,
-        email: action.payload.email,
-        nombre: action.payload.nombre,
-        profesionalId: action.payload.profesionalId,
-        token: action.payload.token,
-        _id: action.payload._id,
-        trafficLightBase128: ROLES[action.payload.rol]
+        confirmado: action.payload?.confirmado,
+        email: action.payload?.email,
+        nombre: action.payload?.nombre,
+        profesionalId: action.payload?.profesionalId,
+        token: action.payload?.token,
+        _id: action.payload?._id,
+        trafficLightBase128: ROLES[action.payload?.rol]
       };
     });
 
@@ -275,18 +275,24 @@ const authSlice = createSlice({
     builder.addCase(register.fulfilled, (state, action) => {
       state.loading = false;
       localStorage.setItem("profile", JSON.stringify({
-        confirmado: action.payload.confirmado,
-        email: action.payload.email,
-        nombre: action.payload.nombre,
-        profesionalId: action.payload.profesionalId,
-        token: action.payload.token,
-        _id: action.payload._id,
+        confirmado: action?.payload?.confirmado,
+        email: action.payload?.email,
+        nombre: action.payload?.nombre,
+        profesionalId: action.payload?.profesionalId,
+        token: action.payload?.token,
+        _id: action.payload?._id,
+        trafficLightBase128: ROLES[action.payload?.rol]
       }));
 
-      localStorage.setItem("trafficLightBase128", JSON.stringify({ time: ROLES[action.payload.rol] }));
-
-      state.trafficLightBase128 = { time: ROLES[action.payload.rol] };
-      state.user = action.payload;
+      state.user = {
+        confirmado: action.payload?.confirmado,
+        email: action.payload?.email,
+        nombre: action.payload?.nombre,
+        profesionalId: action.payload?.profesionalId,
+        token: action.payload?.token,
+        _id: action.payload?._id,
+        trafficLightBase128: ROLES[action.payload?.rol]
+      };
     });
 
     // Google Sign In
@@ -300,18 +306,24 @@ const authSlice = createSlice({
     builder.addCase(googleSignIn.fulfilled, (state, action) => {
       state.loading = false;
       localStorage.setItem("profile", JSON.stringify({
-        confirmado: action.payload.confirmado,
-        email: action.payload.email,
-        nombre: action.payload.nombre,
-        profesionalId: action.payload.profesionalId,
-        token: action.payload.token,
-        _id: action.payload._id,
+        confirmado: action?.payload?.confirmado,
+        email: action.payload?.email,
+        nombre: action.payload?.nombre,
+        profesionalId: action.payload?.profesionalId,
+        token: action.payload?.token,
+        _id: action.payload?._id,
+        trafficLightBase128: ROLES[action.payload?.rol]
       }));
 
-      localStorage.setItem("trafficLightBase128", JSON.stringify({ time: ROLES[action.payload.rol] }));
-
-      state.trafficLightBase128 = { time: ROLES[action.payload.rol] };
-      state.user = action.payload;
+      state.user = {
+        confirmado: action.payload?.confirmado,
+        email: action.payload?.email,
+        nombre: action.payload?.nombre,
+        profesionalId: action.payload?.profesionalId,
+        token: action.payload?.token,
+        _id: action.payload?._id,
+        trafficLightBase128: ROLES[action.payload?.rol]
+      };
     });
 
     // Confirm Account
