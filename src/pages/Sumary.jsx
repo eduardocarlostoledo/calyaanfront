@@ -51,7 +51,7 @@ const Sumary = () => {
               <p className="md:text-xl text-base text-gray-800 leading-tight font-medium lg:mt-0 md:mt-6 mt-6">
                 Fecha de reserva:{" "}
                 <span className="text-gray-600 font-normal">
-                  {historial?.dia_servicio} - {historial?.hora_servicio}{" "}
+                  {historial?.cita_servicio} - {historial?.hora_servicio}{" "}
                 </span>
               </p>
 
@@ -61,7 +61,7 @@ const Sumary = () => {
                 </p>
                 <ul className="list-disc">
                   <p className="text-base leading-normal text-gray-600 lg:max-w-[235px] w-full">
-                    {historial?.profesional?.nombre || "Pendiente"}
+                    {historial?.profesional_id?.nombre || "Pendiente"}
                   </p>
                 </ul>
               </div>
@@ -123,7 +123,7 @@ const Sumary = () => {
                   <p className="text-base leading-normal text-gray-600">
                     {historial?.direccion_servicio || "Pendiente"}
                     <br />
-                    {historial?.direccion_servicio || "Pendiente"}
+                    
                   </p>
                   <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
                     Pago de Reserva
@@ -135,7 +135,7 @@ const Sumary = () => {
                     Estado: {" "}      {historial?.factura?.estadoPago || "Pendiente"}
                   </p>
                   <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
-                    Horario de reserva
+                    Día y Hora de reserva
                   </p>
                   <p className="text-base leading-normal text-gray-600">
                     Hora:  {historial?.hora_servicio || "Pendiente"}
@@ -146,10 +146,11 @@ const Sumary = () => {
                 </div>
                 <div className="mt-4">
                   <p className="mb-4 text-base font-semibold leading-none text-gray-800 ">
-                    Contacto
-                  </p>
+                  Consulta sobre la reserva aquí: {" "}                  </p>
                   <a
-                    href="https://api.whatsapp.com/send/?phone=573147428757&text&type=phone_number&app_absent=0"
+                  
+                    href={`https://api.whatsapp.com/send/?phone=573147428757&text${id}&type=phone_number&app_absent=0`}
+                    
                     className="flex border bg-whatsapp   mt-6 p-5 border-gray-300 lg:max-w-[296px] w-full justify-center py-3 gap-2 items-center"
                     target="_blank"
                   >
@@ -233,13 +234,13 @@ const Sumary = () => {
               <p className="text-base text-gray-600 leading-none mt-8">
                 ¿Preguntas? Revisa
                 <span className="text-gray-800 font-semibold hover:underline cursor-pointer mt-2">
-                  Nuestras preguntas frecuentes
+                {" "} Nuestras preguntas frecuentes
                 </span>
               </p>
               <p className="text-base text-gray-600 mt-4">
                 ¿Preguntas? Póngase en contacto con nuestro
                 <span className="text-gray-800 font-semibold hover:underline cursor-pointer">
-                  Atención al cliente
+                {" "} Atención al cliente
                 </span>
               </p>
             </div>
