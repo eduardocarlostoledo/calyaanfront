@@ -18,8 +18,8 @@ const HistoryServicesProfessional = () => {
         let { data } = await clienteAxios.get(
           `api/profesional/historial/${user.profesionalId}`
         );
-        setHistorial(data);
-
+        const datosFiltrados = data.filter((item) => item !== null && item !== undefined);
+        setHistorial(datosFiltrados);
 
       } catch (err) {
         console.log(err);
@@ -71,6 +71,9 @@ const HistoryServicesProfessional = () => {
                       Estado
                     </th>
                     <th scope="col" className="px-6 py-3">
+                      Pago Servicio
+                    </th>
+                    <th scope="col" className="px-6 py-3">
                       Acciones
                     </th>
                   </tr>
@@ -89,6 +92,7 @@ const HistoryServicesProfessional = () => {
                         {reserva?.cliente_id?.nombre}
                       </td>
                       <td className="px-6 py-4">{reserva.estado_servicio}</td>
+                      <td className="px-6 py-4">{reserva.factura.estadoPago}</td>
                       <td className="px-6 py-4"> <Link to={`/resumen-profesional/${reserva._id}`}> Ver </Link>
                       </td>
                     </tr>

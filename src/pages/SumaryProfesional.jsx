@@ -114,12 +114,21 @@ const Sumary = () => {
                 <p className="text-2xl font-semibold leading-normal text-gray-800 ">
                   Detalles de reserva
                 </p>
+
+                <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
+                    Día y Hora de reserva
+                  </p>
+                  <p className="text-base leading-normal text-gray-600">
+                    Estado del Pago:  {historial.factura?.estadoPago || "Pendiente"}
+                    <br />                    
+                  </p>
+
                 <div aria-label="delivery" className="">
                   <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
                     Dirección de reserva
                   </p>
                   <p className="text-base leading-normal text-gray-600">
-                    <br />
+                    
                     {historial?.direccion_servicio || "Pendiente"}                  </p>
                   <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
                     Día y Hora de reserva

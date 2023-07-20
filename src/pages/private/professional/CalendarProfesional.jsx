@@ -7,6 +7,178 @@ import { toast } from "react-toastify";
 import clienteAxios from "../../../config/axios";
 
 const localizer = momentLocalizer(moment);
+const MyCalendar = ({ reservations }) => {
+
+  const events = reservations
+    .map((reservation) => {
+      if (
+        !reservation.hora_servicio &&
+        !reservation.cita_servicio &&
+        reservation.factura.estadoPago === "approved"
+      ) {
+        return null; // O maneja el caso de reserva sin hora de servicio de acuerdo a tus necesidades
+      }
+
+      const [start, end] = reservation?.hora_servicio?.split("-") || [];
+      const startDate = moment(
+        `${reservation.cita_servicio} ${start?.trim()}` || null,
+        "YYYY-MM-DD HH:mm"
+      );
+      const endDate = moment(
+        `${reservation.cita_servicio} ${end?.trim()}` || null,
+        "YYYY-MM-DD HH:mm"
+      );
+
+      return {
+        _id: reservation._id,
+        cliente: reservation.cliente_id?.nombre,
+        servicio: reservation.servicios[0]?.nombre,
+        dia: reservation?.cita_servicio,
+        start: startDate.toDate(),
+        end: endDate.toDate(),
+        estadoPago: reservation.factura?.estadoPago, // Agrega el estado de pago al objeto del evento
+      };
+    })
+    .filter((event) => event !== null && event.estadoPago === "approved"); // Filtra eventos nulos y con estado de pago "approved"
+
+  // console.log("events", events);
+  return (
+    <div style={{ height: "1000px" }}>
+      <h1>CLICK EN AGENDA PARA VER RESERVAS</h1>
+      <Calendar
+        localizer={localizer}
+        events={events.filter((event) => event !== null)} // Filtrar eventos nulos
+        startAccessor="start"
+        endAccessor="end"
+        style={{ margin: "50px" }}
+        components={{
+          event: EventComponent,
+        }}
+      />
+    </div>
+  );
+};
+
+const EventComponent = ({ event }) => {
+  return (
+    <div>
+      <div>ID: {event._id}</div>
+      <div>Cliente: {event.cliente}</div>
+      <div>Servicio: {event.servicio}</div>
+    </div>
+  );
+};
+
+const CalendarioProfesional = () => {
+  const [reservations, setReservations] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => ({ ...state.auth }));
+
+  useEffect(() => {
+    const obtenerReservas = async () => {
+      try {
+        // Comienza la carga de datos, estableciendo el estado "cargando" a true
+        setCargando(true);
+
+        const { data } = await clienteAxios.get(
+          `api/profesional/historial/${user.profesionalId}`
+        );
+
+        // Actualiza el estado con las reservas obtenidas y finaliza la carga
+        setReservations(data);
+        setCargando(false);
+      } catch (err) {
+        console.log(err);
+        const error =
+          err.response?.data.msg || "Estamos experimentando problemas internos";
+        setError(error);
+        toast.error(error);
+        setCargando(false); // Asegúrate de establecer "cargando" a false en caso de error
+      }
+    };
+    obtenerReservas();
+  }, [user.profesionalId]);
+
+  console.log(reservations, "PROFESIONAL RESERVAS");
+
+  return (
+    <div>
+      {cargando ? ( // Verifica el estado "cargando" para mostrar "Cargando..." o el calendario
+        <div>Cargando...</div>
+      ) : error ? (
+        <div>Error: {error}</div>
+      ) : (
+        <MyCalendar reservations={reservations} />
+      )}
+    </div>
+  );
+};
+
+export default CalendarioProfesional;
+
+// const CalendarioProfesional = () => {
+//   const [reservations, setReservations] = useState([]);
+//   const [cargando, setCargando] = useState(true);  
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const dispatch = useDispatch();
+
+//   const { user } = useSelector((state) => ({ ...state.auth }));
+
+//   useEffect(() => {
+//     const obtenerReservas = async () => {
+//       try {
+//         setCargando(true);
+
+//         const { data } = await clienteAxios.get(
+//           `api/profesional/historial/${user.profesionalId}`
+//         );
+//         setReservations(data);
+
+//         setCargando(false);
+
+//       } catch (err) {
+//         console.log(err);
+//         const error =
+//           err.response?.data.msg || "Estamos experimentando problemas internos";
+//         setError(error);
+//         toast.error(error);
+//         setCargando(false);
+//       }
+//     };
+//     obtenerReservas();
+//   }, [user.profesionalId]);
+
+// console.log(reservations,"PROFESIONAL RESERVAS")
+
+//   return (
+//     <div>
+//       {loading ? (
+//         <div>Cargando...</div>
+//       ) : error ? (
+//         <div>Error: {error}</div>
+//       ) : (
+//         <MyCalendar reservations={reservations} />
+//       )}
+//     </div>
+//   );
+// };
+
+// export default CalendarioProfesional;
+
+/*
+import React, { useEffect, useState } from "react";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import clienteAxios from "../../../config/axios";
+
+const localizer = momentLocalizer(moment);
 
 const Evento = ({ evento }) => {
   const [showContent, setShowContent] = useState(false);
@@ -23,9 +195,11 @@ const Evento = ({ evento }) => {
     <div>
       {showContent && (
         <div>
-          <div>Servicio: {evento?.servicio}</div>
-          <div>Cliente: {evento?.cliente}</div>
-        </div>
+      <div>ID: {evento?.id}</div>
+      <div>Cliente: {evento?.cliente}</div>
+      <div>Servicio: {evento?.servicio}</div>
+      
+    </div>
       )}
     </div>
   );
@@ -60,33 +234,37 @@ const CalendarioProfesional = () => {
     obtenerReservas();
   }, [user.profesionalId]);
 
+console.log(reservas,"PROFESIONAL RESERVAS")
+
   const eventos = reservas
-    ?.map((reserva) => {
+    .map((reserva) => {
       if (
-        !reserva.hora_servicio ||
-        !reserva.dia_servicio ||
-        reserva.estadoPago !== "approved"
+        !reserva.hora_servicio &&
+        !reserva.cita_servicio &&
+        !reserva._id &&
+        reserva.factura.estadoPago !== "approved"
       ) {
         return null;
       }
 
-      const [inicio, fin] = reserva.hora_servicio.split("-");
-      const fechaInicio = moment(
-        `${reserva.dia_servicio} ${inicio.trim()}`,
+      const [start, end] = reserva?.hora_servicio?.split("-") || [];
+      const startDate = moment(
+        `${reserva.cita_servicio} ${start?.trim()}` || null,
         "YYYY-MM-DD HH:mm"
       );
-      const fechaFin = moment(
-        `${reserva.dia_servicio} ${fin.trim()}`,
+      const endDate = moment(
+        `${reserva.cita_servicio} ${end?.trim()}` || null,
         "YYYY-MM-DD HH:mm"
       );
 
       return {
-        servicio: reserva?.servicio,
-        cliente: reserva?.cliente_nombre,
-        dia: reserva?.dia_servicio,
-        start: fechaInicio.toDate(),
-        end: fechaFin.toDate(),
-        estadoPago: reserva.estadoPago,
+        id: reserva._id,
+        cliente: reserva.cliente_id?.nombre,
+        servicio: reserva.servicios[0]?.nombre,
+        dia: reserva?.cita_servicio,
+        start: startDate.toDate(),
+        end: endDate.toDate(),
+        estadoPago: reserva.factura?.estadoPago, // Agrega el estado de pago al objeto del evento
       };
     })
     .filter((evento) => evento !== null && evento.estadoPago === "approved");
@@ -100,14 +278,14 @@ const CalendarioProfesional = () => {
       ) : error ? (
         <div>Error: {error}</div>
       ) : (
-        <div style={{ height: "500px" }}>
+        <div style={{ height: "1000px" }}>
           {eventos && eventos.length > 0 ? (
             <Calendar
               localizer={localizer}
-              events={eventos}
+              events={eventos.filter((event) => event !== null)} // Filtrar eventos nulos
               startAccessor="start"
               endAccessor="end"
-              style={{ margin: "100px" }}
+              style={{ margin: "50px" }}
               components={{
                 event: Evento,
               }}
@@ -122,6 +300,8 @@ const CalendarioProfesional = () => {
 };
 
 export default CalendarioProfesional;
+
+*/
 
 // import React from "react";
 // import { useState } from "react";
@@ -177,8 +357,8 @@ export default CalendarioProfesional;
 //       id: index + 1,
 //       name: `${item.cliente_nombre} ${item.cliente_apellido}`,
 //       imageUrl: item.servicio_img,
-//       startDatetime: `${item.dia_servicio}T${item.hora_servicio.split("-")[0]}`,
-//       endDatetime: `${item.dia_servicio}T${item.hora_servicio.split("-")[1]}`,
+//       startDatetime: `${item.cita_servicio}T${item.hora_servicio.split("-")[0]}`,
+//       endDatetime: `${item.cita_servicio}T${item.hora_servicio.split("-")[1]}`,
 //     };
 //   });
 
