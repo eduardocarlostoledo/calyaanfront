@@ -11,42 +11,45 @@ const MyCalendar = ({ reservations }) => {
     .map((reservation) => {
       if (
         !reservation.hora_servicio &&
-        !reservation.dia_servicio &&
-        reservation.estadoPago === "approved"
+        !reservation.cita_servicio &&
+        reservation.factura.estadoPago === "approved" &&
+        !reservation.profesional_id
       ) {
         return null; // O maneja el caso de reserva sin hora de servicio de acuerdo a tus necesidades
       }
 
       const [start, end] = reservation?.hora_servicio?.split("-") || [];
       const startDate = moment(
-        `${reservation.dia_servicio} ${start?.trim()}` || null,
+        `${reservation.cita_servicio} ${start?.trim()}` || null,
         "YYYY-MM-DD HH:mm"
       );
       const endDate = moment(
-        `${reservation.dia_servicio} ${end?.trim()}` || null,
+        `${reservation.cita_servicio} ${end?.trim()}` || null,
         "YYYY-MM-DD HH:mm"
       );
 
       return {
-        servicio: reservation.servicio,
-        profesional: reservation.profesional_nombre,
-        dia: reservation.dia_servicio,
+        _id: reservation._id,
+        cliente: reservation.cliente_id?.nombre,
+        servicio: reservation.servicios[0]?.nombre,
+        profesional: reservation.profesional_id?.nombre,
+        dia: reservation?.cita_servicio,
         start: startDate.toDate(),
         end: endDate.toDate(),
-        estadoPago: reservation.estadoPago, // Agrega el estado de pago al objeto del evento
+        estadoPago: reservation.factura?.estadoPago, // Agrega el estado de pago al objeto del evento
       };
     })
     .filter((event) => event !== null && event.estadoPago === "approved"); // Filtra eventos nulos y con estado de pago "approved"
 
   // console.log("events", events);
   return (
-    <div style={{ height: "500px" }}>
+    <div style={{ height: "1000px" }}>
       <Calendar
         localizer={localizer}
         events={events.filter((event) => event !== null)} // Filtrar eventos nulos
         startAccessor="start"
         endAccessor="end"
-        style={{ margin: "100px" }}
+        style={{ margin: "50px" }}
         components={{
           event: EventComponent,
         }}
@@ -58,6 +61,8 @@ const MyCalendar = ({ reservations }) => {
 const EventComponent = ({ event }) => {
   return (
     <div>
+      <div>ID: {event._id}</div>
+      <div>Cliente: {event.cliente}</div>
       <div>Servicio: {event.servicio}</div>
       <div>Profesional: {event.profesional}</div>
     </div>
@@ -69,7 +74,7 @@ const CalendarDashboard = () => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const reservations = useSelector((state) => state.ordenes.order || []);
-  // console.log("reservations", reservations)
+  console.log("reservations", reservations)
   useEffect(() => {
     dispatch(getOrders())
       .then(() => setLoading(false))
