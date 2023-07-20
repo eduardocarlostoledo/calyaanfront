@@ -108,22 +108,28 @@ const Customers = () => {
       render: (text) => <p>{text}</p>,
     },
     {
-      title: "Telefono",
-      dataIndex: "telefono",
-      defaultSortOrder: "descend",
-      render: (text) => (
-        <div>
-          <p>{text}</p>
-          <a
-            href={`https://api.whatsapp.com/send/?phone=+57${text}&text&type=phone_number&app_absent=0`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaWhatsapp size={25} />
-          </a>
-        </div>
-      ),
-    },
+  title: "Telefono",
+  dataIndex: "telefono",
+  defaultSortOrder: "descend",
+  render: (text) => {
+    // Eliminar el carácter "+" de la variable "telefono"
+    const phoneNumber = text?.replace(/\+/g, '');
+
+    return (
+      <div>
+        <p>{text}</p>
+        <a
+          href={`https://api.whatsapp.com/send/?phone=${phoneNumber}&text&type=phone_number&app_absent=0`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaWhatsapp size={25} />
+        </a>
+      </div>
+    );
+  },
+},
+
     {
       title: "Ultimo Acceso",
       dataIndex: "ultimaConexion",
