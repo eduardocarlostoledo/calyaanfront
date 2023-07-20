@@ -493,9 +493,10 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                             </div>
 
                           </>
-                          : <>
-                            <Spinner />
-                          </>
+                          : 
+                          <div className="w-full justify-center items-center">
+                            <Spinner className="m-auto"/>
+                          </div>
                       }
 
                       <div

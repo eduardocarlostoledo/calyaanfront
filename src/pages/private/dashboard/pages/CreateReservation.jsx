@@ -58,7 +58,8 @@ const CreateReservation = () => {
     nuevo: true,
     coupon: "",
     metodo_pago: "",
-    link_pago: ""
+    link_pago: "",
+    estadoPago:""
   });
 
   const handleChange = (e) => {
@@ -90,7 +91,7 @@ const CreateReservation = () => {
               cliente_nombre: data.cliente_id.nombre,
               cliente_apellido: data.cliente_id.apellido,
               cliente_cedula: data.cliente_id.cedula,
-              cliente_telefono: data.telefono_servicio,
+              cliente_telefono: data.cliente_id.telefono,
               telefono_servicio:data.telefono_servicio,
               profesional_id: data.profesional_id,
               cita_servicio: data.cita_servicio,
@@ -100,7 +101,8 @@ const CreateReservation = () => {
               adicional_direccion_servicio: data.adicional_direccion_servicio,
               coupon: "",
               metodo_pago: data.factura.metodo_pago,
-              link_pago: data.factura.link_pago
+              link_pago: data.factura.link_pago,
+              estadoPago:data.factura.estadoPago
             });
           } else {
             setReserva({
@@ -111,7 +113,7 @@ const CreateReservation = () => {
               cliente_nombre: data.cliente_id.nombre,
               cliente_apellido: data.cliente_id.apellido,
               cliente_cedula: data.cliente_id.cedula,
-              cliente_telefono: data.telefono,
+              cliente_telefono: data.cliente_id.telefono,
               telefono_servicio:data.telefono_servicio,
               profesional_id: "",
               cita_servicio: data.cliente_id.cita_servicio,
@@ -122,7 +124,8 @@ const CreateReservation = () => {
               coupon: "",
               estado_servicio: data.estado_servicio,
               metodo_pago: data.factura.metodo_pago,
-              link_pago: data.factura.link_pago
+              link_pago: data.factura.link_pago,
+              estadoPago:data.factura.estadoPago
             });
           }
 
@@ -137,15 +140,16 @@ const CreateReservation = () => {
 
           setEstado("nuevo");
 
-          if (data.hora_servicio && data.dia_servicio) {
+          if (data.hora_servicio && data.cita_servicio) {
             console.log("Se han resguardado los datos de la reserva.");
+
             setLiberar({
               ...data,
-              liberar_hora_servicio: data.hora_servicio,
-              liberar_dia_servicio: data.dia_servicio,
-              liberar_profesional_id: data.profesional_id,
-              liberar_profesional_email: data.profesional_email,
-              liberar_profesional_telefono: data.profesional_telefono,
+              liberar_hora_servicio: data?.hora_servicio,
+              liberar_dia_servicio: data?.cita_servicio,
+              liberar_profesional_id: data?.profesional_id,
+              liberar_profesional_email: data.profesional_id?.email,
+              liberar_profesional_telefono: data.profesional_id?.telefono,
             });
           }
         } catch (error) {
@@ -183,22 +187,40 @@ const CreateReservation = () => {
 
     try {
       if (reserva.nuevo) {
-        const datos1 = await clienteAxios.post(
-          `${import.meta.env.VITE_APP_BACK}/api/usuarios/reserva-usuario`,
-          clienteNuevo
-        );
+        try{
+          const datos1 = await clienteAxios.post(
+            `${import.meta.env.VITE_APP_BACK}/api/usuarios/reserva-usuario`,
+            clienteNuevo
+          );
+  
+          const serviciosRequest = servicios.map((servicio) => servicio.idWP);
+  
+          const reservaRequest = {
+            cliente_id: datos1.data._id,
+            servicios: serviciosRequest,
+            localidad_servicio: reserva.localidad_servicio,
+            adicional_direccion_servicio: reserva.adicional_direccion_servicio,
+            telefono_servicio: reserva.telefono_servicio,
+            direccion_servicio:reserva.direccion_servicio,
+            coupon: reserva.coupon,
+            metodo_pago: metodo,
+            link_pago: linkPago
+          };
 
-        const reservaRequest = {
-          ...reserva,
-          serviciosIds: servicios[0].idWP,
-          cliente_id: datos1.data._id,
-        };
+          await procesarPreferencias(reservaRequest);
+          
+        }catch(err){
+          setCargando2(false);
+          let error = err.response.data.msg
+          ? err.response.data.msg
+          : err.response && "Estamos presentando problemas internos";
+          return toast.error(error);
+        }
 
-        await procesarPreferencias(reservaRequest);
+ 
+
       } else {
         const serviciosRequest = servicios.map((servicio) => servicio.idWP);
-
-        console.log(reserva)
 
         const reservaRequest = {
           cliente_id: reserva.cliente_id,
@@ -214,8 +236,20 @@ const CreateReservation = () => {
 
         await procesarPreferencias(reservaRequest);
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      setCargando2(false);
+      let error = err.response.data.msg
+      ? err.response.data.msg
+      : err.response && "Estamos presentando problemas internos";
+      return toast.error(error);
+  /*     swal({
+        title: "Algo salio mal",
+        text: ",
+        icon: "error",
+        button: "Aceptar",
+      }); */
+    
     }
 
     setCargando2(false);
@@ -386,29 +420,46 @@ const CreateReservation = () => {
     setConfirmarReserva(true);
   };
 
+  const [loadingLiberar,setLoadingLiberrar] = useState(false)
+
   const guardarReserva = async () => {
+    setLoadingLiberrar(true)
     try {
+
       if (liberar && Object.keys(liberar).length > 0) {
         // console.log("liberando reserva")
-        let { dataFree } = await clienteAxios.post(
-          `/pay/finish/liberar`,
+        let response = await clienteAxios.post(
+          `api/pay/finish/liberar`,
           liberar
         );
-        let { data } = await clienteAxios.post(`/pay/finish/order`, reserva);
+        let { data } = await clienteAxios.post(`api/pay/finish/order`, {id:idOrder});
         setConfirmarReserva(false);
 
-        toast.success(dataFree.msg);
+        toast.success(response.data.msg);
         toast.success(data.msg);
+        setLoadingLiberrar(false)
+        swal({
+          title: "Reprogramada",
+          text: "Recarga tu navegador para ver los cambios",
+          icon: "success",
+          button: "Aceptar",
+        });
       }
+
+      swal({
+        title: "Algo salio mal",
+        text: "Recarga tu navegador o consulta con area de tecnologia",
+        icon: "error",
+        button: "Aceptar",
+      });
       // console.log("asignando reserva")
-
-      let { data } = await clienteAxios.post(`/pay/finish/order`, reserva);
-
+      setLoadingLiberrar(false)
       setConfirmarReserva(false);
 
-      toast.success(dataFree.msg);
-      toast.success(data.msg);
+  /*     toast.success(dataFree.msg);
+      toast.success(data.msg); */
     } catch (err) {
+      console.log(err)
       let error = err.response.data.msg
         ? err.response.data.msg
         : err.response && "Estamos presentando problemas internos";
@@ -541,7 +592,7 @@ const CreateReservation = () => {
           }
 
           {
-            reserva.metodo_pago === "Interno" ?
+            reserva.metodo_pago === "Interno" && reserva.estadoPago === "approved" ?
               <>
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
 
@@ -561,7 +612,7 @@ const CreateReservation = () => {
                   </h6>
                 </div>
 
-                <ScheduleProfessional id={idOrder} reserva={reserva} setReserva={setReserva} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
+                <ScheduleProfessional loadingLiberar={loadingLiberar}  guardarReserva={guardarReserva} id={idOrder} reserva={reserva} setReserva={setReserva} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
 
               </>
               : (reserva.metodo_pago === "Externo" || metodoexterno) &&
@@ -584,7 +635,7 @@ const CreateReservation = () => {
                   </h6>
                 </div>
 
-                <ScheduleProfessional id={idOrder} reserva={reserva} setReserva={setReserva} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
+                <ScheduleProfessional loadingLiberar={loadingLiberar} guardarReserva={guardarReserva} id={idOrder} reserva={reserva} setReserva={setReserva} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
 
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
 

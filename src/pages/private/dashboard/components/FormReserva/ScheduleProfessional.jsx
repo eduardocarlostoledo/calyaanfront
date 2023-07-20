@@ -7,7 +7,7 @@ import swal from "sweetalert";
 import { toast } from "react-toastify";
 
 
-const ScheduleProfessional = ({ nombreServicio, localidadServicio, reserva, setReserva, id }) => {
+const ScheduleProfessional = ({ loadingLiberar, nombreServicio, localidadServicio, reserva, setReserva, id, guardarReserva }) => {
 
   console.log(reserva)
 
@@ -181,7 +181,25 @@ const ScheduleProfessional = ({ nombreServicio, localidadServicio, reserva, setR
                 <div className="flex mt-4 space-x-3 md:mt-6">
                   <p>Hora asignada: {reserva.hora_servicio}</p>
                 </div>
+                <div className="flex mt-4 space-x-3 md:mt-6">
+
+                  {
+                    !loadingLiberar ?
+
+                      <div
+                        onClick={guardarReserva}
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-center cursor-pointer text-white bg-primary rounded-lg hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover "
+                      >
+                        Re-Agendar
+                      </div>
+                      :
+                      <Spinner />
+                  }
+
+
+                </div>
               </div>
+
             </div>
           </div>
           :
