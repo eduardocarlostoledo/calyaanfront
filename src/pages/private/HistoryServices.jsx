@@ -16,8 +16,6 @@ const HistoryServices = () => {
           `api/usuarios/historial/${user._id}`
         );
 
-          console.log(data)
-
         setHistorial(data);
         // console.log(data)
       } catch (error) {
@@ -84,12 +82,12 @@ const HistoryServices = () => {
                       >
                         {reserva?.servicios?.map((servicio)=>servicio.nombre)}
                       </th>
-                      <td className="px-6 py-4">{reserva.cita_servicio}</td>
-                      <td className="px-6 py-4">{reserva.hora_servicio}</td>
+                      <td className="px-6 py-4">{reserva?.cita_servicio}</td>
+                      <td className="px-6 py-4">{reserva?.hora_servicio}</td>
                       <td className="px-6 py-4">
-                        {reserva.profesional_id.creador.nombre}
+                        {reserva?.profesional_id?.creador?.nombre}
                       </td>
-                      <td className="px-6 py-4">{reserva.estado_servicio}</td>
+                      <td className="px-6 py-4">{reserva?.estado_servicio}</td>
                       <td className="px-6 py-4">
                         {" "}
                         <Link to={`/resumen/${reserva._id}`}> Ver </Link>

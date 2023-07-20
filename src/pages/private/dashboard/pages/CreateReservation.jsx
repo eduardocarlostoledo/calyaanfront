@@ -165,6 +165,8 @@ const CreateReservation = () => {
     }
   }, [id]);
 
+  console.log(reserva)
+
 
   const [metodoexterno, setMetodoExterno] = useState(false)
 
@@ -208,7 +210,7 @@ const CreateReservation = () => {
           };
 
           await procesarPreferencias(reservaRequest);
-          
+
         }catch(err){
           setCargando2(false);
           let error = err.response.data.msg
@@ -216,8 +218,6 @@ const CreateReservation = () => {
           : err.response && "Estamos presentando problemas internos";
           return toast.error(error);
         }
-
- 
 
       } else {
         const serviciosRequest = servicios.map((servicio) => servicio.idWP);
@@ -236,6 +236,11 @@ const CreateReservation = () => {
 
         await procesarPreferencias(reservaRequest);
       }
+
+      if(metodo === "Externo"){
+        setMetodoExterno(!metodoexterno)
+      }
+
     } catch (err) {
       console.error(err);
       setCargando2(false);
@@ -577,7 +582,6 @@ const CreateReservation = () => {
 
                   <button
                     onClick={(e) => {
-                      setMetodoExterno(!metodoexterno)
                       generarPreferencias("Externo")
                     }}
                     className="mt-4 p-3 bg-primary hover:bg-bgHover focus:bg-bgHover  rounded focus:outline-none"
@@ -592,7 +596,7 @@ const CreateReservation = () => {
           }
 
           {
-            reserva.metodo_pago === "Interno" && reserva.estadoPago === "approved" ?
+           ( reserva.metodo_pago === "Interno" && reserva.estadoPago === "approved") ?
               <>
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
 

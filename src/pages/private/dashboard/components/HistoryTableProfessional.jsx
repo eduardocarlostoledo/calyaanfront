@@ -72,7 +72,7 @@ const HistoryTableProfessional = ({ id }) => {
                   <td className=" py-4">{reserva.precio}</td>
                   <td className=" py-4">{reserva.profesional_nombre}</td>
                   <td className=" py-4">{reserva._id}</td>
-                  <td className=" py-4">{reserva.estadoServicio}</td>
+                  <td className=" py-4">{reserva.estado_servicio}</td>
                   <td className=" py-4"> <Link to={`/resumen/${reserva._id}`}> Ver </Link>
                   </td>
                 </tr>
