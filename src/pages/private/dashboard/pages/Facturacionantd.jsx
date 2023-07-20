@@ -616,29 +616,96 @@ const FacturacionAntDesing = () => {
         </div>
       ),
     },
+    // {
+    //   title: "Facturacion",
+    //   dataIndex: "factura",
+    //   filters: [
+    //     { text: "Facturado", value: "Facturado" },
+    //     { text: "NoFacturado", value: "NoFacturado" },
+    //     { text: "Error", value: "Error" },
+    //   ],
+    //   onFilter: (value, record) =>
+    //     record?.factura?.estado_facturacion === value,
+    //   render: ({
+    //     estado_facturacion,
+    //     nro_factura,
+    //     fecha_venta,
+    //     precioTotal,
+    //     payment_id,
+    //     origen,
+    //   }) => (
+    //     <>
+    //       {estado_facturacion === "Facturado" ? (
+    //         <Tag style={{ margin: "auto" }} color="green">
+    //           Facturado
+    //         </Tag>
+    //       ) : estado_facturacion === "Error" ? (
+    //         <Tag style={{ margin: "auto" }} color="red">
+    //           Error
+    //         </Tag>
+    //       ) : (
+    //         <Tag style={{ margin: "auto" }} color="yellow">
+    //           No Facturado
+    //         </Tag>
+    //       )}
+    //       {payment_id && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <b>id del pago: </b>
+    //           <p>{payment_id}</p>
+    //           <hr></hr>
+    //         </div>
+    //       )}
+
+    //       {origen && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <b>Origen del pago: </b>
+    //           <p>{origen}</p>
+    //           <hr></hr>
+    //         </div>
+    //       )}
+
+    //       {nro_factura && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <hr />
+    //           <b>Nro de factura: </b>
+    //           {nro_factura}
+    //           <hr></hr>
+    //         </div>
+    //       )}
+    //       {precioTotal && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <b>Precio: </b>
+    //           {precioTotal}
+    //           <hr></hr>
+    //         </div>
+    //       )}
+    //       {fecha_venta && (
+    //         <div style={{ marginTop: ".5rem" }}>
+    //           <b>Dia de venta: </b>
+    //           {moment(fecha_venta).format("YYYY-MM-DD HH:mm:ss")}
+    //           <hr></hr>
+    //         </div>
+    //       )}
+    //     </>
+    //   ),
+    // },
     {
       title: "Facturacion",
-      dataIndex: "factura",
+      dataIndex: "factura.estado_facturacion",
       filters: [
         { text: "Facturado", value: "Facturado" },
-        { text: "NoFacturado", value: "NoFacturado" },
+        { text: "No Facturado", value: "NoFacturado" },
         { text: "Error", value: "Error" },
       ],
-      onFilter: (value, record) => record?.estado_facturacion === value,
-      render: ({
-        estado_facturacion,
-        nro_factura,
-        fecha_venta,
-        precioTotal,
-        payment_id,
-        origen,
-      }) => (
+      onFilter: (value, record) =>
+        record?.factura?.estado_facturacion === value,
+      render: (value, record) => (
         <>
-          {estado_facturacion === "Facturado" ? (
+          {record?.factura?.estado_facturacion === "Facturado" ? (
             <Tag style={{ margin: "auto" }} color="green">
               Facturado
             </Tag>
-          ) : estado_facturacion === "Error" ? (
+          ) : record?.factura?.estado_facturacion === "Error" ? (
             <Tag style={{ margin: "auto" }} color="red">
               Error
             </Tag>
@@ -647,47 +714,48 @@ const FacturacionAntDesing = () => {
               No Facturado
             </Tag>
           )}
-          {payment_id && (
+          {record?.factura?.payment_id && (
             <div style={{ marginTop: ".5rem" }}>
               <b>id del pago: </b>
-              <p>{payment_id}</p>
+              <p>{record?.factura?.payment_id}</p>
               <hr></hr>
             </div>
           )}
 
-          {origen && (
+          {record?.factura?.origen && (
             <div style={{ marginTop: ".5rem" }}>
               <b>Origen del pago: </b>
-              <p>{origen}</p>
+              <p>{record?.factura?.origen}</p>
               <hr></hr>
             </div>
           )}
 
-          {nro_factura && (
+          {record?.factura?.nro_factura && (
             <div style={{ marginTop: ".5rem" }}>
               <hr />
               <b>Nro de factura: </b>
-              {nro_factura}
+              {record?.factura?.nro_factura}
               <hr></hr>
             </div>
           )}
-          {precioTotal && (
+          {record?.factura?.precioTotal && (
             <div style={{ marginTop: ".5rem" }}>
               <b>Precio: </b>
-              {precioTotal}
+              {record.factura?.precioTotal}
               <hr></hr>
             </div>
           )}
-          {fecha_venta && (
+          {record?.createdAt && (
             <div style={{ marginTop: ".5rem" }}>
               <b>Dia de venta: </b>
-              {moment(fecha_venta).format("YYYY-MM-DD HH:mm:ss")}
+              {moment(record.createdAt).format("YYYY-MM-DD HH:mm:ss")}
               <hr></hr>
             </div>
           )}
         </>
       ),
     },
+
     // {
     //   title: "Profesional",
     //   dataIndex: "profesional_nombre",
@@ -736,18 +804,18 @@ const FacturacionAntDesing = () => {
     },
     {
       title: "Estado Pago",
-      dataIndex: "factura",
+      dataIndex: "factura.estadoPago",
       filters: [
-        { text: "Pending", value: "pending" },
-        { text: "Rejected", value: "rejected" },
-        { text: "Approved", value: "approved" },
+        { text: "Pendiente", value: "pending" },
+        { text: "Rechazado", value: "rejected" },
+        { text: "Aprobado", value: "approved" },
       ],
-      onFilter: (value, record) => record?.estadoPago === value,
-      render: ({ estadoPago }) => (
+      onFilter: (value, record) => record?.factura?.estadoPago === value,
+      render: (value, record) => (
         <>
-          {estadoPago === "approved" ? (
+          {record?.factura?.estadoPago === "approved" ? (
             <Tag color="green">Aprobado</Tag>
-          ) : estadoPago === "rejected" ? (
+          ) : record?.factura?.estadoPago === "rejected" ? (
             <Tag color="red">Rechazado</Tag>
           ) : (
             <Tag color="yellow">Pendiente</Tag>
@@ -755,6 +823,27 @@ const FacturacionAntDesing = () => {
         </>
       ),
     },
+    // {
+    //   title: "Estado Pago",
+    //   dataIndex: "factura.estadoPago",
+    //   filters: [
+    //     { text: "Pendiente", value: "pending" },
+    //     { text: "Rechazado", value: "rejected" },
+    //     { text: "Aprobado", value: "approved" },
+    //   ],
+    //   onFilter: (value, record) => record?.factura?.estadoPago === value,
+    //   render: ({ estadoPago }) => (
+    //     <>
+    //       {estadoPago === "approved" ? (
+    //         <Tag color="green">Aprobado</Tag>
+    //       ) : estadoPago === "rejected" ? (
+    //         <Tag color="red">Rechazado</Tag>
+    //       ) : (
+    //         <Tag color="yellow">Pendiente</Tag>
+    //       )}
+    //     </>
+    //   ),
+    // },
     // {
     //   title: "Pago",
     //   dataIndex: "factura",

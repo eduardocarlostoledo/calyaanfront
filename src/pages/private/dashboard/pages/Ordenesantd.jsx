@@ -886,20 +886,41 @@ const OrdenesAntDesing = (props) => {
     //   // defaultSortOrder: "descend",
     //   render: (text) => <p>{text}</p>,
     // },
+    // {
+    //   title: "Estado Pago",
+    //   dataIndex: "factura",
+    //   filters: [
+    //     { text: "Pending", value: "pending" },
+    //     { text: "Rejected", value: "rejected" },
+    //     { text: "Approved", value: "approved" },
+    //   ],
+    //   onFilter: (value, record) => record?.estadoPago?.indexOf(value) === 0,
+    //   render: (text) => (
+    //     <>
+    //       {text?.estadoPago === "approved" ? (
+    //         <Tag color="green">Aprobado</Tag>
+    //       ) : text?.estadoPago === "rejected" ? (
+    //         <Tag color="red">Rechazado</Tag>
+    //       ) : (
+    //         <Tag color="yellow">Pendiente</Tag>
+    //       )}
+    //     </>
+    //   ),
+    // },
     {
       title: "Estado Pago",
-      dataIndex: "factura",
+      dataIndex: "factura.estadoPago",
       filters: [
-        { text: "Pending", value: "pending" },
-        { text: "Rejected", value: "rejected" },
-        { text: "Approved", value: "approved" },
+        { text: "Pendiente", value: "pending" },
+        { text: "Rechazado", value: "rejected" },
+        { text: "Aprobado", value: "approved" },
       ],
-      onFilter: (value, record) => record?.estadoPago?.indexOf(value) === 0,
-      render: (text) => (
+      onFilter: (value, record) => record?.factura?.estadoPago === value,
+      render: (value, record) => (
         <>
-          {text?.estadoPago === "approved" ? (
+          {record?.factura?.estadoPago === "approved" ? (
             <Tag color="green">Aprobado</Tag>
-          ) : text?.estadoPago === "rejected" ? (
+          ) : record?.factura?.estadoPago === "rejected" ? (
             <Tag color="red">Rechazado</Tag>
           ) : (
             <Tag color="yellow">Pendiente</Tag>
