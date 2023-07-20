@@ -21,7 +21,7 @@ const ProductExpanded = ({
   numeroLiquidacion,
   ordenes,
   profesional,
-  totalLiquidado,
+  totalLiquidacion,
   editProduct,
   setEditProduct,
 }) => {
@@ -35,7 +35,7 @@ const ProductExpanded = ({
     numeroLiquidacion,
     ordenes,
     profesional,
-    totalLiquidado,
+    totalLiquidacion,
   });
 
   const [loading, setLoading] = useState(true);
@@ -101,7 +101,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Fecha inicio: {input.fechaInicio}
+                Fecha inicio: {input.fechaInicio?.split("T")[0]?.slice(0, 10)}
               </p>
               <p
                 className="PDivInfo"
@@ -112,7 +112,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Fecha fin: {input.fechaFin}
+                Fecha fin: {input.fechaFin?.split("T")[0]?.slice(0, 10)}
               </p>
               <p
                 className="PDivInfo"
@@ -123,7 +123,8 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Fecha de creacion: {input.createdAt}
+                Fecha de creacion:{" "}
+                {input.createdAt?.split("T")[0]?.slice(0, 10)}
               </p>
               {/* <p
                 className="PDivInfo"
@@ -181,9 +182,74 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                Total liquidado: {input.totalLiquidado}
+                Total liquidado: {input.totalLiquidacion}
               </p>
             </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <b style={{ margin: "auto" }}> Ordenes: </b>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "nowrap",
+            }}
+          >
+            {input?.ordenes?.map((order) => (
+              <div style={{ width: "50%", padding: "1rem" }}>
+                <p>
+                  <b>Orden id: </b>
+                  {order._id}
+                </p>
+                <hr />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "nowrap",
+                  }}
+                >
+                  <div style={{ width: "50%" }}>
+                    {order.ciudad_servicio && (
+                      <p>
+                        <b>ciudad:</b>
+                        {order.ciudad_servicio}
+                      </p>
+                    )}
+                    {order.localidad_servicio && (
+                      <p>
+                        <b>Estado:</b>
+                        {order.localidad_servicio}
+                      </p>
+                    )}
+                    {order.hora_servicio && (
+                      <p>
+                        <b>hora:</b>
+                        {order.hora_servicio}
+                      </p>
+                    )}
+                  </div>
+                  <div style={{ width: "50%" }}>
+                    {order.cita_servicio && (
+                      <p>
+                        <b>fecha</b>:{order.cita_servicio}
+                      </p>
+                    )}
+                    {order.estado_servicio && (
+                      <p>
+                        <b>Estado:</b>
+                        {order.estado_servicio}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -494,40 +560,40 @@ const LiquidacionAllAntDesing = () => {
       defaultSortOrder: "descend",
       render: (text) => <p>{text} </p>,
     },
-    {
-      title: "Ordenes",
-      dataIndex: "ordenes",
-      render: (text) =>
-        text.map((order, index) => (
-          <div>
-            <p>Orden N°{index + 1}</p>
-            <hr />
-            {order.ciudad_servicio && (
-              <p>
-                <b>ciudad:</b>
-                {order.ciudad_servicio}
-              </p>
-            )}
-            {order.hora_servicio && (
-              <p>
-                <b>hora:</b>
-                {order.hora_servicio}
-              </p>
-            )}
-            {order.cita_servicio && (
-              <p>
-                <b>fecha</b>:{order.cita_servicio}
-              </p>
-            )}
-            {order.estado_servicio && (
-              <p>
-                <b>Estado:</b>
-                {order.estado_servicio}
-              </p>
-            )}
-          </div>
-        )),
-    },
+    // {
+    //   title: "Ordenes",
+    //   dataIndex: "ordenes",
+    //   render: (text) =>
+    //     text.map((order, index) => (
+    //       <div>
+    //         <p>Orden N°{index + 1}</p>
+    //         <hr />
+    //         {order.ciudad_servicio && (
+    //           <p>
+    //             <b>ciudad:</b>
+    //             {order.ciudad_servicio}
+    //           </p>
+    //         )}
+    //         {order.hora_servicio && (
+    //           <p>
+    //             <b>hora:</b>
+    //             {order.hora_servicio}
+    //           </p>
+    //         )}
+    //         {order.cita_servicio && (
+    //           <p>
+    //             <b>fecha</b>:{order.cita_servicio}
+    //           </p>
+    //         )}
+    //         {order.estado_servicio && (
+    //           <p>
+    //             <b>Estado:</b>
+    //             {order.estado_servicio}
+    //           </p>
+    //         )}
+    //       </div>
+    //     )),
+    // },
     {
       title: "COTIZACION",
       dataIndex: "totalLiquidacion",
@@ -551,7 +617,7 @@ const LiquidacionAllAntDesing = () => {
       ),
     },
   ];
-
+  console.log(filteredOrdenes);
   return (
     <div style={{ textAlign: "center", alignItems: "center" }}>
       <p className="p">
@@ -615,13 +681,13 @@ const LiquidacionAllAntDesing = () => {
                 numeroLiquidacion={record.numeroLiquidacion}
                 ordenes={record.ordenes}
                 profesional={record.profesional}
-                totalLiquidado={record.totalLiquidado}
+                totalLiquidacion={record.totalLiquidacion}
                 editProduct={editProduct}
                 setEditProduct={setEditProduct}
               />
             ),
           }}
-          rowSelection={rowSelection}
+          // rowSelection={rowSelection}
         />
         {selectedRows.length > 0 && (
           <Button onClick={handleEditModalOpen}>
