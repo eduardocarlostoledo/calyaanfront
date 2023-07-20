@@ -216,9 +216,9 @@ const authSlice = createSlice({
     setLogout: (state, action) => {
       let servicios = localStorage.getItem('services');
       localStorage.clear();
-      localStorage.setItem('services', servicios)
       state.user = null;
-      state.trafficLightBase128 = null;
+      localStorage.setItem('services', servicios)
+      //state.trafficLightBase128 = null;
     },
     deleteError: (state, action) => {
       state.error = "";
