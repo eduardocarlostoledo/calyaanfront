@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import clienteAxios from "../../../../config/axios";
@@ -222,6 +223,13 @@ const ProfessionalProfile = () => {
       [e.target.name]: e.target.value,
     }));
     // console.log(valueForm);
+  };
+
+  const handleChangePhone = (telefono) => {
+    setValueForm({
+      ...valueForm,
+      telefono,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -556,8 +564,18 @@ const ProfessionalProfile = () => {
 
               <div className="lg:flex md:flex block gap-8  mt-6">
                 <div className="w-full">
-                  <p className="text-base text-gray-800">Teléfono</p>
-                  <input
+                  <label className="text-base text-gray-800">Teléfono</label>
+                  <PhoneInput
+                    international
+                    countryCallingCodeEditable={false}
+                    name="telefono"
+                    className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
+                    value={telefono}
+                    onChange={handleChangePhone}
+                    disabled={!forEdit}
+                    defaultCountry="CO"
+                  />
+                  {/* <input
                     type="text"
                     name="telefono"
                     id="telefono"
@@ -566,7 +584,7 @@ const ProfessionalProfile = () => {
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                     placeholder="No registrado"
                     disabled={!forEdit}
-                  />
+                  /> */}
                 </div>
                 <div className="lg:mt-0 md:mt-0 mt-4 w-full">
                   <p className="text-base text-gray-800">Cédula</p>
