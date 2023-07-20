@@ -81,7 +81,7 @@ const CreateReservation = () => {
           let { data } = await clienteAxios.get(`api/ordenes/getordenbyid/${id}`);
 
 
-          console.log(data)
+    
 
           if (data.profesional_id) {
             setReserva({
@@ -129,7 +129,7 @@ const CreateReservation = () => {
             });
           }
 
-          console.log("arreglo de servicios", data)
+    
 
           setServicios(data.servicios);
 
@@ -141,7 +141,7 @@ const CreateReservation = () => {
           setEstado("nuevo");
 
           if (data.hora_servicio && data.cita_servicio) {
-            console.log("Se han resguardado los datos de la reserva.");
+          
 
             setLiberar({
               ...data,
@@ -165,7 +165,6 @@ const CreateReservation = () => {
     }
   }, [id]);
 
-  console.log(reserva)
 
 
   const [metodoexterno, setMetodoExterno] = useState(false)
@@ -261,8 +260,6 @@ const CreateReservation = () => {
   }
 
   async function procesarPreferencias(reservaRequest) {
-
-    console.log(reservaRequest)
 
     const producto = servicios[0].nombre;
     const precio = servicios[0].valorTotal || servicios[0].precio;
@@ -501,7 +498,6 @@ const CreateReservation = () => {
 
   }
 
-  // console.log("LIBERAR", liberar)
   return (
     <div className="w-full mx-auto ">
       <div className="relative flex flex-col  break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">

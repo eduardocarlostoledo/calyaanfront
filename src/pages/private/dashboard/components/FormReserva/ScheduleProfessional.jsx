@@ -9,8 +9,6 @@ import { toast } from "react-toastify";
 
 const ScheduleProfessional = ({ loadingLiberar, nombreServicio, localidadServicio, reserva, setReserva, id, guardarReserva }) => {
 
-  console.log(reserva)
-
   const [inputValue, setInputValue] = useState({
     address: "",
     date: "",
@@ -120,11 +118,7 @@ const ScheduleProfessional = ({ loadingLiberar, nombreServicio, localidadServici
           return;
         }
 
-        console.log({
-          fecha: inputValue.date,
-          especialidad: [nombre],
-          localidad,
-        })
+
 
         const { data } = await clienteAxios.post(
           "api/reservas/profesionales/fecha",
@@ -134,7 +128,7 @@ const ScheduleProfessional = ({ loadingLiberar, nombreServicio, localidadServici
             localidad,
           }
         );
-        console.log("data de api/reservas/profesionales/fecha", data);
+
 
 
         setProfesionalesRequest(data);
@@ -148,8 +142,6 @@ const ScheduleProfessional = ({ loadingLiberar, nombreServicio, localidadServici
     obtenerUsuarios();
   }, [inputValue.date]);
   const { date, time } = inputValue;
-
-  console.log(reserva.profesional_id)
 
   return (
     <>

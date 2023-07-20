@@ -16,7 +16,7 @@ const ServiciosComponent = ({setServicios,servicios,setReserva,reserva}) => {
             setCargando(true)
           try {
             let { data } = await clienteAxios.get(`/api/products`);
-            console.log(data)
+
             setProductos(data);
             setCargando(false)
           } catch (err) {

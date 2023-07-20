@@ -441,7 +441,7 @@ const FacturacionAntDesing = () => {
   const handleDateChange = (dates) => {
     const dateNow = dates ? moment(dates[0].$d).format("YYYY/MM/DD") : null;
     const dateNow2 = dates ? moment(dates[1].$d).format("YYYY/MM/DD") : null;
-    console.log(dates);
+ 
     dates ? setStartDate(dateNow) : setStartDate("");
     dates ? setEndDate(dateNow2) : setEndDate("");
   };

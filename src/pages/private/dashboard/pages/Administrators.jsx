@@ -167,7 +167,7 @@ const Administrators = () => {
     const selectedRows = filteredOrdenes.filter((orden) =>
       selectedRowKeys.includes(orden.key)
     );
-    console.log(selectedRows);
+
   };
 
   return (

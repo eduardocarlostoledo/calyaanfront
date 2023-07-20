@@ -21,7 +21,6 @@ const SumaryAdmin = () => {
       try {
         let { data } = await clienteAxios.get(`api/ordenes/getordenbyid/${id}`);
         setHistorial(data);
-        console.log(data)
       } catch (error) {
         console.log(error);
         const errorMsg =

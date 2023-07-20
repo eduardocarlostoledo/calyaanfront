@@ -74,7 +74,7 @@ const CalendarDashboard = () => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const reservations = useSelector((state) => state.ordenes.order || []);
-  console.log("reservations", reservations)
+  //console.log("reservations", reservations)
   useEffect(() => {
     dispatch(getOrders())
       .then(() => setLoading(false))

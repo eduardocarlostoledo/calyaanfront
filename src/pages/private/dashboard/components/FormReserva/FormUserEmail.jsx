@@ -24,7 +24,6 @@ const FormUserEmail = ({userEmail,setUserEmail,setEstado,setReserva,reserva}) =>
 
             setEstado("nuevo");
 
-            console.log(data)
             setReserva({
                 ...reserva,
                 cliente_id: data?._id,

@@ -2,7 +2,6 @@ import React from 'react'
 import { localidadesLaborales } from '../../../../../data'
 
 const FormUser = ({handleChange, reserva}) => {
-console.log(reserva)
     return (
         <>
             <div className="flex flex-wrap">
