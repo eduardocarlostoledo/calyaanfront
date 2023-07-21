@@ -167,7 +167,7 @@ const ProfessionalProfile = () => {
         profesional: data.profesional || {},
         ultimaConexion: data.ultimaConexion || "",
       }));
-      console.log(data);
+
       setDescriptionForm(data.profesional.descripcion);
       setEspecialidadForm(data.profesional.especialidad);
       setLocalidadForm(data.profesional.localidadesLaborales);
@@ -248,7 +248,7 @@ const ProfessionalProfile = () => {
         especialidades: especialidadesForm,
         localidades: localidadForm,
       };
-      console.log(dataP, "info");
+     
       dispatch(updateProfileAdminDash({ valueForm, toast }));
       dispatch(updateProfileAdmin({ dataP, toast }));
       setForEdit(false);

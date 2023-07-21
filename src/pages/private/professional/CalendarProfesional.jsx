@@ -102,7 +102,7 @@ const CalendarioProfesional = () => {
     obtenerReservas();
   }, [user.profesionalId]);
 
-  console.log(reservations, "PROFESIONAL RESERVAS");
+
 
   return (
     <div>

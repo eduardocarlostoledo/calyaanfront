@@ -108,11 +108,11 @@ const ProductExpanded = ({
   function handleSubmit(e) {
     e.preventDefault();
     setLoading(false);
-    console.log("INPUT", input);
+
     const data = new FormData();
     Object.keys(input).forEach((key) => data.append(key, input[key]));
     dispatch(updateOrder(input));
-    console.log(input, "input");
+
     setEditProduct(0);
     swal("success", "ORDEN MODIFICADA", "success");
     setLoading(true);
@@ -606,7 +606,7 @@ const OrdenesAntDesing = (props) => {
   const handleDateChange = (dates) => {
     const dateNow = dates ? moment(dates[0].$d).format("YYYY/MM/DD") : null;
     const dateNow2 = dates ? moment(dates[1].$d).format("YYYY/MM/DD") : null;
-    console.log(dates);
+
     dates ? setStartDate(dateNow) : setStartDate("");
     dates ? setEndDate(dateNow2) : setEndDate("");
   };

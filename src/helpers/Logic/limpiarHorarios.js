@@ -18,7 +18,7 @@ const limpiarHorarios = (horarios) => {
     .filter((horario) => horario.stock)
 
     .map((horario) => horario.hora);
-    console.log(horarios)
+  
 };
 
 export default limpiarHorarios;

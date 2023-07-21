@@ -276,7 +276,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
 
       let { data } = await clienteAxios.post(`/api/coupon/discount`, { coupon, valor: valor[0] });
 
-      console.log(data)
+   
 
       const servicesLocal = JSON.parse(localStorage.getItem("services"));
 
@@ -290,7 +290,6 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
         };
       });
 
-      console.log(updatedServices);
 
       localStorage.setItem("services", JSON.stringify(updatedServices));
 

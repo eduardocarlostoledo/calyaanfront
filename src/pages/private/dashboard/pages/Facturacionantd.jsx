@@ -55,7 +55,7 @@ const ProductExpanded = ({
   async function handleSubmit(e) {
     setLoading(false);
     e.preventDefault();
-    console.log("INPUT", input);
+   
     const data = new FormData();
     Object.keys(input).forEach((key) => data.append(key, input[key]));
     try {

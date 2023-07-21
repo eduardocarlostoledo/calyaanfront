@@ -129,8 +129,7 @@ const FormUpdateProfile = () => {
   };
 
   const handleChangeLocalidad = (e) => {
-    console.log("e.target.value", e.target.value);
-    console.log("localidadForm", localidadForm);
+
     if (!localidadForm.includes(e.target.value) && e.target.value !== "") {
       setLocalidadForm([...localidadForm, e.target.value]);
     }

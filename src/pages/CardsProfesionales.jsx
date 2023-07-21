@@ -21,7 +21,7 @@ const CardsProfessionalAntDesing = () => {
   const orders = useSelector(
     (state) => state.professional.disponibilidad || []
   );
-  console.log(orders);
+
   const newProducts = orders?.map((product) => ({
     ...product,
     key: product._id,
@@ -287,7 +287,7 @@ const CardsProfessionalAntDesing = () => {
     const selectedRows = filteredOrdenes.filter((orden) =>
       selectedRowKeys.includes(orden.key)
     );
-    console.log(selectedRows);
+
   };
 
   const onPageChange = (page, pageSize) => {

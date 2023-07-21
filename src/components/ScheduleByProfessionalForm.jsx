@@ -109,7 +109,7 @@ const ScheduleByProfessionalForm = () => {
           }
         );
 
-        console.log("data de api/reservas/profesionales/fecha", data);
+       
 
         if (data?.length > 0) {
           // Filtrar objetos con creador distinto de null y con teléfono definido
@@ -161,7 +161,7 @@ const ScheduleByProfessionalForm = () => {
   }, [inputValue.date]);
   const { date, time } = inputValue;
 
-  console.log(profesional);
+
 
   return (
     <>

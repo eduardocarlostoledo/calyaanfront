@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const HistoryTableProfessional = ({ id }) => {
 
-  console.log(id)
+
 
   const [historial, setHistorial] = useState([]);
 
@@ -17,7 +17,7 @@ const HistoryTableProfessional = ({ id }) => {
             `api/profesional/historial/${id}`
           );
           setHistorial(data);
-          console.log(data)
+  
         }
 
 

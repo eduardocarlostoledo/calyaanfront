@@ -18,7 +18,7 @@ const TableTransactionHistory = () => {
 
   const [userState, setUserState] = useState({});
   const [modal, setModal] = useState(false);
-  console.log(paginado);
+
   const handleUser = (user) => {
     setUserState(user);
     setModal(true);
@@ -76,8 +76,7 @@ const TableTransactionHistory = () => {
     }, 500);
   };
 
-  console.log(historial, "historial");
-  console.log(ventas, "ventas");
+
 
   return (
     <div className="py-8">

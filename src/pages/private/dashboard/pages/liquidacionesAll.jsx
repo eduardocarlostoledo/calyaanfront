@@ -389,7 +389,7 @@ const LiquidacionAllAntDesing = () => {
   const handleDateChange = (dates) => {
     const dateNow = dates ? moment(dates[0].$d).format("YYYY/MM/DD") : null;
     const dateNow2 = dates ? moment(dates[1].$d).format("YYYY/MM/DD") : null;
-    console.log(dates);
+
     dates ? setStartDate(dateNow) : setStartDate("");
     dates ? setEndDate(dateNow2) : setEndDate("");
   };
@@ -425,7 +425,7 @@ const LiquidacionAllAntDesing = () => {
   };
 
   const handleEstadoLiquidacionChange = (value) => {
-    console.log("handleEstadoLiquidacionChange", value);
+  
     setSelectedEstadoLiquidacion(value);
   };
 
@@ -617,7 +617,7 @@ const LiquidacionAllAntDesing = () => {
       ),
     },
   ];
-  console.log(filteredOrdenes);
+
   return (
     <div style={{ textAlign: "center", alignItems: "center" }}>
       <p className="p">

@@ -34,7 +34,7 @@ const HorarioProfessionalAntDesing = () => {
     filterOrdenes();
   }, [orders, searchText, selectedEspecialidad, selectedLocalidad]);
 
-  console.log("selects", selectedEspecialidad, selectedLocalidad);
+
 
   const columns = [
     {
@@ -166,7 +166,7 @@ const HorarioProfessionalAntDesing = () => {
     const selectedRows = filteredOrdenes.filter((orden) =>
       selectedRowKeys.includes(orden.key)
     );
-    console.log(selectedRows);
+  
   };
 
   return (

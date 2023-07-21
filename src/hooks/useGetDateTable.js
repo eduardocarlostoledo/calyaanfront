@@ -25,7 +25,7 @@ const useGetDateTable = (rol) => {
   }, [limite, pagina]);
 
   const handleFilterUsers = (e) => {
-    console.log(e.target.value)
+  
     if (e.target.value === "Todos") {
       setPaginado({ ...paginado, resultadoFilter: paginado.resultados });
     } else if (e.target.value === "Activo") {
