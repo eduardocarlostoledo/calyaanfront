@@ -27,14 +27,13 @@ const HorarioProfessionalAntDesing = () => {
   }, [dispatch]);
 
   const orders = useSelector(
-    (state) => state.professional.disponibilidad || []
+    (state) => (state.professional.disponibilidad || [])
+    
   );
-
+  
   useEffect(() => {
     filterOrdenes();
   }, [orders, searchText, selectedEspecialidad, selectedLocalidad]);
-
-
 
   const columns = [
     {
@@ -89,7 +88,12 @@ const HorarioProfessionalAntDesing = () => {
     },
   ];
 
-  const filterOrdenes = () => {
+  const filterOrdenes = (() => {
+    if ( !(Object.keys(orders) ===  Array) )
+    {
+      return [];
+    }
+
     const filtered = orders.filter((orden) => {
       const { creador, fecha, disponibilidad } = orden;
       const {
@@ -158,7 +162,7 @@ const HorarioProfessionalAntDesing = () => {
     });
 
     setFilteredOrdenes(filtered);
-  };
+  });
 
   const onSelectChange = (selectedRowKeys) => {
     setSelectedRowKeys(selectedRowKeys);

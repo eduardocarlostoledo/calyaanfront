@@ -401,11 +401,11 @@ const LiquidacionAllAntDesing = () => {
       .catch((error) => setError(error.message));
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(updateLiquidacion(false))
-      .then(() => setLoading(false))
-      .catch((error) => setError(error.message));
-  }, [change]);
+  // useEffect(() => {
+  //   dispatch(updateLiquidacion(false))
+  //     .then(() => setLoading(false))
+  //     .catch((error) => setError(error.message));
+  // }, [change]);
 
   useEffect(() => {
     const total = selectedRows.reduce((acc, row) => acc + row.precio, 0);
