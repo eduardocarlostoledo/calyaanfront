@@ -89,10 +89,10 @@ const HorarioProfessionalAntDesing = () => {
   ];
 
   const filterOrdenes = (() => {
-    if ( !(Object.keys(orders) ===  Array) )
-    {
-      return [];
-    }
+    // if ( !(Object.keys(orders) ===  Array) )
+    // {
+    //   return [];
+    // }
 
     const filtered = orders.filter((orden) => {
       const { creador, fecha, disponibilidad } = orden;
