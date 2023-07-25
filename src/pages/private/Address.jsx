@@ -11,6 +11,7 @@ const Address = () => {
 
   const handleToggleModalAddress = () => {
     setModalAddressForm(!modalAddressForm);
+    setAddressEdit(false); // Close the edit modal as well, if open
   };
 
   useEffect(() => {
