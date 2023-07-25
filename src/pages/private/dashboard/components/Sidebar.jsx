@@ -279,7 +279,7 @@ const Sidebar = () => {
                       <SiContactlesspayment className="w-5 h-5" />
                     </span>
                     <p className="ml-2 text-sm tracking-wide truncate">
-                      Lquidaciones totales
+                      Liquidaciones totales
                     </p>{" "}
                     {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">
                       15
