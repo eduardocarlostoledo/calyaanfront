@@ -10,6 +10,7 @@ import ScheduleByProfessionalForm from "../../components/ScheduleByProfessionalF
 import { localidadesLaborales } from "../../data";
 
 const Reservation = () => {
+  window.scrollTo(0, 0);
   const [formProfessional, setFormProfessional] = useState(false);
 
   const navigate = useNavigate();

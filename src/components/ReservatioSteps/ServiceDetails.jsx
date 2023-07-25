@@ -214,7 +214,7 @@ const ServiceDetails = () => {
                         className="line-through font-light text-xs  bg-white"
                       />
                     </p>
-                    <p className="text-base font-semibold leading-none text-gray-800 mt-2">
+                    <p className="text-base max-md:hidden font-semibold leading-none text-gray-800 mt-2">
                       <NumericFormat
                         value={producto?.precio}
                         displayType={"text"}
