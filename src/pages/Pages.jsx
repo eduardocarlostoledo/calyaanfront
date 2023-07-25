@@ -546,7 +546,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                                   {producto?.nombre}
                                 </p>
                                 <p className="text-base leading-none text-gray-600 mt-4 sm:mt-2">
-                                  {producto.cantidad}
+                                 Cantidad: {producto.cantidad}
                                 </p>
                                 <p className="text-base font-medium leading-none hover:underline text-gray-600 cursor-pointer mt-8">
                                   {/* Ver detalles */}

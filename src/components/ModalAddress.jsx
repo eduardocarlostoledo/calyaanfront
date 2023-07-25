@@ -16,8 +16,6 @@ const ModalAddress = ({
     localidad: "",
   });
 
-
-
   const { nombre, direccion, info, localidad } = direccionState;
 
   useEffect(()=>{

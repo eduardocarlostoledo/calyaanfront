@@ -32,7 +32,7 @@ const Sidebar = () => {
         <div className=" flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-gray-800">
           <div className="fixed flex flex-col top-0 left-0 w-64 bg-white h-full border-r">
             <div className="flex items-center justify-center h-14 mt-6 ">
-              <Link to="/servicios">
+              <Link to="/servicio">
                 <LazyLoadImage
                   effect="blur"
                   width="150"

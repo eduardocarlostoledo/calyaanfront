@@ -140,7 +140,7 @@ function App() {
         <Route path="/ver" element={<Ver />} />
         {/* Public Routes */}
         <Route element={<ServicesLayout />}>
-          <Route index path="/servicios" element={<Services />} />
+        {/*   <Route index path="/servicios" element={<Services />} /> */}
           <Route path="/servicio" element={<Service />} />
         </Route>
 
@@ -182,7 +182,7 @@ function App() {
           <Route element={<ProfileLayout />}>
             <Route path="/ajustes" element={<Settings />} />
             <Route path="/direcciones" element={<Address />} />
-            <Route path="/favoritos" element={<Favorites />} />
+      {/*       <Route path="/favoritos" element={<Favorites />} /> */}
             <Route path="/historial" element={<HistoryServices />} />
             <Route path="/fidelidad" element={<Fidelidad />} />
             <Route

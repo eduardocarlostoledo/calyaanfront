@@ -11,13 +11,10 @@ const ServicesLayout = () => {
             <Header />
 
   
-                <Filters />
+          {/*       <Filters /> */}
 
                 <Outlet />
-        
- 
-
-
+    
             <Footer />
         </>
     )

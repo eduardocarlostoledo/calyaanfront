@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { AiFillCalendar, AiFillClockCircle } from "react-icons/ai";
 import RoleGuardComponent from "../guards/RoleGuardComponent";
 import { ROLES } from "../helpers/Logic/roles";
+import {FaPeopleArrows} from "react-icons/fa"
 
 const TabsSettings = () => {
   let location = useLocation();
@@ -60,7 +61,7 @@ const TabsSettings = () => {
               Historial de servicios
             </Link>
           </li>
-
+{/* 
           <li className="mr-2">
             <Link
               to="/favoritos"
@@ -73,7 +74,7 @@ const TabsSettings = () => {
               <MdFavorite className="mr-2 w-5 h-5" />
               Favoritos
             </Link>
-          </li>
+          </li> */}
 
           <li className="mr-2">
             <Link
@@ -170,7 +171,7 @@ const TabsSettings = () => {
                   : "hover:text-gray-600 hover:border-gray-300"
               }`}
             >
-              <MdFavorite className="mr-2 w-5 h-5" />
+              <FaPeopleArrows className="mr-2 w-5 h-5" />
               Referidos
             </Link>
           </li>

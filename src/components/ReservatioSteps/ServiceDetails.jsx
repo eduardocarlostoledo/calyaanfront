@@ -334,7 +334,7 @@ const ServiceDetails = () => {
         </div>
       </div>
 
-      <p className="text-center text-2xl mt-6">o</p>
+      {/* <p className="text-center text-2xl mt-6">o</p>
 
       <a
         href="https://api.whatsapp.com/send/?phone=573147428757&text&type=phone_number&app_absent=0"
@@ -342,7 +342,7 @@ const ServiceDetails = () => {
       >
         <p className="text-base font-medium leading-none text-white">Agenda</p>
         <ImWhatsapp className="w-4 h-4 text-white" />
-      </a>
+      </a> */}
 
       {modal && <ModalInfo handleModalLogin={handleModalLogin} />}
     </>

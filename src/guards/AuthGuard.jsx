@@ -7,7 +7,7 @@ const AuthGuard = () => {
     const { user } = useSelector((state) => ({ ...state.auth }));
 
     return (
-        user ? <Outlet /> : <Navigate to="/servicios" replace={true} />
+        user ? <Outlet /> : <Navigate to="/servicio" replace={true} />
     )
 }
 

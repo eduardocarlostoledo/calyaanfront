@@ -89,7 +89,7 @@ const FormUpdateSettings = () => {
 
     if ([nombre, apellido, email,telefono].includes("") || telefono.toString().length < 6 ) {
       return toast.error(
-        "Los campos nombres,apellidos,teléfono y correo electrónico son obligatorios"
+        "Los campos nombres,apellidos,teléfono,sexo y correo electrónico son obligatorios"
       );
     }
 
@@ -141,7 +141,7 @@ const FormUpdateSettings = () => {
           onChange={handleChange}
           name="sexo"
         >
-          <option value="">Sexo</option>
+          <option value="" disabled >Sexo</option>
           <option value="Masculino">Masculino</option>
           <option value="Femenino">Femenino</option>
           <option value="Otro">Otro</option>

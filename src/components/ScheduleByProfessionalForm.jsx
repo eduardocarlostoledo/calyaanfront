@@ -190,8 +190,7 @@ const ScheduleByProfessionalForm = () => {
                     name="date"
                     id="date"
                     onChange={handleChange}
-                    className="bg-gray-50 border m-auto border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-96 p-2.5"
-                    placeholder="username.example"
+                    className="bg-gray-50 border m-auto border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-full p-2.5 md:w-1/2"
                     required=""
                   />
                 </div>
@@ -261,7 +260,7 @@ const ScheduleByProfessionalForm = () => {
                     name="time"
                     id="time"
                     onChange={handleChange}
-                    className="bg-gray-50 border m-auto border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-96 p-2.5"
+                    className="bg-gray-50 border m-auto border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-full md:w-2/5 p-2.5"
                     required=""
                   >
                     <option value="">Horas</option>

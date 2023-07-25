@@ -115,7 +115,7 @@ export const confirmAccount = createAsyncThunk(
 
 export const googleSignIn = createAsyncThunk(
   "auth/googleSignIn",
-  async ({ accessToken, navigate, toast, rute = "/servicios" }, { rejectWithValue }) => {
+  async ({ accessToken, navigate, toast, rute = "/servicio" }, { rejectWithValue }) => {
     try {
       const response = await api.googleSignIn(accessToken);
       toast.success("Inicio de sesión con Google exitoso");

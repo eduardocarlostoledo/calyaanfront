@@ -10,7 +10,7 @@ const Address = () => {
   const [addresses, setAddresses] = useState([]);
 
   const handleToggleModalAddress = () => {
-    setModalAddressForm((prevState) => !prevState);
+    setModalAddressForm(!modalAddressForm);
   };
 
   useEffect(() => {

@@ -118,7 +118,7 @@ const Footer = () => {
                                     <li>
                                         <a
                                             className="text-white transition hover:text-white/75"
-                                            href="http://localhost:5173/servicios"
+                                            href="https://calyaan.com/"
                                         >
                                             Tienda
                                         </a>

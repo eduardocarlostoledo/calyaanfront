@@ -26,7 +26,7 @@ const Header2 = () => {
     <header>
       <nav className="bg-white border-gray-200 px-4 lg:px-6 pt-8 pb-4 sm:py-8">
         <div className="flex flex-wrap gap-4 justify-center sm:justify-between items-center mx-auto max-w-screen-xl">
-          <Link to="/servicios">
+          <Link to="/servicio">
             <LazyLoadImage
               effect="blur"
               width="150"
@@ -41,7 +41,7 @@ const Header2 = () => {
           </Link>
             {user ? (
               <div className="flex items-center space-x-2 justify-center">
-                <div className="dropdown inline-block relative">
+               {/*  <div className="dropdown inline-block relative">
                   <AiOutlineBell className="w-6 h-6 text-gray-400 hover:text-primary cursor-pointer" />
                   <div className="z-40 w-64 right-4 p-1  bg-white divide-y dropdown-menu absolute hidden  text-gray-700  border    divide-gray-100 rounded-lg shadow ">
                     <div className=" px-4 py-2 z-40 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50">
@@ -100,7 +100,7 @@ const Header2 = () => {
                       </div>
                     </a>
                   </div>
-                </div>
+                </div> */}
 
                 <Link to="/ajustes">
                   <RiSettings3Line className="w-6 h-6 text-gray-400 hover:text-primary" />
@@ -230,7 +230,7 @@ const Header2 = () => {
               </>
             )}
 
-            <button
+            {/* <button
               onClick={handleMenu}
               type="button"
               className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
@@ -262,9 +262,9 @@ const Header2 = () => {
                   clipRule="evenodd"
                 ></path>
               </svg>
-            </button>
+            </button> */}
           </div>
-          <div
+       {/*    <div
             className={`"justify-between items-center w-full lg:flex lg:w-auto lg:order-1" ${
               !open && "hidden"
             }`}
@@ -312,7 +312,7 @@ const Header2 = () => {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </nav>
     </header>
