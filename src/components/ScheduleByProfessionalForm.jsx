@@ -109,8 +109,6 @@ const ScheduleByProfessionalForm = () => {
           }
         );
 
-       
-
         if (data?.length > 0) {
           // Filtrar objetos con creador distinto de null y con teléfono definido
           const filteredData = data.filter(
@@ -161,8 +159,6 @@ const ScheduleByProfessionalForm = () => {
   }, [inputValue.date]);
   const { date, time } = inputValue;
 
-
-
   return (
     <>
       <div className="mx-auto max-lg:my-8 p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
@@ -190,7 +186,8 @@ const ScheduleByProfessionalForm = () => {
                     name="date"
                     id="date"
                     onChange={handleChange}
-                    className="bg-gray-50 border m-auto border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-full p-2.5 md:w-1/2"
+                    className="bg-gray-50 border m-auto border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-96 max-lg:w-48 p-2.5"
+                    placeholder="username.example"
                     required=""
                   />
                 </div>
@@ -260,7 +257,7 @@ const ScheduleByProfessionalForm = () => {
                     name="time"
                     id="time"
                     onChange={handleChange}
-                    className="bg-gray-50 border m-auto border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-full md:w-2/5 p-2.5"
+                    className="bg-gray-50 border m-auto border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bgHover focus:border-bgHover block w-96 max-lg:w-48 p-2.5"
                     required=""
                   >
                     <option value="">Horas</option>

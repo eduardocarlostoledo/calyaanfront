@@ -114,7 +114,7 @@ const ServiceDetails = () => {
       <div className="lg:max-w-[1440px] md:max-w-[744px] max-w-[375px] w-full lg:px-10 md:px-6 px-4   bg-white mx-auto">
         <div className="lg:block ">
           <div className="grid grid-cols-6 mt-8 gap-5 max-lg:grid-cols-2">
-            <p className="text-xl font-medium leading-tight text-gray-600 lg:text-xl col-span-2">
+            <p className="text-xl max-md:text-center font-medium leading-tight text-gray-600 lg:text-xl col-span-2">
               Servicio
             </p>
             <p className="text-xl font-medium leading-tight text-gray-600 lg:pl-0 pl-28 lg:text-xl max-lg:hidden ">
@@ -297,7 +297,7 @@ const ServiceDetails = () => {
           {services.length <= 0 && (
             <a
               href="https://calyaan.com/categoria-producto/centro-belleza-bogota/masaje-relajante-bogota-domicilio"
-              className="flex border border-gray-300 lg:max-w-[296px] w-full justify-center py-3 gap-2 items-center"
+              className="flex border border-gray-300 lg:max-w-[296px w-full  justify-center py-3 gap-2 items-center"
             >
               <svg
                 width={16}
@@ -315,7 +315,7 @@ const ServiceDetails = () => {
                   fill="#1F2937"
                 />
               </svg>
-              <p className="text-base font-medium leading-none text-gray-800">
+              <p className="text-base  max-md:w-2/3 max-md:text-center font-medium leading-none text-gray-800">
                 Continuar comprando
               </p>
             </a>

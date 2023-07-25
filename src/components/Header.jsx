@@ -36,12 +36,12 @@ const Header2 = () => {
             />
           </Link>
           <div className="flex items-center lg:order-2">
-          <Link to="/servicio">
-          <AiOutlineShoppingCart className="w-6 h-6 mr-2 text-gray-400 hover:text-primary cursor-pointer"/>
-          </Link>
+            <Link to="/servicio">
+              <AiOutlineShoppingCart className="w-6 h-6 mr-2 text-gray-400 hover:text-primary cursor-pointer" />
+            </Link>
             {user ? (
               <div className="flex items-center space-x-2 justify-center">
-               {/*  <div className="dropdown inline-block relative">
+                {/*  <div className="dropdown inline-block relative">
                   <AiOutlineBell className="w-6 h-6 text-gray-400 hover:text-primary cursor-pointer" />
                   <div className="z-40 w-64 right-4 p-1  bg-white divide-y dropdown-menu absolute hidden  text-gray-700  border    divide-gray-100 rounded-lg shadow ">
                     <div className=" px-4 py-2 z-40 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50">
@@ -143,14 +143,14 @@ const Header2 = () => {
                         </Link>
                       </li>
 
-                      <li>
+                      {/* <li>
                         <Link
                           className="py-2 px-4 block whitespace-no-wrap text-left hover:text-primary hover:bg-gray-200"
                           to="/favoritos"
                         >
                           Favoritos
                         </Link>
-                      </li>
+                      </li> */}
                     </RoleGuardComponent>
 
                     <RoleGuardComponent rol={[ROLES.ADMIN]}>
@@ -164,12 +164,12 @@ const Header2 = () => {
                       </li>
 
                       <li>
-                        <Link
+                        {/* <Link
                           className="py-2 px-4 block whitespace-no-wrap text-left hover:text-primary hover:bg-gray-200"
                           to="/"
                         >
                           Usuarios
-                        </Link>
+                        </Link> */}
                       </li>
                     </RoleGuardComponent>
 
@@ -264,7 +264,7 @@ const Header2 = () => {
               </svg>
             </button> */}
           </div>
-       {/*    <div
+          {/*    <div
             className={`"justify-between items-center w-full lg:flex lg:w-auto lg:order-1" ${
               !open && "hidden"
             }`}

@@ -60,7 +60,6 @@ const RecomendationCards = ({
       if (horas === null) {
         return;
       }
-
       const matchLocalidad = creador.localidadesLaborales?.some((loca) =>
         loca?.toLowerCase().includes(localidad?.toLowerCase())
       );
@@ -74,7 +73,9 @@ const RecomendationCards = ({
     });
   }, [newProducts, searchText]);
 
-  const paginatedData = filteredOrdenes.slice(
+  const limit = filteredOrdenes.slice(0, 20);
+
+  const paginatedData = limit.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
@@ -210,7 +211,6 @@ const RecomendationCards = ({
     const selectedRows = filteredOrdenes.filter((orden) =>
       selectedRowKeys.includes(orden.key)
     );
-  
   };
 
   const onPageChange = (page, pageSize) => {
@@ -255,10 +255,11 @@ const RecomendationCards = ({
         {renderCards()}
       </div>
       <Pagination
+        size="small"
         current={currentPage}
         pageSize={pageSize}
         showSizeChanger={false}
-        total={filteredOrdenes?.length}
+        total={limit?.length}
         onChange={onPageChange}
         style={{ marginTop: 16, marginBottom: 16, textAlign: "center" }}
       />
