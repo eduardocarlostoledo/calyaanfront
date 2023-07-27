@@ -209,7 +209,11 @@ export const localidadesLaborales = [
   "Usme Danubio",
   "Usme Gran Yomasa",
   "Usme La Flora",
-  "Usme Parque Entrenubes"
+  "Usme Parque Entrenubes",
+  "Cundinamarca Chia",
+  "Cundinamarca Cota",
+  "Cundinamarca Cajica",
+  "Cundinamarca La Calera",
 ];
 
 
