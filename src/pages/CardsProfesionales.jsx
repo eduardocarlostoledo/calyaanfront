@@ -18,9 +18,10 @@ const CardsProfessionalAntDesing = () => {
       .catch((error) => setError(error.message));
   }, [dispatch]);
 
-  const orders = useSelector(
-    (state) => state.professional.disponibilidad || []
-  );
+  let orders = useSelector((state) => state.professional.disponibilidad || []);
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
 
   const newProducts = orders?.map((product) => ({
     ...product,
@@ -287,7 +288,6 @@ const CardsProfessionalAntDesing = () => {
     const selectedRows = filteredOrdenes.filter((orden) =>
       selectedRowKeys.includes(orden.key)
     );
-
   };
 
   const onPageChange = (page, pageSize) => {

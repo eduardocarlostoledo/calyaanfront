@@ -39,7 +39,10 @@ const ProductExpanded = ({
   const [error, setError] = useState(null);
 
   const change = useSelector((state) => state.ordenes.update);
-  const orders = useSelector((state) => state.ordenes.order || []);
+  let orders = useSelector((state) => state.ordenes.order || []);
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
   //separo los useEffect para que no se renderize todo junto
 
   useEffect(() => {
@@ -55,7 +58,7 @@ const ProductExpanded = ({
   async function handleSubmit(e) {
     setLoading(false);
     e.preventDefault();
-   
+
     const data = new FormData();
     Object.keys(input).forEach((key) => data.append(key, input[key]));
     try {
@@ -441,7 +444,7 @@ const FacturacionAntDesing = () => {
   const handleDateChange = (dates) => {
     const dateNow = dates ? moment(dates[0].$d).format("YYYY/MM/DD") : null;
     const dateNow2 = dates ? moment(dates[1].$d).format("YYYY/MM/DD") : null;
- 
+
     dates ? setStartDate(dateNow) : setStartDate("");
     dates ? setEndDate(dateNow2) : setEndDate("");
   };
@@ -465,8 +468,11 @@ const FacturacionAntDesing = () => {
   //     .catch((error) => setError(error.message));
   // }, [change]);
 
-  const orders = useSelector((state) => state.ordenes.order || []);
+  let orders = useSelector((state) => state.ordenes.order || []);
 
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
   //// Mapeo ordenes para agregar una key a cada fila
   const newProducts = orders?.map((product) => ({
     ...product,

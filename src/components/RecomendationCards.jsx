@@ -43,9 +43,10 @@ const RecomendationCards = ({
     valorServices && setServices(valorServices);
   }, [dispatch]);
 
-  const orders = useSelector(
-    (state) => state.professional.disponibilidad || []
-  );
+  let orders = useSelector((state) => state.professional.disponibilidad || []);
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
 
   const newProducts = orders?.map((product) => ({
     ...product,

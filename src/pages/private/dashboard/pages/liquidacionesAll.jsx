@@ -42,7 +42,10 @@ const ProductExpanded = ({
   const [error, setError] = useState(null);
 
   const change = useSelector((state) => state.ordenes.update);
-  const orders = useSelector((state) => state.ordenes.order || []);
+  let orders = useSelector((state) => state.ordenes.order || []);
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
   //separo los useEffect para que no se renderize todo junto
   useEffect(() => {
     dispatch(getLiquidacion())
@@ -413,8 +416,11 @@ const LiquidacionAllAntDesing = () => {
     setSelectedRowsTotal(percentage);
   }, [selectedRows]);
 
-  const orders = useSelector((state) => state.liquidaciones.liquidacion || []);
+  let orders = useSelector((state) => state.liquidaciones.liquidacion || []);
   // console.log(orders, "ordenes");
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
   const handleEditModalOpen = () => {
     setEditModalVisible(true);
   };
@@ -425,7 +431,6 @@ const LiquidacionAllAntDesing = () => {
   };
 
   const handleEstadoLiquidacionChange = (value) => {
-  
     setSelectedEstadoLiquidacion(value);
   };
 
@@ -449,6 +454,12 @@ const LiquidacionAllAntDesing = () => {
 
   const rowSelection = {
     onChange: handleRowSelect,
+  };
+
+  const refreshData = () => {
+    dispatch(getOrders())
+      .then(() => setLoading(false))
+      .catch((error) => setError(error.message));
   };
 
   const newProducts = orders?.map((product) => ({

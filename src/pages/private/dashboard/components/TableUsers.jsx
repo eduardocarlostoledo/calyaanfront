@@ -18,14 +18,13 @@ const LinksPerfiles = {
   PROFESIONAL: "/dashboard/perfil-profesional",
 };
 
-
 const TableUsers = () => {
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
   const [userState, setUserState] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchText, setSearchText] = useState("");  
+  const [searchText, setSearchText] = useState("");
   const [editProduct, setEditProduct] = useState(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -49,7 +48,10 @@ const TableUsers = () => {
       .catch((error) => setError(error.message));
   }, [dispatch]);
 
-  const orders = useSelector((state) => state.usuarios.users || []);
+  let orders = useSelector((state) => state.usuarios.users || []);
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
 
   const newProducts = orders?.map((product) => ({
     ...product,
@@ -68,7 +70,7 @@ const TableUsers = () => {
         email?.includes(searchText) ||
         nombreCompleto.includes(searchText.toLowerCase()) ||
         (nombre?.toLowerCase().includes(searchText.toLowerCase()) &&
-          apellido?.toLowerCase().includes(searchText.toLowerCase())) 
+          apellido?.toLowerCase().includes(searchText.toLowerCase()))
       );
     });
   }, [newProducts, searchText]);
@@ -99,28 +101,28 @@ const TableUsers = () => {
       defaultSortOrder: "descend",
       render: (text) => <p>{text}</p>,
     },
-     {
-  title: "Telefono",
-  dataIndex: "telefono",
-  defaultSortOrder: "descend",
-  render: (text) => {
-    // Eliminar el carácter "+" de la variable "telefono"
-    const phoneNumber = text?.replace(/\+/g, '');
+    {
+      title: "Telefono",
+      dataIndex: "telefono",
+      defaultSortOrder: "descend",
+      render: (text) => {
+        // Eliminar el carácter "+" de la variable "telefono"
+        const phoneNumber = text?.replace(/\+/g, "");
 
-    return (
-      <div>
-        <p>{text}</p>
-        <a
-          href={`https://api.whatsapp.com/send/?phone=${phoneNumber}&text&type=phone_number&app_absent=0`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaWhatsapp size={25} />
-        </a>
-      </div>
-    );
-  },
-},
+        return (
+          <div>
+            <p>{text}</p>
+            <a
+              href={`https://api.whatsapp.com/send/?phone=${phoneNumber}&text&type=phone_number&app_absent=0`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaWhatsapp size={25} />
+            </a>
+          </div>
+        );
+      },
+    },
     {
       title: "Ultimo Acceso",
       dataIndex: "ultimaConexion",
@@ -133,11 +135,13 @@ const TableUsers = () => {
       defaultSortOrder: "descend",
       render: (text, record) => (
         <>
-          {modal &&  (<ModalUserInfo
-            userState={record}
-            handleModalView={handleModalView}
-            key={text}
-          />)}
+          {modal && (
+            <ModalUserInfo
+              userState={record}
+              handleModalView={handleModalView}
+              key={text}
+            />
+          )}
           <Link
             to={`${LinksPerfiles[record.rol]}/${text}`}
             type="button"
@@ -148,8 +152,6 @@ const TableUsers = () => {
         </>
       ),
     },
-
-
   ];
 
   const onSelectChange = (selectedRowKeys) => {
@@ -159,11 +161,12 @@ const TableUsers = () => {
     const selectedRows = filteredOrdenes.filter((orden) =>
       selectedRowKeys.includes(orden.key)
     );
-
   };
 
   return (
-    <div style={{ textAlign: "center", alignItems: "center", overflow: "auto" }}>
+    <div
+      style={{ textAlign: "center", alignItems: "center", overflow: "auto" }}
+    >
       <p className="p">USUARIOS</p>
       <p className="p">BUSQUEDA POR NOMBRE, APELLIDO, TELEFONO, EMAIL, ROL</p>
 
@@ -195,36 +198,30 @@ const TableUsers = () => {
           rowSelection={{
             selectedRowKeys,
             onChange: onSelectChange,
-          }}          
+          }}
         />
       </div>
       <div>
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2"
-              onClick={() => {
-                if ([rol].includes("")) {
-                  handleDownload(
-                    `api/usuarios/excel-usuarios`,
-                    `usuarios.xlsx`
-                  );
-                } else {
-                  handleDownload(
-                    `api/usuarios/excel-${rol.toLocaleLowerCase()}`,
-                    `${rol.toLocaleLowerCase() + ".xlsx"}`
-                  );
-                }
-              }}
-            >
-              <AiOutlineCloudDownload />
-              <span className="sr-only">Exportar Excel</span>
-            </button>    
-          </div>
+        <button
+          type="button"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2"
+          onClick={() => {
+            if ([rol].includes("")) {
+              handleDownload(`api/usuarios/excel-usuarios`, `usuarios.xlsx`);
+            } else {
+              handleDownload(
+                `api/usuarios/excel-${rol.toLocaleLowerCase()}`,
+                `${rol.toLocaleLowerCase() + ".xlsx"}`
+              );
+            }
+          }}
+        >
+          <AiOutlineCloudDownload />
+          <span className="sr-only">Exportar Excel</span>
+        </button>
+      </div>
     </div>
   );
 };
 
 export default TableUsers;
-
-
-

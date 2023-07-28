@@ -76,7 +76,10 @@ const ProductExpanded = ({
   const [error, setError] = useState(null);
 
   const change = useSelector((state) => state.ordenes.update);
-  const orders = useSelector((state) => state.ordenes.order || []);
+  let orders = useSelector((state) => state.ordenes.order || []);
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
   //separo los useEffect para que no se renderize todo junto
   // useEffect(() => {
   //   dispatch(getOrders())
@@ -592,8 +595,11 @@ const OrdenesAntDesing = (props) => {
   //     .catch((error) => setError(error.message));
   // }, [change]);
 
-  const orders = useSelector((state) => state.ordenes.order || []);
+  let orders = useSelector((state) => state.ordenes.order || []);
   // console.log(orders, "order");
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
   //// Mapeo ordenes para agregar una key a cada fila
   const newProducts = orders?.map((product) => ({
     ...product,

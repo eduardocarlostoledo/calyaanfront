@@ -75,7 +75,10 @@ const ProductExpanded = ({
   const [error, setError] = useState(null);
 
   const change = useSelector((state) => state.ordenes.update);
-  const orders = useSelector((state) => state.ordenes.order || []);
+  let orders = useSelector((state) => state.ordenes.order || []);
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
   //separo los useEffect para que no se renderize todo junto
   useEffect(() => {
     dispatch(getOrders())
@@ -584,7 +587,11 @@ const LiquidacionAntDesing = () => {
     }
   }, [selectedRows]);
 
-  const orders = useSelector((state) => state.ordenes.order || []);
+  let orders = useSelector((state) => state.ordenes.order || []);
+  console.log(orders, "ordenes");
+  if (!Array.isArray(orders)) {
+    orders = [];
+  }
 
   const handleEditModalOpen = () => {
     if (
@@ -1000,6 +1007,12 @@ const LiquidacionAntDesing = () => {
     //   render: (text) => <p>{text}</p>,
     // },
   ];
+
+  const refreshData = () => {
+    dispatch(getOrders())
+      .then(() => setLoading(false))
+      .catch((error) => setError(error.message));
+  };
 
   return (
     <div style={{ textAlign: "center", alignItems: "center" }}>
