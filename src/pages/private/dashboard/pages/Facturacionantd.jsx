@@ -18,6 +18,8 @@ const ProductExpanded = ({
   _id,
   cliente_id,
   direccion_Servicio,
+  localidad_servicio,
+  hora_servicio,
   estadoServicio,
   estadoPago,
   payment_id,
@@ -27,6 +29,8 @@ const ProductExpanded = ({
 }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({
+    hora_servicio: hora_servicio,
+    localidad_servicio: localidad_servicio,
     estadoPago: factura.estadoPago,
     estado_facturacion: factura.estado_facturacion,
     origen: factura.origen,
@@ -81,21 +85,6 @@ const ProductExpanded = ({
     setEditProduct(0);
   }
 
-  // useEffect(() => {
-  //   const fetchOrders = async () => {
-  //     setLoading(true);
-  //     try {
-  //       await dispatch(getOrders());
-  //       setLoading(false);
-  //     } catch (error) {
-  //       setError(error.message);
-  //       setLoading(false);
-  //     }
-  //   };
-  //   console.log("act");
-  //   fetchOrders();
-  // }, [loading]);
-
   return (
     <div>
       {!(editProduct === _id) && (
@@ -124,7 +113,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                <b>Localidad:</b> {input.localidad_Servicio}
+                <b>Localidad:</b> {input.localidad_servicio || " Sin localidad"}
               </p>
               <p
                 className="PDivInfo"
@@ -135,7 +124,7 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                <b>Dirección de servicio:</b> {input.direccion_Servicio}
+                <b>Hora de servicio:</b> {input.hora_servicio}
               </p>
               <p
                 className="PDivInfo"
@@ -154,8 +143,7 @@ const ProductExpanded = ({
                       : "transparent",
                 }}
               >
-                <b> Estado pago:</b>
-                {input.estadoPago}
+                <b> Estado pago:</b> {input.estadoPago}
               </p>
 
               <p
@@ -167,76 +155,8 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                <b>Origen del pago:</b> {input?.factura?.origen}
+                <b>Origen del pago:</b> {input?.origen}
               </p>
-              {/* <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Email: {input.cliente_email}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Nombre: {input.cliente_nombre}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Apellido: {input.cliente_apellido}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }} 
-              >
-                Cédula: {input.cliente_cedula}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Teléfono: {input.cliente_telefono}
-              </p> */}
-
-              {/* <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Dirección adicional de servicio: <br />
-                {input.adicional_direccion_Servicio}
-              </p> */}
             </div>
 
             <div style={{ width: "50%" }}>
@@ -250,7 +170,7 @@ const ProductExpanded = ({
                 }}
               >
                 <b>Estado de facturación:</b>
-                {input.factura?.estado_facturacion}
+                {input?.estado_facturacion}
               </p>
               <p
                 className="PDivInfo"
@@ -262,7 +182,7 @@ const ProductExpanded = ({
                 }}
               >
                 <b>Número de facturación:</b>
-                {input.factura?.nro_factura}
+                {input?.nro_factura || " Sin numero"}
               </p>
               <p
                 className="PDivInfo"
@@ -273,53 +193,9 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
-                <b>N°Pago:</b> {input.factura?.payment_id}
+                <b>N°Pago:</b>{" "}
+                {input?.payment_id === null ? input?.payment_id : " Sin numero"}
               </p>
-              {/* <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize:"14px",
-                }}
-              >
-                Teléfono de servicio: {input.telefono_Servicio}
-              </p> */}
-              {/* <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Estado de facturación: {input.estadoServicio}
-              </p> */}
-
-              {/* <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Estado de liquidación: {input.estadoLiquidacion}
-              </p> */}
-              {/* <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "2px",
-                  borderRadius: "3px",
-                  fontSize: "17px",
-                }}
-              >
-                Número de liquidación: {input.numeroLiquidacion}
-              </p> */}
             </div>
           </div>
         </div>
@@ -1032,27 +908,8 @@ const FacturacionAntDesing = () => {
                 payment_id={record.factura?.payment_id}
                 estadoServicio={record?.estado_servicio}
                 factura={record?.factura}
-                // cliente_email={record.cliente_email}
-                // cliente_nombre={record.cliente_nombre}
-                // cliente_apellido={record.cliente_apellido}
-                // cliente_cedula={record.cliente_cedula}
-                // cliente_telefono={record.cliente_telefono}
-                // profesional_email={record.profesional_email}
-                // profesional_nombre={record.profesional_nombre}
-                // profesional_apellido={record.profesional_apellido}
-                // direccion_Servicio={record.direccion_Servicio}
-                // adicional_direccion_Servicio={
-                //   record.adicional_direccion_Servicio
-                // }
-                // estadoPago={record.estadoPago}
-                // payment_id={record.payment_id}
-                // localidad_Servicio={record.localidad_Servicio}
-                // telefono_Servicio={record.telefono_Servicio}
-                // estadoServicio={record?.estadoServicio}
-                // estadoFacturacion={record?.estadoFacturacion}
-                // numeroFacturacion={record?.numeroFacturacion}
-                // estadoLiquidacion={record?.estadoLiquidacion}
-                // numeroLiquidacion={record?.numeroLiquidacion}
+                hora_servicio={record.hora_servicio}
+                localidad_servicio={record.localidad_servicio}
                 editProduct={editProduct}
                 setEditProduct={setEditProduct}
               />

@@ -329,7 +329,7 @@ const ServiceDetails = () => {
             ${services.length <= 0 && "disabled:opacity-40"}`}
             disabled={services.length <= 0 ? true : false}
           >
-            Agenda tu reserva
+            Reservar
           </button>
         </div>
       </div>

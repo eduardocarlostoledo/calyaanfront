@@ -9,6 +9,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiEditAlt, BiRefresh } from "react-icons/bi";
 import moment from "moment";
 import swal from "sweetalert";
+import { getOrders } from "../../../../redux/features/ordenesSlice";
 
 const { RangePicker } = DatePicker;
 
@@ -197,14 +198,14 @@ const ProductExpanded = ({
             <b style={{ margin: "auto" }}> Ordenes: </b>
           </div>
           <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "nowrap",
-            }}
+          // style={{
+          //   display: "flex",
+          //   flexDirection: "row",
+          //   flexWrap: "wrap",
+          // }}
           >
             {input?.ordenes?.map((order) => (
-              <div style={{ width: "50%", padding: "1rem" }}>
+              <div style={{ padding: "1rem" }}>
                 <p>
                   <b>Orden id: </b>
                   {order._id}
@@ -217,7 +218,14 @@ const ProductExpanded = ({
                     flexWrap: "nowrap",
                   }}
                 >
-                  <div style={{ width: "50%" }}>
+                  <div
+                    style={{
+                      width: "50%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: ".2rem",
+                    }}
+                  >
                     {order.ciudad_servicio && (
                       <p>
                         <b>ciudad:</b>
@@ -237,7 +245,14 @@ const ProductExpanded = ({
                       </p>
                     )}
                   </div>
-                  <div style={{ width: "50%" }}>
+                  <div
+                    style={{
+                      width: "50%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: ".2rem",
+                    }}
+                  >
                     {order.cita_servicio && (
                       <p>
                         <b>fecha</b>:{order.cita_servicio}
