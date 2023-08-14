@@ -490,9 +490,9 @@ const LiquidacionAllAntDesing = () => {
     const searchTextLower = searchText.toLowerCase();
     return newProducts.filter((orden) => {
       const fullNameProfesional =
-        `${orden.profesional_id?.nombre} ${orden.profesional_id?.apellido}`.toLowerCase();
+        `${orden.profesional?.creador?.nombre} ${orden.profesional?.creador?.apellido}`.toLowerCase();
       const fullNameProfesionalInverso =
-        `${orden.profesional_id?.nombre} ${orden.profesional_id?.apellido}`.toLowerCase();
+        ` ${orden.profesional?.creador?.apellido} ${orden.profesional?.creador?.nombre}`.toLowerCase();
 
       const orderDate = moment(orden.createdAt, "YYYY/MM/DD");
 
@@ -500,14 +500,13 @@ const LiquidacionAllAntDesing = () => {
         return (
           (fullNameProfesional?.includes(searchTextLower) ||
             fullNameProfesionalInverso?.includes(searchTextLower) ||
-            orden.factura?.nro_factura?.includes(searchTextLower) ||
-            orden.factura?.payment_id?.includes(searchTextLower) ||
-            orden._id?.includes(searchTextLower) ||
-            orden.cliente_id?.cedula.includes(searchTextLower) ||
-            orden.cliente_id?.telefono?.includes(searchTextLower) ||
-            orden.cliente_id?.email?.includes(searchTextLower) ||
-            orden.servicio?.toLowerCase().includes(searchTextLower) ||
-            orden.direccion_Servicio
+            orden?.factura?.nro_factura?.includes(searchTextLower) ||
+            orden?.factura?.payment_id?.includes(searchTextLower) ||
+            orden?._id?.includes(searchTextLower) ||
+            orden?.cliente_id?.cedula.includes(searchTextLower) ||
+            orden?.cliente_id?.telefono?.includes(searchTextLower) ||
+            orden?.cliente_id?.email?.includes(searchTextLower) ||
+            orden?.direccion_Servicio
               ?.toLowerCase()
               .includes(searchTextLower)) &&
           orderDate.isBetween(startDate, endDate, null, "[]")
@@ -517,14 +516,13 @@ const LiquidacionAllAntDesing = () => {
       return (
         fullNameProfesional?.includes(searchTextLower) ||
         fullNameProfesionalInverso?.includes(searchTextLower) ||
-        orden.factura?.nro_factura?.includes(searchTextLower) ||
-        orden.factura?.payment_id?.includes(searchTextLower) ||
-        orden._id?.includes(searchTextLower) ||
-        orden.cliente_id?.cedula.toString().includes(searchTextLower) ||
-        orden.cliente_id?.telefono?.includes(searchTextLower) ||
-        orden.cliente_id?.email?.includes(searchTextLower) ||
-        orden.servicios[0]?.nombre.toLowerCase()?.includes(searchTextLower) ||
-        orden.direccion_Servicio?.toLowerCase()?.includes(searchTextLower)
+        orden?.factura?.nro_factura?.includes(searchTextLower) ||
+        orden?.factura?.payment_id?.includes(searchTextLower) ||
+        orden?._id?.includes(searchTextLower) ||
+        orden?.cliente_id?.cedula.toString().includes(searchTextLower) ||
+        orden?.cliente_id?.telefono?.includes(searchTextLower) ||
+        orden?.cliente_id?.email?.includes(searchTextLower) ||
+        orden?.direccion_Servicio?.toLowerCase()?.includes(searchTextLower)
       );
     });
   }, [newProducts, searchText, startDate, endDate]);
