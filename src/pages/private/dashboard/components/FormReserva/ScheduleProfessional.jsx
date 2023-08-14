@@ -53,7 +53,9 @@ const ScheduleProfessional = ({ loadingLiberar, nombreServicio, localidadServici
     if (name === "time") {
       const [startTime] = value.split("-"); // Obtener el valor de inicio de la hora
       // console.log("startTime", startTime);
-      const isValidTime = validateTime(startTime);
+      
+      // const isValidTime = validateTime(startTime); //se comenta la linea para quitar el control del tiempo
+      const isValidTime = true
       setPagar(isValidTime);
       if (!isValidTime) {
         swal("¡Error!", "Se requieren al menos 5hrs de anticipación", "error");

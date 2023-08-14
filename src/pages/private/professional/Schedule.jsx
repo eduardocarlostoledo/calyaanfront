@@ -146,16 +146,17 @@ const Schedule = () => {
               <input
                 type="date"
                 onChange={onChangeInputDate}
-                min={
-                  dateCurrent.toISOString().split("T")[0]
-                } /*para definir solamente reservas hacia adelante*/
-                max={
-                  dateCurrent.getFullYear() +
-                  "-0" +
-                  (dateCurrent.getMonth() + 2) +
-                  "-" +
-                  dateCurrent.getDate()
-                }
+                //se comenta para cambiar la agenda.
+                // min={
+                //   dateCurrent.toISOString().split("T")[0]
+                // } /*para definir solamente reservas hacia adelante*/
+                // max={
+                //   dateCurrent.getFullYear() +
+                //   "-0" +
+                //   (dateCurrent.getMonth() + 2) +
+                //   "-" +
+                //   dateCurrent.getDate()
+                // }
                 className="w-full block bg-gray-100 border-gray-400 font-semibold rounded-lg px-4 py-3 mt-6"
               />
 
