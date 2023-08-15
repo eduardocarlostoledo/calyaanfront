@@ -19,7 +19,6 @@ const CreateReservation = () => {
   const params = new URLSearchParams(querystring);
   let id = params.get("id");
 
-
   const [idOrder, setIDOrder] = useState(id)
   const [datosPago,setDatosPago] = useState({
     origen:"",
@@ -34,9 +33,7 @@ const CreateReservation = () => {
   // Para buscar el usuario mediante Email
   const [userEmail, setUserEmail] = useState("");
 
-
   const [cargando2, setCargando2] = useState(false);
-
 
   const [reserva, setReserva] = useState({
     cliente_id: "",
@@ -69,9 +66,9 @@ const CreateReservation = () => {
     });
   };
 
-
   const [servicios, setServicios] = useState([]);
   const [liberar, setLiberar] = useState({}); //se va a guardar el dato de la reserva si existe en caso de reprogramacion
+  const [loadingLiberar,setLoadingLiberrar] = useState(false)
 
   useEffect(() => {
     if (id) {
@@ -79,9 +76,6 @@ const CreateReservation = () => {
         try {
 
           let { data } = await clienteAxios.get(`api/ordenes/getordenbyid/${id}`);
-
-
-    
 
           if (data.profesional_id) {
             setReserva({
@@ -114,9 +108,9 @@ const CreateReservation = () => {
               cliente_apellido: data.cliente_id.apellido,
               cliente_cedula: data.cliente_id.cedula,
               cliente_telefono: data.cliente_id.telefono,
-              telefono_servicio:data.telefono_servicio,
+              telefono_servicio: data.telefono_servicio,
               profesional_id: "",
-              cita_servicio: data.cliente_id.cita_servicio,
+              cita_servicio: "",
               hora_servicio: "",
               direccion_servicio:data.direccion_servicio,
               localidad_servicio: data.localidad_servicio,
@@ -127,9 +121,7 @@ const CreateReservation = () => {
               link_pago: data.factura.link_pago,
               estadoPago:data.factura.estadoPago
             });
-          }
-
-    
+          }    
 
           setServicios(data.servicios);
 
@@ -141,7 +133,6 @@ const CreateReservation = () => {
           setEstado("nuevo");
 
           if (data.hora_servicio && data.cita_servicio) {
-          
 
             setLiberar({
               ...data,
@@ -152,6 +143,7 @@ const CreateReservation = () => {
               liberar_profesional_telefono: data.profesional_id?.telefono,
             });
           }
+
         } catch (error) {
           console.log(error);
           const errorMsg =
@@ -165,12 +157,9 @@ const CreateReservation = () => {
     }
   }, [id]);
 
-
-
   const [metodoexterno, setMetodoExterno] = useState(false)
 
   async function generarPreferencias(metodo) {
-
 
     setCargando2(true);
 
@@ -252,10 +241,8 @@ const CreateReservation = () => {
         text: ",
         icon: "error",
         button: "Aceptar",
-      }); */
-    
+      }); */    
     }
-
     setCargando2(false);
   }
 
@@ -312,20 +299,13 @@ const CreateReservation = () => {
 
       setLinkPago(datos2.init_point);
     }
-
   }
 
-
-
   const [orderId, setOrderId] = useState("");
-
-
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(linkPago);
   };
-
-
 
   const [inputValue, setInputValue] = useState({
     address: "",
@@ -379,8 +359,6 @@ const CreateReservation = () => {
     obtenerProfesional();
   }, [date]);
 
-
-
   const [confirmarReserva, setConfirmarReserva] = useState(false);
   const [profesional, setProfesional] = useState({});
   const [hourSelect, setHoursSelect] = useState([]); // mapea la disponibilidad.horarios del profesional
@@ -422,14 +400,41 @@ const CreateReservation = () => {
     setConfirmarReserva(true);
   };
 
-  const [loadingLiberar,setLoadingLiberrar] = useState(false)
+  //no va
+  const obtenerUsuarios = async () => {
+    setCargando2(true);    
+    try {    
+      const nombre = nombreServicio || "";
+      const localidad = localidadServicio || "";    
+      // Verificar si los datos son inválidos, nulos o no definidos
+      if (!inputValue.date || !nombre) {
+        // console.log("Datos inválidos o no definidos");
+        setCargando2(false);
+        return;
+      }
+
+      const { data } = await clienteAxios.post(
+        "api/reservas/profesionales/fecha",
+        {
+          fecha: inputValue.date,
+          especialidad: [nombre],
+          localidad,
+        }
+      );    
+      setProfesionalesRequest(data);    
+      setCargando2(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const guardarReserva = async () => {
-    setLoadingLiberrar(true)
     try {
 
       if (liberar && Object.keys(liberar).length > 0) {
-        // console.log("liberando reserva")
+        setLoadingLiberrar(true)
+
+        //console.log("liberando reserva" , liberar)
         let response = await clienteAxios.post(
           `api/pay/finish/liberar`,
           liberar
@@ -439,7 +444,7 @@ const CreateReservation = () => {
 
         toast.success(response.data.msg);
         toast.success(data.msg);
-        setLoadingLiberrar(false)
+
         swal({
           title: "Reprogramada",
           text: "Recarga tu navegador para ver los cambios",
@@ -448,13 +453,11 @@ const CreateReservation = () => {
         });
       }
 
-      swal({
-        title: "Algo salio mal",
-        text: "Recarga tu navegador o consulta con area de tecnologia",
-        icon: "error",
-        button: "Aceptar",
-      });
-      // console.log("asignando reserva")
+      // if (reserva.metodo_pago && !reserva.cita_servicio && !reserva.hora_servicio) {
+      //   console.log("reserva sin datos", reserva.metodo_pago)      
+      //   //obtenerUsuarios()
+      // }     
+      
       setLoadingLiberrar(false)
       setConfirmarReserva(false);
 
@@ -465,6 +468,14 @@ const CreateReservation = () => {
       let error = err.response.data.msg
         ? err.response.data.msg
         : err.response && "Estamos presentando problemas internos";
+
+        swal({
+          title: "Algo salio mal",
+          text: "Recarga tu navegador o consulta con area de tecnologia",
+          icon: "error",
+          button: "Aceptar",
+        });
+
       return toast.error(error);
     }
   };
@@ -614,6 +625,8 @@ const CreateReservation = () => {
 
                 <ScheduleProfessional loadingLiberar={loadingLiberar}  guardarReserva={guardarReserva} id={idOrder} reserva={reserva} setReserva={setReserva} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
 
+                {/* {console.log("ScheduleProfessional PARAMS","liberar", liberar, "loadingLiberar", loadingLiberar,"guardarReserva", guardarReserva, "idOrder", idOrder , "reserva",reserva ,"setReserva",  setReserva, "servicios[0]?.nombre", servicios[0]?.nombre, "reserva.localidad_servicio", reserva.localidad_servicio)} */}
+
               </>
               : (reserva.metodo_pago === "Externo" || metodoexterno) &&
               <>
@@ -636,6 +649,8 @@ const CreateReservation = () => {
                 </div>
 
                 <ScheduleProfessional loadingLiberar={loadingLiberar} guardarReserva={guardarReserva} id={idOrder} reserva={reserva} setReserva={setReserva} nombreServicio={servicios[0]?.nombre} localidadServicio={reserva.localidad_servicio} />
+
+                    {/* {console.log("ScheduleProfessional PARAMS", "liberar", liberar, "loadingLiberar", loadingLiberar,"guardarReserva", guardarReserva, "idOrder", idOrder , "reserva",reserva ,"setReserva",  setReserva, "servicios[0]?.nombre", servicios[0]?.nombre, "reserva.localidad_servicio", reserva.localidad_servicio)} */}
 
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
 
