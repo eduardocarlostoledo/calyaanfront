@@ -23,6 +23,8 @@ const ProductExpanded = ({
   ordenes,
   profesional,
   totalLiquidacion,
+  porcentajeCaalyan,
+  porcentajeProfesional,
   editProduct,
   setEditProduct,
 }) => {
@@ -37,6 +39,8 @@ const ProductExpanded = ({
     ordenes,
     profesional,
     totalLiquidacion,
+    porcentajeCaalyan,
+    porcentajeProfesional,
   });
 
   const [loading, setLoading] = useState(true);
@@ -105,6 +109,52 @@ const ProductExpanded = ({
                   fontSize: "17px",
                 }}
               >
+                Número de facturación: {input.numeroLiquidacion}
+              </p>
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "12px",
+                  borderRadius: "5px",
+                  fontSize: "17px",
+                }}
+              >
+                Total liquidado: {input.totalLiquidacion}
+              </p>
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "12px",
+                  borderRadius: "5px",
+                  fontSize: "17px",
+                }}
+              >
+                Porcentaje Calyaan: {input.porcentajeCaalyan}
+              </p>
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "12px",
+                  borderRadius: "5px",
+                  fontSize: "17px",
+                }}
+              >
+                Porcentaje del profesional: {input.porcentajeProfesional}
+              </p>
+            </div>
+            <div style={{ width: "50%" }}>
+              <p
+                className="PDivInfo"
+                style={{
+                  border: "1px solid gray",
+                  padding: "12px",
+                  borderRadius: "5px",
+                  fontSize: "17px",
+                }}
+              >
                 Fecha inicio: {input.fechaInicio?.split("T")[0]?.slice(0, 10)}
               </p>
               <p
@@ -152,8 +202,6 @@ const ProductExpanded = ({
               >
                 Teléfono: {input.profesional.creador.telefono}
               </p> */}
-            </div>
-            <div style={{ width: "50%" }}>
               <p
                 className="PDivInfo"
                 style={{
@@ -164,29 +212,6 @@ const ProductExpanded = ({
                 }}
               >
                 Estado del servicio: {input.estadoLiquidacion}
-              </p>
-
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "12px",
-                  borderRadius: "5px",
-                  fontSize: "17px",
-                }}
-              >
-                Número de facturación: {input.numeroLiquidacion}
-              </p>
-              <p
-                className="PDivInfo"
-                style={{
-                  border: "1px solid gray",
-                  padding: "12px",
-                  borderRadius: "5px",
-                  fontSize: "17px",
-                }}
-              >
-                Total liquidado: {input.totalLiquidacion}
               </p>
             </div>
           </div>
@@ -526,7 +551,7 @@ const LiquidacionAllAntDesing = () => {
       );
     });
   }, [newProducts, searchText, startDate, endDate]);
-
+  console.log(filteredOrdenes, "filt");
   const columns = [
     Table.EXPAND_COLUMN,
     {
@@ -706,6 +731,8 @@ const LiquidacionAllAntDesing = () => {
                 ordenes={record.ordenes}
                 profesional={record.profesional}
                 totalLiquidacion={record.totalLiquidacion}
+                porcentajeCaalyan={record.porcentajeCaalyan}
+                porcentajeProfesional={record.porcentajeProfesional}
                 editProduct={editProduct}
                 setEditProduct={setEditProduct}
               />
