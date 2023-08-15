@@ -11,6 +11,8 @@ import {
 import moment from "moment";
 import swal from "sweetalert";
 import "./Ordenesantd.css";
+import { newHourArray } from "../../../../data";
+import { obtenerUsuarios } from "../../../../redux/features/usuariosSlice";
 
 const { RangePicker } = DatePicker;
 
@@ -22,6 +24,7 @@ const ProductExpanded = ({
   servicios,
   estadoPago,
   payment_id,
+  hora_servicio,
   // cliente_email,
   // cliente_nombre,
   // cliente_apellido,
@@ -49,6 +52,8 @@ const ProductExpanded = ({
     estado_servicio,
     estadoPago,
     payment_id,
+    hora_servicio,
+    profesional_id: "",
     // _id,
     // cliente_id,
     // // cliente_email,
@@ -74,6 +79,10 @@ const ProductExpanded = ({
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [horaInicio, setHoraInicio] = useState("");
+  const [horaFin, setHoraFin] = useState("");
+  const [horariosForm, setHorariosForm] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const change = useSelector((state) => state.ordenes.update);
   let orders = useSelector((state) => state.ordenes.order || []);
@@ -95,17 +104,53 @@ const ProductExpanded = ({
       .catch((error) => setError(error.message));
   }, [loading]);
 
-  // useEffect(() => {
-  //   setLoading(true); // updateinprogress
-  //   dispatch(updateOrder(false))
-  //     // dispatch(getOrders())
+  useEffect(() => {
+    dispatch(obtenerUsuarios())
+      .then(() => setLoading(false))
+      .catch((error) => setError(error.message));
+  }, []);
 
-  //     .then(() => setLoading(false))
-  //     .catch((error) => setError(error.message));
-  // }, [dispatch, change, orders]);
+  let users = useSelector((state) => state.usuarios.users || []);
+  if (!Array.isArray(users)) {
+    users = [];
+  }
+  const filtered = users.filter((user) => {
+    const fullNameProfesional =
+      `${user?.nombre} ${user?.apellido}`.toLowerCase();
+    const fullNameProfesionalInverso =
+      `${user?.apellido} ${user?.nombre} `.toLowerCase();
+
+    const isProfessional = user.rol === "PROFESIONAL";
+    const matchesSearch = fullNameProfesional.includes(
+      searchTerm.toLowerCase()
+    );
+    const matchesSearchInverso = fullNameProfesionalInverso.includes(
+      searchTerm.toLowerCase()
+    );
+
+    return (
+      isProfessional &&
+      (user?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        matchesSearch ||
+        matchesSearchInverso)
+    );
+  });
+  console.log(input);
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
+    console.log(input, "input");
+  };
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleChangeHorarios = (e) => {
+    if (e.target.value !== "") {
+      setHorariosForm([...horariosForm, { hora: e.target.value, stock: true }]);
+    }
+    setHoraInicio(e.target.value.split("-")[0]);
+    setHoraFin(e.target.value.split("-")[1]);
   };
 
   function handleSubmit(e) {
@@ -381,45 +426,31 @@ const ProductExpanded = ({
                   placeholder="Apellido del cliente"
                 ></input>
               </div>
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Dirección </strong>
-                </label>
+              <div>
                 <input
+                  type="text"
+                  placeholder="Buscar Profesional..."
                   className="InputsEdits"
-                  value={input.direccion_Servicio}
-                  onChange={(e) => handleChange(e)}
-                  name="direccion_Servicio"
-                  placeholder="Dirección de servicio"
-                ></input>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Datos Adicionales</strong>
-                </label>
-                <input
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+                <select
                   className="InputsEdits"
-                  value={input.adicional_direccion_Servicio}
-                  onChange={(e) => handleChange(e)}
-                  name="adicional_direccion_Servicio"
-                  placeholder="Dirección adicional de servicio"
-                ></input>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Localidad de servicio</strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  value={input.localidad_Servicio}
-                  onChange={(e) => handleChange(e)}
-                  name="localidad_Servicio"
-                  placeholder="Localidad de servicio"
-                ></input>
-              </div> */}
+                  name="profesional_id"
+                  onChange={handleChange}
+                >
+                  {filtered.map((profesional, index) => (
+                    <option
+                      key={index}
+                      value={profesional._id}
+                      className="InputsEdits"
+                    >
+                      {profesional.apellido} {profesional.nombre} <br />
+                      Email: {profesional.email}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
             <div style={{ width: "50%" }}>
               <div>
@@ -453,7 +484,6 @@ const ProductExpanded = ({
                 </label>
                 <select
                   className="InputsEdits"
-                  // defaultValue="Pendiente"
                   value={input.estado_servicio}
                   onChange={(e) => handleChange(e)}
                   name="estado_servicio"
@@ -466,101 +496,58 @@ const ProductExpanded = ({
                 </select>
               </div>
 
-              {/* <div>
+              <form>
                 <label className="LabelNameImg">
-                  <strong>Estado del Pago</strong>
+                  <strong>Hora de servicio</strong>
                 </label>
                 <select
+                  id="disponibilidad"
+                  name="hora_servicio"
                   className="InputsEdits"
-                  // defaultValue="Pendiente"
-                  value={input.estadoPago}
-                  onChange={(e) => handleChange(e)}
-                  name="estadoPago"
-                  placeholder="Estado del Pago"
+                  onChange={handleChange}
+                  value={input.hora_servicio}
                 >
-                  <option value="pending">pending</option>
-                  <option value="approved">approved</option>
-                  <option value="rejected">rejected</option>
+                  <option value={input.hora_servicio}>
+                    {input.hora_servicio || "Selecciona horario"}
+                  </option>
+                  {newHourArray.map((hora, index) => (
+                    <option
+                      key={index}
+                      value={`${hora.horaInicio}-${hora.horaFin}`}
+                    >
+                      {`${hora.horaInicio}-${hora.horaFin}`}
+                    </option>
+                  ))}
                 </select>
-              </div>
 
+                {horariosForm?.length > 0 && (
+                  <div className="my-4 flex flex-wrap gap-4">
+                    {horariosForm.map((horario, index) => (
+                      <p
+                        key={index}
+                        className="text-center text-xs font-medium flex items-center px-2.5 py-3 rounded cursor-pointer bg-gray-100 text-gray-800 border-gray-500 "
+                      >
+                        {horario.hora}
+                        <AiFillCloseCircle
+                          className="ml-2"
+                          onClick={() => eliminarHorario(horario.hora)}
+                        />
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </form>
               <div>
                 <label className="LabelNameImg">
-                  <strong>payment_id</strong>
+                  <strong>Fecha</strong>
                 </label>
                 <input
+                  type="date"
+                  name="cita_servicio"
                   className="InputsEdits"
-                  // defaultValue=""
-                  value={input.payment_id}
-                  onChange={(e) => handleChange(e)}
-                  name="payment_id"
-                  placeholder="Número de payment_id"
-                ></input>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Facturación</strong>
-                </label>
-                <select
-                  className="InputsEdits"
-                  // defaultValue="NoFacturado"
-                  value={input.estadoFacturacion}
-                  onChange={(e) => handleChange(e)}
-                  name="estadoFacturacion"
-                  placeholder="Estado de facturación"
-                >
-                  <option value="Facturado">Facturado</option>
-                  <option value="NoFacturado">No facturado</option>
-                  <option value="Error">Error</option>
-                </select>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>NºFactura</strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  // defaultValue=""
-                  value={input.numeroFacturacion}
-                  onChange={(e) => handleChange(e)}
-                  name="numeroFacturacion"
-                  placeholder="Número de facturación"
-                ></input>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>Liquidación</strong>
-                </label>
-                <select
-                  className="InputsEdits"
-                  // defaultValue="NoLiquidado"
-                  value={input.estadoLiquidacion}
-                  onChange={(e) => handleChange(e)}
-                  name="estadoLiquidacion"
-                  placeholder="Estado de liquidación"
-                >
-                  <option value="Liquidado">Liquidado</option>
-                  <option value="NoLiquidado">No liquidado</option>
-                  <option value="Error">Error</option>
-                </select>
-              </div> */}
-
-              {/* <div>
-                <label className="LabelNameImg">
-                  <strong>NºLiquidación</strong>
-                </label>
-                <input
-                  className="InputsEdits"
-                  // defaultValue=""
-                  value={input.numeroLiquidacion}
-                  onChange={(e) => handleChange(e)}
-                  name="numeroLiquidacion"
-                  placeholder="Número de liquidación"
-                ></input>
-              </div> */}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
           </div>
 
@@ -589,18 +576,10 @@ const OrdenesAntDesing = (props) => {
       .catch((error) => setError(error.message));
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(updateOrder(false))
-  //     .then(() => setLoading(false))
-  //     .catch((error) => setError(error.message));
-  // }, [change]);
-
   let orders = useSelector((state) => state.ordenes.order || []);
-  // console.log(orders, "order");
   if (!Array.isArray(orders)) {
     orders = [];
   }
-  //// Mapeo ordenes para agregar una key a cada fila
   const newProducts = orders?.map((product) => ({
     ...product,
     key: product._id,
@@ -679,7 +658,7 @@ const OrdenesAntDesing = (props) => {
       );
     });
   }, [newProducts, searchText, startDate, endDate]);
-
+  console.log(filteredOrdenes);
   const columns = [
     Table.EXPAND_COLUMN,
     {
@@ -1108,6 +1087,7 @@ const OrdenesAntDesing = (props) => {
                 estadoPago={record.factura?.estadoPago}
                 payment_id={record.factura?.payment_id}
                 estado_servicio={record?.estado_servicio}
+                hora_servicio={record?.hora_servicio}
                 editProduct={editProduct}
                 setEditProduct={setEditProduct}
                 // cliente_nombre={record.cliente_nombre}

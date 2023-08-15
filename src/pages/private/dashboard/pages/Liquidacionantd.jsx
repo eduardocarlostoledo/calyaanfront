@@ -711,6 +711,7 @@ const LiquidacionAntDesing = () => {
         !orden.factura?.estadoPago?.includes("approved") ||
         orden?.factura?.estado_facturacion !== "Facturado" ||
         !orden?.estado_servicio?.includes("Completado") ||
+        orden?.liquidacion === true ||
         !(Boolean(orden.liquidacion) === false)
       ) {
         return;
@@ -737,12 +738,12 @@ const LiquidacionAntDesing = () => {
             // fullNameClienteInverso?.includes(searchTextLower) ||
             orden.factura?.nro_factura?.includes(searchTextLower) ||
             orden.factura?.payment_id?.includes(searchTextLower) ||
-            orden._id?.includes(searchTextLower) ||
-            orden.cliente_id?.cedula.includes(searchTextLower) ||
-            orden.cliente_id?.telefono?.includes(searchTextLower) ||
-            orden.cliente_id?.email?.includes(searchTextLower) ||
-            orden.servicio?.toLowerCase().includes(searchTextLower) ||
-            orden.direccion_Servicio
+            orden?._id?.includes(searchTextLower) ||
+            orden?.cliente_id?.cedula?.toString().includes(searchTextLower) ||
+            orden?.cliente_id?.telefono?.includes(searchTextLower) ||
+            orden?.cliente_id?.email?.includes(searchTextLower) ||
+            orden?.servicio?.toLowerCase().includes(searchTextLower) ||
+            orden?.direccion_Servicio
               ?.toLowerCase()
               .includes(searchTextLower)) &&
           orderDate.isBetween(startDate, endDate, null, "[]")
