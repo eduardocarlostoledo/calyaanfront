@@ -11,6 +11,7 @@ import {
   Modal,
   Select,
   DatePicker,
+  Pagination,
 } from "antd";
 import { AiFillSetting, AiOutlineClose } from "react-icons/ai";
 import { BiEditAlt, BiRefresh } from "react-icons/bi";
@@ -554,6 +555,12 @@ const LiquidacionAntDesing = () => {
     dates ? setEndDate(dateNow2) : setEndDate("");
   };
 
+  const [pageSize, setPageSize] = useState(10); // Initial page size
+
+  const handleShowSizeChange = (current, size) => {
+    // Update the page size when the user changes it
+    setPageSize(size);
+  };
   //separo los useEffect para que no se renderize todo junto
   useEffect(() => {
     dispatch(getOrders())
@@ -588,7 +595,7 @@ const LiquidacionAntDesing = () => {
   }, [selectedRows]);
 
   let orders = useSelector((state) => state.ordenes.order || []);
-  console.log(orders, "ordenes");
+  // console.log(orders, "ordenes");
   if (!Array.isArray(orders)) {
     orders = [];
   }
@@ -1122,7 +1129,11 @@ const LiquidacionAntDesing = () => {
           style={{ backgroundColor: "rgb(245, 245, 235)" }}
           columns={columns}
           dataSource={filteredOrdenes}
-          // expandable={{
+          pagination={{
+            showSizeChanger: true,
+            onShowSizeChange: handleShowSizeChange,
+            pageSizeOptions: ["10", "20", "50", "100"], // You can customize available options
+          }}
           //   expandedRowRender: (record) => (
           //     <ProductExpanded
           //       key={record._id}
