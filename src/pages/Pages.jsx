@@ -188,6 +188,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       profile: localStorage.getItem("profile"),
       servicios: idWPArray,
       dataCustomer: localStorage.getItem("data_customer"),
+      coupon: couponApply?._idCodigo ? couponApply?._idCodigo : undefined
     };
 
     let orderData = {};
@@ -266,6 +267,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
     tipoDescuento: "",
     valor: "",
     valorTotal: "",
+    _idCodigo:""
   })
 
   const applyCoupon = async (e) => {
@@ -275,8 +277,6 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       let valor = services?.map((producto) => producto.precioTotal)
 
       let { data } = await clienteAxios.post(`/api/coupon/discount`, { coupon, valor: valor[0] });
-
-   
 
       const servicesLocal = JSON.parse(localStorage.getItem("services"));
 
@@ -289,7 +289,6 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
           _idCodigo: data._idCodigo
         };
       });
-
 
       localStorage.setItem("services", JSON.stringify(updatedServices));
 
@@ -304,7 +303,6 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
       toast.error(errorMsg);
     }
   };
-
 
   return (
     <div>

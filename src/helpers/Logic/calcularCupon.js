@@ -1,15 +1,16 @@
-const calcularCupon = (precio, descuento, esPorcentaje) => {
-    if (esPorcentaje) {
+const calcularCupon = ({valor, tipoDescuento,descuento}) => {
 
-      const porcentajeDescuento = descuento / 100;
-      const montoDescuento = precio * porcentajeDescuento;
-      const precioConDescuento = precio - montoDescuento;
-      return precioConDescuento;
-    } else {
 
-      const precioConDescuento = precio - descuento;
-      return precioConDescuento;
-    }
+
+  let precioTotal =  0;
+
+  if (tipoDescuento === 'porcentaje') {
+    precioTotal = valor - (valor * (descuento / 100));
+  } else {
+    precioTotal = valor - descuento;
+  }
+
+  return precioTotal;
 };
 
 export default calcularCupon;

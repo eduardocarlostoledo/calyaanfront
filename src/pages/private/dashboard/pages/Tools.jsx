@@ -38,7 +38,7 @@ const Tools = () => {
         e.preventDefault();
 
         try {
-            if ([codigo, tipoDescuento, descuento].includes("")) {
+            if ([codigo, tipoDescuento, descuento, vencimiento].includes("")) {
                 return toast.error("Todos los campos son obligatorios");
             }
 
@@ -98,8 +98,8 @@ const Tools = () => {
             try {
                 let { data } = await clienteAxios.get(`/api/coupon/list-coupons`);
 
-                setCuponesVigentes(data.cuponesVigentes);
-                setCuponesNoVigentes(data.cuponesNoVigentes);
+                setCuponesVigentes(data?.cuponesVigentes);
+                setCuponesNoVigentes(data?.cuponesNoVigentes);
             } catch (error) {
                 console.log(error);
                 const errorMsg =
@@ -229,54 +229,54 @@ const Tools = () => {
                         <h3 className="focus:outline-none text-gray-800  leading-4 tracking-normal text-base mb-6 font-bold">
                             Cupones vigentes
                         </h3>
-                        {cuponesVigentes.length > 0 ? (
+                        {cuponesVigentes?.length > 0 ? (
                             <>
-                                {cuponesVigentes.map((cupon, index) => (
+                                {cuponesVigentes?.map((cupon, index) => (
                                     <div
                                         className="bg-white mt-2  border border-gray-200 rounded-md transition-all duration-1000"
-                                        key={cupon._id}
+                                        key={cupon?._id}
                                     >
                                         <ul className="shadow-box transition-all duration-1000">
                                             <li
                                                 className="relative border-b border-gray-200"
-                                                key={cupon._id}
+                                                key={cupon?._id}
                                             >
                                                 <button
                                                     type="button"
                                                     className="w-full px-8 py-6 text-left"
-                                                    onClick={() => toggleAccordion(cupon._id)}
+                                                    onClick={() => toggleAccordion(cupon?._id)}
                                                 >
                                                     <div className="flex items-center justify-between transition-all duration-1000">
                                                         <div className="flex items-center">
 
                                                             <p className="focus:outline-none font-medium text-gray-600  text-base tracking-normal leading-4">
-                                                                {cupon.codigo} -{" "}
-                                                                {cupon.vencimiento.split("T")[0]} -{" "}
+                                                                {cupon?.codigo} -{" "}
+                                                                {cupon?.vencimiento?.split("T")[0]} -{" "}
                                                             </p>
-                                                            {cupon.tipoDescuento === "valor" ?
+                                                            {cupon?.tipoDescuento === "valor" ?
                                                                 <NumericFormat
-                                                                    value={cupon.descuento}
+                                                                    value={cupon?.descuento}
                                                                     displayType={"text"}
                                                                     thousandSeparator={true}
                                                                     prefix={"$"}
                                                                 />
                                                                 :
                                                                 <>
-                                                                    {cupon.descuento}%
+                                                                    {cupon?.descuento}%
                                                                 </>
 
                                                             }
                                                         </div>
                                                         <div className="flex gap-2">
                                                             <button onClick={(e) =>
-                                                                handleCopyCoupon(cupon.codigo)
+                                                                handleCopyCoupon(cupon?.codigo)
                                                             }
                                                                 className="px-2 py-2 bg-primary hover:bg-bgHover focus:bg-bgHover  text-white focus:outline-none font-normal text-xs leading-3 rounded">
                                                                 Copiar Código
                                                             </button>
                                                             <button
                                                                 onClick={(e) =>
-                                                                    eliminarCupon({ _id: cupon._id, vigente: true })
+                                                                    eliminarCupon({ _id: cupon?._id, vigente: true })
                                                                 }
                                                                 className="focus:ring-2 focus:ring-offset-2 focus:ring-red-700 focus:outline-none px-6 py-2 bg-white  hover:bg-red-700 hover:text-white border border-red-700 text-red-700 font-normal text-xs leading-3 rounded"
                                                             >
@@ -287,7 +287,7 @@ const Tools = () => {
                                                     </div>
                                                 </button>
                                                 <AnimatePresence initial={false}>
-                                                    {isAccordionOpen(cupon._id) && (
+                                                    {isAccordionOpen(cupon?._id) && (
                                                         <motion.div
                                                             initial={{ opacity: 0, y: -10 }}
                                                             animate={{ opacity: 1, y: 0 }}
@@ -296,21 +296,24 @@ const Tools = () => {
                                                         >
                                                             <div className="p-6 border-b border-gray-200">
 
-                                                                {cupon.reclamados.length > 0 ?
-                                                                    cupon.reclamados.map((usuario) => (
-                                                                        <div className="w-full flex items-center justify-between" key={usuario._id}>
-                                                                            <div className="flex items-center">
-                                                                                <img src={usuario.img} className="w-10 h-10 bg-gray-300 rounded-full" />
-                                                                                <div className="pl-3">
-                                                                                    <p className="text-sm font-medium leading-normal text-gray-800">
-                                                                                        {usuario.nombre} {usuario.apellido}
-                                                                                    </p>
-                                                                                    <p className="text-xs leading-3 pt-2 text-gray-600">
-                                                                                        {usuario.email}  - {usuario.telefono}
-                                                                                    </p>
+                                                                {cupon?.reclamados?.length > 0 ?
+                                                                    cupon?.reclamados?.map((usuario) => (
+                                                                        <>
+                                                                            <div className="w-full flex items-center justify-between mt-4" key={usuario._id}>
+                                                                                <div className="flex items-center">
+                                                                                    <img src={usuario?.img} className="w-10 h-10 bg-gray-300 rounded-full" />
+                                                                                    <div className="pl-3">
+                                                                                        <p className="text-sm font-medium leading-normal text-gray-800">
+                                                                                            {usuario?.nombre} {usuario?.apellido}
+                                                                                        </p>
+                                                                                        <p className="text-xs leading-3 pt-2 text-gray-600">
+                                                                                            {usuario?.email}  - {usuario?.telefono}
+                                                                                        </p>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
+                                                                        </>
+
                                                                     ))
 
                                                                     :
@@ -340,54 +343,54 @@ const Tools = () => {
                         <h3 className="focus:outline-none text-gray-800  leading-4 tracking-normal text-base mb-6 font-bold">
                             Cupones vencidos
                         </h3>
-                        {cuponesNoVigentes.length > 0 ? (
+                        {cuponesNoVigentes?.length > 0 ? (
                             <>
-                                {cuponesNoVigentes.map((cupon, index) => (
+                                {cuponesNoVigentes?.map((cupon, index) => (
                                     <div
                                         className="bg-white mt-2  border border-gray-200 rounded-md transition-all duration-1000"
-                                        key={cupon._id}
+                                        key={cupon?._id}
                                     >
                                         <ul className="shadow-box transition-all duration-1000">
                                             <li
                                                 className="relative border-b border-gray-200"
-                                                key={cupon._id}
+                                                key={cupon?._id}
                                             >
                                                 <button
                                                     type="button"
                                                     className="w-full px-8 py-6 text-left"
-                                                    onClick={() => toggleAccordion(cupon._id)}
+                                                    onClick={() => toggleAccordion(cupon?._id)}
                                                 >
                                                     <div className="flex items-center justify-between transition-all duration-1000">
                                                         <div className="flex items-center">
 
                                                             <p className="focus:outline-none font-medium text-gray-600  text-base tracking-normal leading-4">
-                                                                {cupon.codigo} -{" "}
-                                                                {cupon.vencimiento.split("T")[0]} -{" "}
+                                                                {cupon?.codigo} -{" "}
+                                                                {cupon?.vencimiento?.split("T")[0]} -{" "}
                                                             </p>
-                                                            {cupon.tipoDescuento === "valor" ?
+                                                            {cupon?.tipoDescuento === "valor" ?
                                                                 <NumericFormat
-                                                                    value={cupon.descuento}
+                                                                    value={cupon?.descuento}
                                                                     displayType={"text"}
                                                                     thousandSeparator={true}
                                                                     prefix={"$"}
                                                                 />
                                                                 :
                                                                 <>
-                                                                    {cupon.descuento}%
+                                                                    {cupon?.descuento}%
                                                                 </>
 
                                                             }
                                                         </div>
                                                         <div className="flex gap-2">
                                                             <button onClick={(e) =>
-                                                                handleCopyCoupon(cupon.codigo)
+                                                                handleCopyCoupon(cupon?.codigo)
                                                             }
                                                                 className="px-2 py-2 bg-primary hover:bg-bgHover focus:bg-bgHover  text-white focus:outline-none font-normal text-xs leading-3 rounded">
                                                                 Copiar Código
                                                             </button>
                                                             <button
                                                                 onClick={(e) =>
-                                                                    eliminarCupon({ _id: cupon._id, vigente: true })
+                                                                    eliminarCupon({ _id: cupon?._id, vigente: true })
                                                                 }
                                                                 className="focus:ring-2 focus:ring-offset-2 focus:ring-red-700 focus:outline-none px-6 py-2 bg-white  hover:bg-red-700 hover:text-white border border-red-700 text-red-700 font-normal text-xs leading-3 rounded"
                                                             >
@@ -406,17 +409,17 @@ const Tools = () => {
                                                         >
                                                             <div className="p-6 border-b border-gray-200">
 
-                                                                {cupon.reclamados.length > 0 ?
-                                                                    cupon.reclamados.map((usuario) => (
+                                                                {cupon?.reclamados?.length > 0 ?
+                                                                    cupon?.reclamados?.map((usuario) => (
                                                                         <div className="w-full flex items-center justify-between" key={usuario._id}>
                                                                             <div className="flex items-center">
-                                                                                <img src={usuario.img} className="w-10 h-10 bg-gray-300 rounded-full" />
+                                                                                <img src={usuario?.img} className="w-10 h-10 bg-gray-300 rounded-full" />
                                                                                 <div className="pl-3">
                                                                                     <p className="text-sm font-medium leading-normal text-gray-800">
-                                                                                        {usuario.nombre} {usuario.apellido}
+                                                                                        {usuario?.nombre} {usuario?.apellido}
                                                                                     </p>
                                                                                     <p className="text-xs leading-3 pt-2 text-gray-600">
-                                                                                        {usuario.email}  - {usuario.telefono}
+                                                                                        {usuario?.email}  - {usuario?.telefono}
                                                                                     </p>
                                                                                 </div>
                                                                             </div>
