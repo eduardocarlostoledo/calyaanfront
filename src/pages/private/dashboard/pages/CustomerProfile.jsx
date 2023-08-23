@@ -1,14 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import bg3 from "../../../../assets/bg-3-auth.jpg";
 import clienteAxios from "../../../../config/axios";
 import { localidades } from "../../../../data";
+import { AiOutlineCheck, AiOutlineClose, AiOutlineEdit } from "react-icons/ai";
+import { updateProfileAdminDash } from "../../../../redux/features/professionalSlice";
+import { useDispatch } from "react-redux";
 
 const CustomerProfile = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
 
+  const getUser = async () => {
+    try {
+      let { data } = await clienteAxios.get(`api/usuarios/perfil/${id}`);
+
+      setValueForm({ ...valueForm, ...data });
+    } catch (err) {
+      let error = err.response.data.msg
+        ? err.response.data.msg
+        : err.response && "Estamos presentando problemas internos";
+      return toast.error(error);
+    }
+  };
+  const [forEdit, setForEdit] = useState(true);
   const [valueForm, setValueForm] = useState({
     nombre: "",
     apellido: "",
@@ -39,22 +55,65 @@ const CustomerProfile = () => {
     confirmado,
     ultimaConexion,
   } = valueForm;
-
+  console.log(valueForm);
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        let { data } = await clienteAxios.get(`api/usuarios/perfil/${id}`);
-
-        setValueForm({ ...valueForm, ...data });
-      } catch (err) {
-        let error = err.response.data.msg
-          ? err.response.data.msg
-          : err.response && "Estamos presentando problemas internos";
-        return toast.error(error);
-      }
-    };
     getUser();
   }, [id]);
+
+  const options = localidades.map((localidad) => {
+    const [value, ...rest] = localidad.split("."); // Dividir por el primer punto
+    const label = rest.join(".").trim(); // Unir lo restante y eliminar espacios innecesarios
+    return {
+      value: localidad,
+      label,
+    };
+  });
+
+  const handleChange = (e) => {
+    // if (e.label) {
+    //   console.log(e);
+    //   return setValueForm((prevState) => ({
+    //     ...prevState,
+    //     direccionDefault: {
+    //       ...prevState.direccionDefault,
+    //       localidad: e.value,
+    //     },
+    //   }));
+    // }
+    // if (e.target.name === "direccionDefault") {
+    //   return setValueForm((prevState) => ({
+    //     ...prevState,
+    //     direccionDefault: {
+    //       ...prevState.direccionDefault,
+    //       [e.target.id]: e.target.value,
+    //     },
+    //   }));
+    // }
+    setValueForm((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+    // console.log(valueForm);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (![nombre, apellido, email].every(Boolean)) {
+      return toast.error(
+        "Los campos nombres, apellidos y correo electrónico son obligatorios"
+      );
+    }
+
+    try {
+      dispatch(updateProfileAdminDash({ valueForm, toast }));
+      setForEdit(true);
+      toast.success("Enviando...");
+    } catch (error) {
+      console.log(error);
+      toast.error("Ha ocurrido un error al enviar los datos");
+    }
+  };
 
   return (
     <>
@@ -88,25 +147,19 @@ const CustomerProfile = () => {
                 <h2 className="text-gray-600  font-bold text-xl  leading-6 mb-2 text-center">
                   {reviews}
                 </h2>
-                <p className="text-gray-800  text-sm leading-5">
-                  Reviews
-                </p>
+                <p className="text-gray-800  text-sm leading-5">Reviews</p>
               </div>
               <div className="mr-6 ">
                 <h2 className="text-gray-600  font-bold text-xl  leading-6 mb-2 text-center">
                   {reservas.length}
                 </h2>
-                <p className="text-gray-800  text-sm leading-5">
-                  Servicos
-                </p>
+                <p className="text-gray-800  text-sm leading-5">Servicos</p>
               </div>
               <div>
                 <h2 className="text-gray-600  font-bold text-xl  leading-6 mb-2 text-center">
                   {reservas.length}
                 </h2>
-                <p className="text-gray-800  text-sm  leading-5">
-                  Completados
-                </p>
+                <p className="text-gray-800  text-sm  leading-5">Completados</p>
               </div>
             </div>
             <div className="w-full flex-col  justify-center  ">
@@ -134,8 +187,37 @@ const CustomerProfile = () => {
 
       <div className="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-6 gap-8">
         <div className="bg-white  shadow p-8">
-          <h3>Datos personales</h3>
-
+          <div
+            className={`grid ${
+              !forEdit ? "grid-cols-3" : "grid-cols-2"
+            } justify-items-end items-center`}
+          >
+            <h3 className="text-2xl font tracking-widest mr-auto">
+              Datos personales
+            </h3>
+            {!forEdit && (
+              <AiOutlineCheck
+                size={30}
+                color="green"
+                className="cursor-pointer"
+                onClick={(e) => handleSubmit(e)}
+              />
+            )}
+            {forEdit ? (
+              <AiOutlineEdit
+                size={30}
+                className="cursor-pointer"
+                onClick={() => setForEdit(!forEdit)}
+              />
+            ) : (
+              <AiOutlineClose
+                size={30}
+                color="red"
+                className="cursor-pointer"
+                onClick={() => (setForEdit(!forEdit), getUser())}
+              />
+            )}
+          </div>
           <div className="flex lg:flex-row md:flex-col-reverse flex-col-reverse justify-between mt-4  ">
             <div className="text">
               <div className=" lg:mt-0 mt-6">
@@ -144,10 +226,11 @@ const CustomerProfile = () => {
                   type="text"
                   name="nombre"
                   id="nombres"
+                  onChange={handleChange}
                   value={nombre}
                   className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                   placeholder="No registrado"
-                  disabled={true}
+                  disabled={forEdit}
                 />
               </div>
 
@@ -156,12 +239,13 @@ const CustomerProfile = () => {
                   <p className="text-base text-gray-800">Apellidos</p>
                   <input
                     type="text"
-                    name="apellidos"
-                    id="apellidos"
+                    name="apellido"
+                    id="apellido"
+                    onChange={handleChange}
                     value={apellido}
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                     placeholder="No registrado"
-                    disabled={true}
+                    disabled={forEdit}
                   />
                 </div>
               </div>
@@ -171,10 +255,11 @@ const CustomerProfile = () => {
                   type="text"
                   name="email"
                   id="email"
+                  onChange={handleChange}
                   value={email}
                   className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[540px] w-full py-3 px-3 rounded mt-4"
                   placeholder="No registrado"
-                  disabled={true}
+                  disabled={forEdit}
                 />
               </div>
 
@@ -185,10 +270,11 @@ const CustomerProfile = () => {
                     type="text"
                     name="telefono"
                     id="telefono"
+                    onChange={handleChange}
                     value={telefono}
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                     placeholder="No registrado"
-                    disabled={true}
+                    disabled={forEdit}
                   />
                 </div>
                 <div className="lg:mt-0 md:mt-0 mt-4 w-full">
@@ -197,10 +283,11 @@ const CustomerProfile = () => {
                     type="text"
                     name="cedula"
                     id="cedula"
+                    onChange={handleChange}
                     value={cedula}
                     placeholder="No registrado"
                     className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                    disabled={true}
+                    disabled={forEdit}
                   />
                 </div>
               </div>
@@ -212,8 +299,9 @@ const CustomerProfile = () => {
               id="sexo"
               className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
               value={sexo}
+              onChange={handleChange}
               name="sexo"
-              disabled={true}
+              disabled={forEdit}
             >
               <option value="">No registrado</option>
               <option value="Masculino">Masculino</option>
@@ -231,7 +319,8 @@ const CustomerProfile = () => {
                 id="ciudad"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 value={direccionDefault.ciudad}
-                name="ciudad"
+                onChange={handleChange}
+                name="direccionDefault"
                 disabled={true}
               >
                 <option value="">No registrado</option>
@@ -240,52 +329,50 @@ const CustomerProfile = () => {
                 </option>
               </select>
             </div>
-            <div className="lg:mt-0 md:mt-0 mt-4 w-full">
+            {/* <div className="lg:mt-0 md:mt-0 mt-4 w-full">
               <p className="text-base leading-none text-gray-800">Nombre</p>
               <select
-                id="ciudad"
+                id="nombre"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 value={direccionDefault.nombre}
-                name="ciudad"
-                disabled={true}
+                onChange={handleChange}
+                name="direccionDefault"
+                disabled={forEdit}
               >
                 <option value="">No registrado</option>
                 <option value={direccionDefault.nombre}>
                   {direccionDefault.nombre}
                 </option>
               </select>
-            </div>
+            </div> */}
           </div>
 
           <div className="lg:flex md:flex block gap-8  mt-6">
-            <div className="w-full">
+            {/* <div className="w-full">
               <p className="text-base leading-none text-gray-800">ID</p>
               <input
                 type="text"
-                name="cedula"
+                name="direccionDefault"
                 id="cedula"
                 value={direccionDefault._id}
+                onChange={handleChange}
+                placeholder="No registrado"
+                className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
+                disabled={forEdit}
+              />
+            </div> */}
+            <div className="lg:mt-0 md:mt-0 mt-4 w-full">
+              <p className="text-base leading-none text-gray-800">Localidad</p>
+
+              <input
+                type="text"
+                name="direccionDefault"
+                id="cedula"
+                value={direccionDefault.localidad}
                 placeholder="No registrado"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 disabled={true}
               />
-            </div>
-            <div className="lg:mt-0 md:mt-0 mt-4 w-full">
-              <p className="text-base leading-none text-gray-800">Localidad</p>
-              <select
-                className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                name="localidad"
-                id="localidad"
-                value={direccionDefault.localidad}
-                disabled={true}
-              >
-                <option value="">No registrado</option>
-                {localidades.map((localidad, index) => (
-                  <option key={index} value={localidad.split(" ")[1]}>
-                    {localidad}
-                  </option>
-                ))}
-              </select>
             </div>
           </div>
 
@@ -296,24 +383,26 @@ const CustomerProfile = () => {
                 type="text"
                 name="cedula"
                 id="cedula"
+                onChange={handleChange}
                 value={direccionDefault.direccion}
                 placeholder="No registrado"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 disabled={true}
               />
             </div>
-            <div className="lg:mt-0 md:mt-0 mt-4 w-full">
+            {/* <div className="lg:mt-0 md:mt-0 mt-4 w-full">
               <p className="text-base leading-none text-gray-800">Localidad</p>
               <input
                 type="text"
                 name="cedula"
                 id="cedula"
+                onChange={handleChange}
                 value={direccionDefault.info}
                 placeholder="No registrado"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                disabled={true}
+                disabled={forEdit}
               />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -322,8 +411,10 @@ const CustomerProfile = () => {
 
           <div className="flex gap-6 justify-center mx-auto  flex-wrap lg:flex-col mt-4">
             <div className="w-full">
-            <Link
-                to="/reserva/1"className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer">
+              <Link
+                to="/reserva/1"
+                className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
+              >
                 <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
                   <p className="text-lg text-gray-800  mb-3 font-normal">
                     Depilación
@@ -343,8 +434,10 @@ const CustomerProfile = () => {
               </Link>
             </div>
             <div className="w-full">
-            <Link
-                to="/reserva/1" className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer">
+              <Link
+                to="/reserva/1"
+                className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
+              >
                 <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
                   <p className="text-lg text-gray-800  mb-3 font-normal">
                     Depilación
