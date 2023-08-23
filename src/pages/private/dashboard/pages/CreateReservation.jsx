@@ -57,6 +57,7 @@ const CreateReservation = () => {
     metodo_pago: "",
     link_pago: "",
     estadoPago:""
+
   });
 
   const handleChange = (e) => {
@@ -96,7 +97,8 @@ const CreateReservation = () => {
               coupon: "",
               metodo_pago: data.factura.metodo_pago,
               link_pago: data.factura.link_pago,
-              estadoPago:data.factura.estadoPago
+              estadoPago:data.factura.estadoPago,
+              paquetesGenerados: data.paquetesGenerados,
             });
           } else {
             setReserva({
@@ -119,7 +121,8 @@ const CreateReservation = () => {
               estado_servicio: data.estado_servicio,
               metodo_pago: data.factura.metodo_pago,
               link_pago: data.factura.link_pago,
-              estadoPago:data.factura.estadoPago
+              estadoPago:data.factura.estadoPago,
+              paquetesGenerados: data.paquetesGenerados,
             });
           }    
 
@@ -481,9 +484,8 @@ const CreateReservation = () => {
   };
 
   const actualizarPago = async(e)=>{
-
+    
     e.preventDefault()
-
     try{
       
       if ([datosPago.payment_id, datosPago.origen].includes("")) {
@@ -497,17 +499,48 @@ const CreateReservation = () => {
           id: idOrder
         }
       );
-
       toast.success(data.msg)
 
+      const currentUrl = window.location.href;
+      // Construir la nueva URL con el parámetro id
+      const newUrl = `${currentUrl.substring(0, currentUrl.indexOf("?"))}?id=${idOrder}`;
+      // Redirigir a la nueva URL
+      window.location.href = newUrl;
+    
     }catch (err) {
       let error = err.response.data.msg
         ? err.response.data.msg
         : err.response && "Estamos presentando problemas internos";
       return toast.error(error);
     }
-
   }
+
+  const generarPaquetes = async (id) => {    
+    try {        
+      if (reserva.paquetesGenerados === false) {
+        let { data } = await clienteAxios.post(`api/pay/generar-paquetes`, { id: id }); // Cambiar "idOrder" por "id"
+        toast.success(data.msg);
+         // Obtener la URL actual
+      const currentUrl = window.location.href;
+      // Construir la nueva URL con el parámetro id
+      const newUrl = `${currentUrl.substring(0, currentUrl.indexOf("?"))}?id=${id}`;
+      // Redirigir a la nueva URL
+      window.location.href = newUrl;
+
+      } else {
+        swal({
+          title: "Ya se generaron los paquetes",
+          text: "No se pueden generar más paquetes",
+          icon: "success",
+          button: "Aceptar",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      let error = err.response && err.response.data.msg ? err.response.data.msg : "Estamos presentando problemas internos"; // Mejorar la condición para verificar si existe la propiedad "msg"
+      return toast.error(error);
+    }
+  };  
 
   return (
     <div className="w-full mx-auto ">
@@ -747,12 +780,43 @@ const CreateReservation = () => {
               <Spinner />
             </div>
           )}
+          
+        </div>        
+          {/* ESTE FRAGMENTO DE CODIGO ES PARA GENERAR UN BOTON QUE FINALICE LA ORDEN Y GENERE LOS PAQUETES APUNTANDO AL ENDPOINT DE GENERAR PAQUETES */}
+          { (reserva.estadoPago === "approved" && reserva.profesional_id ) ? (            
+            <>
+              <hr className="mt-6 border-b-1 border-blueGray-300" />
+              <h6 className="text-blueGray-400 text-sm mt-4 mb-6 font-bold uppercase">
+                Generar Sesiones para Paquetes contratados
+              </h6>
 
-
-        </div>
+              <div className="container  grid grid-cols-2  gap-8">              
+                <div className="rounded bg-white p-4" >
+                  <h4 className="font-bold mb-2">Generar Paquetes para ID: {id} </h4>                  
+                  <p>Una vez ingresado datos del pago, ya sea con Link de Pago, o Pago externo, asignado un profesional, día y hora. Podrá generar las órdenes individuales para gestionar las sesiones del paquete contratado.</p>
+                  <button
+                    onClick={(e) => {
+                      generarPaquetes(id)
+                    }}
+                    className="mt-4 p-3 bg-primary hover:bg-bgHover focus:bg-bgHover  rounded focus:outline-none"
+                  >
+                    <p className="text-sm font-medium leading-none text-white">
+                      Generar Sesiones
+                    </p>
+                  </button>
+                </div>
+              </div>
+            </>
+          ) :
+         (<h7> 
+          <> SIN TURNO AGENDADO </>         
+         </h7>)          
+          }
+          {/* FIN DEL FRAGMENTO DE CODIGO PARA GENERAR PAQUETES */}
       </div>
     </div>
   );
+  
 };
 
 export default CreateReservation;

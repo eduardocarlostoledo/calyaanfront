@@ -162,13 +162,16 @@ const TableReservas = () => {
                     Profesional
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Servicio
+                  </th>
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Día Compra
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Estado del Servicio
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Hora del Servicio
+                    Hora y Día Reserva
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Acciones
@@ -242,6 +245,12 @@ const TableReservas = () => {
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
+                          {reserva.servicios[0].nombre}
+                        </p>
+                      </td>
+
+                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <p className="text-gray-900 whitespace-no-wrap">
                           {reserva.createdAt.split("T")[0]}
                         </p>
                       </td>
@@ -255,7 +264,7 @@ const TableReservas = () => {
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva.hora_servicio}
+                          {reserva.hora_servicio} {" "} {reserva.cita_servicio}
                         </p>
                       </td>
 

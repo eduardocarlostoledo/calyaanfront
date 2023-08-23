@@ -175,6 +175,7 @@ const ScheduleProfessional = ({
                 {!loadingLiberar ? (
                   // Condición 1: Si no está cargando y alguna otra condición es verdadera
                   //if si no hay cita y hora entonces hay q reprogramar
+                  
                   reserva.metodo_pago &&
                   !reserva.cita_servicio &&
                   !reserva.hora_servicio ? (
@@ -208,7 +209,7 @@ const ScheduleProfessional = ({
                             />
                           </div>
 
-                          {date && !selectCard && !reserva.profesional_id && (
+                          {date && !selectCard && reserva.profesional_id && (
                             <div className="mx-auto mt-6 flex w-full bg-whitefull-screen flex-wrap items-center justify-around">
                               {!cargando ? (
                                 profesionalesRequest.length > 0 ? (
