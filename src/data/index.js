@@ -347,7 +347,7 @@ export const especialidadesHabilitadas = [
   "Masaje reductor paquete x 4 (con camilla)",
   "Masaje reductor paquete x 6",
   "Masaje reductor paquete x 6 (con camilla)",
-  "Masajes reductores paquete x 10",
+  "masajes reductores x 10 ",
   "Masaje reductor paquete x 10 (con camilla)",
   "Masajes reductores paquete x 20",
   "Masaje reductor paquete x 20 (con camilla)",
@@ -358,6 +358,18 @@ export const especialidadesHabilitadas = [
   "Masaje descontracturante",
   "Masaje Post Operatorio + Aparatologia x 10 sesiones",
   "Masaje + Chocolaterapia + exfoliación corporal",
+  "Masaje facial",
+  "Masajes express corporativos 10 min",
+  "Masajes express corporativos 15 min",
+  "Masajes express corporativos 20 min",
+  "Paquete reductor x 10 sesiones de 35 min",
+  "Paquete reductor x 6 sesiones de 35 min",
+  "Promo masaje de 2 horas con spa",
+  "Promo masaje 2 horas sin spa",
+  "Tratamiento de glúteos x 4 sesiones",
+  "Tratamiento de Rejuvenecimiento facial x 4 sesiones",
+  "Descontracturante + spa",
+  "Masaje Reductor de Valoracion",
 ];
 
 
