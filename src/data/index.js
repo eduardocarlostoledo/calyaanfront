@@ -370,6 +370,8 @@ export const especialidadesHabilitadas = [
   "Tratamiento de Rejuvenecimiento facial x 4 sesiones",
   "Descontracturante + spa",
   "Masaje Reductor de Valoracion",
+  "Piel de porcelana",
+  "Limpieza facial profunda",
 ];
 
 
