@@ -372,6 +372,8 @@ export const especialidadesHabilitadas = [
   "Masaje Reductor de Valoracion",
   "Piel de porcelana",
   "Limpieza facial profunda",
+  "Paquete Masaje descontracturante x 10 sesiones",
+  "Paquete Masaje descontracturante x 6 sesiones",
 ];
 
 
