@@ -1,31 +1,32 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Table, List, Spin, Alert, Tag, Input, DatePicker } from "antd";
+import { Table, Tag, Input, Button, Modal, DatePicker } from "antd";
 import { AiFillSetting, AiOutlineClose } from "react-icons/ai";
 import { BiEditAlt, BiRefresh } from "react-icons/bi";
-import {
-  getOrders,
-  updateOrder,
-  createOrder,
-} from "../../../../redux/features/ordenesSlice";
+import { getOrders } from "../../../../redux/features/ordenesSlice";
 import moment from "moment";
 import swal from "sweetalert";
 import "./Ordenesantd.css";
+import clienteAxios from "../../../../config/axios";
 
 const { RangePicker } = DatePicker;
 
 const ProductExpanded = ({
   _id,
   cliente_id,
-  direccion_Servicio,
   localidad_servicio,
   hora_servicio,
-  estadoServicio,
-  estadoPago,
-  payment_id,
   factura,
   editProduct,
   setEditProduct,
+  record,
+  profesional,
+  servicios,
+  direccion_Servicio,
+  estadoServicio,
+  estadoPago,
+  payment_id,
+  siigoToken,
 }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({
@@ -38,9 +39,115 @@ const ProductExpanded = ({
     payment_id: factura.payment_id,
     _id: factura._id,
   });
+  // const [inputSiigo, setInputSiigo] = useState({
+  //   customer: {
+  //     identification: cliente_id?.cedula,
+  //     branch_office: "0",
+  //   },
+  //   date: date.now(),
+  //   items: [
+  //     servicios.map((serv) => ({
+  //       code: "Sku-1",
+  //       description: "Sku-1",
+  //       quantity: 1,
+  //       taxes: [
+  //         {
+  //           id: 13156,
+  //         },
+  //         {
+  //           id: 21479,
+  //         },
+  //       ],
+  //       price: 847.45,
+  //     })),
+  //   ],
 
+  // payments: [
+  //   {
+  //     id: 5638,
+  //     value: 1000,
+  //     due_date: "2022-05-08",
+  //   },
+  // ],
+
+  //   // cliente_nombre: cliente_id?.nombre,
+  //   // cliente_apellido: cliente_id?.apellido,
+  //   // cliente_telefono: cliente_id?.telefono,
+
+  //   // profesional_nombre: profesional?.nombre,
+  //   // profesional_apellido: profesional?.apellido,
+  //   // profesional_telefono: profesional?.telefono,
+  //   // profesional_cedula: profesional?.cedula,
+
+  //   // factura_estado_pago: factura?.estadoPago,
+  //   // factura_origen: factura?.origen,
+  //   // factura_fecha_venta: factura?.fecha_venta,
+  //   // factura_precio_neto: factura?.precioTotal,
+  //   // factura_precio_total: factura?.precioNeto,
+  // });
+  console.log(record, "record");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+
+  const objTest = {
+    document: {
+      id: 24446,
+    },
+    date: "2023-09-29",
+    customer: {
+      identification: "209048401",
+      branch_office: "0",
+    },
+    seller: 629,
+    items: [
+      {
+        code: "Sku-1",
+        description: "Sku-1",
+        quantity: 1,
+        taxes: [
+          {
+            id: 13156,
+          },
+          {
+            id: 21479,
+          },
+        ],
+        price: 847.45,
+      },
+    ],
+    payments: [
+      {
+        id: 5638,
+        value: 1000,
+        due_date: "2022-05-08",
+      },
+    ],
+  };
+
+  const SendSiigo = async () => {
+    try {
+      const { data } = await clienteAxios.post(
+        `http://127.0.0.1:3001/api/siigo/invoice`,
+        objTest,
+        {
+          headers: {
+            Authorization: `Bearer ${siigoToken}`,
+            "Content-Type": "application/json",
+            "Partner-Id": "calyaanapp",
+          },
+        }
+      );
+      setInput({
+        ...input,
+        nro_factura: data.number,
+        estado_facturacion: "approved",
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const change = useSelector((state) => state.ordenes.update);
   let orders = useSelector((state) => state.ordenes.order || []);
@@ -84,6 +191,14 @@ const ProductExpanded = ({
     }
     setEditProduct(0);
   }
+
+  const handleEditModalOpen = () => {
+    setEditModalVisible(true);
+  };
+
+  const handleEditModalClose = () => {
+    setEditModalVisible(false);
+  };
 
   return (
     <div>
@@ -197,6 +312,143 @@ const ProductExpanded = ({
                 {input?.payment_id === null ? input?.payment_id : " Sin numero"}
               </p>
             </div>
+            <Button key="save" type="primary" onClick={handleEditModalOpen}>
+              Open modal
+            </Button>
+
+            <Modal
+              title="Facturacion siigo"
+              visible={editModalVisible}
+              onCancel={handleEditModalClose}
+              width={"50rem"}
+              footer={[
+                <Button key="cancel" onClick={handleEditModalClose}>
+                  Cancelar
+                </Button>,
+                <Button key="save" type="primary" onClick={SendSiigo}>
+                  Enviar
+                </Button>,
+              ]}
+            >
+              <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
+              <div
+                style={{
+                  gap: "1rem",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <p style={{ fontSize: "1.2rem" }}>Cliente</p>
+                <p>
+                  Nombre y apellido:{" "}
+                  <b style={{ textDecorationLine: "underline" }}>
+                    {cliente_id.apellido} {cliente_id.nombre}
+                  </b>
+                </p>
+                <p>
+                  Email:<b> {cliente_id.email}</b> Telefono:{" "}
+                  <b style={{ textDecorationLine: "underline" }}>
+                    {cliente_id.telefono}
+                  </b>
+                </p>
+                <p>
+                  Cedula:
+                  <b style={{ textDecorationLine: "underline" }}>
+                    {cliente_id.cedula}
+                  </b>
+                </p>
+              </div>
+              <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
+              <div
+                style={{
+                  gap: "1rem",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <p style={{ fontSize: "1.2rem" }}>Profesional</p>
+                <p>
+                  Nombre y apellido:{" "}
+                  <b style={{ textDecorationLine: "underline" }}>
+                    {profesional.apellido} {profesional.nombre}
+                  </b>
+                </p>
+                <p>
+                  Email:<b> {profesional.email}</b> Telefono:{" "}
+                  <b style={{ textDecorationLine: "underline" }}>
+                    {profesional.telefono}
+                  </b>
+                </p>
+                <p>
+                  Cedula:
+                  <b style={{ textDecorationLine: "underline" }}>
+                    {profesional.cedula}
+                  </b>
+                </p>
+              </div>
+              <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
+              <div
+                style={{
+                  gap: "1rem",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <p style={{ fontSize: "1.2rem" }}>Factura</p>{" "}
+                <p>
+                  Estado de pago:{" "}
+                  {factura?.estadoPago === "approved" ? (
+                    <Tag color="green">Aprobado</Tag>
+                  ) : factura?.estadoPago === "rejected" ? (
+                    <Tag color="red">Rechazado</Tag>
+                  ) : (
+                    <Tag color="yellow">Pendiente</Tag>
+                  )}
+                </p>
+                <p>Origen de pago: {factura.origen}</p>
+                {/* <p>Fecha de venta: {factura.fecha_venta?.toLocaleDateString()}</p> */}
+                <p>
+                  Fecha de venta:{" "}
+                  {new Date(factura.fecha_venta).toLocaleDateString("es-AR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+                <p>Precio neto: ${factura.precioNeto}</p>
+                <p>Porcentaje caalyan: ${factura.precioTotal}</p>
+              </div>
+              <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
+              <div
+                style={{
+                  gap: "1rem",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <p style={{ fontSize: "1.2rem" }}>Servicios</p>{" "}
+                {servicios.map((serv) => (
+                  <>
+                    <p>Servicio: {serv.nombre}</p>
+                    <p>Precio: ${serv.precio}</p>
+                  </>
+                ))}
+              </div>
+            </Modal>
           </div>
         </div>
       )}
@@ -317,6 +569,8 @@ const FacturacionAntDesing = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
+  const [siigoToken, setSiigoToken] = useState("");
+
   const handleDateChange = (dates) => {
     const dateNow = dates ? moment(dates[0].$d).format("YYYY/MM/DD") : null;
     const dateNow2 = dates ? moment(dates[1].$d).format("YYYY/MM/DD") : null;
@@ -325,11 +579,40 @@ const FacturacionAntDesing = () => {
     dates ? setEndDate(dateNow2) : setEndDate("");
   };
   //separo los useEffect para que no se renderize todo junto
-  // useEffect(() => {
-  //   dispatch(getOrders())
-  //     .then(() => setLoading(false))
-  //     .catch((error) => setError(error.message));
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getOrders())
+      .then(() => setLoading(false))
+      .catch((error) => setError(error.message));
+  }, [dispatch]);
+
+  const obj = {
+    username: "siigoapi@pruebas.com",
+    access_key:
+      "OWE1OGNkY2QtZGY4ZC00Nzg1LThlZGYtNmExMzUzMmE4Yzc1Omt2YS4yJTUyQEU=",
+  };
+
+  const LoginSiigo = async () => {
+    try {
+      const { data } = await clienteAxios.post(
+        `http://127.0.0.1:3001/api/siigo/auth`,
+        obj,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setSiigoToken(data.access_token);
+      console.log(data);
+      console.log(siigoToken, "token");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    LoginSiigo();
+  }, [dispatch]);
 
   // useEffect(() => {
   //   dispatch(getOrders())
@@ -418,26 +701,6 @@ const FacturacionAntDesing = () => {
     });
   }, [newProducts, searchText, startDate, endDate]);
 
-  // moment(orden.createdAt, "YYYY-MM-DD")
-  //   .format("YYYY-MM-DD")
-  //   ?.includes(searchTextLower)) &&
-  // fullNameProfesional?.includes(searchTextLower) ||
-  // fullNameCliente?.includes(searchTextLower) ||
-  // fullNameProfesionalInverso?.includes(searchTextLower) ||
-  // fullNameClienteInverso?.includes(searchTextLower) ||
-  // orden.numeroFacturacion?.includes(searchTextLower) ||
-  // orden.payment_id?.includes(searchTextLower) ||
-  // orden._id?.includes(searchTextLower) ||
-  // orden.cliente_cedula?.includes(searchTextLower) ||
-  // orden.cliente_telefono?.includes(searchTextLower) ||
-  // orden.cliente_email?.includes(searchTextLower) ||
-  // orden.servicio?.toLowerCase().includes(searchTextLower) ||
-  // orden.direccion_Servicio?.toLowerCase().includes(searchTextLower) ||
-  // (moment(orden.createdAt, "YYYY-MM-DD")
-  //   .format("YYYY-MM-DD")
-  //   ?.includes(searchTextLower) &&
-  //   isDateInRange)
-  // console.log(filteredOrdenes);
   const columns = [
     Table.EXPAND_COLUMN,
     {
@@ -498,79 +761,6 @@ const FacturacionAntDesing = () => {
         </div>
       ),
     },
-    // {
-    //   title: "Facturacion",
-    //   dataIndex: "factura",
-    //   filters: [
-    //     { text: "Facturado", value: "Facturado" },
-    //     { text: "NoFacturado", value: "NoFacturado" },
-    //     { text: "Error", value: "Error" },
-    //   ],
-    //   onFilter: (value, record) =>
-    //     record?.factura?.estado_facturacion === value,
-    //   render: ({
-    //     estado_facturacion,
-    //     nro_factura,
-    //     fecha_venta,
-    //     precioTotal,
-    //     payment_id,
-    //     origen,
-    //   }) => (
-    //     <>
-    //       {estado_facturacion === "Facturado" ? (
-    //         <Tag style={{ margin: "auto" }} color="green">
-    //           Facturado
-    //         </Tag>
-    //       ) : estado_facturacion === "Error" ? (
-    //         <Tag style={{ margin: "auto" }} color="red">
-    //           Error
-    //         </Tag>
-    //       ) : (
-    //         <Tag style={{ margin: "auto" }} color="yellow">
-    //           No Facturado
-    //         </Tag>
-    //       )}
-    //       {payment_id && (
-    //         <div style={{ marginTop: ".5rem" }}>
-    //           <b>id del pago: </b>
-    //           <p>{payment_id}</p>
-    //           <hr></hr>
-    //         </div>
-    //       )}
-
-    //       {origen && (
-    //         <div style={{ marginTop: ".5rem" }}>
-    //           <b>Origen del pago: </b>
-    //           <p>{origen}</p>
-    //           <hr></hr>
-    //         </div>
-    //       )}
-
-    //       {nro_factura && (
-    //         <div style={{ marginTop: ".5rem" }}>
-    //           <hr />
-    //           <b>Nro de factura: </b>
-    //           {nro_factura}
-    //           <hr></hr>
-    //         </div>
-    //       )}
-    //       {precioTotal && (
-    //         <div style={{ marginTop: ".5rem" }}>
-    //           <b>Precio: </b>
-    //           {precioTotal}
-    //           <hr></hr>
-    //         </div>
-    //       )}
-    //       {fecha_venta && (
-    //         <div style={{ marginTop: ".5rem" }}>
-    //           <b>Dia de venta: </b>
-    //           {moment(fecha_venta).format("YYYY-MM-DD HH:mm:ss")}
-    //           <hr></hr>
-    //         </div>
-    //       )}
-    //     </>
-    //   ),
-    // },
     {
       title: "Facturacion",
       dataIndex: "factura.estado_facturacion",
@@ -847,6 +1037,7 @@ const FacturacionAntDesing = () => {
             Día de la venta, formato de uso (YYYY-MM-DD){" "}
           </b>
         </p>
+
         {/* <p className="p">
           {" "}
           Puede realizar búsquedas por{" "}
@@ -903,15 +1094,19 @@ const FacturacionAntDesing = () => {
                 key={record._id}
                 _id={record._id}
                 cliente_id={record.cliente_id}
+                profesional={record.profesional_id}
                 direccion_servicio={record.direccion_servicio}
                 estadoPago={record.factura?.estadoPago}
                 payment_id={record.factura?.payment_id}
                 estadoServicio={record?.estado_servicio}
+                servicios={record?.servicios}
+                record={record}
                 factura={record?.factura}
                 hora_servicio={record.hora_servicio}
                 localidad_servicio={record.localidad_servicio}
                 editProduct={editProduct}
                 setEditProduct={setEditProduct}
+                siigoToken={siigoToken}
               />
             ),
           }}

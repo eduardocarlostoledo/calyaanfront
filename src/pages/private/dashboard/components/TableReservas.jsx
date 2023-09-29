@@ -44,12 +44,17 @@ const TableReservas = () => {
         paginado.resultados.filter((item) => {
           const searchTermLower = searchTerm.toLowerCase();
           const idReserva = item._id && item._id.toLowerCase();
-          const clienteNombre = item.cliente_nombre && item.cliente_nombre.toLowerCase();
-          const clienteApellido = item.cliente_apellido && item.cliente_apellido.toLowerCase();
-          const clienteCedula = item.cliente_cedula && item.cliente_cedula.toLowerCase();
-          const clienteTelefono = item.cliente_telefono && item.cliente_telefono.toLowerCase();
-          const clienteEmail = item.cliente_email && item.cliente_email.toLowerCase();
-  
+          const clienteNombre =
+            item.cliente_nombre && item.cliente_nombre.toLowerCase();
+          const clienteApellido =
+            item.cliente_apellido && item.cliente_apellido.toLowerCase();
+          const clienteCedula =
+            item.cliente_cedula && item.cliente_cedula.toLowerCase();
+          const clienteTelefono =
+            item.cliente_telefono && item.cliente_telefono.toLowerCase();
+          const clienteEmail =
+            item.cliente_email && item.cliente_email.toLowerCase();
+
           return (
             (clienteNombre && clienteNombre.includes(searchTermLower)) ||
             (clienteApellido && clienteApellido.includes(searchTermLower)) ||
@@ -62,7 +67,7 @@ const TableReservas = () => {
       );
     }
   }, [searchTerm, paginado]);
-  
+
   const handleState = () => {
     dispatch(estadoAction());
   };
@@ -245,7 +250,7 @@ const TableReservas = () => {
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva.servicios[0].nombre}
+                          {reserva?.servicios[0]?.nombre}
                         </p>
                       </td>
 
@@ -255,7 +260,6 @@ const TableReservas = () => {
                         </p>
                       </td>
 
-
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
                           {reserva.estado_servicio}
@@ -264,7 +268,7 @@ const TableReservas = () => {
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva.hora_servicio} {" "} {reserva.cita_servicio}
+                          {reserva.hora_servicio} {reserva.cita_servicio}
                         </p>
                       </td>
 

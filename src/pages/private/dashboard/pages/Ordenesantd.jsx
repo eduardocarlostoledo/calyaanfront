@@ -814,6 +814,14 @@ const OrdenesAntDesing = (props) => {
                 <hr></hr>
               </p>
             )}
+            {record?._id && (
+              <p>
+                <b>Sesion </b> <br />
+                {record?.nroSesion}
+                <br />
+                <hr></hr>
+              </p>
+            )}
             <b>Servicio: {text[0]?.nombre}</b>
 
             {record?.direccion_servicio && (
