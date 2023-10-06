@@ -190,7 +190,7 @@ const ProductExpanded = ({
   const SiigoCheckUser = async () => {
     try {
       const response = await clienteAxios.post(
-        `/api/siigo/get-customer`,
+        `/api/siigo/get-customer-identification/`,
         objCedula,
         {
           headers: {
