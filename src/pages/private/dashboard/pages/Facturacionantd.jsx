@@ -1,13 +1,19 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Tag, Input, Button, Modal, DatePicker } from "antd";
-import { AiFillSetting, AiOutlineClose } from "react-icons/ai";
+import {
+  AiFillSetting,
+  AiOutlineClose,
+  AiFillCheckCircle,
+  AiFillExclamationCircle,
+} from "react-icons/ai";
 import { BiEditAlt, BiRefresh } from "react-icons/bi";
 import { getOrders } from "../../../../redux/features/ordenesSlice";
 import moment from "moment";
 import swal from "sweetalert";
 import "./Ordenesantd.css";
 import clienteAxios from "../../../../config/axios";
+import axios from "axios";
 
 const { RangePicker } = DatePicker;
 
@@ -27,6 +33,7 @@ const ProductExpanded = ({
   estadoPago,
   payment_id,
   siigoToken,
+  productsID,
 }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({
@@ -85,10 +92,14 @@ const ProductExpanded = ({
   //   // factura_precio_neto: factura?.precioTotal,
   //   // factura_precio_total: factura?.precioNeto,
   // });
-  console.log(record, "record");
+  // console.log(record, "record");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
+
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const [userCheck, setUserCheck] = useState("wait");
 
   const objTest = {
     document: {
@@ -125,10 +136,91 @@ const ProductExpanded = ({
     ],
   };
 
+  const DocTypePeticion = async () => {
+    const response = await clienteAxios.get(
+      `${import.meta.env.VITE_APP_BACK}/api/siigo/document-type?type=FV`,
+      {
+        headers: {
+          Authorization: `Bearer ${siigoToken}`,
+          "Content-Type": "application/json",
+          "Partner-Id": "calyaanapp",
+        },
+      }
+    );
+    console.log("Document type", response);
+    return response;
+  };
+
+  const usersSiigoPeticion = async () => {
+    const page = { page: "1", pageSize: "10" };
+    const response = await clienteAxios.get(
+      `${import.meta.env.VITE_APP_BACK}/api/siigo/users`,
+      page,
+      {
+        headers: {
+          Authorization: `Bearer ${siigoToken}`,
+          "Content-Type": "application/json",
+          "Partner-Id": "calyaanapp",
+        },
+      }
+    );
+    console.log("USERS DE SIIGO", response);
+    return response;
+  };
+
+  const getCustomerPeticion = async () => {
+    const response = await clienteAxios.get(
+      `${import.meta.env.VITE_APP_BACK}/api/siigo/get-customer/`,
+      {
+        headers: {
+          Authorization: `Bearer ${siigoToken}`,
+          "Content-Type": "application/json",
+          "Partner-Id": "calyaanapp",
+        },
+      }
+    );
+    console.log("CUSTOMER RESPONSE", response);
+    return response;
+  };
+
+  const objCedula = {
+    identification: cliente_id.cedula,
+  };
+
+  const SiigoCheckUser = async () => {
+    try {
+      const response = await clienteAxios.post(
+        `/api/siigo/get-customer`,
+        objCedula,
+        {
+          headers: {
+            Authorization: `Bearer ${siigoToken}`,
+            "Content-Type": "application/json",
+            "Partner-Id": "calyaanapp",
+          },
+        }
+      );
+      console.log(response);
+      if (response.data.results <= 0) {
+        return setUserCheck("NoRegistered");
+      }
+      if (response.data.results.map) return setUserCheck("Registered");
+    } catch (error) {
+      console.error("Error en SiigoCheckUser:", error);
+      throw error;
+    }
+  };
+
   const SendSiigo = async () => {
     try {
-      const { data } = await clienteAxios.post(
-        `http://127.0.0.1:3001/api/siigo/invoice`,
+      swal({
+        title: "Cargando...",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+      });
+      productIDPeticion();
+      const response = await clienteAxios.post(
+        `${import.meta.env.VITE_APP_BACK}/api/siigo/invoice`,
         objTest,
         {
           headers: {
@@ -138,14 +230,28 @@ const ProductExpanded = ({
           },
         }
       );
+      console.log(response);
+
       setInput({
         ...input,
-        nro_factura: data.number,
-        estado_facturacion: "approved",
+        nro_factura: response.data.number,
+        estado_facturacion: "Facturado",
       });
-      console.log(data);
+
+      const responseEdit = await handleSubmit();
+
+      if (
+        (response.status === 200 || response.status === 201) &&
+        (responseEdit.status === 200 || responseEdit.status === 201)
+      ) {
+        // La operación se realizó con éxito
+        swal("success", "La operación se completó exitosamente.", "success");
+      } else {
+        // Hubo un error en la operación
+        swal("Error", "Hubo un error en la operación.", "error");
+      }
     } catch (error) {
-      console.log(error.message);
+      swal("Error", "Hubo un error en la operación.", "error");
     }
   };
 
@@ -168,7 +274,9 @@ const ProductExpanded = ({
 
   async function handleSubmit(e) {
     setLoading(false);
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
 
     const data = new FormData();
     Object.keys(input).forEach((key) => data.append(key, input[key]));
@@ -184,7 +292,8 @@ const ProductExpanded = ({
         }
       );
       setLoading(true);
-      swal("success", "ORDEN MODIFICADA", "success");
+      // swal("success", "ORDEN MODIFICADA", "success");
+      return response;
     } catch (error) {
       console.log(error);
       alert("Unexpected error");
@@ -193,11 +302,16 @@ const ProductExpanded = ({
   }
 
   const handleEditModalOpen = () => {
+    SiigoCheckUser();
     setEditModalVisible(true);
   };
 
   const handleEditModalClose = () => {
     setEditModalVisible(false);
+  };
+
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
   };
 
   return (
@@ -360,6 +474,52 @@ const ProductExpanded = ({
                     {cliente_id.cedula}
                   </b>
                 </p>
+                {userCheck === "wait" ? (
+                  <div>
+                    <div
+                      style={{
+                        border: "4px solid rgba(255, 255, 255, 0.3)",
+                        borderRadius: "50%",
+                        borderTop: "4px solid #007bff", // Cambia el color según tus preferencias
+                        width: "40px",
+                        height: "40px",
+                        animation: "spin 1s linear infinite",
+                        margin: "0 auto",
+                      }}
+                    ></div>
+                    <p> Verificando si el usuario esta registrado en siigo</p>
+                  </div>
+                ) : userCheck === "Registered" ? (
+                  <div
+                    style={{
+                      gap: "1rem",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <AiFillCheckCircle size={50} color="green" />
+                    <p>El usuario esta registrado en siigo</p>
+                  </div>
+                ) : userCheck === "NoRegistered" ? (
+                  <div
+                    style={{
+                      gap: "1rem",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <AiFillExclamationCircle size={50} color="yellow" />
+                    <p>Es necesario registrar el usuario en siigo</p>
+                  </div>
+                ) : (
+                  "Algo salio mal con la comunicacion con siigo api"
+                )}
               </div>
               <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
               <div
@@ -440,6 +600,31 @@ const ProductExpanded = ({
                   alignItems: "center",
                 }}
               >
+                <div
+                  style={{
+                    gap: "1rem",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-around",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <label htmlFor="selectBox">Selecciona una opción:</label>
+                  <select
+                    id="selectBox"
+                    value={selectedOption}
+                    onChange={handleSelectChange}
+                  >
+                    <option value="">Selecciona una opción</option>
+                    {/* Utiliza map para generar las opciones del select */}
+                    {productsID?.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <p style={{ fontSize: "1.2rem" }}>Servicios</p>{" "}
                 {servicios.map((serv) => (
                   <>
@@ -570,6 +755,7 @@ const FacturacionAntDesing = () => {
   const [endDate, setEndDate] = useState("");
 
   const [siigoToken, setSiigoToken] = useState("");
+  const [productsID, setProductsID] = useState([]);
 
   const handleDateChange = (dates) => {
     const dateNow = dates ? moment(dates[0].$d).format("YYYY/MM/DD") : null;
@@ -603,12 +789,30 @@ const FacturacionAntDesing = () => {
         }
       );
       setSiigoToken(data.access_token);
-      console.log(data);
-      console.log(siigoToken, "token");
+      // console.log(data);
+      // console.log(siigoToken, "token");
     } catch (error) {
       console.log(error.message);
     }
   };
+
+  const productIDPeticion = async () => {
+    const response = await clienteAxios.get(
+      `${import.meta.env.VITE_APP_BACK}/api/siigo/products`,
+      {
+        headers: {
+          Authorization: `Bearer ${siigoToken}`,
+          "Content-Type": "application/json",
+          "Partner-Id": "calyaanapp",
+        },
+      }
+    );
+    // console.log("Document type", response);
+    setProductsID(response.data.results);
+  };
+  useEffect(() => {
+    productIDPeticion();
+  }, [dispatch]);
 
   useEffect(() => {
     LoginSiigo();
@@ -646,20 +850,20 @@ const FacturacionAntDesing = () => {
     }
 
     const searchTextLower = searchText.toLowerCase();
-    return newProducts.filter((orden) => {
+    return newProducts?.filter((orden) => {
       const { profesional_id } = orden;
       if (!profesional_id) {
         return;
       }
 
       const fullNameProfesional =
-        `${orden.cliente_id.nombre} ${orden.cliente_id.apellido}`.toLowerCase();
+        `${orden?.cliente_id?.nombre} ${orden?.cliente_id.apellido}`.toLowerCase();
       const fullNameCliente =
-        `${orden.cliente_id.nombre} ${orden.cliente_id.apellido}`.toLowerCase();
+        `${orden?.cliente_id?.nombre} ${orden?.cliente_id?.apellido}`.toLowerCase();
       const fullNameProfesionalInverso =
-        `${orden.profesional_apellido} ${orden.profesional_nombre} `.toLowerCase();
+        `${orden?.profesional_apellido} ${orden?.profesional_nombre} `.toLowerCase();
       const fullNameClienteInverso =
-        `${orden.cliente_id.apellido} ${orden.cliente_id.nombre}`.toLowerCase();
+        `${orden?.cliente_id.apellido} ${orden?.cliente_id?.nombre}`.toLowerCase();
 
       const orderDate = moment(orden.createdAt, "YYYY/MM/DD");
 
@@ -865,6 +1069,13 @@ const FacturacionAntDesing = () => {
                 <hr></hr>
                 <b>Localidad</b> <br />
                 {record?.localidad_servicio} <br />
+              </p>
+            )}
+            {record?.nroSesion && (
+              <p>
+                <hr></hr>
+                <b>Sesion</b> <br />
+                {record?.nroSesion} <br />
               </p>
             )}
           </div>
@@ -1107,6 +1318,7 @@ const FacturacionAntDesing = () => {
                 editProduct={editProduct}
                 setEditProduct={setEditProduct}
                 siigoToken={siigoToken}
+                productsID={productsID}
               />
             ),
           }}

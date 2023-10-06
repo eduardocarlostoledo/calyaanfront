@@ -901,6 +901,13 @@ const LiquidacionAntDesing = () => {
                 {record.direccion_servicio &&
                   record.direccion_servicio.slice(0, 20)}{" "}
                 ... <br />
+                {record?.nroSesion && (
+                  <p>
+                    <hr></hr>
+                    <b>Sesion</b> <br />
+                    {record?.nroSesion} <br />
+                  </p>
+                )}
               </p>
             </div>
           ))
