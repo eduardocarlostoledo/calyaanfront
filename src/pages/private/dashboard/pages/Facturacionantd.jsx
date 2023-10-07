@@ -46,52 +46,34 @@ const ProductExpanded = ({
     payment_id: factura.payment_id,
     _id: factura._id,
   });
-  // const [inputSiigo, setInputSiigo] = useState({
-  //   customer: {
-  //     identification: cliente_id?.cedula,
-  //     branch_office: "0",
-  //   },
-  //   date: date.now(),
-  //   items: [
-  //     servicios.map((serv) => ({
-  //       code: "Sku-1",
-  //       description: "Sku-1",
-  //       quantity: 1,
-  //       taxes: [
-  //         {
-  //           id: 13156,
-  //         },
-  //         {
-  //           id: 21479,
-  //         },
-  //       ],
-  //       price: 847.45,
-  //     })),
-  //   ],
+  const fechaInputSiigo = new Date().toISOString().slice(0, 10);
+  const [inputSiigo, setInputSiigo] = useState({
+    document: {
+      id: 24446,
+    },
+    date: fechaInputSiigo,
+    customer: {
+      identification: cliente_id?.cedula.toString(),
+      branch_office: "0",
+    },
+    seller: 629,
+    items: [],
+    // stamp:{
+    //   send:true
+    // },
+    // mail:{
+    //   send:true
+    // },
+    observations: "observaciones",
 
-  // payments: [
-  //   {
-  //     id: 5638,
-  //     value: 1000,
-  //     due_date: "2022-05-08",
-  //   },
-  // ],
-
-  //   // cliente_nombre: cliente_id?.nombre,
-  //   // cliente_apellido: cliente_id?.apellido,
-  //   // cliente_telefono: cliente_id?.telefono,
-
-  //   // profesional_nombre: profesional?.nombre,
-  //   // profesional_apellido: profesional?.apellido,
-  //   // profesional_telefono: profesional?.telefono,
-  //   // profesional_cedula: profesional?.cedula,
-
-  //   // factura_estado_pago: factura?.estadoPago,
-  //   // factura_origen: factura?.origen,
-  //   // factura_fecha_venta: factura?.fecha_venta,
-  //   // factura_precio_neto: factura?.precioTotal,
-  //   // factura_precio_total: factura?.precioNeto,
-  // });
+    payments: [
+      {
+        id: 5638,
+        value: Math.ceil(factura?.precioTotal),
+        due_date: fechaInputSiigo,
+      },
+    ],
+  });
   // console.log(record, "record");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -100,6 +82,7 @@ const ProductExpanded = ({
   const [selectedOption, setSelectedOption] = useState("");
 
   const [userCheck, setUserCheck] = useState("wait");
+  const [productCheck, setProductCheck] = useState("wait");
 
   const objTest = {
     document: {
@@ -183,6 +166,85 @@ const ProductExpanded = ({
     return response;
   };
 
+  const ProductNamePeticion = async () => {
+    const response = await clienteAxios.get(
+      `${import.meta.env.VITE_APP_BACK}/api/products/name/${
+        servicios[0].nombre
+      }`
+    );
+
+    console.log(response, "get id wp");
+
+    if (response.data === null) {
+      return error;
+    }
+
+    const responseSiigoCheck = await clienteAxios.post(
+      `${import.meta.env.VITE_APP_BACK}/api/siigo/product-code`,
+      { code: response.data.idWP },
+      {
+        headers: {
+          Authorization: `Bearer ${siigoToken}`,
+          "Content-Type": "application/json",
+          "Partner-Id": "calyaanapp",
+        },
+      }
+    );
+
+    console.log(responseSiigoCheck, "response siigo");
+
+    if (responseSiigoCheck.data.pagination.total_results >= 1) {
+      setProductCheck("Registered");
+      setInputSiigo({
+        ...inputSiigo,
+        items: [
+          {
+            code: responseSiigoCheck.data.results[0].code,
+            description:
+              responseSiigoCheck.data.results[0].description ||
+              responseSiigoCheck.data.results[0].name,
+            quantity: 1,
+            price: Math.ceil(factura?.precioTotal),
+          },
+        ],
+      });
+      return console.log("producto creado", inputSiigo);
+    }
+    setProductCheck("NoRegistered");
+    const createProductSiigo = await clienteAxios.post(
+      `${import.meta.env.VITE_APP_BACK}/api/siigo/create-product`,
+      {
+        code: response.data.idWP,
+        name: response.data.nombre,
+        account_group: 1253,
+        description: response.data.nombre,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${siigoToken}`,
+          "Content-Type": "application/json",
+          "Partner-Id": "calyaanapp",
+        },
+      }
+    );
+
+    console.log(createProductSiigo, "create product siigo");
+    setProductCheck("Registered");
+    return setInputSiigo({
+      ...inputSiigo,
+      items: [
+        {
+          code: createProductSiigo.data.code,
+          name: createProductSiigo.data.result[0].name,
+          description:
+            createProductSiigo.data.description || createProductSiigo.data.name,
+          quantity: 1,
+          price: Math.ceil(factura?.precioTotal),
+        },
+      ],
+    });
+  };
+
   const objCedula = {
     identification: cliente_id.cedula,
   };
@@ -202,9 +264,49 @@ const ProductExpanded = ({
       );
       console.log(response);
       if (response.data.results <= 0) {
-        return setUserCheck("NoRegistered");
+        setUserCheck("NoRegistered");
+
+        const response = await clienteAxios.post(
+          `/api/siigo/create-customer/`,
+          {
+            person_type: "Person",
+            id_type: "13",
+            identification: cliente_id.cedula.toString(),
+            name: [cliente_id.nombre, cliente_id.apellido],
+            address: {
+              address: cliente_id.direccionDefault.direccion,
+              city: {
+                country_code: "Co",
+                state_code: "11",
+                city_code: "11001",
+              },
+            },
+            phones: [
+              {
+                number: cliente_id.telefono,
+              },
+            ],
+            contacts: [
+              {
+                first_name: cliente_id.nombre,
+                last_name: cliente_id.apellido,
+                email: cliente_id.email,
+              },
+            ],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${siigoToken}`,
+              "Content-Type": "application/json",
+              "Partner-Id": "calyaanapp",
+            },
+          }
+        );
+        console.log(response, "creado el customer");
+        return setUserCheck("Registered");
       }
-      if (response.data.results.map) return setUserCheck("Registered");
+      console.log("ya estaba creado");
+      return setUserCheck("Registered");
     } catch (error) {
       console.error("Error en SiigoCheckUser:", error);
       throw error;
@@ -218,10 +320,10 @@ const ProductExpanded = ({
         allowOutsideClick: false,
         showConfirmButton: false,
       });
-      productIDPeticion();
+      // productIDPeticion();
       const response = await clienteAxios.post(
         `${import.meta.env.VITE_APP_BACK}/api/siigo/invoice`,
-        objTest,
+        inputSiigo,
         {
           headers: {
             Authorization: `Bearer ${siigoToken}`,
@@ -302,8 +404,9 @@ const ProductExpanded = ({
   }
 
   const handleEditModalOpen = () => {
-    SiigoCheckUser();
     setEditModalVisible(true);
+    SiigoCheckUser();
+    ProductNamePeticion();
   };
 
   const handleEditModalClose = () => {
@@ -459,11 +562,11 @@ const ProductExpanded = ({
                 <p>
                   Nombre y apellido:{" "}
                   <b style={{ textDecorationLine: "underline" }}>
-                    {cliente_id.apellido} {cliente_id.nombre}
+                    {cliente_id?.apellido} {cliente_id?.nombre}
                   </b>
                 </p>
                 <p>
-                  Email:<b> {cliente_id.email}</b> Telefono:{" "}
+                  Email:<b> {cliente_id?.email}</b> Telefono:{" "}
                   <b style={{ textDecorationLine: "underline" }}>
                     {cliente_id.telefono}
                   </b>
@@ -536,19 +639,19 @@ const ProductExpanded = ({
                 <p>
                   Nombre y apellido:{" "}
                   <b style={{ textDecorationLine: "underline" }}>
-                    {profesional.apellido} {profesional.nombre}
+                    {profesional?.apellido} {profesional.nombre}
                   </b>
                 </p>
                 <p>
                   Email:<b> {profesional.email}</b> Telefono:{" "}
                   <b style={{ textDecorationLine: "underline" }}>
-                    {profesional.telefono}
+                    {profesional?.telefono}
                   </b>
                 </p>
                 <p>
                   Cedula:
                   <b style={{ textDecorationLine: "underline" }}>
-                    {profesional.cedula}
+                    {profesional?.cedula}
                   </b>
                 </p>
               </div>
@@ -609,22 +712,7 @@ const ProductExpanded = ({
                     flexDirection: "column",
                     alignItems: "center",
                   }}
-                >
-                  <label htmlFor="selectBox">Selecciona una opción:</label>
-                  <select
-                    id="selectBox"
-                    value={selectedOption}
-                    onChange={handleSelectChange}
-                  >
-                    <option value="">Selecciona una opción</option>
-                    {/* Utiliza map para generar las opciones del select */}
-                    {productsID?.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                ></div>
                 <p style={{ fontSize: "1.2rem" }}>Servicios</p>{" "}
                 {servicios.map((serv) => (
                   <>
@@ -632,6 +720,52 @@ const ProductExpanded = ({
                     <p>Precio: ${serv.precio}</p>
                   </>
                 ))}
+                {productCheck === "wait" ? (
+                  <div>
+                    <div
+                      style={{
+                        border: "4px solid rgba(255, 255, 255, 0.3)",
+                        borderRadius: "50%",
+                        borderTop: "4px solid #007bff", // Cambia el color según tus preferencias
+                        width: "40px",
+                        height: "40px",
+                        animation: "spin 1s linear infinite",
+                        margin: "0 auto",
+                      }}
+                    ></div>
+                    <p> Verificando si el producto esta registrado en siigo</p>
+                  </div>
+                ) : productCheck === "Registered" ? (
+                  <div
+                    style={{
+                      gap: "1rem",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <AiFillCheckCircle size={50} color="green" />
+                    <p>El producto esta registrado en siigo</p>
+                  </div>
+                ) : productCheck === "NoRegistered" ? (
+                  <div
+                    style={{
+                      gap: "1rem",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <AiFillExclamationCircle size={50} color="yellow" />
+                    <p>Es necesario registrar el Producto en siigo</p>
+                  </div>
+                ) : (
+                  "Algo salio mal con la comunicacion con siigo api"
+                )}
               </div>
             </Modal>
           </div>
@@ -857,13 +991,13 @@ const FacturacionAntDesing = () => {
       }
 
       const fullNameProfesional =
-        `${orden?.cliente_id?.nombre} ${orden?.cliente_id.apellido}`.toLowerCase();
+        `${orden?.cliente_id?.nombre} ${orden?.cliente_id?.apellido}`.toLowerCase();
       const fullNameCliente =
         `${orden?.cliente_id?.nombre} ${orden?.cliente_id?.apellido}`.toLowerCase();
       const fullNameProfesionalInverso =
         `${orden?.profesional_apellido} ${orden?.profesional_nombre} `.toLowerCase();
       const fullNameClienteInverso =
-        `${orden?.cliente_id.apellido} ${orden?.cliente_id?.nombre}`.toLowerCase();
+        `${orden?.cliente_id?.apellido} ${orden?.cliente_id?.nombre}`.toLowerCase();
 
       const orderDate = moment(orden.createdAt, "YYYY/MM/DD");
 
@@ -915,23 +1049,23 @@ const FacturacionAntDesing = () => {
           <div>
             <b>Nombre y apellido</b>
             <p>
-              {text.apellido} {text.nombre}
+              {text?.apellido} {text?.nombre}
             </p>
           </div>
           <hr />
           <div>
             <b>Cedula</b>
-            <p>{text.cedula}</p>
+            <p>{text?.cedula}</p>
           </div>
           <hr />
           <div>
             <b>Telefono</b>
-            <p>{text.telefono}</p>
+            <p>{text?.telefono}</p>
           </div>
           <hr />
           <div>
             <b>Email</b>
-            <p>{text.email}</p>
+            <p>{text?.email}</p>
           </div>
         </div>
       ),
@@ -944,23 +1078,23 @@ const FacturacionAntDesing = () => {
           <div>
             <b>Nombre y apellido</b>
             <p>
-              {text.apellido} {text.nombre}
+              {text?.apellido} {text?.nombre}
             </p>
           </div>
           <hr />
           <div>
             <b>Cedula</b>
-            <p>{text.cedula}</p>
+            <p>{text?.cedula}</p>
           </div>
           <hr />
           <div>
             <b>Telefono</b>
-            <p>{text.telefono}</p>
+            <p>{text?.telefono}</p>
           </div>
           <hr />
           <div>
             <b>Email</b>
-            <p>{text.email}</p>
+            <p>{text?.email}</p>
           </div>
         </div>
       ),
