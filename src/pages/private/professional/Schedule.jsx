@@ -21,50 +21,46 @@ function verificarHorario(horario, arrayObjetos) {
   });
 }
 
+const Schedule = ({ profesionalSelect }) => {
+  const newHourArray = [
+    "06:00-07:00",
+    "07:00-08:00",
+    "08:00-09:00",
+    "09:00-10:00",
+    "10:00-11:00",
+    "11:00-12:00",
+    "12:00-13:00",
+    "13:00-14:00",
+    "14:00-15:00",
+    "15:00-16:00",
+    "16:00-17:00",
+    "17:00-18:00",
+    "18:00-19:00",
+    "19:00-20:00",
+    "20:00-21:00",
+    "21:00-22:00",
+  ].sort();
 
-const Schedule = () => {
-  
+  const jornadaDeSeisADoce = [
+    "06:00-07:00",
+    "07:00-08:00",
+    "08:00-09:00",
+    "09:00-10:00",
+    "10:00-11:00",
+    "11:00-12:00",
+  ].sort();
 
-const newHourArray = [
-  "06:00-07:00",
-  "07:00-08:00",
-  "08:00-09:00",
-  "09:00-10:00",
-  "10:00-11:00",
-  "11:00-12:00",
-  "12:00-13:00",
-  "13:00-14:00",
-  "14:00-15:00",
-  "15:00-16:00",
-  "16:00-17:00",
-  "17:00-18:00",
-  "18:00-19:00",
-  "19:00-20:00",
-  "20:00-21:00",
-  "21:00-22:00",
-].sort();
-
-const jornadaDeSeisADoce = [
-  "06:00-07:00",
-  "07:00-08:00",
-  "08:00-09:00",
-  "09:00-10:00",
-  "10:00-11:00",
-  "11:00-12:00",  
-].sort();
-
-const jornadaDeDoceAVentiDos = [  
-  "13:00-14:00",
-  "14:00-15:00",
-  "15:00-16:00",
-  "16:00-17:00",
-  "17:00-18:00",
-  "18:00-19:00",
-  "19:00-20:00",
-  "20:00-21:00",
-  "21:00-22:00",
-].sort();
-
+  const jornadaDeDoceAVentiDos = [
+    "13:00-14:00",
+    "14:00-15:00",
+    "15:00-16:00",
+    "16:00-17:00",
+    "17:00-18:00",
+    "18:00-19:00",
+    "19:00-20:00",
+    "20:00-21:00",
+    "21:00-22:00",
+  ].sort();
 
   const scrollToTop = () => {
     window.scrollTo(0, 0);
@@ -95,10 +91,22 @@ const jornadaDeDoceAVentiDos = [
   const onChangeInputDate = async (e) => {
     setHorariosForm([]);
     try {
-      const { data } = await clienteAxios.get(`/api/profesional/${e.target.value}`);
-      if (data) {
+      let info = "";
+      console.log(profesionalSelect, "aaa");
+      if (profesionalSelect) {
+        const { data } = await clienteAxios.get(
+          `/api/profesional/disponibilidad-profesional-admin-dash?fecha=${e.target.value}&_id=${profesionalSelect.profesional._id}`
+        );
+        info = data;
+      } else {
+        const { data } = await clienteAxios.get(
+          `/api/profesional/${e.target.value}`
+        );
+        info = data;
+      }
+      if (info) {
         setDateInput(e.target.value);
-        setHorariosForm(data.horarios);
+        setHorariosForm(info.horarios);
       } else {
         setDateInput(e.target.value);
         setHorariosForm([]);
@@ -119,6 +127,9 @@ const jornadaDeDoceAVentiDos = [
       horarios: horariosForm,
       scheduleData,
     };
+    if (profesionalSelect) {
+      dataP._id = profesionalSelect.profesional._id;
+    }
     try {
       await clienteAxios.post(`/api/profesional`, dataP);
     } catch (err) {
@@ -146,7 +157,10 @@ const jornadaDeDoceAVentiDos = [
         ...prevHorariosForm,
         { hora: value, stock: true },
       ]);
-      setSelectedOptions((prevSelectedOptions) => [...prevSelectedOptions, value]);
+      setSelectedOptions((prevSelectedOptions) => [
+        ...prevSelectedOptions,
+        value,
+      ]);
     } else {
       setHorariosForm((prevHorariosForm) =>
         prevHorariosForm.filter((option) => option.hora !== value)
@@ -168,31 +182,35 @@ const jornadaDeDoceAVentiDos = [
     }
   };
 
-  const selectAlljornadaDeDoceAVentiDos= () => {
+  const selectAlljornadaDeDoceAVentiDos = () => {
     if (selectedOptions.length === jornadaDeDoceAVentiDos.length) {
       setHorariosForm([]);
       setSelectedOptions([]);
     } else {
-      setHorariosForm(jornadaDeDoceAVentiDos.map((hora) => ({ hora, stock: true })));
+      setHorariosForm(
+        jornadaDeDoceAVentiDos.map((hora) => ({ hora, stock: true }))
+      );
       setSelectedOptions([...jornadaDeDoceAVentiDos]);
     }
   };
 
-  const selectAlljornadaDeSeisADoce= () => {
+  const selectAlljornadaDeSeisADoce = () => {
     if (selectedOptions.length === jornadaDeSeisADoce.length) {
       setHorariosForm([]);
       setSelectedOptions([]);
     } else {
-      setHorariosForm(jornadaDeSeisADoce.map((hora) => ({ hora, stock: true })));
+      setHorariosForm(
+        jornadaDeSeisADoce.map((hora) => ({ hora, stock: true }))
+      );
       setSelectedOptions([...jornadaDeSeisADoce]);
     }
-  }; 
-/* fin selects*/
+  };
+  /* fin selects*/
 
   return (
     <div className="flex items-center justify-center my-32 max-lg:my-12">
       <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-        <div className="grid gap-8 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+        <div className="grid gap-8 gap-y-2 text-sm grid-cols-1 lg:grid-cols-1">
           <div className="mb-4">
             <p className="font-medium text-xl mb-2">Horarios</p>
             <p className="text-gray-600 leading-loose">
@@ -209,20 +227,16 @@ const jornadaDeDoceAVentiDos = [
               />
 
               {dateInput && (
-                <section className="mt-6">
+                <section className="mt-6 w-full">
                   <h2 className="font-semibold text-gray-900">
                     Horario para{" "}
                     <time>
-                      {format(
-                        addDays(new Date(dateInput), 1),
-                        "MMM dd, yyy",
-                        {
-                          locale: es,
-                        }
-                      )}
+                      {format(addDays(new Date(dateInput), 1), "MMM dd, yyy", {
+                        locale: es,
+                      })}
                     </time>
                   </h2>
-{/* aca esta la botonera de opciones */}
+                  {/* aca esta la botonera de opciones */}
                   {/* <div className="flex items-center justify-between mb-4">
                     <h5 className="text-xl font-medium leading-none mb-2">
                       Selecciona tus horarios
@@ -279,26 +293,31 @@ const jornadaDeDoceAVentiDos = [
                     </button>
                   </div>
 
-
-                  <ol className= "flex flex-col items-center justify-between mb-4 sm:flex-row text-gray-500">
+                  <ol className="flex flex-col items-center justify-between mb-4 sm:flex-row text-gray-500">
                     <div
                       id="accordion-collapse-body-1"
                       aria-labelledby="accordion-collapse-heading-1"
+                      className="w-full"
                     >
                       <form onSubmit={onSubmitForm}>
-                        {newHourArray.map((hora, index) => (
-                          <label key={index} className="block mt-1 text-sm text-gray-900">
-                            <input
-                              type="checkbox"
-                              name="horarios"
-                              value={hora}
-                              onChange={handleCheckboxChange}
-                              checked={selectedOptions.includes(hora)}
-                            />
-                            {hora}
-                          </label>
-                        ))}
-                        <div className="my-4 flex flex-wrap gap-4">
+                        <div className="my-4 m-auto flex flex-col flex-wrap content-around max-h-72">
+                          {newHourArray.map((hora, index) => (
+                            <label
+                              key={index}
+                              className="block mt-2 text-base text-gray-900"
+                            >
+                              <input
+                                type="checkbox"
+                                name="horarios"
+                                value={hora}
+                                onChange={handleCheckboxChange}
+                                checked={selectedOptions.includes(hora)}
+                              />
+                              {hora}
+                            </label>
+                          ))}
+                        </div>
+                        <div className="my-4 m-auto flex flex-wrap gap-4 max-w-x justify-center">
                           {horariosForm.map((horario, index) => (
                             <p
                               key={index}
@@ -317,7 +336,7 @@ const jornadaDeDoceAVentiDos = [
                         ) : (
                           <button
                             type="submit"
-                            className="w-full block bg-primary hover:bg-bgHover focus:bg-bgHover text-white font-semibold rounded-lg px-4 py-3 mt-6"
+                            className="w-96 m-auto block bg-primary hover:bg-bgHover focus:bg-bgHover text-white font-semibold rounded-lg px-4 py-3 mt-6"
                           >
                             Confirmar Horario
                           </button>
@@ -389,7 +408,6 @@ export default Schedule;
 // const Schedule = () => {
 //   const dispatch = useDispatch();
 //   const dateInputRef = useRef(null); // Ref para el input date
-
 
 //   const { loadingProfessional, errorProfessional } = useSelector((state) => ({
 //     ...state.professional,
@@ -502,7 +520,6 @@ export default Schedule;
 
 //           <div className="lg:col-span-2">
 //             <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
-           
 
 //               <input
 //                 type="date"
@@ -536,7 +553,6 @@ export default Schedule;
 //                   Seleccionar todos
 //                 </button>
 //               </div>
-
 
 //                   <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
 //                     {
@@ -829,7 +845,6 @@ export default Schedule;
 
 // export default Schedule;
 
-
 // import React, { useEffect, useState } from "react";
 // import { addDays, format } from "date-fns";
 // import { es } from "date-fns/locale";
@@ -1058,7 +1073,6 @@ export default Schedule;
 // };
 
 // export default Schedule;
-
 
 // import React, { useEffect, useState } from "react";
 // import { addDays, format } from "date-fns";

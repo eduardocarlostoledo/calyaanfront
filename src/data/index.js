@@ -1,8 +1,7 @@
 export const services = [
   {
     id: 1,
-    image:
-      "https://calyaan.com/wp-content/uploads/2022/09/11-300x300-1.png",
+    image: "https://calyaan.com/wp-content/uploads/2022/09/11-300x300-1.png",
     text: "Limpieza facial profunda + Masaje descontracturante",
     count: "2",
     link: "https://calyaan.com/producto/limpieza-facial-profunda-masaje-descontracturante/",
@@ -15,7 +14,7 @@ export const services = [
     count: "20",
     link: "https://calyaan.com/producto/masaje-descontracturante-bogota/",
   },
-    {
+  {
     id: 3,
     image:
       "https://calyaan.com/wp-content/uploads/2022/06/Recurso-5--300x300.jpg.webp",
@@ -23,7 +22,7 @@ export const services = [
     count: "1",
     link: "https://calyaan.com/producto/masaje-relajante-limpieza-facial-profunda/",
   },
-    {
+  {
     id: 4,
     image:
       "https://calyaan.b-cdn.net/wp-content/uploads/2022/01/500x500_Mesa-de-trabajo-1-copia-3-360x360.jpg",
@@ -63,9 +62,76 @@ export const services = [
     count: "12",
     link: "https://calyaan.com/categoria-producto/centro-belleza-bogota/spa-en-bogota/",
   },
-
-]
+];
 // ].map(service => ({
+
+export const servicesLandingPage = [
+  {
+    id: "806",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "20 masajes(4 zonas)",
+    precio: "$2.380.000",
+    link: "https://calyaan.netlify.app/servicio?id=806",
+  },
+  {
+    id: "928",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "10 masajes (2 zonas)",
+    precio: "$1.190.000",
+    link: "https://calyaan.netlify.app/servicio?id=928",
+  },
+  {
+    id: "12307",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "6 masajes (2 zonas)",
+    precio: "$800.000",
+    link: "https://calyaan.netlify.app/servicio?id=12307",
+  },
+  {
+    id: "13901",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "4 masajes (2 zonas)",
+    precio: "$550.000",
+    link: "https://calyaan.netlify.app/servicio?id=13901",
+  },
+  {
+    id: "13906",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "20 masajes con camilla",
+    precio: "$2.800.000",
+    link: "https://calyaan.netlify.app/servicio?id=13906",
+  },
+  {
+    id: "13904",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "10 masajes con camilla",
+    precio: "$1.400.000",
+    link: "https://calyaan.netlify.app/servicio?id=13904",
+  },
+  {
+    id: "13903",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "6 masajes con camilla",
+    precio: "$870.000",
+    link: "https://calyaan.netlify.app/servicio?id=13903",
+  },
+  {
+    id: "30011",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "1 masaje + Valoración (2 zonas)",
+    precio: "$200.000",
+    link: "https://calyaan.netlify.app/servicio?id=30011",
+  },
+];
+
 //   ...service,
 //   image: service.image.replace(/-\d+x\d+/, "-300x300")
 // }));
@@ -121,7 +187,7 @@ export const localidadesLaborales = [
   "Candelaria La Candelaria",
   "Chapinero Centro",
   "Chapinero Chico-Lago",
-  "Chapinero El refugio",  
+  "Chapinero El refugio",
   "Chapinero Pardo Rubio",
   "Chapinero San Isidro-Patios",
   "Ciudad Bolívar Arborizadora",
@@ -150,17 +216,17 @@ export const localidadesLaborales = [
   "Fontibón San Pablo",
   "Fontibón Zona Franca",
   "Kennedy Americas",
-  "Kennedy Bavaria",  
+  "Kennedy Bavaria",
   "Kennedy Calandaima",
   "Kennedy Carvajal",
-  "Kennedy Castilla",  
+  "Kennedy Castilla",
   "Kennedy Central",
   "Kennedy Corabastos",
   "Kennedy Gran Britalia",
   "Kennedy Las Margaritas",
-  "Kennedy Patio Bonito",  
+  "Kennedy Patio Bonito",
   "Kennedy Timiza",
-  "Kennedy Tintal Norte",  
+  "Kennedy Tintal Norte",
   "Los Mártires",
   "Puente Aranda",
   "Rafael Uribe Diana Turbay",
@@ -216,8 +282,6 @@ export const localidadesLaborales = [
   "Cundinamarca La Calera",
 ];
 
-
-
 export const localidades = [
   "1. Usaquén",
   "2. Chapinero",
@@ -261,24 +325,97 @@ export const hoursArray = [
 
 //se usa en schedule para carga de horarios
 export const newHourArray = [
-  { horaInicio: "06:00", horaFin: "07:00", valueHoraInicio: "06:00", valueHoraFin: "06:59" },
-  { horaInicio: "07:00", horaFin: "08:00", valueHoraInicio: "07:00", valueHoraFin: "07:59" },
-  { horaInicio: "08:00", horaFin: "09:00", valueHoraInicio: "08:00", valueHoraFin: "08:59" },
-  { horaInicio: "09:00", horaFin: "10:00", valueHoraInicio: "09:00", valueHoraFin: "09:59" },
-  { horaInicio: "10:00", horaFin: "11:00", valueHoraInicio: "10:00", valueHoraFin: "10:59" },
-  { horaInicio: "11:00", horaFin: "12:00", valueHoraInicio: "11:00", valueHoraFin: "11:59" },
-  { horaInicio: "12:00", horaFin: "13:00", valueHoraInicio: "12:00", valueHoraFin: "12:59" },
-  { horaInicio: "13:00", horaFin: "14:00", valueHoraInicio: "13:00", valueHoraFin: "13:59" },
-  { horaInicio: "14:00", horaFin: "15:00", valueHoraInicio: "14:00", valueHoraFin: "14:59" },
-  { horaInicio: "15:00", horaFin: "16:00", valueHoraInicio: "15:00", valueHoraFin: "15:59" },
-  { horaInicio: "16:00", horaFin: "17:00", valueHoraInicio: "16:00", valueHoraFin: "16:59" },
-  { horaInicio: "17:00", horaFin: "18:00", valueHoraInicio: "17:00", valueHoraFin: "17:59" },
-  { horaInicio: "18:00", horaFin: "19:00", valueHoraInicio: "18:00", valueHoraFin: "18:59" },
-  { horaInicio: "19:00", horaFin: "20:00", valueHoraInicio: "19:00", valueHoraFin: "19:59" },
-  { horaInicio: "20:00", horaFin: "21:00", valueHoraInicio: "20:00", valueHoraFin: "20:59" },
+  {
+    horaInicio: "06:00",
+    horaFin: "07:00",
+    valueHoraInicio: "06:00",
+    valueHoraFin: "06:59",
+  },
+  {
+    horaInicio: "07:00",
+    horaFin: "08:00",
+    valueHoraInicio: "07:00",
+    valueHoraFin: "07:59",
+  },
+  {
+    horaInicio: "08:00",
+    horaFin: "09:00",
+    valueHoraInicio: "08:00",
+    valueHoraFin: "08:59",
+  },
+  {
+    horaInicio: "09:00",
+    horaFin: "10:00",
+    valueHoraInicio: "09:00",
+    valueHoraFin: "09:59",
+  },
+  {
+    horaInicio: "10:00",
+    horaFin: "11:00",
+    valueHoraInicio: "10:00",
+    valueHoraFin: "10:59",
+  },
+  {
+    horaInicio: "11:00",
+    horaFin: "12:00",
+    valueHoraInicio: "11:00",
+    valueHoraFin: "11:59",
+  },
+  {
+    horaInicio: "12:00",
+    horaFin: "13:00",
+    valueHoraInicio: "12:00",
+    valueHoraFin: "12:59",
+  },
+  {
+    horaInicio: "13:00",
+    horaFin: "14:00",
+    valueHoraInicio: "13:00",
+    valueHoraFin: "13:59",
+  },
+  {
+    horaInicio: "14:00",
+    horaFin: "15:00",
+    valueHoraInicio: "14:00",
+    valueHoraFin: "14:59",
+  },
+  {
+    horaInicio: "15:00",
+    horaFin: "16:00",
+    valueHoraInicio: "15:00",
+    valueHoraFin: "15:59",
+  },
+  {
+    horaInicio: "16:00",
+    horaFin: "17:00",
+    valueHoraInicio: "16:00",
+    valueHoraFin: "16:59",
+  },
+  {
+    horaInicio: "17:00",
+    horaFin: "18:00",
+    valueHoraInicio: "17:00",
+    valueHoraFin: "17:59",
+  },
+  {
+    horaInicio: "18:00",
+    horaFin: "19:00",
+    valueHoraInicio: "18:00",
+    valueHoraFin: "18:59",
+  },
+  {
+    horaInicio: "19:00",
+    horaFin: "20:00",
+    valueHoraInicio: "19:00",
+    valueHoraFin: "19:59",
+  },
+  {
+    horaInicio: "20:00",
+    horaFin: "21:00",
+    valueHoraInicio: "20:00",
+    valueHoraFin: "20:59",
+  },
 ];
-
-
 
 export const hours = {
   hour: "6:00 am - 7:00 am",
@@ -298,7 +435,7 @@ export const hours = {
   hour15: "8:00 pm - 9:00 pm",
 };
 
-//se usa en carrito para eleccion por profesional 
+//se usa en carrito para eleccion por profesional
 export const hourSelect = [
   "06:00",
   "07:00",
@@ -373,7 +510,6 @@ export const especialidadesHabilitadas = [
   "Piel de porcelana",
   "Limpieza facial profunda",
 ];
-
 
 export const coloresBG = {
   blue: "bg-blue-100 text-blue-500",

@@ -9,6 +9,7 @@ const ProfileLayout = lazy(() => import("./layout/ProfileLayout"));
 const DashboardLayout = lazy(() => import("./layout/DashboardLayout"));
 
 const Login = lazy(() => import("./pages/Login"));
+const Productos = lazy(() => import("./pages/Productos"));
 const Register = lazy(() => import("./pages/Register"));
 const Services = lazy(() => import("./pages/Services"));
 const ConfirmAccount = lazy(() => import("./pages/ConfirmAccount"));
@@ -85,7 +86,7 @@ import LiquidacionAntDesing from "./pages/private/dashboard/pages/Liquidacionant
 import HorarioProfessionalAntDesing from "./pages/private/dashboard/pages/HorariosProfesionales";
 import Tools from "./pages/private/dashboard/pages/Tools";
 import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
-import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails"
+import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails";
 import LiquidacionAllAntDesing from "./pages/private/dashboard/pages/liquidacionesAll";
 import clienteAxios from "./config/axios";
 import { setUser } from "./redux/features/authSlice";
@@ -105,7 +106,7 @@ function App() {
     }, 2000);
   }, [message]);
 
-/*   useEffect(() => {
+  /*   useEffect(() => {
    const obtenerUsuario = async ()=>{
     try{
       const token = JSON.parse(localStorage.getItem("profile"))?.token;
@@ -140,9 +141,10 @@ function App() {
         <Route path="/ver" element={<Ver />} />
         {/* Public Routes */}
         <Route element={<ServicesLayout />}>
-        {/*   <Route index path="/servicios" element={<Services />} /> */}
+          {/*   <Route index path="/servicios" element={<Services />} /> */}
           <Route path="/servicio" element={<Service />} />
         </Route>
+        <Route path="/productos" element={<Productos />} />
 
         <Route path="/" element={<Login />} />
 
@@ -182,7 +184,7 @@ function App() {
           <Route element={<ProfileLayout />}>
             <Route path="/ajustes" element={<Settings />} />
             <Route path="/direcciones" element={<Address />} />
-      {/*       <Route path="/favoritos" element={<Favorites />} /> */}
+            {/*       <Route path="/favoritos" element={<Favorites />} /> */}
             <Route path="/historial" element={<HistoryServices />} />
             <Route path="/fidelidad" element={<Fidelidad />} />
             <Route

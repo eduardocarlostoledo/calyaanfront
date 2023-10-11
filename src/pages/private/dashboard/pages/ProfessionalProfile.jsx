@@ -20,6 +20,7 @@ import {
   updateProfileAdmin,
   updateProfileAdminDash,
 } from "../../../../redux/features/professionalSlice";
+import Schedule from "../../professional/Schedule";
 
 // const ProfessionalProfile = () => {
 //   const { id } = useParams();
@@ -248,7 +249,7 @@ const ProfessionalProfile = () => {
         especialidades: especialidadesForm,
         localidades: localidadForm,
       };
-     
+
       dispatch(updateProfileAdminDash({ valueForm, toast }));
       dispatch(updateProfileAdmin({ dataP, toast }));
       setForEdit(false);
@@ -961,6 +962,10 @@ const ProfessionalProfile = () => {
             </div>
           )}
         </div>
+      </div>
+
+      <div>
+        <Schedule profesionalSelect={valueForm} />
       </div>
 
       <div className="bg-white  shadow p-8 mt-5">
