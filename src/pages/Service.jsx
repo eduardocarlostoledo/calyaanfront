@@ -40,6 +40,9 @@ const Service = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState([]);
 
+  window.scrollTo(0, 0);
+  
+
   // useEffect(() => {
   //   JSON.parse(localStorage.getItem("profile")) &&
   //     setProfile(JSON.parse(localStorage.getItem("profile")));

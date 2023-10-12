@@ -67,12 +67,12 @@ export const services = [
 
 export const servicesLandingPage = [
   {
-    id: "806",
+    id: "816",
     image:
       "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
-    text: "20 masajes(4 zonas)",
+    text: "20 masajes (4 zonas)",
     precio: "$2.380.000",
-    link: "https://calyaan.netlify.app/servicio?id=806",
+    link: "https://calyaan.netlify.app/servicio?id=816",
   },
   {
     id: "928",
@@ -123,15 +123,35 @@ export const servicesLandingPage = [
     link: "https://calyaan.netlify.app/servicio?id=13903",
   },
   {
+    id: "30006",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "10 masajes (35 min)",
+    precio: "$990.000",
+    link: "https://calyaan.netlify.app/servicio?id=30006",
+  },
+  {
+    id: "30007",
+    image:
+      "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
+    text: "6 masajes (35 min)",
+    precio: "$660.000",
+    link: "https://calyaan.netlify.app/servicio?id=30007",
+  },
+  {
     id: "30011",
     image:
       "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
-    text: "1 masaje + Valoración (2 zonas)",
+    text: "Masaje de Valoración",
     precio: "$200.000",
     link: "https://calyaan.netlify.app/servicio?id=30011",
   },
 ];
 
+//35 minutos, incluye dos zonas del cuerpo.
+
+// 10 masajes (35 min) $990.000
+// 6 masajes (35 min) $660.000 
 //   ...service,
 //   image: service.image.replace(/-\d+x\d+/, "-300x300")
 // }));

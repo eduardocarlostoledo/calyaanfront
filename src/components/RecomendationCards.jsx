@@ -239,7 +239,7 @@ const RecomendationCards = ({
       }}
     >
       <h2 style={{ fontSize: "1.7rem", marginBottom: "2rem" }}>
-        Nuestros clientes tambien eligen:
+        Profesionales Disponibles
       </h2>
       <div
         style={{

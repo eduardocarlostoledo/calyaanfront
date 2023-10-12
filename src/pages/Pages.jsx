@@ -528,7 +528,7 @@ const Pages = ({ currentStep, pasosReserva, setComplete, setCurrentStep }) => {
                     <div className="product-container">
                       {services?.map((producto, index) => (
                         <>
-                          <div className="sm:flex items-start mt-10">
+                          <div className="sm:flex items-start mt-10 text-center">
                             <div className="w-auto">
                               <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                 <img

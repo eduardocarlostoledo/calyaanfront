@@ -427,6 +427,31 @@ const ProductExpanded = ({
                 ></input>
               </div>
               <div>
+  <input
+    type="text"
+    placeholder="Buscar Profesional..."
+    className="InputsEdits"
+    value={searchTerm}
+    onChange={handleSearchChange}
+  />
+  <select
+    className="InputsEdits"
+    name="profesional_id"
+    onChange={handleChange}
+  >
+    {filtered
+      .sort((a, b) => a.nombre.localeCompare(b.nombre)) // Ordenar por nombre
+      .map((profesional, index) => (
+        <option key={index} value={profesional._id} className="InputsEdits">
+          {profesional.nombre} {profesional.apellido} <br />
+          Email: {profesional.email}
+        </option>
+      ))}
+  </select>
+</div>
+
+              {/* comentado y reemplazado por otra funcion que ordena el array de prof.
+              <div>
                 <input
                   type="text"
                   placeholder="Buscar Profesional..."
@@ -445,12 +470,12 @@ const ProductExpanded = ({
                       value={profesional._id}
                       className="InputsEdits"
                     >
-                      {profesional.apellido} {profesional.nombre} <br />
+                      {profesional.nombre} {profesional.apellido} <br />
                       Email: {profesional.email}
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
             </div>
             <div style={{ width: "50%" }}>
               <div>
