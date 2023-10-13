@@ -5,6 +5,7 @@ import limpiarHorarios from "../helpers/Logic/limpiarHorarios";
 import Spinner from "./Spinner";
 import swal from "sweetalert";
 import RecomendationCards from "./RecomendationCards";
+import { BiLinkExternal } from "react-icons/bi";
 
 const ScheduleByProfessionalForm = () => {
   const [inputValue, setInputValue] = useState({
@@ -59,6 +60,9 @@ const ScheduleByProfessionalForm = () => {
         swal("¡Bien!", "Ahora al Siguiente Paso", "success");
       } else {
         swal("¡Error!", "Se requieren al menos 5hrs de anticipación", "error");
+        setHoursSelect([]);
+        setProfesional({});
+        setSelectCard(false);
       }
     }
   };
@@ -237,7 +241,20 @@ const ScheduleByProfessionalForm = () => {
                         </div>
                       ))
                     ) : (
-                      <>{profesionalesRequest.msg}</>
+                      <>
+                        <p className="text-xl font-normal text-center">
+                          No encontramos profesionales con disponibilidad para
+                          la fecha indicada, no te preocupes 😉, agenda mediante
+                          alguna de nuestras asesoras mediante
+                          <a
+                            href="https://api.whatsapp.com/send/?phone=573242118509&text&type=phone_number&app_absent=0"
+                            className="ml-1 text-whatsapp"
+                          >
+                            Whatsapp.
+                            <BiLinkExternal style={{ display: "inline" }} />
+                          </a>
+                        </p>
+                      </>
                     )
                   ) : (
                     <Spinner />
@@ -284,19 +301,20 @@ const ScheduleByProfessionalForm = () => {
           )}
         </div>
       </div>
-
-      <RecomendationCards
-        // profesional={profesional}
-        // setProfesional={setProfesional}
-        // setProfesionalesRequest={setProfesionalesRequest}
-        // profesionalesRequest={profesionalesRequest}
-        // limpiarHorarios={limpiarHorarios}
-        // setHoursSelect={setHoursSelect}
-        handleProfesional={handleProfesional}
-        setInputValue={setInputValue}
-        inputValue={inputValue}
-        setSelectCard={setSelectCard}
-      />
+      {!profesional._id && (
+        <RecomendationCards
+          // profesional={profesional}
+          // setProfesional={setProfesional}
+          // setProfesionalesRequest={setProfesionalesRequest}
+          // profesionalesRequest={profesionalesRequest}
+          // limpiarHorarios={limpiarHorarios}
+          // setHoursSelect={setHoursSelect}
+          handleProfesional={handleProfesional}
+          setInputValue={setInputValue}
+          inputValue={inputValue}
+          setSelectCard={setSelectCard}
+        />
+      )}
     </>
   );
 };

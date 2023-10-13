@@ -5,7 +5,8 @@ import { addMessage } from "./notificationsSlice";
 import { ROLES } from "../../helpers/Logic/roles";
 
 export const login = createAsyncThunk(
-  "auth/login", async ({ userForm, navigate, rute = "/servicio" }, thunkAPI) => {
+  "auth/login",
+  async ({ userForm, navigate, rute = "/servicio" }, thunkAPI) => {
     try {
       const response = await api.signIn(userForm);
 
@@ -48,13 +49,17 @@ export const register = createAsyncThunk(
   async ({ userForm, navigate, toast }, thunkAPI) => {
     try {
       const response = await api.signUp(userForm);
-      toast.success("Registro exitoso, confirma tu cuenta con el email enviado");
-      swal("Registro Exitoso!", "Por Favor, confirma tu correo electrónico para Ingresar", "success");
+      toast.success(
+        "Registro exitoso, confirma tu cuenta con el email enviado"
+      );
+      swal(
+        "Registro Exitoso!",
+        "Por Favor, confirma tu correo electrónico para Ingresar",
+        "success"
+      );
       navigate("/");
       return response.data;
-
     } catch (err) {
-
       thunkAPI.rejectWithValue();
 
       if (err.code === "ERR_NETWORK") {
@@ -115,7 +120,10 @@ export const confirmAccount = createAsyncThunk(
 
 export const googleSignIn = createAsyncThunk(
   "auth/googleSignIn",
-  async ({ accessToken, navigate, toast, rute = "/servicio" }, { rejectWithValue }) => {
+  async (
+    { accessToken, navigate, toast, rute = "/servicio" },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await api.googleSignIn(accessToken);
       toast.success("Inicio de sesión con Google exitoso");
@@ -166,10 +174,10 @@ export const newPassword = createAsyncThunk(
 
 export const updateInformation = createAsyncThunk(
   "usuarios/actualizar-perfil",
-  async ({ valueForm, toast }, { rejectWithValue }) => {
+  async ({ valueForm, notificacion }, { rejectWithValue }) => {
     try {
       await api.updateInformationRequest(valueForm);
-      toast.success("Perfil actualizado exitosamente");
+      notificacion();
     } catch (err) {
       let error = err.response.data.msg
         ? err.response.data.msg
@@ -214,10 +222,10 @@ const authSlice = createSlice({
       state.user = action.payload;
     },
     setLogout: (state, action) => {
-      let servicios = localStorage.getItem('services');
+      let servicios = localStorage.getItem("services");
       localStorage.clear();
       state.user = null;
-      localStorage.setItem('services', servicios)
+      localStorage.setItem("services", servicios);
       //state.trafficLightBase128 = null;
     },
     deleteError: (state, action) => {
@@ -229,7 +237,6 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-
     // Login
     builder.addCase(login.pending, (state, action) => {
       state.loading = true;
@@ -240,15 +247,18 @@ const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
-      localStorage.setItem("profile", JSON.stringify({
-        confirmado: action?.payload?.confirmado,
-        email: action.payload?.email,
-        nombre: action.payload?.nombre,
-        profesionalId: action.payload?.profesionalId,
-        token: action.payload?.token,
-        _id: action.payload?._id,
-        trafficLightBase128: ROLES[action.payload?.rol]
-      }));
+      localStorage.setItem(
+        "profile",
+        JSON.stringify({
+          confirmado: action?.payload?.confirmado,
+          email: action.payload?.email,
+          nombre: action.payload?.nombre,
+          profesionalId: action.payload?.profesionalId,
+          token: action.payload?.token,
+          _id: action.payload?._id,
+          trafficLightBase128: ROLES[action.payload?.rol],
+        })
+      );
 
       //localStorage.setItem("trafficLightBase128", JSON.stringify({ time: ROLES[action.payload.rol] }));
 
@@ -260,7 +270,7 @@ const authSlice = createSlice({
         profesionalId: action.payload?.profesionalId,
         token: action.payload?.token,
         _id: action.payload?._id,
-        trafficLightBase128: ROLES[action.payload?.rol]
+        trafficLightBase128: ROLES[action.payload?.rol],
       };
     });
 
@@ -274,15 +284,18 @@ const authSlice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, action) => {
       state.loading = false;
-      localStorage.setItem("profile", JSON.stringify({
-        confirmado: action?.payload?.confirmado,
-        email: action.payload?.email,
-        nombre: action.payload?.nombre,
-        profesionalId: action.payload?.profesionalId,
-        token: action.payload?.token,
-        _id: action.payload?._id,
-        trafficLightBase128: ROLES[action.payload?.rol]
-      }));
+      localStorage.setItem(
+        "profile",
+        JSON.stringify({
+          confirmado: action?.payload?.confirmado,
+          email: action.payload?.email,
+          nombre: action.payload?.nombre,
+          profesionalId: action.payload?.profesionalId,
+          token: action.payload?.token,
+          _id: action.payload?._id,
+          trafficLightBase128: ROLES[action.payload?.rol],
+        })
+      );
 
       state.user = {
         confirmado: action.payload?.confirmado,
@@ -291,7 +304,7 @@ const authSlice = createSlice({
         profesionalId: action.payload?.profesionalId,
         token: action.payload?.token,
         _id: action.payload?._id,
-        trafficLightBase128: ROLES[action.payload?.rol]
+        trafficLightBase128: ROLES[action.payload?.rol],
       };
     });
 
@@ -305,15 +318,18 @@ const authSlice = createSlice({
     });
     builder.addCase(googleSignIn.fulfilled, (state, action) => {
       state.loading = false;
-      localStorage.setItem("profile", JSON.stringify({
-        confirmado: action?.payload?.confirmado,
-        email: action.payload?.email,
-        nombre: action.payload?.nombre,
-        profesionalId: action.payload?.profesionalId,
-        token: action.payload?.token,
-        _id: action.payload?._id,
-        trafficLightBase128: ROLES[action.payload?.rol]
-      }));
+      localStorage.setItem(
+        "profile",
+        JSON.stringify({
+          confirmado: action?.payload?.confirmado,
+          email: action.payload?.email,
+          nombre: action.payload?.nombre,
+          profesionalId: action.payload?.profesionalId,
+          token: action.payload?.token,
+          _id: action.payload?._id,
+          trafficLightBase128: ROLES[action.payload?.rol],
+        })
+      );
 
       state.user = {
         confirmado: action.payload?.confirmado,
@@ -322,7 +338,7 @@ const authSlice = createSlice({
         profesionalId: action.payload?.profesionalId,
         token: action.payload?.token,
         _id: action.payload?._id,
-        trafficLightBase128: ROLES[action.payload?.rol]
+        trafficLightBase128: ROLES[action.payload?.rol],
       };
     });
 

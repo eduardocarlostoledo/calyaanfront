@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import clienteAxios from "../config/axios";
 import swal from "sweetalert";
 import { Navigate, useNavigate } from "react-router-dom";
+import { BiLinkExternal } from "react-icons/bi";
 // import swal from "sweetalert2";
 
 const Service = () => {
@@ -41,7 +42,6 @@ const Service = () => {
   const [profile, setProfile] = useState([]);
 
   window.scrollTo(0, 0);
-  
 
   // useEffect(() => {
   //   JSON.parse(localStorage.getItem("profile")) &&
@@ -115,9 +115,10 @@ const Service = () => {
             asesoras mediante
             <a
               href="https://api.whatsapp.com/send/?phone=573242118509&text&type=phone_number&app_absent=0"
-              className="ml-1 text-whatsapp "
+              className="ml-1 text-whatsapp"
             >
               Whatsapp.
+              <BiLinkExternal style={{ display: "inline" }} />
             </a>
           </p>
         </div>

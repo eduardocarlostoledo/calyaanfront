@@ -8,11 +8,13 @@ import { deleteError, updateInformation } from "../redux/features/authSlice";
 import clienteAxios from "../config/axios";
 import { localidades } from "../data";
 
-import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import swal from "sweetalert";
 
 const FormUpdateSettings = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { loading, error } = useSelector((state) => ({ ...state.auth }));
 
@@ -25,7 +27,7 @@ const FormUpdateSettings = () => {
     email: "",
     telefono: "",
     direccionDefault: "",
-    cedula: ""
+    cedula: "",
   });
 
   const { nombre, apellido, sexo, email, telefono, direccionDefault, cedula } =
@@ -75,25 +77,49 @@ const FormUpdateSettings = () => {
   };
 
   const handleChangePhone = (telefono) => {
-
     setValueForm({
       ...valueForm,
       telefono,
     });
+  };
 
-
+  const notificacion = () => {
+    return swal({
+      title: "",
+      icon: "success",
+      text: "Información actualizada",
+      type: "success",
+      buttons: {
+        continueEditing: {
+          text: "Continuar editando",
+          value: "continue",
+        },
+        goToService: {
+          text: "Volver al carrito",
+          value: "goToService",
+        },
+      },
+    }).then((value) => {
+      if (value === "goToService") {
+        // Redirigir al usuario a la página /servicio
+        navigate("/servicio");
+      }
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if ([nombre, apellido, email,telefono].includes("") || telefono.toString().length < 6 ) {
+    if (
+      [nombre, apellido, email, telefono].includes("") ||
+      telefono.toString().length < 6
+    ) {
       return toast.error(
         "Los campos nombres,apellidos,teléfono,sexo y correo electrónico son obligatorios"
       );
     }
 
-    dispatch(updateInformation({ valueForm, toast }));
+    dispatch(updateInformation({ valueForm, notificacion }));
   };
 
   return (
@@ -141,7 +167,9 @@ const FormUpdateSettings = () => {
           onChange={handleChange}
           name="sexo"
         >
-          <option value="" disabled >Sexo</option>
+          <option value="" disabled>
+            Sexo
+          </option>
           <option value="Masculino">Masculino</option>
           <option value="Femenino">Femenino</option>
           <option value="Otro">Otro</option>
