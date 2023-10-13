@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import clienteAxios from "../../../../config/axios";
 import { toast } from "react-toastify";
-
+import ButtonSpinner from "../../../../components/ButtonSpinner";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { NumericFormat } from "react-number-format";
+import { setAccessToken } from "../../../../helpers/Components/siigoAccessToken";
 
 const Tools = () => {
     const [minDate, setMinDate] = useState("");
@@ -24,7 +26,11 @@ const Tools = () => {
 
     const [cuponesNoVigentes, setCuponesNoVigentes] = useState([]);
     const [cuponesVigentes, setCuponesVigentes] = useState([]);
-
+const [ siigoForm, setSiigoForm] = useState({
+    username: "siigoapi@pruebas.com",
+    access_key: "OWE1OGNkY2QtZGY4ZC00Nzg1LThlZGYtNmExMzUzMmE4Yzc1Omt2YS4yJTUyQEU=",
+  });
+  const { username, access_key } = siigoForm;
     const { codigo, tipoDescuento, descuento, vencimiento } = coupon;
 
     const handleChange = (e) => {
@@ -33,6 +39,38 @@ const Tools = () => {
             [e.target.name]: e.target.value,
         });
     };
+
+    const handleChangeSiigo = (e) => {
+        setSiigoForm({
+          ...siigoForm,
+          [e.target.name]: e.target.value,
+        });
+      };
+
+      const handleSubmitSiigo = async (e) => {
+        e.preventDefault();
+    
+        if ([username, access_key].includes("")) {
+          return toast.error("Todos los campos son obligatorios");
+        }
+    
+        try {
+            const dataSiigo = await clienteAxios.post("/api/siigo/auth", siigoForm);
+            setAccessToken(dataSiigo.access_token);
+            toast.success("Token recibido con éxito");
+            } catch (error) {
+            console.log(error);
+            const errorMsg =
+                 error.response?.dataSiigo?.msg ||
+                 error.response?.dataSiigo?.message ||
+                 "Estamos presentando problemas internos";
+            toast.error(errorMsg);
+            }
+
+
+    
+        //setSiigoForm({ username: "", access_key: "" });
+      };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -447,7 +485,64 @@ const Tools = () => {
                     </div>
                 </div>
 
-                <div className="rounded border-gray-300  border-dashed border-2 h-24"></div>
+                <div className="rounded bg-white  shadow p-6">
+{/* INICIO CONFIGURACION DE SIIGO */}
+
+<form className="mt-6" onSubmit={handleSubmitSiigo}>
+            <div className="mt-4">
+              <label className="block text-gray-700">Usuario</label>
+              <input
+                type="username"
+                name="username"
+                onChange={handleChangeSiigo}
+                value={username}
+                placeholder="Ingresa tu username de SIIGO"
+                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover focus:bg-white focus:outline-none"
+                autoFocus
+              />
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-gray-700">Contraseña</label>
+              <input
+                type="access_key"
+                name="access_key"
+                onChange={handleChangeSiigo}
+                value={access_key}
+                placeholder="••••••••"
+                minLength="6"
+                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover
+                  focus:bg-white focus:outline-none"
+              />
+            </div>
+
+            <div className="text-right mt-2">                
+  <a
+    href="https://siigonube.siigo.com/ISIIGO2/Login.aspx"
+    className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
+  >
+    ¿Deseas acceder a Siigo?
+  </a>
+</div>
+
+
+            {siigoForm.length > 0 ? (
+              <ButtonSpinner />
+            ) : (
+              <button
+                type="submit"
+                className="w-full block bg-primary hover:bg-bgHover focus:bg-bgHover text-white font-semibold rounded-lg
+                            px-4 py-3 mt-6"
+              >
+                INICIAR SESION EN SIIGO
+              </button>
+            )}
+          </form>
+
+
+{/* FIN CONFIGURACION DE SIIGO */}
+
+                </div>
             </div>
         </div>
     );

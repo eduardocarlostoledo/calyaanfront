@@ -14,6 +14,7 @@ import swal from "sweetalert";
 import "./Ordenesantd.css";
 import clienteAxios from "../../../../config/axios";
 import axios from "axios";
+import { getAccessToken } from "../../../../helpers/Components/siigoAccessToken";
 
 const { RangePicker } = DatePicker;
 
@@ -913,16 +914,17 @@ const FacturacionAntDesing = () => {
 
   const LoginSiigo = async () => {
     try {
-      const { data } = await clienteAxios.post(
-        `http://127.0.0.1:3001/api/siigo/auth`,
-        obj,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setSiigoToken(data.access_token);
+      // const { data } = await clienteAxios.post(
+      //   `http://127.0.0.1:3001/api/siigo/auth`,
+      //   obj,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+      // setSiigoToken(data.access_token);
+      setSiigoToken(getAccessToken());
       // console.log(data);
       // console.log(siigoToken, "token");
     } catch (error) {
