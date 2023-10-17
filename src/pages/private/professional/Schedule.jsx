@@ -72,6 +72,8 @@ const Schedule = ({ profesionalSelect }) => {
   const { loadingProfessional, errorProfessional } = useSelector((state) => ({
     ...state.professional,
   }));
+  const _id = useSelector((state) => state.auth.user.profesionalId);
+
 
   const [dateInput, setDateInput] = useState("");
   const [horariosForm, setHorariosForm] = useState([]);
@@ -125,6 +127,7 @@ const Schedule = ({ profesionalSelect }) => {
     const dataP = {
       fecha: dateInput,
       horarios: horariosForm,
+      _id,
       scheduleData,
     };
     if (profesionalSelect) {

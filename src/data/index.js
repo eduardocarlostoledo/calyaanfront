@@ -504,7 +504,7 @@ export const especialidadesHabilitadas = [
   "Masaje reductor paquete x 4 (con camilla)",
   "Masaje reductor paquete x 6",
   "Masaje reductor paquete x 6 (con camilla)",
-  "masajes reductores x 10 ",
+  "Masaje reductor paquete x 10",
   "Masaje reductor paquete x 10 (con camilla)",
   "Masajes reductores paquete x 20",
   "Masaje reductor paquete x 20 (con camilla)",
