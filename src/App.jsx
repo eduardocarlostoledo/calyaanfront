@@ -16,6 +16,7 @@ const ConfirmAccount = lazy(() => import("./pages/ConfirmAccount"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const NewPassword = lazy(() => import("./pages/NewPassword"));
 const Settings = lazy(() => import("./pages/private/Settings"));
+const LoginDashboard = lazy(() => import("./pages/LoginDashboard.jsx"));
 const Dashboard = lazy(() => import("./pages/private/dashboard/Dashboard"));
 const Schedule = lazy(() => import("./pages/private/professional/Schedule"));
 const RegisterProfessional = lazy(() => import("./pages/RegisterProfessional"));
@@ -147,6 +148,7 @@ function App() {
         <Route path="/productos" element={<Productos />} />
 
         <Route path="/" element={<Login />} />
+        <Route path="/logindashboard" element={<LoginDashboard />} />
 
         <Route path="/registro" element={<PageReferred />} />
 

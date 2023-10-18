@@ -97,7 +97,7 @@ const Login = () => {
               data-cy="title-login"
               className="text-xl md:text-2xl font-bold leading-tight mt-4"
             >
-              Ingresa tu cuenta
+              Acceso Clientes
             </h1>
           </div>
 
@@ -173,6 +173,44 @@ const Login = () => {
               Créate una cuenta gratis
             </Link>
           </p>
+
+          <h1
+              data-cy="title-login"
+              className="text-xl md:text-2xl font-bold leading-tight mt-4"
+            >
+              Acceso Profesionales
+            </h1>
+            
+            <p className="mt-8">
+          
+          <Link to="/logindashboard">
+        <button
+          className="w-full block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-3 mt-6"
+        >
+          Acceder al Panel
+        </button>
+      </Link>
+          </p>
+
+          <h1
+              data-cy="title-login"
+              className="text-xl md:text-2xl font-bold leading-tight mt-4"
+            >
+              Panel de Administración
+            </h1>
+            
+            <p className="mt-8">
+          
+          <Link to="/logindashboard">
+        <button
+          className="w-full block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-3 mt-6"
+        >
+          Acceder al Panel
+        </button>
+      </Link>
+          </p>
+
+          
         </div>
       </div>
     </section>
