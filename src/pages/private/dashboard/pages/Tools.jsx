@@ -488,7 +488,7 @@ const [ siigoForm, setSiigoForm] = useState({
                 <div className="rounded bg-white  shadow p-6">
 {/* INICIO CONFIGURACION DE SIIGO */}
 
-<form className="mt-6" onSubmit={handleSubmitSiigo}>
+        <form className="mt-6" onSubmit={handleSubmitSiigo}>
             <div className="mt-4">
               <label className="block text-gray-700">Usuario</label>
               <input
@@ -537,10 +537,12 @@ const [ siigoForm, setSiigoForm] = useState({
                 INICIAR SESION EN SIIGO
               </button>
             )}
-          </form>
+        </form>
 
 
 {/* FIN CONFIGURACION DE SIIGO */}
+
+
 
                 </div>
             </div>

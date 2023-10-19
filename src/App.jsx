@@ -92,6 +92,7 @@ import Tools from "./pages/private/dashboard/pages/Tools";
 import CardsProfessionalAntDesing from "./pages/CardsProfesionales";
 import OrdenDetails from "./pages/private/dashboard/pages/OrderDetails";
 import LiquidacionAllAntDesing from "./pages/private/dashboard/pages/liquidacionesAll";
+import Logs from "./pages/private/dashboard/pages/Logs.jsx";
 import clienteAxios from "./config/axios";
 import { setUser } from "./redux/features/authSlice";
 
@@ -287,9 +288,15 @@ function App() {
             />
             <Route
               path="/liquidacionestotales"
-              element={<LiquidacionAllAntDesing />}
+              element={<LiquidacionAllAntDesing />}                        
+          />
+            <Route
+              path="/logs"
+              element={<Logs />}
             />
+          
           </Route>
+          
         </Route>
       </RoutesWithNotFound>
     </Router>
