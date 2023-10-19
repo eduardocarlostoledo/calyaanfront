@@ -15,6 +15,8 @@ import "./Ordenesantd.css";
 import clienteAxios from "../../../../config/axios";
 import axios from "axios";
 import { getAccessToken } from "../../../../helpers/Components/siigoAccessToken";
+import { PDFViewer } from "@react-pdf/renderer";
+import MyDocument from "../../../../helpers/Components/PDFFile";
 
 const { RangePicker } = DatePicker;
 
@@ -81,6 +83,74 @@ const ProductExpanded = ({
   const [editModalVisible, setEditModalVisible] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState("");
+
+  const [siigoResponse, setSiigoResponse] = useState({
+    balance: 0,
+    customer: {
+      id: "45022857-9154-4b0c-bdd4-f38f4bff3096",
+      identification: "123",
+      branch_office: 0,
+    },
+    date: "2023-10-13",
+    document: { id: 24446 },
+    id: "0b7cc95a-27bd-4e06-b100-d3f49045f39b",
+    items: [
+      {
+        code: "13901",
+        description: "Masaje reductor paquete x 4",
+        id: "fa2a48be-f849-47b6-9686-968945f1b271",
+        price: 137500,
+        quantity: 1,
+        total: 137500,
+      },
+    ],
+    mail: {
+      status: "not_sent",
+      observations: "The invoice has not been sent by mail",
+    },
+    metadata: { created: "2023-10-13T20:58:33.377Z" },
+    name: "FV-1-60000000506",
+    number: 60000000506,
+    payments: [{ id: 5638, name: "Consignación", value: 137500 }],
+    prefix: "HA",
+    seller: 629,
+    stamp: { status: "Draft" },
+    total: 137500,
+  });
+
+  const dataFake = {
+    balance: 0,
+    customer: {
+      id: "45022857-9154-4b0c-bdd4-f38f4bff3096",
+      identification: "123",
+      branch_office: 0,
+    },
+    date: "2023-10-13",
+    document: { id: 24446 },
+    id: "0b7cc95a-27bd-4e06-b100-d3f49045f39b",
+    items: [
+      {
+        code: "13901",
+        description: "Masaje reductor paquete x 4",
+        id: "fa2a48be-f849-47b6-9686-968945f1b271",
+        price: 137500,
+        quantity: 1,
+        total: 137500,
+      },
+    ],
+    mail: {
+      status: "not_sent",
+      observations: "The invoice has not been sent by mail",
+    },
+    metadata: { created: "2023-10-13T20:58:33.377Z" },
+    name: "FV-1-60000000506",
+    number: 60000000506,
+    payments: [{ id: 5638, name: "Consignación", value: 137500 }],
+    prefix: "HA",
+    seller: 629,
+    stamp: { status: "Draft" },
+    total: 137500,
+  };
 
   const [userCheck, setUserCheck] = useState("wait");
   const [productCheck, setProductCheck] = useState("wait");
@@ -549,225 +619,246 @@ const ProductExpanded = ({
               ]}
             >
               <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
-              <div
-                style={{
-                  gap: "1rem",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <p style={{ fontSize: "1.2rem" }}>Cliente</p>
-                <p>
-                  Nombre y apellido:{" "}
-                  <b style={{ textDecorationLine: "underline" }}>
-                    {cliente_id?.apellido} {cliente_id?.nombre}
-                  </b>
-                </p>
-                <p>
-                  Email:<b> {cliente_id?.email}</b> Telefono:{" "}
-                  <b style={{ textDecorationLine: "underline" }}>
-                    {cliente_id.telefono}
-                  </b>
-                </p>
-                <p>
-                  Cedula:
-                  <b style={{ textDecorationLine: "underline" }}>
-                    {cliente_id.cedula}
-                  </b>
-                </p>
-                {userCheck === "wait" ? (
-                  <div>
+
+              {siigoResponse ? (
+                <div style={{ width: "100%", minHeight: "80vh" }}>
+                  <PDFViewer style={{ width: "100%", minHeight: "80vh" }}>
+                    <MyDocument siigoResponse={siigoResponse} Orden={input} />
+                  </PDFViewer>
+                </div>
+              ) : (
+                <>
+                  {" "}
+                  <div
+                    style={{
+                      gap: "1rem",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <p style={{ fontSize: "1.2rem" }}>Cliente</p>
+                    <p>
+                      Nombre y apellido:{" "}
+                      <b style={{ textDecorationLine: "underline" }}>
+                        {cliente_id?.apellido} {cliente_id?.nombre}
+                      </b>
+                    </p>
+                    <p>
+                      Email:<b> {cliente_id?.email}</b> Telefono:{" "}
+                      <b style={{ textDecorationLine: "underline" }}>
+                        {cliente_id.telefono}
+                      </b>
+                    </p>
+                    <p>
+                      Cedula:
+                      <b style={{ textDecorationLine: "underline" }}>
+                        {cliente_id.cedula}
+                      </b>
+                    </p>
+                    {userCheck === "wait" ? (
+                      <div>
+                        <div
+                          style={{
+                            border: "4px solid rgba(255, 255, 255, 0.3)",
+                            borderRadius: "50%",
+                            borderTop: "4px solid #007bff", // Cambia el color según tus preferencias
+                            width: "40px",
+                            height: "40px",
+                            animation: "spin 1s linear infinite",
+                            margin: "0 auto",
+                          }}
+                        ></div>
+                        <p>
+                          {" "}
+                          Verificando si el usuario esta registrado en siigo
+                        </p>
+                      </div>
+                    ) : userCheck === "Registered" ? (
+                      <div
+                        style={{
+                          gap: "1rem",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-around",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <AiFillCheckCircle size={50} color="green" />
+                        <p>El usuario esta registrado en siigo</p>
+                      </div>
+                    ) : userCheck === "NoRegistered" ? (
+                      <div
+                        style={{
+                          gap: "1rem",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-around",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <AiFillExclamationCircle size={50} color="yellow" />
+                        <p>Es necesario registrar el usuario en siigo</p>
+                      </div>
+                    ) : (
+                      "Algo salio mal con la comunicacion con siigo api"
+                    )}
+                  </div>
+                  <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
+                  <div
+                    style={{
+                      gap: "1rem",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <p style={{ fontSize: "1.2rem" }}>Profesional</p>
+                    <p>
+                      Nombre y apellido:{" "}
+                      <b style={{ textDecorationLine: "underline" }}>
+                        {profesional?.apellido} {profesional.nombre}
+                      </b>
+                    </p>
+                    <p>
+                      Email:<b> {profesional.email}</b> Telefono:{" "}
+                      <b style={{ textDecorationLine: "underline" }}>
+                        {profesional?.telefono}
+                      </b>
+                    </p>
+                    <p>
+                      Cedula:
+                      <b style={{ textDecorationLine: "underline" }}>
+                        {profesional?.cedula}
+                      </b>
+                    </p>
+                  </div>
+                  <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
+                  <div
+                    style={{
+                      gap: "1rem",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <p style={{ fontSize: "1.2rem" }}>Factura</p>{" "}
+                    <p>
+                      Estado de pago:{" "}
+                      {factura?.estadoPago === "approved" ? (
+                        <Tag color="green">Aprobado</Tag>
+                      ) : factura?.estadoPago === "rejected" ? (
+                        <Tag color="red">Rechazado</Tag>
+                      ) : (
+                        <Tag color="yellow">Pendiente</Tag>
+                      )}
+                    </p>
+                    <p>Origen de pago: {factura.origen}</p>
+                    {/* <p>Fecha de venta: {factura.fecha_venta?.toLocaleDateString()}</p> */}
+                    <p>
+                      Fecha de venta:{" "}
+                      {new Date(factura.fecha_venta).toLocaleDateString(
+                        "es-AR",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
+                    </p>
+                    <p>Precio neto: ${factura.precioNeto}</p>
+                    <p>Porcentaje caalyan: ${factura.precioTotal}</p>
+                  </div>
+                  <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
+                  <div
+                    style={{
+                      gap: "1rem",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
                     <div
                       style={{
-                        border: "4px solid rgba(255, 255, 255, 0.3)",
-                        borderRadius: "50%",
-                        borderTop: "4px solid #007bff", // Cambia el color según tus preferencias
-                        width: "40px",
-                        height: "40px",
-                        animation: "spin 1s linear infinite",
-                        margin: "0 auto",
+                        gap: "1rem",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-around",
+                        flexDirection: "column",
+                        alignItems: "center",
                       }}
                     ></div>
-                    <p> Verificando si el usuario esta registrado en siigo</p>
+                    <p style={{ fontSize: "1.2rem" }}>Servicios</p>{" "}
+                    {servicios.map((serv) => (
+                      <>
+                        <p>Servicio: {serv.nombre}</p>
+                        <p>Precio: ${serv.precio}</p>
+                      </>
+                    ))}
+                    {productCheck === "wait" ? (
+                      <div>
+                        <div
+                          style={{
+                            border: "4px solid rgba(255, 255, 255, 0.3)",
+                            borderRadius: "50%",
+                            borderTop: "4px solid #007bff", // Cambia el color según tus preferencias
+                            width: "40px",
+                            height: "40px",
+                            animation: "spin 1s linear infinite",
+                            margin: "0 auto",
+                          }}
+                        ></div>
+                        <p>
+                          {" "}
+                          Verificando si el producto esta registrado en siigo
+                        </p>
+                      </div>
+                    ) : productCheck === "Registered" ? (
+                      <div
+                        style={{
+                          gap: "1rem",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-around",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <AiFillCheckCircle size={50} color="green" />
+                        <p>El producto esta registrado en siigo</p>
+                      </div>
+                    ) : productCheck === "NoRegistered" ? (
+                      <div
+                        style={{
+                          gap: "1rem",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-around",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <AiFillExclamationCircle size={50} color="yellow" />
+                        <p>Es necesario registrar el Producto en siigo</p>
+                      </div>
+                    ) : (
+                      "Algo salio mal con la comunicacion con siigo api"
+                    )}
                   </div>
-                ) : userCheck === "Registered" ? (
-                  <div
-                    style={{
-                      gap: "1rem",
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "space-around",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <AiFillCheckCircle size={50} color="green" />
-                    <p>El usuario esta registrado en siigo</p>
-                  </div>
-                ) : userCheck === "NoRegistered" ? (
-                  <div
-                    style={{
-                      gap: "1rem",
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "space-around",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <AiFillExclamationCircle size={50} color="yellow" />
-                    <p>Es necesario registrar el usuario en siigo</p>
-                  </div>
-                ) : (
-                  "Algo salio mal con la comunicacion con siigo api"
-                )}
-              </div>
-              <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
-              <div
-                style={{
-                  gap: "1rem",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <p style={{ fontSize: "1.2rem" }}>Profesional</p>
-                <p>
-                  Nombre y apellido:{" "}
-                  <b style={{ textDecorationLine: "underline" }}>
-                    {profesional?.apellido} {profesional.nombre}
-                  </b>
-                </p>
-                <p>
-                  Email:<b> {profesional.email}</b> Telefono:{" "}
-                  <b style={{ textDecorationLine: "underline" }}>
-                    {profesional?.telefono}
-                  </b>
-                </p>
-                <p>
-                  Cedula:
-                  <b style={{ textDecorationLine: "underline" }}>
-                    {profesional?.cedula}
-                  </b>
-                </p>
-              </div>
-              <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
-              <div
-                style={{
-                  gap: "1rem",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <p style={{ fontSize: "1.2rem" }}>Factura</p>{" "}
-                <p>
-                  Estado de pago:{" "}
-                  {factura?.estadoPago === "approved" ? (
-                    <Tag color="green">Aprobado</Tag>
-                  ) : factura?.estadoPago === "rejected" ? (
-                    <Tag color="red">Rechazado</Tag>
-                  ) : (
-                    <Tag color="yellow">Pendiente</Tag>
-                  )}
-                </p>
-                <p>Origen de pago: {factura.origen}</p>
-                {/* <p>Fecha de venta: {factura.fecha_venta?.toLocaleDateString()}</p> */}
-                <p>
-                  Fecha de venta:{" "}
-                  {new Date(factura.fecha_venta).toLocaleDateString("es-AR", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-                <p>Precio neto: ${factura.precioNeto}</p>
-                <p>Porcentaje caalyan: ${factura.precioTotal}</p>
-              </div>
-              <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
-              <div
-                style={{
-                  gap: "1rem",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    gap: "1rem",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "space-around",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                ></div>
-                <p style={{ fontSize: "1.2rem" }}>Servicios</p>{" "}
-                {servicios.map((serv) => (
-                  <>
-                    <p>Servicio: {serv.nombre}</p>
-                    <p>Precio: ${serv.precio}</p>
-                  </>
-                ))}
-                {productCheck === "wait" ? (
-                  <div>
-                    <div
-                      style={{
-                        border: "4px solid rgba(255, 255, 255, 0.3)",
-                        borderRadius: "50%",
-                        borderTop: "4px solid #007bff", // Cambia el color según tus preferencias
-                        width: "40px",
-                        height: "40px",
-                        animation: "spin 1s linear infinite",
-                        margin: "0 auto",
-                      }}
-                    ></div>
-                    <p> Verificando si el producto esta registrado en siigo</p>
-                  </div>
-                ) : productCheck === "Registered" ? (
-                  <div
-                    style={{
-                      gap: "1rem",
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "space-around",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <AiFillCheckCircle size={50} color="green" />
-                    <p>El producto esta registrado en siigo</p>
-                  </div>
-                ) : productCheck === "NoRegistered" ? (
-                  <div
-                    style={{
-                      gap: "1rem",
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "space-around",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <AiFillExclamationCircle size={50} color="yellow" />
-                    <p>Es necesario registrar el Producto en siigo</p>
-                  </div>
-                ) : (
-                  "Algo salio mal con la comunicacion con siigo api"
-                )}
-              </div>
+                </>
+              )}
             </Modal>
           </div>
         </div>

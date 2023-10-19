@@ -15,7 +15,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from "@react-oauth/google";
 import clienteAxios from "../config/axios";
 
-const LoginDashboard = () => {
+const logindashboardProfesional = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,16 +24,14 @@ const LoginDashboard = () => {
   const [userForm, setUserForm] = useState({
     email: "",
     password: "",
-    rol: "ADMIN",
+    rol: "PROFESIONAL",
   });
 
   const { email, password } = userForm;
 
   function handleGoogleLoginSuccess(tokenResponse) {
     const accessToken = tokenResponse.access_token;
-    dispatch(
-      googleSignIn({ accessToken, navigate, toast, rute: "/dashboard" })
-    );
+    dispatch(googleSignIn({ accessToken, navigate, toast, rute: "/ajustes" }));
   }
 
   const loginWithGoogle = useGoogleLogin({
@@ -58,7 +56,7 @@ const LoginDashboard = () => {
       return toast.error("Todos los campos son obligatorios");
     }
 
-    dispatch(login({ userForm, navigate, toast, rute: "/dashboard" }));
+    dispatch(login({ userForm, navigate, toast, rute: "/ajustes" }));
 
     setUserForm({ email: "", password: "" });
   };
@@ -120,7 +118,7 @@ const LoginDashboard = () => {
   );
 };
 
-export default LoginDashboard;
+export default logindashboardProfesional;
 
 // import React, { lazy, useEffect, useState } from "react";
 

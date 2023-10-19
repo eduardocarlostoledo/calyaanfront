@@ -3,11 +3,14 @@ import { toast } from "react-toastify";
 import AddressCard from "../../components/AddressCard";
 import ModalAddress from "../../components/ModalAddress";
 import clienteAxios from "../../config/axios";
+import { useNavigate } from "react-router-dom";
 
 const Address = () => {
   const [modalAddressForm, setModalAddressForm] = useState(false);
   const [addressEdit, setAddressEdit] = useState(false);
   const [addresses, setAddresses] = useState([]);
+  const [noHayDire, setNoHayDire] = useState(false);
+  const navigate = useNavigate();
 
   const handleToggleModalAddress = () => {
     setModalAddressForm(!modalAddressForm);
@@ -29,6 +32,9 @@ const Address = () => {
     };
 
     getAddresses();
+    if (addresses.length <= 0) {
+      setNoHayDire(true);
+    }
   }, []);
 
   const crearDireccion = async (direccion) => {
@@ -40,8 +46,35 @@ const Address = () => {
       // console.log("crearDireccion", data);
 
       setAddresses((prevState) => [...prevState, data.direccion]);
-
-      toast.success("Dirección creada correctamente");
+      if (noHayDire) {
+        setNoHayDire(false);
+        swal({
+          title:
+            "¡Excelente! Hemos guardado tu información. Vuelve al carrito para finalizar tu pedido y disfrutar de nuestros servicios de masajes a domicilio",
+          icon: "success",
+          type: "success",
+          customClass: {
+            title: "text-center", // Clase CSS para centrar el título
+          },
+          buttons: {
+            continueEditing: {
+              text: "Continuar editando",
+              value: "continue",
+            },
+            goToService: {
+              text: "Volver al carrito",
+              value: "goToService",
+            },
+          },
+        }).then((value) => {
+          if (value === "goToService") {
+            // Redirigir al usuario a la página /servicio
+            navigate("/servicio");
+          }
+        });
+      } else {
+        toast.success("Dirección creada correctamente");
+      }
 
       setModalAddressForm(false);
     } catch (err) {

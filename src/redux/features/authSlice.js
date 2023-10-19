@@ -17,7 +17,7 @@ export const login = createAsyncThunk(
         })
       );
 
-      navigate(`${rute}`);
+      navigate(`${rute}`, { replace: true });
 
       return response.data;
     } catch (err) {

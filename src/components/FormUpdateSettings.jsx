@@ -29,7 +29,7 @@ const FormUpdateSettings = () => {
     direccionDefault: "",
     cedula: "",
   });
-
+  console.log(valueForm);
   const { nombre, apellido, sexo, email, telefono, direccionDefault, cedula } =
     valueForm;
 
@@ -84,6 +84,36 @@ const FormUpdateSettings = () => {
   };
 
   const notificacion = () => {
+    if (direcciones?.length <= 0) {
+      return swal({
+        title:
+          "Gracias por tus datos. Para brindarte la mejor atención, agrega tu dirección",
+        icon: "success",
+        type: "success",
+        customClass: {
+          title: "text-center", // Clase CSS para centrar el título
+        },
+        buttons: {
+          continueEditing: {
+            text: "Agendar mi dirección",
+            value: "goToAgendar",
+          },
+          goToService: {
+            text: "Volver al carrito",
+            value: "goToService",
+          },
+        },
+      }).then((value) => {
+        if (value === "goToService") {
+          // Redirigir al usuario a la página /servicio
+          navigate("/servicio");
+        }
+        if (value === "goToAgendar") {
+          // Redirigir al usuario a la página /direcciones
+          navigate("/direcciones");
+        }
+      });
+    }
     return swal({
       title: "",
       icon: "success",
