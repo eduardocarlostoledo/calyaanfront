@@ -168,7 +168,7 @@ const ProfessionalProfile = () => {
         profesional: data.profesional || {},
         ultimaConexion: data.ultimaConexion || "",
       }));
-
+//console.log("data.profesional", data.profesional)
       setDescriptionForm(data.profesional.descripcion);
       setEspecialidadForm(data.profesional.especialidad);
       setLocalidadForm(data.profesional.localidadesLaborales);
@@ -308,6 +308,27 @@ const ProfessionalProfile = () => {
     ultimaConexion,
     profesional,
   } = valueForm;
+  
+  const confirmarCorreoProfesional = async () => {
+    const token = localStorage.getItem('token');    
+  
+    try {
+      const response = await clienteAxios.post('/api/usuarios/confirmar', {email: email}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+      // Mostrar Sweet Alert en caso de éxito
+      swal('Éxito', 'El correo del profesional ha sido confirmado', 'success');
+      //console.log(response.data);
+    } catch (error) {
+      // Mostrar Sweet Alert en caso de error
+      swal('Error', 'No se pudo confirmar el correo del profesional', 'error');
+      console.error('Error al confirmar el correo del profesional', error);
+    }
+  };
+
   return (
     <>
       <div className="bg-white  shadow rounded mx-auto w-full">
@@ -472,7 +493,10 @@ const ProfessionalProfile = () => {
                   {confirmado ? "Activo" : "Inactivo"}
                 </div>
                 <div className="ml-5 rounded-full bg-green-200 text-green-500 text-sm px-6 py-2 flex justify-center items-center">
-                  {estado ? "Cuenta Verificada" : "Cuenta Sin Verificada"}
+                  {estado ? "Cuenta Verificada" : "Cuenta Sin Verificar"}
+                </div>
+                <div className="ml-5 rounded-full bg-green-200 text-green-500 text-sm px-6 py-2 flex justify-center items-center">
+                <button onClick={confirmarCorreoProfesional}>Confirmar Correo Profesional</button>
                 </div>
               </div>
             </div>
