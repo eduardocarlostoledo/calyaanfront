@@ -11,6 +11,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import ButtonSpinner from '../components/ButtonSpinner'
 
 import bg4 from "../assets/bg-4-auth.jpg"
+import swal from 'sweetalert';
 
 const RegisterProfessional = () => {
 
@@ -57,6 +58,13 @@ const RegisterProfessional = () => {
         }
 
         dispatch(registerProfessional({ userForm, navigate, toast }));
+
+        // Mostrar Sweet Alert en caso de éxito
+        swal("Registro Exitoso", "Comunícate con el área comercial para confirmar tu cuenta", "success")
+        .then(() => {
+            history.push('/loginProfesional');
+        });
+
     };
 
     return (

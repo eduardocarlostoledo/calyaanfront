@@ -56,7 +56,7 @@ const logindashboardProfesional = () => {
       return toast.error("Todos los campos son obligatorios");
     }
 
-    dispatch(login({ userForm, navigate, toast, rute: "/ajustes" }));
+    dispatch(login({ userForm, toast, navigate,  rute: "/ajustes" }));
 
     setUserForm({ email: "", password: "" });
   };
@@ -92,7 +92,7 @@ const logindashboardProfesional = () => {
               />
             </div>
 
-            <div className="text-right mt-2">
+            {/* <div className="text-right mt-2">
               <Link
                 to="/olvide-password"
                 className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
@@ -100,6 +100,36 @@ const logindashboardProfesional = () => {
                 ¿Has olvidado tu contraseña?
               </Link>
             </div>
+
+            <div className="text-left mt-2">
+              <Link
+                to="/"
+                className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
+              >
+                Volver al Inicio
+              </Link>
+            </div> */}
+
+              <div className="flex flex-col items-center mt-2">
+                  <div className="text-right">
+                    <Link
+                      to="/olvide-password"
+                      className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
+                    >
+                      ¿Has olvidado tu contraseña?
+                    </Link>
+                  </div>
+
+                  <div className="text-left mt-2">
+                    <Link
+                      to="/"
+                      className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
+                    >
+                      Volver al Inicio
+                    </Link>
+                  </div>
+              </div>
+
 
             {loading ? (
               <ButtonSpinner />
@@ -112,6 +142,26 @@ const logindashboardProfesional = () => {
               </button>
             )}
           </form>
+
+          <div className="mt-6">
+              <h1
+                data-cy="title-login"
+                className="text-xl md:text-xl font-bold leading-tight mt-8 mx-5 text-center"
+              >
+Registro para Staff Profesional              </h1>
+              <p className="mt-6">
+                <Link to="/registro/profesional">
+                <button
+                type="submit"
+                className="w-full block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-3 mt-6"
+              >
+                    Registro Profesional
+                  </button>
+                </Link>
+              </p>{" "}
+            </div>
+
+
         </div>
       </div>
     </section>

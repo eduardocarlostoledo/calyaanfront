@@ -58,7 +58,7 @@ const LoginDashboard = () => {
       return toast.error("Todos los campos son obligatorios");
     }
 
-    dispatch(login({ userForm, navigate, toast, rute: "/dashboard" }));
+    dispatch(login({ userForm, toast, navigate, rute: "/dashboard" }));
 
     setUserForm({ email: "", password: "" });
   };
@@ -94,14 +94,25 @@ const LoginDashboard = () => {
               />
             </div>
 
-            <div className="text-right mt-2">
-              <Link
-                to="/olvide-password"
-                className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
-              >
-                ¿Has olvidado tu contraseña?
-              </Link>
-            </div>
+            <div className="flex flex-col items-center mt-2">
+                  <div className="text-right">
+                    <Link
+                      to="/olvide-password"
+                      className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
+                    >
+                      ¿Has olvidado tu contraseña?
+                    </Link>
+                  </div>
+
+                  <div className="text-left mt-2">
+                    <Link
+                      to="/"
+                      className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
+                    >
+                      Volver al Inicio
+                    </Link>
+                  </div>
+              </div>
 
             {loading ? (
               <ButtonSpinner />

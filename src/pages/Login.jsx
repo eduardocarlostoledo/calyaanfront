@@ -63,7 +63,7 @@ const Login = () => {
       return toast.error("Todos los campos son obligatorios");
     }
 
-    dispatch(login({ userForm, navigate, toast }));
+    dispatch(login({ userForm, toast, navigate }));
 
     setUserForm({ email: "", password: "" });
   };
@@ -165,22 +165,22 @@ const Login = () => {
             </div>
           </button>
 
-          <p className="mt-8">
+          <p className="mt-8 text-center">
             ¿No tienes cuenta?{" "}
             <Link
               to="/registro"
-              className="text-primary hover:text-bgHover font-semibold"
+              className="text-primary hover:text-bgHover font-semibold text-center"
             >
               Créate una cuenta gratis
             </Link>
           </p>
-          <div className="flex">
+          {/* <div className="flex">
             <div className="w-1/2">
               <h1
                 data-cy="title-login"
-                className="text-sm md:text-xl font-bold leading-tight mt-4"
+                className="text-sm md:text-xl font-bold leading-tight mt-8 mx-5"
               >
-                Acceso Profesionales
+                Acceso  Profesionales
               </h1>
 
               <p className="mt-8 mx-5">
@@ -194,9 +194,9 @@ const Login = () => {
             <div className="w-1/2">
               <h1
                 data-cy="title-login"
-                className="text-xl md:text-xl font-bold leading-tight mt-4"
+                className="text-xl md:text-xl font-bold leading-tight mt-8 mx-5"
               >
-                acesso de Administración
+                Acceso Administrador
               </h1>
               <p className="mt-8 mx-5">
                 <Link to="/logindashboard">
@@ -206,7 +206,42 @@ const Login = () => {
                 </Link>
               </p>{" "}
             </div>
-          </div>
+          </div> */}
+
+<div className="flex flex-col sm:flex-row">
+    <div className="w-full sm:w-1/2">
+        <h1
+            data-cy="title-login"
+            className="text-sm md:text-xl font-bold leading-tight mt-8 mx-5 text-center"
+        >
+            Acceso Profesionales
+        </h1>
+
+        <p className="mt-8 mx-5">
+            <Link to="/loginProfesional">
+                <button className="w-full text-sm sm:text-base block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-3 mt-4">
+                    Acceder al Panel
+                </button>
+            </Link>
+        </p>
+    </div>
+    <div className="w-full sm:w-1/2 mt-8 sm:mt-0">
+        <h1
+            data-cy="title-login"
+            className="text-xl md:text-xl font-bold leading-tight mt-2 sm:mt-8 mx-5 text-center"
+        >
+            Acceso Administrador
+        </h1>
+        <p className="mt-4 sm:mt-8 mx-5">
+            <Link to="/logindashboard">
+                <button className="w-full text-sm sm:text-base block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-3 mt-4">
+                    Acceder al Panel
+                </button>
+            </Link>
+        </p>
+    </div>
+</div>
+
         </div>
       </div>
     </section>
