@@ -86,7 +86,7 @@ export const servicesLandingPage = [
     id: "12307",
     image:
       "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
-    text: "6 masajes (2 zonas)",
+    text: " 6 masajes (2 zonas)",
     precio: "$800.000",
     link: "https://calyaan.netlify.app/servicio?id=12307",
   },
@@ -94,7 +94,7 @@ export const servicesLandingPage = [
     id: "13901",
     image:
       "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
-    text: "4 masajes (2 zonas)",
+    text: " 4 masajes (2 zonas)",
     precio: "$550.000",
     link: "https://calyaan.netlify.app/servicio?id=13901",
   },
@@ -118,7 +118,7 @@ export const servicesLandingPage = [
     id: "13903",
     image:
       "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
-    text: "6 masajes con camilla",
+    text: " 6 masajes con camilla",
     precio: "$870.000",
     link: "https://calyaan.netlify.app/servicio?id=13903",
   },
@@ -134,7 +134,7 @@ export const servicesLandingPage = [
     id: "30007",
     image:
       "https://calyaan.com/wp-content/uploads/2022/06/como_funciona_el_masaje_reductivo_24646_paso_1_600.jpg",
-    text: "6 masajes (35 min)",
+    text: " 6 masajes (35 min)",
     precio: "$660.000",
     link: "https://calyaan.netlify.app/servicio?id=30007",
   },
