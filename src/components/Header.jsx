@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { setLogout } from "../redux/features/authSlice";
 import RoleGuardComponent from "../guards/RoleGuardComponent";
 import { ROLES } from "../helpers/Logic/roles";
+import { useNavigate } from 'react-router-dom';
 
 const Header2 = () => {
   const [open, setOpen] = useState(false);
@@ -20,6 +21,8 @@ const Header2 = () => {
 
   const logout = () => {
     dispatch(setLogout());
+    let navigate = useNavigate();
+    navigate('/');
   };
 
   return (

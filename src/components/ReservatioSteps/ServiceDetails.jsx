@@ -296,7 +296,7 @@ const ServiceDetails = () => {
           )} */}
           {services.length <= 0 && (
             <a
-              href="https://calyaan.com/categoria-producto/centro-belleza-bogota/masaje-relajante-bogota-domicilio"
+              href="https://calyaan.netlify.app/productos"
               className="flex border border-gray-300 lg:max-w-[296px w-full  justify-center py-3 gap-2 items-center"
             >
               <svg
