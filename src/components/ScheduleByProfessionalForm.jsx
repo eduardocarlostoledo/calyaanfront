@@ -249,6 +249,8 @@ const ScheduleByProfessionalForm = () => {
                           <a
                             href="https://api.whatsapp.com/send/?phone=573242118509&text&type=phone_number&app_absent=0"
                             className="ml-1 text-whatsapp"
+                            target="_blank" rel="noopener noreferrer"
+
                           >
                             Whatsapp.
                             <BiLinkExternal style={{ display: "inline" }} />

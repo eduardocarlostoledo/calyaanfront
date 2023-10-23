@@ -546,7 +546,7 @@ export const coloresBG = {
 };
 
 export const pasosReserva = [
-  "Servicios Seleccionados",
+  "Servicio Seleccionado",
   "Detalles de Agendamiento",
   "Información de Pago",
   "Resumen de Reserva",

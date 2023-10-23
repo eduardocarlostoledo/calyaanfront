@@ -28,6 +28,7 @@ const ModalLogin = ({ handleModalLogin }) => {
   const [userForm, setUserForm] = useState({
     email: "",
     password: "",
+    rol: "CLIENTE",
   });
 
   const { email, password } = userForm;

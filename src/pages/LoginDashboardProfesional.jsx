@@ -56,10 +56,31 @@ const logindashboardProfesional = () => {
       return toast.error("Todos los campos son obligatorios");
     }
 
-    dispatch(login({ userForm, toast, navigate,  rute: "/ajustes" }));
-
-    setUserForm({ email: "", password: "" });
+    try {
+      dispatch(login({ userForm, toast, navigate,  rute: "/ajustes" }));
+      setUserForm({ email: "", password: "", rol: "PROFESIONAL" });
+    } catch (error) {
+      if (error.response) {
+        // El servidor respondió con un status code fuera de rango 2xx
+        toast.error(error.response.data.msg);
+      } else if (error.request) {
+        // La solicitud fue hecha pero no se recibió una respuesta
+        console.error("No se recibió una respuesta del servidor");
+      } else {
+        // Se produjo un error al configurar la solicitud
+        console.error("Error al configurar la solicitud:", error.message);
+      }
+    }
   };
+  
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (email === "" || password === "") {
+  //     return toast.error("Todos los campos son obligatorios");
+  //   }
+  //   dispatch(login({ userForm, toast, navigate,  rute: "/ajustes" }));
+  //   setUserForm({ email: "", password: "" });
+  // };
 
   return (
     <section className="flex flex-col md:flex-row h-screen items-center">

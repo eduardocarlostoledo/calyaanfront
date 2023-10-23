@@ -3,17 +3,18 @@ import { BsPersonCircle } from "react-icons/bs";
 import { IoMdExit } from "react-icons/io";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
 import { setLogout } from "../../../../redux/features/authSlice";
+import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+const Header = () => {  
   const { user } = useSelector((state) => ({ ...state.auth }));
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const logout = () => {
     dispatch(setLogout());
+    navigate("/");
   };
 
   return (

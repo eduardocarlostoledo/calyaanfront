@@ -254,9 +254,9 @@ const ServiceDetails = () => {
           ) : (
             <>
               <hr className="mt-6" />
-              <div className="flex w-full justify-center  items-center flex-col mt-8 gap-5 ">
+              <div className="flex w-full justify-center  items-center flex-col mt-8 gap-5 text-center">
                 <MdOutlineRemoveShoppingCart className="w-12 h-12" />
-                <p>No tienes servicios seleccionados para tu reserva</p>
+                <p>Tu carrito está vacío. Explora nuestros servicios y productos y encuentra algo que te interese. ¡Haz clic en "Continuar comprando" para empezar!</p>
               </div>
             </>
           )}
@@ -296,7 +296,7 @@ const ServiceDetails = () => {
           )} */}
           {services.length <= 0 && (
             <a
-              href="https://calyaan.netlify.app/productos"
+              href="/productos"
               className="flex border border-gray-300 lg:max-w-[296px w-full  justify-center py-3 gap-2 items-center"
             >
               <svg

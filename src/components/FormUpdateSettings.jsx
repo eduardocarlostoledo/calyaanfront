@@ -29,7 +29,7 @@ const FormUpdateSettings = () => {
     direccionDefault: "",
     cedula: "",
   });
-  console.log(valueForm);
+  //console.log(valueForm);
   const { nombre, apellido, sexo, email, telefono, direccionDefault, cedula } =
     valueForm;
 

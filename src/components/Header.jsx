@@ -9,9 +9,10 @@ import RoleGuardComponent from "../guards/RoleGuardComponent";
 import { ROLES } from "../helpers/Logic/roles";
 import { useNavigate } from 'react-router-dom';
 
-const Header2 = () => {
+const Header2 = () => {  
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
 
   const { user } = useSelector((state) => ({ ...state.auth }));
 //console.log(user, "USUARIO HEADER")
@@ -20,8 +21,7 @@ const Header2 = () => {
   };
 
   const logout = () => {
-    dispatch(setLogout());
-    let navigate = useNavigate();
+    dispatch(setLogout());    
     navigate('/');
   };
 
