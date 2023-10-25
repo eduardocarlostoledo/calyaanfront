@@ -9,6 +9,70 @@ import getScheduleProfessional from "../../../helpers/Components/getScheduleProf
 import clienteAxios from "../../../config/axios";
 import { createSchedule } from "../../../redux/features/professionalSlice";
 import { deleteError } from "../../../redux/features/authSlice";
+//import HorariosTabla from "./components/tablaHorariosProfesionales";
+import { Table } from 'antd';
+
+
+const HorariosTabla = ({ _id }) => {
+  console.log('HORARIOSTABLA', _id);
+  const [disponibilidades, setDisponibilidades] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const obtenerDisponibilidades = async () => {
+      try {
+        setLoading(true);
+        const response = await clienteAxios.post(
+          `/api/profesional/disponibilidad-por-id`,
+          { _id },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        setDisponibilidades(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error al obtener las disponibilidades:', error);
+        setLoading(false); // asegúrate de cambiar el estado de carga en caso de error también
+      }
+    };
+
+    obtenerDisponibilidades();
+  }, [_id]); // agrega _id a las dependencias de useEffect
+
+  const columns = [
+    {
+      title: 'Fecha',
+      dataIndex: 'fecha',
+      key: 'fecha'
+    },
+    {
+      title: 'Horarios',
+      dataIndex: 'horarios',
+      key: 'horarios',
+      render: horarios => (
+        <ul>
+          {horarios.map(horario => (
+            <li key={horario._id}>{horario.hora}</li>
+          ))}
+        </ul>
+      )
+    }
+  ];
+
+  return (
+    <div>
+      {loading ? (
+        <p>Cargando...</p>
+      ) : (        
+        <Table dataSource={disponibilidades} columns={columns} pagination={false} />
+      )}
+    </div>
+  );
+};
 
 const dateCurrent = new Date();
 
@@ -73,11 +137,12 @@ const Schedule = ({ profesionalSelect }) => {
     ...state.professional,
   }));
   const _id = useSelector((state) => state.auth.user.profesionalId);
+  console.log(_id, "id");
 
 
   const [dateInput, setDateInput] = useState("");
   const [horariosForm, setHorariosForm] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);  
 
   useEffect(() => {
     errorProfessional && toast.error(errorProfessional);
@@ -147,10 +212,10 @@ const Schedule = ({ profesionalSelect }) => {
     setSelectedOptions([]);
     // Después de enviar el formulario, scroll al input dateInput
     scrollToTop();
-    dateInputRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    // dateInputRef.current.scrollIntoView({
+    //   behavior: "smooth",
+    //   block: "start",
+    // });
   };
 
   const handleCheckboxChange = (e) => {
@@ -211,8 +276,8 @@ const Schedule = ({ profesionalSelect }) => {
   /* fin selects*/
 
   return (
-    <div className="flex items-center justify-center my-32 max-lg:my-12">
-      <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+    <div className="flex flex-col items-center justify-center my-32 max-lg:my-12">
+  <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
         <div className="grid gap-8 gap-y-2 text-sm grid-cols-1 lg:grid-cols-1">
           <div className="mb-4">
             <p className="font-medium text-xl mb-2">Horarios</p>
@@ -240,6 +305,7 @@ const Schedule = ({ profesionalSelect }) => {
                     </time>
                   </h2>
                   {/* aca esta la botonera de opciones */}
+                  
                   {/* <div className="flex items-center justify-between mb-4">
                     <h5 className="text-xl font-medium leading-none mb-2">
                       Selecciona tus horarios
@@ -352,6 +418,13 @@ const Schedule = ({ profesionalSelect }) => {
             </div>
           </div>
         </div>
+      </div>
+      <div>
+        {profesionalSelect ? (
+        <HorariosTabla _id={profesionalSelect.profesional._id} />
+        ) : (
+        <HorariosTabla _id={_id} />
+        )}
       </div>
     </div>
   );

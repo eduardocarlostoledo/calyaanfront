@@ -22,87 +22,6 @@ import {
 } from "../../../../redux/features/professionalSlice";
 import Schedule from "../../professional/Schedule";
 
-// const ProfessionalProfile = () => {
-//   const { id } = useParams();
-//   const dispatch = useDispatch();
-
-//   const [valueForm, setValueForm] = useState({
-//     nombre: "",
-//     apellido: "",
-//     sexo: "",
-//     email: "",
-//     telefono: "",
-//     direccionDefault: "",
-//     direcciones: "",
-//     cedula: "",
-//     reviews: 0,
-//     reservas: [],
-//     estado: "",
-//     img: "",
-//     profesional: "",
-//     ultimaConexion: "",
-//   });
-//   const [forEdit, setForEdit] = useState(false);
-
-//   const {
-//     nombre,
-//     apellido,
-//     sexo,
-//     email,
-//     telefono,
-//     img,
-//     direccionDefault,
-//     direcciones,
-//     cedula,
-//     reviews,
-//     reservas,
-//     estado,
-//     confirmado,
-//     ultimaConexion,
-//     profesional,
-//   } = valueForm;
-
-//   const handleChange = (e) => {
-//     setValueForm({
-//       ...valueForm,
-//       [e.target.name]: e.target.value,
-//     });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if ([nombre, apellido, email].includes("")) {
-//       return toast.error(
-//         "Los campos nombres,apellidos y correo electrónico son obligatorios"
-//       );
-//     }
-//     console.log("dispachado", valueForm);
-//     dispatch(updateProfileAdminDash({ valueForm, toast }));
-//     setForEdit(false);
-//     return toast.success("Enviando...");
-//   };
-
-//   useEffect(() => {
-//     const getUser = async () => {
-//       try {
-//         let { data } = await clienteAxios.get(
-//           `api/profesional/perfil-profesional/${id}`
-//         );
-
-//         console.log(data);
-
-//         setValueForm({ ...valueForm, ...data });
-//       } catch (err) {
-//         let error = err.response.data.msg
-//           ? err.response.data.msg
-//           : err.response && "Estamos presentando problemas internos";
-//         return toast.error(error);
-//       }
-//     };
-//     getUser();
-//   }, [id]);
-
 const ProfessionalProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -129,20 +48,6 @@ const ProfessionalProfile = () => {
   const [especialidadesForm, setEspecialidadForm] = useState([]);
   const [localidadForm, setLocalidadForm] = useState([]);
   const [descriptionForm, setDescriptionForm] = useState("");
-
-  // const getUser = async () => {
-  //   try {
-  //     const { data } = await clienteAxios.get(
-  //       `api/profesional/perfil-profesional/${id}`
-  //     );
-  //     console.log(data, "informacion de la peticion");
-  //     setValueForm({ ...valueForm, ...data });
-  //   } catch (err) {
-  //     const error =
-  //       err.response?.data.msg || "Estamos experimentando problemas internos";
-  //     toast.error(error);
-  //   }
-  // };
 
   const getUser = async () => {
     try {
@@ -292,6 +197,7 @@ const ProfessionalProfile = () => {
   };
 
   const {
+    _id,
     nombre,
     apellido,
     sexo,
@@ -355,94 +261,7 @@ const ProfessionalProfile = () => {
           </div>
         </div>
         <div className="px-5 pb-10">
-          <div className="flex justify-center  w-full pt-16 ">
-            {/* <div className="flex items-center">
-              <svg
-                className="w-4 mr-1 text-yellow-400 icon icon-tabler icon-tabler-star"
-                xmlns="http://www.w3.org/2000/svg"
-                width={20}
-                height={20}
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path stroke="none" fill="none" d="M0 0h24v24H0z" />
-                <path
-                  fill="currentColor"
-                  d="M12 17.75l-6.172 3.245 1.179-6.873-4.993-4.867 6.9-1.002L12 2l3.086 6.253 6.9 1.002-4.993 4.867 1.179 6.873z"
-                />
-              </svg>
-              <svg
-                className="w-4 mr-1 text-yellow-400 icon icon-tabler icon-tabler-star"
-                xmlns="http://www.w3.org/2000/svg"
-                width={20}
-                height={20}
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path stroke="none" fill="none" d="M0 0h24v24H0z" />
-                <path
-                  fill="currentColor"
-                  d="M12 17.75l-6.172 3.245 1.179-6.873-4.993-4.867 6.9-1.002L12 2l3.086 6.253 6.9 1.002-4.993 4.867 1.179 6.873z"
-                />
-              </svg>
-              <svg
-                className="w-4 mr-1 text-yellow-400 icon icon-tabler icon-tabler-star"
-                xmlns="http://www.w3.org/2000/svg"
-                width={20}
-                height={20}
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path stroke="none" fill="none" d="M0 0h24v24H0z" />
-                <path
-                  fill="currentColor"
-                  d="M12 17.75l-6.172 3.245 1.179-6.873-4.993-4.867 6.9-1.002L12 2l3.086 6.253 6.9 1.002-4.993 4.867 1.179 6.873z"
-                />
-              </svg>
-              <svg
-                className="w-4 mr-1 text-yellow-400 icon icon-tabler icon-tabler-star"
-                xmlns="http://www.w3.org/2000/svg"
-                width={20}
-                height={20}
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path stroke="none" fill="none" d="M0 0h24v24H0z" />
-                <path
-                  fill="currentColor"
-                  d="M12 17.75l-6.172 3.245 1.179-6.873-4.993-4.867 6.9-1.002L12 2l3.086 6.253 6.9 1.002-4.993 4.867 1.179 6.873z"
-                />
-              </svg>
-              <svg
-                className="w-4 text-gray-200 icon icon-tabler icon-tabler-star"
-                xmlns="http://www.w3.org/2000/svg"
-                width={20}
-                height={20}
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path stroke="none" fill="none" d="M0 0h24v24H0z" />
-                <path
-                  fill="currentColor"
-                  d="M12 17.75l-6.172 3.245 1.179-6.873-4.993-4.867 6.9-1.002L12 2l3.086 6.253 6.9 1.002-4.993 4.867 1.179 6.873z"
-                />
-              </svg>
-            </div> */}
+          <div className="flex justify-center  w-full pt-16 ">           
           </div>
           <div className="pt-3  flex flex-col  items-start  justify-between">
             <div className=" w-full ">
@@ -460,12 +279,7 @@ const ProfessionalProfile = () => {
                     </span>
                   )
                 )}
-              </p>
-              {/* <p className="text-center mt-2 text-sm tracking-normal text-gray-600 leading-5">
-                {profesional?.descripcion
-                  ? insertarSaltosDeLinea(profesional.descripcion, 170)
-                  : "Descripción no disponible"}
-              </p> */}
+              </p>             
             </div>
             <div className=" w-full py-5 flex items-start justify-center ">
               <div className="mr-6 ">
@@ -661,37 +475,10 @@ const ProfessionalProfile = () => {
                   {direccionDefault.ciudad}
                 </option>
               </select>
-            </div>
-            {/* <div className="lg:mt-0 md:mt-0 mt-4 w-full">
-              <p className="text-base leading-none text-gray-800">Nombre</p>
-              <select
-                id="ciudad"
-                className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                value={direccionDefault.nombre}
-                name="ciudad"
-                disabled={!forEdit}
-              >
-                <option value="">No registrado</option>
-                <option value={direccionDefault.nombre}>
-                  {direccionDefault.nombre}
-                </option>
-              </select>
-            </div> */}
+            </div>            
           </div>
 
-          <div className="lg:flex md:flex block gap-8  mt-6">
-            {/* <div className="w-full">
-              <p className="text-base leading-none text-gray-800">ID</p>
-              <input
-                type="text"
-                name="cedula"
-                id="cedula"
-                value={direccionDefault._id}
-                placeholder="No registrado"
-                className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                disabled={!forEdit}
-              />
-            </div> */}
+          <div className="lg:flex md:flex block gap-8  mt-6">           
             <div className="lg:mt-0 md:mt-0 mt-4 w-full">
               <p className="text-base leading-none text-gray-800">Localidad</p>
               <select
@@ -723,19 +510,7 @@ const ProfessionalProfile = () => {
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 disabled={!forEdit}
               />
-            </div>
-            {/* <div className="lg:mt-0 md:mt-0 mt-4 w-full">
-              <p className="text-base leading-none text-gray-800">Localidad</p>
-              <input
-                type="text"
-                name="cedula"
-                id="cedula"
-                value={direccionDefault.info}
-                placeholder="No registrado"
-                className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                disabled={!forEdit}
-              />
-            </div> */}
+            </div>           
           </div>
         </div>
 
@@ -880,21 +655,7 @@ const ProfessionalProfile = () => {
                   ))}
                 </select>
               </div>
-              <div className=" flex flex-wrap gap-4">
-                {/* {profesional?.localidadesLaborales?.length > 0 ? (
-                  profesional?.localidadesLaborales?.map((localidad, index) => (
-                    <p
-                      key={index}
-                      className="text-center text-xs font-medium flex items-center px-2.5 py-3 rounded  bg-gray-100 text-gray-800 border-gray-500 "
-                    >
-                      {localidad}
-                    </p>
-                  ))
-                ) : (
-                  <p className="text-center text-xs mt-3 font-medium flex items-center px-2.5 py-3 rounded  bg-gray-100 text-gray-800 border-gray-500 ">
-                    No tiene registrado
-                  </p>
-                )} */}
+              <div className=" flex flex-wrap gap-4">               
 
                 {localidadForm?.length > 0 && (
                   <div className="my-4 flex flex-wrap gap-4">
@@ -916,37 +677,6 @@ const ProfessionalProfile = () => {
                 )}
               </div>
             </div>
-
-            {/* <div className="lg:flex md:flex block gap-8  mt-4">
-              <div className="w-full">
-                <p className="text-base leading-none text-gray-800">
-                  Dirección
-                </p>
-                <input
-                  type="text"
-                  name="cedula"
-                  id="cedula"
-                  value={direccionDefault.direccion}
-                  placeholder="No registrado"
-                  className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                  disabled={!forEdit}
-                />
-              </div>
-              <div className="lg:mt-0 md:mt-0 mt-4 w-full">
-                <p className="text-base leading-none text-gray-800">
-                  Localidad
-                </p>
-                <input
-                  type="text"
-                  name="cedula"
-                  id="cedula"
-                  value={direccionDefault.info}
-                  placeholder="No registrado"
-                  className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                  disabled={!forEdit}
-                />
-              </div>
-            </div> */}
           </div>
 
           {profesional.reservas?.length > 0 && (
