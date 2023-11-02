@@ -40,6 +40,19 @@ const AdminProfile = () => {
     ultimaConexion,
   } = valueForm;
 
+  const deleteUsuario = async (id) => {
+    try {
+      const response = await clienteAxios.delete(`/api/usuarios/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(response.data); // Puedes manejar la respuesta según tus necesidades
+    } catch (error) {
+      console.error("Error al eliminar el usuario", error);
+    }
+  };
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -291,7 +304,7 @@ const AdminProfile = () => {
         <div className="mx-2 my-2 px-6 flex flex-wrap justify-center">
           <Link
             to={`/historial-servicios/admin/${id}`}
-            className="mx-2 my-2 flex items-center bg-white transition duration-150 ease-in-out hover:border-indigo-600 border border-indigo-700 rounded text-indigo-700 hover:text-indigo-600 pl-3 pr-6 py-2 text-sm"
+            className="mx-2 my-2 flex items-center bg-white transition duration-150 ease-in-out hover:border-indigo-600 border border-indigo-700 rounded text-indigo-700 hover:text-white hover:bg-indigo-700 pl-3 pr-6 py-2 text-sm"
           >
             <span className="h-4 w-4 mr-2">
               <svg
@@ -310,6 +323,13 @@ const AdminProfile = () => {
             </span>
             Reservas Agendadas
           </Link>
+          <button
+            onClick={() => deleteUsuario()}
+            className="mx-2 my-2 flex items-center bg-white transition duration-150 ease-in-out hover:border-red-600 border border-red-800 rounded text-red-700 hover:text-white hover:bg-red-700 pl-3 pr-6 py-2 text-sm"
+          >
+            <span className="h-4 w-4 mr-2"></span>
+            Eliminar usuario
+          </button>
         </div>
       </div>
     </>

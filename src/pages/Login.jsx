@@ -79,7 +79,7 @@ const Login = () => {
       }
     }
   };
-    // const handleSubmit = async (e) => {
+  // const handleSubmit = async (e) => {
   //   e.preventDefault();
 
   //   if ([email, password].includes("")) {
@@ -197,13 +197,13 @@ const Login = () => {
               Créate una cuenta gratis
             </Link>
           </p>
-          {/* <div className="flex">
-            <div className="w-1/2">
+          {/* <div className="flex flex-row max-lg:flex-col max-lg:items-center">
+            <div className="w-1/2  text-center max-lg:w-full ">
               <h1
                 data-cy="title-login"
-                className="text-sm md:text-xl font-bold leading-tight mt-8 mx-5"
+                className="text-xl md:text-xl font-bold leading-tight mt-4"
               >
-                Acceso  Profesionales
+                Acceso Profesionales
               </h1>
 
               <p className="mt-8 mx-5">
@@ -214,12 +214,12 @@ const Login = () => {
                 </Link>
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="w-1/2 text-center max-lg:w-full">
               <h1
                 data-cy="title-login"
                 className="text-xl md:text-xl font-bold leading-tight mt-8 mx-5"
               >
-                Acceso Administrador
+                Acceso Administración
               </h1>
               <p className="mt-8 mx-5">
                 <Link to="/logindashboard">
@@ -231,40 +231,39 @@ const Login = () => {
             </div>
           </div> */}
 
-<div className="flex flex-col sm:flex-row">
-    <div className="w-full sm:w-1/2">
-        <h1
-            data-cy="title-login"
-            className="text-sm md:text-xl font-bold leading-tight mt-8 mx-5 text-center"
-        >
-            Acceso Profesionales
-        </h1>
+          <div className="flex flex-col sm:flex-row">
+            <div className="w-full sm:w-1/2">
+              <h1
+                data-cy="title-login"
+                className="text-sm md:text-xl font-bold leading-tight mt-8 mx-5 text-center"
+              >
+                Acceso Profesionales
+              </h1>
 
-        <p className="mt-8 mx-5">
-            <Link to="/loginProfesional">
-                <button className="w-full text-sm sm:text-base block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-3 mt-4">
+              <p className="mt-8 mx-5">
+                <Link to="/loginProfesional">
+                  <button className="w-full text-sm sm:text-base block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-3 mt-4">
                     Acceder al Panel
-                </button>
-            </Link>
-        </p>
-    </div>
-    <div className="w-full sm:w-1/2 mt-8 sm:mt-0">
-        <h1
-            data-cy="title-login"
-            className="text-xl md:text-xl font-bold leading-tight mt-2 sm:mt-8 mx-5 text-center"
-        >
-            Acceso Administrador
-        </h1>
-        <p className="mt-4 sm:mt-8 mx-5">
-            <Link to="/logindashboard">
-                <button className="w-full text-sm sm:text-base block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-3 mt-4">
+                  </button>
+                </Link>
+              </p>
+            </div>
+            <div className="w-full sm:w-1/2 mt-8 sm:mt-0">
+              <h1
+                data-cy="title-login"
+                className="text-xl md:text-xl font-bold leading-tight mt-2 sm:mt-8 mx-5 text-center"
+              >
+                Acceso Administrador
+              </h1>
+              <p className="mt-4 sm:mt-8 mx-5">
+                <Link to="/logindashboard">
+                  <button className="w-full text-sm sm:text-base block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-3 mt-4">
                     Acceder al Panel
-                </button>
-            </Link>
-        </p>
-    </div>
-</div>
-
+                  </button>
+                </Link>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

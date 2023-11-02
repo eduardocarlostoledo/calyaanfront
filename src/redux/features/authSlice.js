@@ -89,7 +89,7 @@ export const registerProfessional = createAsyncThunk(
     try {
       const response = await api.signUpProfessional(userForm);
       toast.success("Registro exitoso");
-      navigate("/");
+      navigate("/loginProfesional");
       return response.data;
     } catch (err) {
       let error = err.response.data.msg

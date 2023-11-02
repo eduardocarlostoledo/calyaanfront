@@ -89,7 +89,6 @@ const MyDocument = ({ siigoResponse, Orden }) => (
           <Text style={styles.value}>
             {siigoResponse.customer.identification}
           </Text>
-          {/* Agregar más campos según tus necesidades */}
         </View>
         <View style={styles.section}>
           <Text style={styles.subheader}>Items</Text>

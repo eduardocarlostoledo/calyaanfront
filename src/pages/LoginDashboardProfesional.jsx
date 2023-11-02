@@ -84,7 +84,7 @@ const logindashboardProfesional = () => {
 
   return (
     <section className="flex flex-col md:flex-row h-screen items-center">
-      <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
+      <div className="bg-white w-full flex-col md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
         <div className="w-full h-100">
           <form className="mt-6" onSubmit={handleSubmit}>
             <div className="mt-4">
@@ -183,6 +183,14 @@ Registro para Staff Profesional              </h1>
             </div>
 
 
+        </div>
+        <div className="p-6">
+          <Link
+            to={"/registro/profesional"}
+            className="w-full block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-2 mt-6"
+          >
+            Registrate como profesional en Calyaan!!
+          </Link>
         </div>
       </div>
     </section>

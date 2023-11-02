@@ -84,39 +84,7 @@ const ProductExpanded = ({
 
   const [selectedOption, setSelectedOption] = useState("");
 
-  const [siigoResponse, setSiigoResponse] = useState({
-    balance: 0,
-    customer: {
-      id: "45022857-9154-4b0c-bdd4-f38f4bff3096",
-      identification: "123",
-      branch_office: 0,
-    },
-    date: "2023-10-13",
-    document: { id: 24446 },
-    id: "0b7cc95a-27bd-4e06-b100-d3f49045f39b",
-    items: [
-      {
-        code: "13901",
-        description: "Masaje reductor paquete x 4",
-        id: "fa2a48be-f849-47b6-9686-968945f1b271",
-        price: 137500,
-        quantity: 1,
-        total: 137500,
-      },
-    ],
-    mail: {
-      status: "not_sent",
-      observations: "The invoice has not been sent by mail",
-    },
-    metadata: { created: "2023-10-13T20:58:33.377Z" },
-    name: "FV-1-60000000506",
-    number: 60000000506,
-    payments: [{ id: 5638, name: "Consignación", value: 137500 }],
-    prefix: "HA",
-    seller: 629,
-    stamp: { status: "Draft" },
-    total: 137500,
-  });
+  const [siigoResponse, setSiigoResponse] = useState("");
 
   const dataFake = {
     balance: 0,
@@ -154,41 +122,6 @@ const ProductExpanded = ({
 
   const [userCheck, setUserCheck] = useState("wait");
   const [productCheck, setProductCheck] = useState("wait");
-
-  const objTest = {
-    document: {
-      id: 24446,
-    },
-    date: "2023-09-29",
-    customer: {
-      identification: "209048401",
-      branch_office: "0",
-    },
-    seller: 629,
-    items: [
-      {
-        code: "Sku-1",
-        description: "Sku-1",
-        quantity: 1,
-        taxes: [
-          {
-            id: 13156,
-          },
-          {
-            id: 21479,
-          },
-        ],
-        price: 847.45,
-      },
-    ],
-    payments: [
-      {
-        id: 5638,
-        value: 1000,
-        due_date: "2022-05-08",
-      },
-    ],
-  };
 
   const DocTypePeticion = async () => {
     const response = await clienteAxios.get(
@@ -411,6 +344,8 @@ const ProductExpanded = ({
         estado_facturacion: "Facturado",
       });
 
+      setSiigoResponse(response.data);
+
       const responseEdit = await handleSubmit();
 
       if (
@@ -600,8 +535,15 @@ const ProductExpanded = ({
                 {input?.payment_id === null ? input?.payment_id : " Sin numero"}
               </p>
             </div>
-            <Button key="save" type="primary" onClick={handleEditModalOpen}>
-              Open modal
+            <Button
+              key="save"
+              type="primary"
+              style={{
+                color: "#000",
+              }}
+              onClick={handleEditModalOpen}
+            >
+              {siigoResponse ? "PDF siigo" : "Facturacion siigo"}
             </Button>
 
             <Modal

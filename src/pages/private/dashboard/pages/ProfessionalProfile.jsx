@@ -14,6 +14,7 @@ import {
   AiOutlineClose,
   AiOutlineCheck,
   AiFillCloseCircle,
+  AiOutlineLoading3Quarters,
 } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import {
@@ -26,6 +27,7 @@ const ProfessionalProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [forEdit, setForEdit] = useState(false);
+  const [cargando, setCargando] = useState(false);
 
   const [valueForm, setValueForm] = useState({
     _id: "",
@@ -73,7 +75,7 @@ const ProfessionalProfile = () => {
         profesional: data.profesional || {},
         ultimaConexion: data.ultimaConexion || "",
       }));
-//console.log("data.profesional", data.profesional)
+      //console.log("data.profesional", data.profesional)
       setDescriptionForm(data.profesional.descripcion);
       setEspecialidadForm(data.profesional.especialidad);
       setLocalidadForm(data.profesional.localidadesLaborales);
@@ -196,6 +198,14 @@ const ProfessionalProfile = () => {
     );
   };
 
+  const confirmProfesional = async () => {
+    setCargando(true);
+    await clienteAxios.post("/api/usuarios/confirmar", { email: email });
+    setValueForm({ ...valueForm, estado: true });
+    toast.success("Profesional verificado");
+    setCargando(false);
+  };
+
   const {
     _id,
     nombre,
@@ -214,24 +224,27 @@ const ProfessionalProfile = () => {
     ultimaConexion,
     profesional,
   } = valueForm;
-  
+
   const confirmarCorreoProfesional = async () => {
-    const token = localStorage.getItem('token');    
-  
+    const token = localStorage.getItem("token");
+
     try {
-      const response = await clienteAxios.post('/api/usuarios/confirmar', {email: email}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+      const response = await clienteAxios.post(
+        "/api/usuarios/confirmar",
+        { email: email },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       // Mostrar Sweet Alert en caso de éxito
-      swal('Éxito', 'El correo del profesional ha sido confirmado', 'success');
+      swal("Éxito", "El correo del profesional ha sido confirmado", "success");
       //console.log(response.data);
     } catch (error) {
       // Mostrar Sweet Alert en caso de error
-      swal('Error', 'No se pudo confirmar el correo del profesional', 'error');
-      console.error('Error al confirmar el correo del profesional', error);
+      swal("Error", "No se pudo confirmar el correo del profesional", "error");
+      console.error("Error al confirmar el correo del profesional", error);
     }
   };
 
@@ -261,8 +274,7 @@ const ProfessionalProfile = () => {
           </div>
         </div>
         <div className="px-5 pb-10">
-          <div className="flex justify-center  w-full pt-16 ">           
-          </div>
+          <div className="flex justify-center  w-full pt-16 "></div>
           <div className="pt-3  flex flex-col  items-start  justify-between">
             <div className=" w-full ">
               <div className="text-center  mb-3  flex flex-col  items-center justify-between ">
@@ -279,7 +291,7 @@ const ProfessionalProfile = () => {
                     </span>
                   )
                 )}
-              </p>             
+              </p>
             </div>
             <div className=" w-full py-5 flex items-start justify-center ">
               <div className="mr-6 ">
@@ -310,7 +322,9 @@ const ProfessionalProfile = () => {
                   {estado ? "Cuenta Verificada" : "Cuenta Sin Verificar"}
                 </div>
                 <div className="ml-5 rounded-full bg-green-200 text-green-500 text-sm px-6 py-2 flex justify-center items-center">
-                <button onClick={confirmarCorreoProfesional}>Confirmar Correo Profesional</button>
+                  <button onClick={confirmarCorreoProfesional}>
+                    Confirmar Correo Profesional
+                  </button>
                 </div>
               </div>
             </div>
@@ -475,10 +489,10 @@ const ProfessionalProfile = () => {
                   {direccionDefault.ciudad}
                 </option>
               </select>
-            </div>            
+            </div>
           </div>
 
-          <div className="lg:flex md:flex block gap-8  mt-6">           
+          <div className="lg:flex md:flex block gap-8  mt-6">
             <div className="lg:mt-0 md:mt-0 mt-4 w-full">
               <p className="text-base leading-none text-gray-800">Localidad</p>
               <select
@@ -510,7 +524,7 @@ const ProfessionalProfile = () => {
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 disabled={!forEdit}
               />
-            </div>           
+            </div>
           </div>
         </div>
 
@@ -655,8 +669,7 @@ const ProfessionalProfile = () => {
                   ))}
                 </select>
               </div>
-              <div className=" flex flex-wrap gap-4">               
-
+              <div className=" flex flex-wrap gap-4">
                 {localidadForm?.length > 0 && (
                   <div className="my-4 flex flex-wrap gap-4">
                     {localidadForm.map((localidad, index) => (
