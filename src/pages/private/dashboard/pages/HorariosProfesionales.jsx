@@ -189,7 +189,7 @@ const HorarioProfessionalAntDesing = () => {
           placeholder="Buscar"
           onChange={(e) => setSearchText(e.target.value)}
           style={{
-            width: 400,
+            width: 1000,
             marginBottom: "0px",
             textAlign: "center",
             alignItems: "center",
@@ -208,7 +208,7 @@ const HorarioProfessionalAntDesing = () => {
           <p>Especialidades</p>
           <Select
             placeholder="Filtrar por especialidad"
-            style={{ width: 200, marginRight: "10px" }}
+            style={{ width: 500, marginRight: "10px" }}
             onChange={(value) => setSelectedEspecialidad(value)}
           >
             <Option value={null}>Todos</Option>
@@ -223,7 +223,7 @@ const HorarioProfessionalAntDesing = () => {
           <p>Localidades</p>
           <Select
             placeholder="Filtrar por localidad"
-            style={{ width: 200 }}
+            style={{ width: 500 }}
             onChange={(value) => setSelectedLocalidad(value)}
           >
             <Option value={null}>Todos</Option>
