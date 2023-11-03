@@ -68,6 +68,7 @@ const TableReservas = () => {
     }
   }, [searchTerm, paginado]);
 
+  console.log("filtrado", filtrado)
   const handleState = () => {
     dispatch(estadoAction());
   };
@@ -94,15 +95,15 @@ const TableReservas = () => {
                   onChange={(e) => setLimite(e.target.value || 50)}
                   className="appearance-none h-full rounded-l border block a w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
                   <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <MdKeyboardArrowDown className="fill-current h-4 w-4" />
                 </div>
               </div>
-              <div className="relative">
+              {/* <div className="relative">
                 <select className="h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                   <option>Todos</option>
                   <option>Activo</option>
@@ -112,7 +113,7 @@ const TableReservas = () => {
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <MdKeyboardArrowDown className="fill-current h-4 w-4" />
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="block relative w-80">
@@ -157,9 +158,9 @@ const TableReservas = () => {
             <table className="min-w-full leading-normal">
               <thead>
                 <tr>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     ID
-                  </th>
+                  </th> */}
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Cliente
                   </th>
@@ -205,58 +206,44 @@ const TableReservas = () => {
                 ) : (
                   filtrado?.map((reserva) => (
                     <tr key={reserva._id}>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
+                      {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
                         <div className="flex items-center">{reserva._id}</div>
-                      </td>
+                      </td> */}
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
                         <div className="flex justify-start">
                           <div className="flex-shrink-0 w-10 h-10">
-                            {reserva?.cliente?.img ? (
-                              <img
-                                className="w-full h-full rounded-full cursor-pointer"
-                                src={user?.img}
-                                alt="Imagen de usuario"
-                                onClick={() => handleUser(reserva?.cliente_id)}
-                              />
-                            ) : (
-                              <BsPersonCircle
-                                className="w-full h-full text-gray-300 cursor-pointer"
-                                onClick={() => handleUser(reserva?.cliente_id)}
-                              />
-                            )}
+                            {reserva?.cliente_id.nombre} {" "} {reserva?.cliente_id.apellido}
                           </div>
                         </div>
                       </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
-                        <div className="flex justify-start">
-                          <div className="flex-shrink-0 w-10 h-10">
-                            {reserva?.profesional?.img ? (
-                              <img
-                                className="w-full h-full rounded-full cursor-pointer"
-                                src={user?.img}
-                                alt="Imagen de usuario"
-                                onClick={() => handleUser(reserva?.cliente_id)}
-                              />
-                            ) : (
-                              <BsPersonCircle
-                                className="w-full h-full text-gray-300 cursor-pointer"
-                                onClick={() => handleUser(reserva?.cliente_id)}
-                              />
-                            )}
-                          </div>
-                        </div>
-                      </td>
+              
+                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+  <div className="flex justify-start">
+    <div className="flex-shrink-0 w-10 h-10">
+      <p className="text-sm">
+      {reserva?.profesional_id?.creador.nombre
+          ? `${reserva?.profesional_id?.creador.nombre.split(" ")[0]} ${
+              reserva?.profesional_id?.creador.apellido
+                ? reserva?.profesional_id?.creador.apellido.split(" ")[0]
+                : "Agendar"
+            }`
+          : "Agendar"}
+      </p>
+    </div>
+  </div>
+</td>
+
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva?.servicios[0]?.nombre}
+                          {reserva?.servicios[0].nombre}{" "} {reserva?.nroSesion}
                         </p>
                       </td>
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva.createdAt.split("T")[0]}
+                          {reserva?.createdAt.split("T")[0]}
                         </p>
                       </td>
 
@@ -268,7 +255,8 @@ const TableReservas = () => {
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva.hora_servicio} {reserva.cita_servicio}
+                        {reserva?.hora_servicio && reserva?.cita_servicio ? `${reserva?.hora_servicio} ${reserva?.cita_servicio}` : "Agendar"}
+
                         </p>
                       </td>
 

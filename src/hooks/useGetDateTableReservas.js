@@ -4,7 +4,7 @@ import clienteAxios from "../config/axios";
 const useGetDateTableReservas = (rol) => {
   const [paginado, setPaginado] = useState({});
 
-  const [limite, setLimite] = useState(10);
+  const [limite, setLimite] = useState(20);
   const [pagina, setPagina] = useState(1);
 
   const [loading, setLoading] = useState(false);

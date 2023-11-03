@@ -10,6 +10,182 @@ import clienteAxios from "../../../../config/axios";
 import useGetDateTable from "../../../../hooks/useGetDateTable";
 import { localidadesLaborales } from "../../../../data";
 import ModalUser from "./ModalUser";
+import { Link } from "react-router-dom";
+import { Table } from 'antd';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { set } from "date-fns";
+import ModalUserInfo from "./ModalUserInfo";
+
+const LinksPerfiles = {
+  CLIENTE: "/dashboard/perfil-cliente",
+  ADMIN: "/dashboard/perfil-admin",
+  PROFESIONAL: "/dashboard/perfil-profesional",
+};
+
+const TablaHorarios = () => {
+  const [modal, setModal] = useState(false);
+  const [info, setInfo] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const getHorarios = async () => {
+      setLoading(true);
+      try {
+        const response = await clienteAxios.get(
+          'api/buscar/get-profesionales',
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+          });
+
+          setInfo(response.data);
+          setLoading(false);
+      } catch (error) {
+        console.error('Error al obtener los logs', error);
+      }
+    };
+    getHorarios();
+  }, []);
+
+  const newData = info.flatMap((item) =>
+  item.creador.especialidad.flatMap((esp, index) => {
+    const loc = item.creador.localidadesLaborales[index] || '';
+    return {      
+      key: `${item.key}-esploc-${index}`,
+      creador: {
+        _id: item.creador.creador._id,
+        nombre: item.creador.creador.nombre,
+        apellido: item.creador.creador.apellido,
+        email: item.creador.creador.email,
+        telefono: item.creador.creador.telefono,
+        especialidad: esp,
+        localidad: loc,
+        fecha: item.fecha,
+        horarios: item.horarios,
+      },      
+      };
+  })
+);
+
+const buscadorUsuarios = useMemo(() => {
+  if (!newData || !Array.isArray.newData || !newData.length) {
+    return [];
+  }
+  return newData.filter(
+    (user) =>
+      user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        user.apellido.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+}, [newData, searchTerm]);
+
+//console.log(newData)
+const columns = [
+  {
+    title: 'Nombre',
+    dataIndex: 'creador',
+    sorter: (a, b) => a.id - b.id,
+    defaultSortOrder: 'ascend',
+    render: (index) => <b>{`${index.nombre} ${index.apellido}`}</b>
+  },
+  {
+    title: 'Contacto',
+    dataIndex: 'creador',
+    sorter: (a, b) => a.id - b.id,
+    defaultSortOrder: 'ascend',
+    render: (index) => <b>{`${index.email} ${index.telefono}`}</b>
+  },
+  {
+    title: 'Especialidad',
+    dataIndex: 'creador',
+    sorter: (a, b) => a.id - b.id,
+    defaultSortOrder: 'descend',
+    render: (index) => index.especialidad
+  },
+  {
+    title: 'Localidad Laboral',
+    dataIndex: 'creador',
+    sorter: (a, b) => a.id - b.id,
+    defaultSortOrder: 'descend',
+    render: (index) => index.localidad
+  },
+  {
+    title: 'Fecha Disponible',
+    dataIndex: 'creador',
+    sorter: (a, b) => a.id - b.id,
+    defaultSortOrder: 'descend',
+    render: (index) => index.fecha
+  },
+  {
+    title: 'Horarios',
+    dataIndex: 'creador',    
+    render: (index) => (
+      <div className="text-red-500">
+        {(index.horarios).map(obj => (obj.hora)).join(", ")}
+      </div>
+    )
+  },
+  
+  // {
+  //   title: 'Horarios',
+  //   dataIndex: 'creador',    
+  //   render: (index) => (index.horarios).map(obj => (obj.hora)).join(", ")
+  // },
+  {
+    title: "Perfil",
+    dataIndex: "creador",
+    defaultSortOrder: "descend",
+    render: (text, record) => (
+      <>
+        {modal && (
+          <ModalUserInfo
+            userState={record}
+            handleModalView={handleModalView}
+            key={text}
+          />
+        )}
+        <Link
+          to={`/dashboard/perfil-profesional/${text._id}`}
+          type="button"
+          className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 w-auto md:w-full"
+        >
+          Perfil
+        </Link>
+      </>
+    ),
+  },
+];
+
+  return (
+
+    <div>
+
+      <div className="block relative">
+
+        <input
+          placeholder="Nombre, Apellido, Email"
+          className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none ml-32"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      <div className="ml-24">      
+      <Table
+        columns={columns}
+        dataSource={newData}
+        loading={loading}
+        rowKey={(record) => record._id}
+      />
+      </div>
+    </div>
+  );
+};
 
 const TableSchedule = () => {
   const { paginado, setLimite, limite, pagina, setPagina, loading } =
@@ -79,161 +255,13 @@ const TableSchedule = () => {
 
   return (
     <>
-      <div className="py-8">
-        <h2 className="text-2xl font-bold mb-6">Horarios de profesionales</h2>
-        <div className="my-2 flex justify-between mx-4">
-          <div className="flex sm:flex-row flex-col">
-            <div className="flex flex-row mb-1 sm:mb-0">
-              <div className="relative">
-                <select
-                  value={limite}
-                  onChange={(e) => setLimite(e.target.value || 50)}
-                  className="appearance-none h-full rounded-l border block a w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <MdKeyboardArrowDown className="fill-current h-4 w-4" />
-                </div>
-              </div>
-              <div className="relative">
-                <select
-                  className="appearance-none  bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  name="localidad"
-                  id="localidad"
-                  onChange={(e) => setLocalidad(e.target.value)}
-                  value={localidad}
-                >
-                  <option value="">Localidad</option>
-                  {localidadesLaborales.map((localidad, index) => (
-                    // <option key={index} value={localidad.split(" ")[1]}>
-                    <option key={index} value={localidad}>
-                      {localidad}
-                    </option>
-                  ))}
-                </select>
-
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <MdKeyboardArrowDown className="fill-current h-4 w-4" />
-                </div>
-              </div>
-            </div>
-            <div className="block relative">
-              <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-4 w-4 fill-current text-gray-500"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M10 2C14.4183 2 18 5.58172 18 10C18 12.1535 17.1571 14.1561 15.6569 15.6569C14.1561 17.1571 12.1535 18 10 18C7.84648 18 5.84391 17.1571 4.34315 15.6569C2.84239 14.1561 2 12.1535 2 10C2 5.58172 5.58172 2 10 2ZM9 4C6.23858 4 4 6.23858 4 9C4 11.7614 6.23858 14 9 14C11.7614 14 14 11.7614 14 9C14 6.23858 11.7614 4 9 4Z"
-                  />
-                </svg>
-              </span>
-              <input
-                placeholder="Nombre, Apellido, Email"
-                className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="flex flex-row mb-1 sm:mb-0">
-            <div className="relative">
-              <select
-                className="h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                defaultValue="Fecha"
-              >
-                <option>Fecha</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <MdKeyboardArrowDown className="fill-current h-4 w-4" />
-              </div>
-            </div>
-            <button
-              className="border h-full w-10 rounded-r sm:rounded-r-none text-center text-gray-600 border-gray-400 bg-gray-100 px-2 py-2"
-              onClick={() =>
-                handleDownload(
-                  "/api/profesional/exportar-profesionales",
-                  "profesionales.csv"
-                )
-              }
-            >
-              <AiOutlineCloudDownload className="text-xl" />
-            </button>
-          </div>
-        </div>
-        <div className="overflow-x-auto mt-6">
-          <table className="min-w-full mx-auto">
-            <thead>
-              <tr className="w-full">
-                <th className="border-b-2 border-gray-200 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase py-3 px-4">
-                  Nombre
-                </th>
-                <th className="border-b-2 border-gray-200 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase py-3 px-4">
-                  Horario
-                </th>
-                <th className="border-b-2 border-gray-200 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase py-3 px-4">
-                  Acciones
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white">
-              {loading ? (
-                <tr>
-                  <td colSpan="3" className="text-center py-8">
-                    <Spinner />
-                  </td>
-                </tr>
-              ) : (
-                filteredUsers.map((user) => (
-                  <tr key={user.id} className="w-full">
-                    <td className="border-t border-gray-200 px-4 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <BsPersonCircle className="h-10 w-10 text-gray-400" />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {user.nombre}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {user.email}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="border-t border-gray-200 px-4 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {user.horario}
-                      </div>
-                    </td>
-                    <td className="border-t border-gray-200 px-4 py-4 whitespace-nowrap">
-                      <button
-                        className="text-indigo-600 hover:text-indigo-900"
-                        onClick={() => handleUser(user)}
-                      >
-                        Ver horarios
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      {modal && userState !== null && userState !== undefined && (
-        <ModalUser
-          userState={userState}
-          handleModalView={handleModalView}
-          dispatch={dispatch}
-        />
+      <div className="ml-1">     
+      {loading ? (
+        <p>Cargando...</p>
+      ) : (
+      <TablaHorarios />
       )}
+      </div>
     </>
   );
 };

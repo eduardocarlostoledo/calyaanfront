@@ -47,6 +47,26 @@ const ProfessionalProfile = () => {
     ultimaConexion: "",
   });
 
+  const deleteUsuario = async (id) => {
+    try {     
+      const response = await clienteAxios.delete(`/api/usuarios/${valueForm._id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });      
+      if (response.data.msg) {
+        const estadoMensaje = response.data.estado ? 'desactivado' : 'activado';
+        swal(`Usuario ${estadoMensaje}`, response.data.msg, "success");
+      } else {
+        swal("Error al eliminar el usuario", "El usuario no ha podido ser eliminado", "error");
+      }
+    } catch (error) {
+      console.error("Error al eliminar el usuario", error);
+    }
+};
+
+
+
   const [especialidadesForm, setEspecialidadForm] = useState([]);
   const [localidadForm, setLocalidadForm] = useState([]);
   const [descriptionForm, setDescriptionForm] = useState("");
@@ -243,7 +263,7 @@ const ProfessionalProfile = () => {
       //console.log(response.data);
     } catch (error) {
       // Mostrar Sweet Alert en caso de error
-      swal("Error", "No se pudo confirmar el correo del profesional", "error");
+      swal("Error", "No se pudo confirmar el correo del profesional o el mismo ya se encuentra confirmado", "error");
       console.error("Error al confirmar el correo del profesional", error);
     }
   };
@@ -316,7 +336,7 @@ const ProfessionalProfile = () => {
             <div className="w-full flex-col  justify-center  ">
               <div className="flex items-center justify-center  mt-1 md:mt-0 mb-5 md:mb-0">
                 <div className="ml-5 rounded-full bg-green-200 text-green-500 text-sm px-6 py-2 flex justify-center items-center">
-                  {confirmado ? "Activo" : "Inactivo"}
+                  {estado ? "Activo" : "Inactivo"}
                 </div>
                 <div className="ml-5 rounded-full bg-green-200 text-green-500 text-sm px-6 py-2 flex justify-center items-center">
                   {estado ? "Cuenta Verificada" : "Cuenta Sin Verificar"}
@@ -821,6 +841,16 @@ const ProfessionalProfile = () => {
             </span>
             Horarios
           </Link>
+          
+          <button
+  onClick={() => deleteUsuario()}
+  className="mx-2 my-2 flex items-center bg-white transition duration-150 ease-in-out hover:border-red-600 border border-red-800 rounded text-red-700 hover:text-white hover:bg-red-700 pl-3 pr-6 py-2 text-sm"
+>
+  <span className="h-4 w-4 mr-2"></span>
+  {estado ? "Desactivar Cuenta" : "Activar Cuenta"}
+</button>
+
+
         </div>
       </div>
     </>

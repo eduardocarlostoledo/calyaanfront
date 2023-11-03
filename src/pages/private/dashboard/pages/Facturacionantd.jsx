@@ -1395,12 +1395,7 @@ const FacturacionAntDesing = () => {
 
   return (
     <div
-      style={{
-        textAlign: "center",
-        alignItems: "center",
-        margin: "auto",
-        width: "95%",
-      }}
+    className="w-full p-1 bg-gray-100 ml-1"
     >
       <p className="p">
         <b>FACTURACION </b>
@@ -1418,14 +1413,7 @@ const FacturacionAntDesing = () => {
           </b>
         </p>
 
-        {/* <p className="p">
-          {" "}
-          Puede realizar búsquedas por{" "}
-          <b>
-            Id Pago, Nro Factura, Nombre y Apellido, Cedula, Telefono, Email o
-            Día de la venta. Hora del Servicio (YYYY-MM-DD){" "}
-          </b>
-        </p> */}
+       
         <div style={{ display: "flex", margin: "1rem" }}>
           <Input.Search
             style={{
@@ -1451,21 +1439,8 @@ const FacturacionAntDesing = () => {
         </div>
       </div>
 
-      <div
-        style={{
-          margin: "auto",
-          width: "95%",
-          padding: "1px",
-        }}
-      >
-        {" "}
-        <Table
-          style={{
-            margin: "auto",
-            width: "100%",
-            padding: "1px",
-            backgroundColor: "rgb(245, 245, 235)",
-          }}
+      <div>        
+        <Table        
           columns={columns}
           dataSource={filteredOrdenes}
           expandable={{

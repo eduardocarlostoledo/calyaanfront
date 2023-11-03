@@ -53,7 +53,7 @@ const HorarioProfessionalAntDesing = () => {
       dataIndex: "creador",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => text.especialidad.map((e) => <p> {e} </p>),
+      render: (text) => (text.especialidad).map(obj => (obj)).join(", ")
     },
     {
       title: "Telefono",
@@ -65,14 +65,14 @@ const HorarioProfessionalAntDesing = () => {
       title: "email",
       dataIndex: "creador",
       defaultSortOrder: "descend",
-      render: (creador) => <p>{creador.creador.email}</p>,
+      render: (creador) => <p>{creador.email}</p>,
     },
     {
       title: "Localidad",
       dataIndex: "creador",
       defaultSortOrder: "descend",
       render: (text) =>
-        text.localidadesLaborales.map((localidad) => <p> {localidad} </p>),
+        (text.localidadesLaborales).map(localidad => (localidad)).join(", "),
     },
     {
       title: "Fecha",
@@ -84,7 +84,8 @@ const HorarioProfessionalAntDesing = () => {
       title: "Hora",
       dataIndex: "disponibilidad",
       defaultSortOrder: "descend",
-      render: (text) => text.map((localidad) => <p> {localidad.hora} </p>),
+      render: (text) => 
+      text.map(localidad => (localidad.hora)).join(", "),
     },
   ];
 
@@ -235,14 +236,7 @@ const HorarioProfessionalAntDesing = () => {
         </div>
       </div>
 
-      <div
-        style={{
-          margin: "0px",
-          marginLeft: "0px",
-          marginTop: "0px",
-          padding: "0px",
-        }}
-      >
+      <div className="py-8 ml-64">
         <Table
           style={{ backgroundColor: "rgb(245, 245, 235)" }}
           columns={columns}

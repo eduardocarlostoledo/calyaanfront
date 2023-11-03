@@ -30,18 +30,20 @@ const MyCalendar = ({ reservations }) => {
 
       return {
         _id: reservation._id,
-        cliente: reservation.cliente_id?.nombre,
+        nombre: reservation.cliente_id?.nombre,
+        apellido: reservation.cliente_id?.apellido,
         servicio: reservation.servicios[0]?.nombre,
         profesional: reservation.profesional_id?.nombre,
         dia: reservation?.cita_servicio,
         start: startDate.toDate(),
         end: endDate.toDate(),
         estadoPago: reservation.factura?.estadoPago, // Agrega el estado de pago al objeto del evento
+        direccion_servicio: reservation.direccion_servicio,
       };
     })
     .filter((event) => event !== null && event.estadoPago === "approved"); // Filtra eventos nulos y con estado de pago "approved"
 
-  // console.log("events", events);
+   console.log("events", events);
   return (
     <div style={{ height: "1000px" }}>
       <Calendar
@@ -61,10 +63,11 @@ const MyCalendar = ({ reservations }) => {
 const EventComponent = ({ event }) => {
   return (
     <div>
-      <div>ID: {event._id}</div>
-      <div>Cliente: {event.cliente}</div>
+      <div>Orden: {event._id}</div>
+      <div>Cliente: {event.nombre} {""} {event.apellido}</div>
       <div>Servicio: {event.servicio}</div>
       <div>Profesional: {event.profesional}</div>
+      <div>Dirección: {event.direccion_servicio}</div>
     </div>
   );
 };
@@ -74,7 +77,7 @@ const CalendarDashboard = () => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const reservations = useSelector((state) => state.ordenes.order || []);
-  //console.log("reservations", reservations)
+  console.log("reservations", reservations)
   useEffect(() => {
     dispatch(getOrders())
       .then(() => setLoading(false))

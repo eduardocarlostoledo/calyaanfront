@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteError, forgotPassword } from '../redux/features/authSlice';
@@ -10,6 +10,7 @@ import { deleteError, forgotPassword } from '../redux/features/authSlice';
 import ButtonSpinner from '../components/ButtonSpinner';
 
 import { toast } from 'react-toastify';
+
 
 const ForgotPassword = () => {
 
@@ -72,6 +73,16 @@ const ForgotPassword = () => {
 
                     </form>
                 </div>
+
+                <div className="text-left mt-2">
+                    <Link
+                      to="/"
+                      className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
+                    >
+                      Volver al Inicio
+                    </Link>
+                  </div>
+
             </div>
         </section>
     )

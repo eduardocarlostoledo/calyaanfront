@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import bg3 from "../../../../assets/bg-3-auth.jpg";
 import clienteAxios from "../../../../config/axios";
 import { localidades } from "../../../../data";
+import swal from "sweetalert";
 
 const AdminProfile = () => {
   const { id } = useParams();
@@ -41,17 +42,22 @@ const AdminProfile = () => {
   } = valueForm;
 
   const deleteUsuario = async (id) => {
-    try {
-      const response = await clienteAxios.delete(`/api/usuarios/${id}`, {
+    try {     
+      const response = await clienteAxios.delete(`/api/usuarios/${valueForm._id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      });
-      console.log(response.data); // Puedes manejar la respuesta según tus necesidades
+      });      
+      if (response.data.msg) {
+        const estadoMensaje = response.data.estado ? 'desactivado' : 'activado';
+        swal(`Usuario ${estadoMensaje}`, response.data.msg, "success");
+      } else {
+        swal("Error al eliminar el usuario", "El usuario no ha podido ser eliminado", "error");
+      }
     } catch (error) {
       console.error("Error al eliminar el usuario", error);
     }
-  };
+};
 
   useEffect(() => {
     const getUser = async () => {
@@ -88,7 +94,7 @@ const AdminProfile = () => {
         </div>
         <div className="px-5 pb-10">
           <div className="flex justify-center  w-full pt-16 "></div>
-          <div className="pt-18  flex flex-col  items-start  justify-between">
+          <div className="w-full flex-col  justify-center  ">
             <div className=" w-full ">
               <div className="text-center   flex flex-col  items-center justify-between ">
                 <h2 className="  text-2xl text-gray-800 font-medium tracking-normal">
@@ -101,6 +107,17 @@ const AdminProfile = () => {
               Última conexión {ultimaConexion?.split("T")[0]} -{" "}
               {ultimaConexion?.split("T")[1]?.slice(0, 5)}
             </p>
+
+            <div className="flex items-center justify-center  mt-1 md:mt-0 mb-5 md:mb-0">
+                <div className="ml-5 rounded-full bg-green-200 text-green-500 text-sm px-6 py-2 flex justify-center items-center">
+                  {estado ? "Activo" : "Inactivo"}
+                </div>
+                <div className="ml-5 rounded-full bg-green-200 text-green-500 text-sm px-6 py-2 flex justify-center items-center">
+                  {estado ? "Cuenta Verificada" : "Cuenta Sin Verificar"}
+                </div>
+                
+              </div>
+
           </div>
         </div>
       </div>
@@ -223,7 +240,7 @@ const AdminProfile = () => {
           </div>
         </div>
 
-        <div className="bg-white  shadow p-8">
+        {/* <div className="bg-white  shadow p-8">
           <h3>Últimas reservas agendas</h3>
 
           <div className="flex gap-6 justify-center mx-auto  flex-wrap lg:flex-col mt-4">
@@ -298,11 +315,11 @@ const AdminProfile = () => {
               </Link>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="bg-white  shadow p-8 mt-5">
         <div className="mx-2 my-2 px-6 flex flex-wrap justify-center">
-          <Link
+          {/* <Link
             to={`/historial-servicios/admin/${id}`}
             className="mx-2 my-2 flex items-center bg-white transition duration-150 ease-in-out hover:border-indigo-600 border border-indigo-700 rounded text-indigo-700 hover:text-white hover:bg-indigo-700 pl-3 pr-6 py-2 text-sm"
           >
@@ -322,14 +339,14 @@ const AdminProfile = () => {
               </svg>
             </span>
             Reservas Agendadas
-          </Link>
+          </Link> */}
           <button
-            onClick={() => deleteUsuario()}
-            className="mx-2 my-2 flex items-center bg-white transition duration-150 ease-in-out hover:border-red-600 border border-red-800 rounded text-red-700 hover:text-white hover:bg-red-700 pl-3 pr-6 py-2 text-sm"
-          >
-            <span className="h-4 w-4 mr-2"></span>
-            Eliminar usuario
-          </button>
+  onClick={() => deleteUsuario()}
+  className="mx-2 my-2 flex items-center bg-white transition duration-150 ease-in-out hover:border-red-600 border border-red-800 rounded text-red-700 hover:text-white hover:bg-red-700 pl-3 pr-6 py-2 text-sm"
+>
+  <span className="h-4 w-4 mr-2"></span>
+  {estado ? "Desactivar Cuenta" : "Activar Cuenta"}
+</button>
         </div>
       </div>
     </>

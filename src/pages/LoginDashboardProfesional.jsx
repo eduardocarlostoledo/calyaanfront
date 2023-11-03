@@ -184,14 +184,7 @@ Registro para Staff Profesional              </h1>
 
 
         </div>
-        <div className="p-6">
-          <Link
-            to={"/registro/profesional"}
-            className="w-full block bg-gray-800 hover:bg-gray-900 focus:bg-gray-900 text-white font-semibold rounded-lg px-4 py-2 mt-6"
-          >
-            Registrate como profesional en Calyaan!!
-          </Link>
-        </div>
+
       </div>
     </section>
   );
