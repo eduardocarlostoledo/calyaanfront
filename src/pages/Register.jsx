@@ -122,7 +122,11 @@ const Register = ({referido=false}) => {
                 <div className="w-full h-100">
 
                     <div className='flex flex-col justify-center items-center'>
-                        <LazyLoadImage effect='blur' width="150" height="80" alt="Logo fondo trasparente" src="https://www.calyaan.com.co/static/media/logo.7391fed19edfcfb85f3d.png" />
+                        <LazyLoadImage effect='blur' width="150" height="80" 
+                        alt="Logo fondo trasparente" 
+                        //src="https://www.calyaan.com.co/static/media/logo.7391fed19edfcfb85f3d.png" 
+                        />
+                        
                         <h1 className="text-xl md:text-2xl font-bold leading-tight mt-4">Regístrate</h1>
                     </div>
 

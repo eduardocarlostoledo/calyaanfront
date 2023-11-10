@@ -337,7 +337,7 @@ const ServiceDetails = () => {
       {/* <p className="text-center text-2xl mt-6">o</p>
 
       <a
-        href="https://api.whatsapp.com/send/?phone=573147428757&text&type=phone_number&app_absent=0"
+        href="https://web.whatsapp.com/send/?phone=573147428757&text&type=phone_number&app_absent=0"
         className="flex border bg-whatsapp  m-auto mt-6 p-5 border-gray-300 lg:max-w-[296px] w-full justify-center py-4 gap-2 items-center"
       >
         <p className="text-base font-medium leading-none text-white">Agenda</p>

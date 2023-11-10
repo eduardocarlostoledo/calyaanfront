@@ -182,7 +182,7 @@ const Footer = () => {
                                 <li>
                                     <a
                                         className="flex items-center justify-center gap-1.5 sm:justify-start"
-                                        href="https://api.whatsapp.com/send/?phone=573147428757&text&app_absent=0"
+                                        href="https://web.whatsapp.com/send/?phone=573147428757&text&app_absent=0"
                                         target="_blank"
                                     >
                                         <HiOutlinePhone className="h-5 w-5 shrink-0 text-white" />

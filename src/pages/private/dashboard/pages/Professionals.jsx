@@ -120,7 +120,7 @@ const Professionals = () => {
           <div>
             <p>{text}</p>
             <a
-              href={`https://api.whatsapp.com/send/?phone=${phoneNumber}&text&type=phone_number&app_absent=0`}
+              href={`https://web.whatsapp.com/send/?phone=${phoneNumber}&text&type=phone_number&app_absent=0`}
               target="_blank"
               rel="noopener noreferrer"
             >

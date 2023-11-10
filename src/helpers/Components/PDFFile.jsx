@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MyDocument = ({ siigoResponse, Orden }) => (
+const MyDocument = ({ siigoResponse, Orden, record }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.divFull}>
@@ -87,20 +87,21 @@ const MyDocument = ({ siigoResponse, Orden }) => (
           <Text style={styles.subheader}>Información del Cliente</Text>
           <Text style={styles.label}>Cedula del Cliente:</Text>
           <Text style={styles.value}>
-            {siigoResponse.customer.identification}
+            {siigoResponse?.customer?.identification}
           </Text>
         </View>
         <View style={styles.section}>
           <Text style={styles.subheader}>Items</Text>
-          {siigoResponse.items.map((item, index) => (
+          {siigoResponse && siigoResponse.items && siigoResponse.items.map((item, index) => (
             <View key={index}>
-              <Text style={styles.label}>Producto: {item.description}</Text>
+              {/* <Text style={styles.label}>Producto: {item.description.split} {" "} {Orden.nroSesion}</Text> */}
+              <Text style={styles.label}>Servicio Contratado: {`${record.nroSesion} de ${item.description}`.trim()}</Text>
 
               <Text style={styles.label}>Cantidad: {item.quantity}</Text>
 
-              <Text style={styles.label}>Valor del producto: {item.price}</Text>
+              <Text style={styles.label}>Valor por Sesión: {item.price}</Text>
 
-              <Text style={styles.label}>Valor total: {item.total}</Text>
+              {/* <Text style={styles.label}>Valor Sesión: {item.total}</Text> */}
 
               {index < siigoResponse.items.length - 1 && (
                 <Line style={styles.divider} />
@@ -117,11 +118,11 @@ const MyDocument = ({ siigoResponse, Orden }) => (
           <View>
             <Text style={styles.label}>Prefixo: {siigoResponse.prefix}</Text>
             <Text style={styles.label}>
-              Id del documento: {siigoResponse.document.id}
+              Id del documento: {siigoResponse && siigoResponse.document && siigoResponse.document.id}
             </Text>
             <Text style={styles.label}>Total: ${siigoResponse.total}</Text>
-            <Text style={styles.label}>Pagamiento:</Text>
-            {siigoResponse.payments.map((pay) => (
+            <Text style={styles.label}>Pago:</Text>
+            {siigoResponse && siigoResponse.payments && siigoResponse.payments.map((pay) => (
               <View>
                 <Text style={styles.value}>{pay.name}</Text>
                 <Text style={styles.value}>${pay.value}</Text>
@@ -130,25 +131,25 @@ const MyDocument = ({ siigoResponse, Orden }) => (
 
             <Text style={styles.label}>Email:</Text>
             <Text
-              style={{
-                ...styles.value,
-                padding: 5,
-                backgroundColor:
-                  siigoResponse.mail.status === "sent"
-                    ? "rgba(0, 128, 0, 0.5)"
-                    : siigoResponse.mail.status === "not_sent"
-                    ? "rgba(255, 0, 0, 0.5)"
-                    : "rgba(255, 255, 0, 0.5)",
-              }}
-            >
-              {siigoResponse.mail.status === "sent"
-                ? "Enviado"
-                : siigoResponse.mail.status === "not_sent"
-                ? "No enviado"
-                : "No Facturado"}
-            </Text>
+  style={{
+    ...styles.value,
+    padding: 5,
+    backgroundColor: siigoResponse?.mail?.status === "sent"
+      ? "rgba(0, 128, 0, 0.5)"
+      : siigoResponse?.mail?.status === "not_sent"
+      ? "rgba(255, 0, 0, 0.5)"
+      : "rgba(255, 255, 0, 0.5)",
+  }}
+>
+  {siigoResponse?.mail?.status === "sent"
+    ? "Enviado"
+    : siigoResponse?.mail?.status === "not_sent"
+    ? "No enviado"
+    : "No Facturado"}
+</Text>
 
-            <Text style={styles.label}>{siigoResponse.mail.observations}</Text>
+
+            <Text style={styles.label}>{siigoResponse && siigoResponse.mail && siigoResponse.mail.observations}</Text>
           </View>
           <View>
             <Text style={styles.label}>

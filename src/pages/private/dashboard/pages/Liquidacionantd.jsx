@@ -25,6 +25,7 @@ import swal from "sweetalert";
 import "./Ordenesantd.css";
 import { createLiquidacion } from "../../../../redux/features/liquidacionesSlice";
 import { verificacionProfesional } from "../../../../helpers/Logic/VerificacionProfesionalLiquidacion";
+import calcularLiquidacion from "../../../../helpers/Logic/calcularLiquidacion.js";
 
 const { RangePicker } = DatePicker;
 
@@ -575,22 +576,28 @@ const LiquidacionAntDesing = () => {
   // }, [change]);
 
   useEffect(() => {
-    let total;
+    //let total;
     if (!selectedRows[0]) {
       setSelectedProfesional(null);
     } else {
       if (selectedRows.length === 1) {
-        total = selectedRows[0].factura.precioTotal;
-      } else {
-        total = selectedRows.reduce(
-          (acc, row) => acc + row.factura.precioTotal,
-          0
-        );
-      }
+        const {total, totalProfesional, totalCalyaan} = calcularLiquidacion(selectedRows);
 
-      setSelectedRowsPorcProfesional(total * 0.61);
-      setSelectedRowsPorcCaalyan(total * 0.39);
+      setSelectedRowsPorcProfesional(totalProfesional);
+      setSelectedRowsPorcCaalyan(totalCalyaan);
       setSelectedRowsTotal(total);
+
+      } else {
+        const {total, totalProfesional, totalCalyaan} = calcularLiquidacion(selectedRows);
+
+        setSelectedRowsPorcProfesional(totalProfesional);
+        setSelectedRowsPorcCaalyan(totalCalyaan);
+        setSelectedRowsTotal(total);
+
+      }
+      console.log("SERVICIOS DENTRO DE LIQUIDACION", selectedRows);
+
+      
     }
   }, [selectedRows]);
 
@@ -611,10 +618,10 @@ const LiquidacionAntDesing = () => {
       !selectedRows
     ) {
       if (!startDate) {
-        return swal("error", "Falta fecha Inicio", "error");
+        return swal("error", "Agrega Fecha Inicio", "error");
       }
       if (!endDate) {
-        return swal("error", "Falta fecha Fin", "error");
+        return swal("error", "Agrega Fecha Inicio", "error");
       }
       if (
         !selectedRowsTotal ||
@@ -711,10 +718,10 @@ const LiquidacionAntDesing = () => {
     }
 
     const searchTextLower = searchText.toLowerCase();
-    return newProducts.filter((orden) => {
-      const { profesional_id } = orden;
+    
+    return newProducts.filter((orden) => {      
       if (
-        !profesional_id ||
+        !orden.profesional_id ||
         !orden.factura?.estadoPago?.includes("approved") ||
         orden?.factura?.estado_facturacion !== "Facturado" ||
         !orden?.estado_servicio?.includes("Completado") ||
@@ -723,50 +730,46 @@ const LiquidacionAntDesing = () => {
       ) {
         return;
       }
-
-      // console.log(orden, "orden filtrada");
-      // orden.estadoPago orden.estadoServicio
+      
       const fullNameProfesional =
         `${orden.profesional_id?.nombre} ${orden.profesional_id?.apellido}`.toLowerCase();
-      // const fullNameCliente =
-      //   `${orden.cliente_id.nombre} ${orden.cliente_id.apellido}`.toLowerCase();
-      const fullNameProfesionalInverso =
+        const fullNameProfesionalInverso =
         `${orden.profesional_id?.apellido} ${orden.profesional_id?.nombre} `.toLowerCase();
-      // const fullNameClienteInverso =
-      //   `${orden.cliente_id.apellido} ${orden.cliente_id.nombre}`.toLowerCase();
+  
+   // Validación de datos de teléfono profesional para su búsqueda: se eliminan los valores nulos y el signo '+'
+const telefonoProfesional = orden?.profesional_id?.telefono && typeof orden.profesional_id.telefono === "string"
+? orden.profesional_id.telefono.split("+").filter(telefono => telefono !== null)[1]
+: null;
 
       const orderDate = moment(orden.createdAt, "YYYY/MM/DD");
 
       if (startDate && endDate) {
         return (
-          (fullNameProfesional?.includes(searchTextLower) ||
-            // fullNameCliente?.includes(searchTextLower) ||
+          (
+            fullNameProfesional?.includes(searchTextLower) ||
             fullNameProfesionalInverso?.includes(searchTextLower) ||
-            // fullNameClienteInverso?.includes(searchTextLower) ||
             orden.factura?.nro_factura?.includes(searchTextLower) ||
             orden.factura?.payment_id?.includes(searchTextLower) ||
             orden?._id?.includes(searchTextLower) ||
+            orden.profesional_id.email.includes(searchTextLower) ||
             orden?.cliente_id?.cedula?.toString().includes(searchTextLower) ||
-            orden?.cliente_id?.telefono?.includes(searchTextLower) ||
+            telefonoProfesional?.includes(searchTextLower) ||
             orden?.cliente_id?.email?.includes(searchTextLower) ||
             orden?.servicio?.toLowerCase().includes(searchTextLower) ||
-            orden?.direccion_Servicio
-              ?.toLowerCase()
-              .includes(searchTextLower)) &&
-          orderDate.isBetween(startDate, endDate, null, "[]")
+            orden?.direccion_Servicio?.toLowerCase().includes(searchTextLower)
+          ) && orderDate.isBetween(startDate, endDate, null, "[]")
         );
       }
 
       return (
         fullNameProfesional?.includes(searchTextLower) ||
-        // fullNameCliente?.includes(searchTextLower) ||
-        fullNameProfesionalInverso?.includes(searchTextLower) ||
-        // fullNameClienteInverso?.includes(searchTextLower) ||
+        orden.profesional_id.email.includes(searchTextLower) ||
+        telefonoProfesional?.includes(searchTextLower) ||                
+        fullNameProfesionalInverso?.includes(searchTextLower) ||        
         orden.factura?.nro_factura?.includes(searchTextLower) ||
         orden.factura?.payment_id?.includes(searchTextLower) ||
         orden._id?.includes(searchTextLower) ||
-        orden.cliente_id?.cedula.toString().includes(searchTextLower) ||
-        orden.cliente_id?.telefono?.includes(searchTextLower) ||
+        orden.cliente_id?.cedula.toString().includes(searchTextLower) ||        
         orden.cliente_id?.email?.includes(searchTextLower) ||
         orden.servicios[0]?.nombre.toLowerCase()?.includes(searchTextLower) ||
         orden.direccion_Servicio?.toLowerCase()?.includes(searchTextLower)
@@ -796,7 +799,8 @@ const LiquidacionAntDesing = () => {
             <hr />
             <div>
               <b>Telefono</b>
-              <p>{text?.telefono}</p>
+              <p>{text?.telefono && text.telefono.split('+').join('')}</p>
+
             </div>
             <hr />
             <div>
@@ -1036,9 +1040,8 @@ const LiquidacionAntDesing = () => {
       </p>
       <div>
         <p className="p">
-          Aplica Filtros a la tabla por Estado de Pago, Estado de Servicio,
-          Facturacion.
-          <br /> Puede realizar búsquedas por{" "}
+          Busca segun el nombre o email del profesional
+          <br /> Tambien puedes realizar búsquedas por{" "}
           <b>
             {" "}
             Id Pago, Nro Factura, Nombre y/o Apellido, Cedula, Telefono o Email
@@ -1086,16 +1089,16 @@ const LiquidacionAntDesing = () => {
       {selectedRows.length > 0 && (
         <div style={{ margin: "2rem", gap: "1rem" }}>
           <p>
-            Total de filas seleccionadas: <b>{selectedRows.length}</b>
+            Cantidad de Servicios: <b>{selectedRows.length}</b>
           </p>
           <p>
-            Sumatoria de precios: <b>{selectedRowsTotal}</b>
+            Total: <b>{selectedRowsTotal}</b>
           </p>
           <p>
-            61% de la sumatoria: <b>{selectedRowsPorcProfesional}</b>
+            Profesional: <b>{selectedRowsPorcProfesional}</b>
           </p>
           <p>
-            39% de la sumatoria: <b>{selectedRowsPorcCaalyan}</b>
+            Calyaan: <b>{selectedRowsPorcCaalyan}</b>
           </p>
           <Button onClick={handleEditModalOpen} style={{ margin: ".5rem" }}>
             Editar Filas Seleccionadas
@@ -1174,7 +1177,7 @@ const LiquidacionAntDesing = () => {
 
         <Modal
           title="Editar Filas Seleccionadas"
-          visible={editModalVisible}
+          open={editModalVisible}
           onCancel={handleEditModalClose}
           width={"50rem"}
           footer={[
@@ -1279,16 +1282,16 @@ const LiquidacionAntDesing = () => {
           <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
           <div style={{ gap: "1rem", width: "100%", display: "flex" }}>
             <p>
-              Total de filas seleccionadas: <b>{selectedRows.length}</b>
+              Total de Servicios: <b>{selectedRows.length}</b>
             </p>
             <p>
-              Sumatoria de precios: <b>{selectedRowsTotal}</b>
+              Total: <b>{selectedRowsTotal}</b>
             </p>
             <p>
-              61% de la sumatoria: <b>{selectedRowsPorcProfesional}</b>
+              Profesional: <b>{selectedRowsPorcProfesional}</b>
             </p>
             <p>
-              39% de la sumatoria: <b>{selectedRowsPorcCaalyan}</b>
+              Calyaan: <b>{selectedRowsPorcCaalyan}</b>
             </p>
           </div>
         </Modal>

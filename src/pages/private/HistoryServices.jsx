@@ -53,24 +53,27 @@ const HistoryServices = () => {
               <table className="w-full text-sm text-left text-gray-500">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 py-3 text-center">
                       Servicio
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 py-3 text-center">
                       Fecha
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 py-3 text-center">
                       Hora
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 py-3 text-center">
                       Profesional
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 py-3 text-center">
                       Estado
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 py-3 text-center">
                       Acciones
                     </th>
+                    <th scope="col" className="px-6 py-3 text-center">
+                  Chat Profesional
+                </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -82,16 +85,19 @@ const HistoryServices = () => {
                       >
                         {reserva?.servicios?.map((servicio)=>servicio.nombre)}
                       </th>
-                      <td className="px-6 py-4">{reserva?.cita_servicio}</td>
-                      <td className="px-6 py-4">{reserva?.hora_servicio}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 text-center">{reserva?.cita_servicio}</td>
+                      <td className="px-6 py-4 text-center">{reserva?.hora_servicio}</td>
+                      <td className="px-6 py-4 text-center">
                         {reserva?.profesional_id?.creador?.nombre}
                       </td>
-                      <td className="px-6 py-4">{reserva?.estado_servicio}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 text-center">{reserva?.estado_servicio}</td>
+                      <td className="px-6 py-4 text-center">
                         {" "}
-                        <Link to={`/resumen/${reserva._id}`}> Ver </Link>
+                        <Link to={`/resumen/${reserva._id}`}> Ver </Link>                        
                       </td>
+                      <td className="px-6 py-4 text-center">
+                    <Link to={`/resumen/${reserva._id}`}>CHAT</Link>
+                  </td>
                     </tr>
                   ))}
                 </tbody>

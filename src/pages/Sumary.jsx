@@ -6,13 +6,9 @@ import { useParams } from "react-router-dom";
 import { ImWhatsapp } from "react-icons/im";
 import calcularCupon from "../helpers/Logic/calcularCupon";
 import Spinner from "../components/Spinner";
+import Chat from "./private/professional/Chat";
 
 const Sumary = () => {
-  const [services, setServices] = useState(
-    JSON.parse(localStorage.getItem("services"))
-      ? JSON.parse(localStorage.getItem("services"))
-      : []
-  );
 
   const [valorDeDescuento, setValorDescuento] = useState(0)
 
@@ -42,8 +38,8 @@ const Sumary = () => {
   }, [id]);
 
   return (
-    <div className="mx-auto p-8 flex gap-4 3xl:gap-8 bg-whitefull-screen flex-wrap items-center justify-center">
-      <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-4/5">
+<div className="container mx-auto p-4 md:p-8 flex gap-4 3xl:gap-8 bg-white flex-wrap items-center justify-center">
+      <div className="bg-white rounded shadow-lg p-4 md:p-8 mb-6 w-full lg:w-4/5">
         {
           cargando ?
             <div className="flex justify-center items-center h-80">
@@ -87,7 +83,7 @@ const Sumary = () => {
                   <div className="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-6 gap-8">
                     <div>
                       <p className="text-2xl font-semibold leading-normal text-gray-800">
-                        Resumen de reserva
+                        Detalle del Paquete
                       </p>
 
 
@@ -151,7 +147,7 @@ const Sumary = () => {
                           Estado: {" "}      {historial?.factura?.estadoPago || "Pendiente"}
                         </p>
                         <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
-                          Día y Hora de reserva
+                          Día y Hora asignada
                         </p>
                         <p className="text-base leading-normal text-gray-600">
                           Hora:  {historial?.hora_servicio || "Pendiente"}
@@ -161,13 +157,13 @@ const Sumary = () => {
 
                       </div>
                       <div className="mt-4">
-                        <p className="mb-4 text-base font-semibold leading-none text-gray-800 ">
-                          Consulta sobre la reserva aquí: {" "}                  </p>
+                        <p className="mb-4 text-base font-semibold leading-none text-gray-800 items-center text-center">
+                          Tienes dudas? Habla con nosotros a través de Whatsapp! {" "}                  </p>
                         <a
 
-                          href={`https://api.whatsapp.com/send/?phone=573147428757&text${id}&type=phone_number&app_absent=0`}
+                          href={`https://web.whatsapp.com/send/?phone=573147428757&text${id}&type=phone_number&app_absent=0`}
 
-                          className="flex border bg-whatsapp   mt-6 p-5 border-gray-300 lg:max-w-[296px] w-full justify-center py-3 gap-2 items-center"
+                          className="flex border bg-whatsapp   mt-6 p-5 border-gray-300 lg:max-w-[296px] w-full justify-center py-3 gap-2 items-center text-center"
                           target="_blank"
                         >
                           <p className="text-base font-medium leading-none text-white">
@@ -193,7 +189,7 @@ const Sumary = () => {
                     </div>
                     <div className="flex justify-between mt-4">
                       <p className="text-base leading-none text-gray-800">
-                        Precio
+                        Precio del servicio
                       </p>
                       <p className="text-base leading-none text-gray-800">
                         <NumericFormat
@@ -240,7 +236,7 @@ const Sumary = () => {
 
                     <div className="flex justify-between mt-4">
                       <p className="text-base font-semibold leading-none text-gray-800">
-                        Precio Total
+                        Precio Por Sesión
                       </p>
                       <p className="text-base font-semibold leading-none text-gray-800">
                         {" "}
@@ -276,21 +272,16 @@ const Sumary = () => {
               </div>
             </>
         }
+
+<div className="chat">
+      <header className="chat-header">
+        <h1>Chatea con nosotros!</h1>
+      </header>
+      <Chat id={(id)}/>
+      </div>
       </div>
     </div>
   );
 };
 
 export default Sumary;
-
-/* <div className="grid  md:grid-cols-2 gap-4 w-full max-w-screen-lg">
-<div>
-<h2 className="text-sm font-medium">Mapa - Hora de llegada 2:00 PM</h2>
-<div className="bg-white rounded mt-4 shadow-lg">
-  <img
-    className="object-cover"
-    src="https://i.pinimg.com/originals/7c/81/e3/7c81e3caedbcaaa8f4101897e92150e3.jpg"
-  />
-</div>
-</div>
-*/

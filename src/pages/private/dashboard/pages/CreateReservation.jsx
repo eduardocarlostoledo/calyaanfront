@@ -12,6 +12,7 @@ import FormUser from "../components/FormReserva/FormUser";
 import ServiciosComponent from "../components/FormReserva/ServiciosComponent";
 import axios from "axios";
 import e from "cors";
+import { Link } from "react-router-dom";
 
 const CreateReservation = () => {
 
@@ -519,13 +520,19 @@ const CreateReservation = () => {
     try {        
       if (reserva.paquetesGenerados === false) {
         let { data } = await clienteAxios.post(`api/pay/generar-paquetes`, { id: id }); // Cambiar "idOrder" por "id"
-        toast.success(data.msg);
+        toast.success(data.msg);        
          // Obtener la URL actual
       const currentUrl = window.location.href;
       // Construir la nueva URL con el parámetro id
       const newUrl = `${currentUrl.substring(0, currentUrl.indexOf("?"))}?id=${id}`;
       // Redirigir a la nueva URL
       window.location.href = newUrl;
+
+      swal({
+        title: "Paquetes generados",          
+        icon: "success",
+        button: "Aceptar",
+      });
 
       } else {
         swal({
@@ -548,8 +555,18 @@ const CreateReservation = () => {
         <div className="rounded-t bg-white mb-0 px-6 py-6">
           <div className="text-center flex justify-between">
             <h6 className="text-blueGray-700 text-xl font-bold">
-              Crear nueva reserva
+              Crear reserva
             </h6>
+
+            <div className="flex gap-3">
+            <Link
+              to="/reservar"
+              className="flex justify-center items-center  text-center  w-full text-xl font-bold  leading-none  text-white px-6  bg-indigo-700 rounded hover:bg-indigo-600 transform duration-300 ease-in-out"
+            >
+              Nueva Reserva
+            </Link>
+          </div>
+
           </div>
         </div>
         <div className="flex-auto px-4 lg:px-10 py-10 pt-0">

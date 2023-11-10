@@ -38,7 +38,7 @@ const Sidebar = () => {
                   width="150"
                   height="14"
                   alt="Logo fondo trasparente"
-                  src="https://www.calyaan.com.co/static/media/logo.7391fed19edfcfb85f3d.png"
+                  //src="https://www.calyaan.com.co/static/media/logo.7391fed19edfcfb85f3d.png"
                 />
               </Link>
             </div>

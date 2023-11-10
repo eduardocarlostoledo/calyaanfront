@@ -96,7 +96,7 @@ const SumaryAdmin = () => {
                   <div className="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-6 gap-8">
                     <div>
                       <p className="text-2xl font-semibold leading-normal text-gray-800">
-                        Resumen de reserva
+                        Detalle del Paquete
                       </p>
 
                       <div className="lg:flex gap-4 justify-between">

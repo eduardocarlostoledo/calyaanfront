@@ -17,6 +17,7 @@ import axios from "axios";
 import { getAccessToken } from "../../../../helpers/Components/siigoAccessToken";
 import { PDFViewer } from "@react-pdf/renderer";
 import MyDocument from "../../../../helpers/Components/PDFFile";
+import { toast } from "react-toastify";
 
 const { RangePicker } = DatePicker;
 
@@ -28,7 +29,7 @@ const ProductExpanded = ({
   factura,
   editProduct,
   setEditProduct,
-  record,
+  record, //aca viene todo el objeto de la orden
   profesional,
   servicios,
   direccion_Servicio,
@@ -38,6 +39,7 @@ const ProductExpanded = ({
   siigoToken,
   productsID,
 }) => {
+  
   const dispatch = useDispatch();
   const [input, setInput] = useState({
     hora_servicio: hora_servicio,
@@ -56,7 +58,7 @@ const ProductExpanded = ({
     },
     date: fechaInputSiigo,
     customer: {
-      identification: cliente_id?.cedula.toString(),
+      identification: cliente_id?.cedula?.toString() || null,
       branch_office: "0",
     },
     seller: 629,
@@ -86,42 +88,43 @@ const ProductExpanded = ({
 
   const [siigoResponse, setSiigoResponse] = useState("");
 
-  const dataFake = {
-    balance: 0,
-    customer: {
-      id: "45022857-9154-4b0c-bdd4-f38f4bff3096",
-      identification: "123",
-      branch_office: 0,
-    },
-    date: "2023-10-13",
-    document: { id: 24446 },
-    id: "0b7cc95a-27bd-4e06-b100-d3f49045f39b",
-    items: [
-      {
-        code: "13901",
-        description: "Masaje reductor paquete x 4",
-        id: "fa2a48be-f849-47b6-9686-968945f1b271",
-        price: 137500,
-        quantity: 1,
-        total: 137500,
-      },
-    ],
-    mail: {
-      status: "not_sent",
-      observations: "The invoice has not been sent by mail",
-    },
-    metadata: { created: "2023-10-13T20:58:33.377Z" },
-    name: "FV-1-60000000506",
-    number: 60000000506,
-    payments: [{ id: 5638, name: "Consignación", value: 137500 }],
-    prefix: "HA",
-    seller: 629,
-    stamp: { status: "Draft" },
-    total: 137500,
-  };
+  // const dataFake = {
+  //   balance: 0,
+  //   customer: {
+  //     id: "45022857-9154-4b0c-bdd4-f38f4bff3096",
+  //     identification: "123",
+  //     branch_office: 0,
+  //   },
+  //   date: "2023-10-13",
+  //   document: { id: 24446 },
+  //   id: "0b7cc95a-27bd-4e06-b100-d3f49045f39b",
+  //   items: [
+  //     {
+  //       code: "13901",
+  //       description: "Masaje reductor paquete x 4",
+  //       id: "fa2a48be-f849-47b6-9686-968945f1b271",
+  //       price: 137500,
+  //       quantity: 1,
+  //       total: 137500,
+  //     },
+  //   ],
+  //   mail: {
+  //     status: "not_sent",
+  //     observations: "The invoice has not been sent by mail",
+  //   },
+  //   metadata: { created: "2023-10-13T20:58:33.377Z" },
+  //   name: "FV-1-60000000506",
+  //   number: 60000000506,
+  //   payments: [{ id: 5638, name: "Consignación", value: 137500 }],
+  //   prefix: "HA",
+  //   seller: 629,
+  //   stamp: { status: "Draft" },
+  //   total: 137500,
+  // };
 
   const [userCheck, setUserCheck] = useState("wait");
   const [productCheck, setProductCheck] = useState("wait");
+  const [siigoButtonVisible, setSiigoButtonVisible] = useState(true);
 
   const DocTypePeticion = async () => {
     const response = await clienteAxios.get(
@@ -177,7 +180,7 @@ const ProductExpanded = ({
       }`
     );
 
-    console.log(response, "get id wp");
+    console.log(response, "ProductNamePeticion");
 
     if (response.data === null) {
       return error;
@@ -316,7 +319,7 @@ const ProductExpanded = ({
       throw error;
     }
   };
-
+//vamos a mandar la factura a siigo para su creacion, a su vez en esta funcion actualizamos el estado de la factura en la app
   const SendSiigo = async () => {
     try {
       swal({
@@ -336,29 +339,48 @@ const ProductExpanded = ({
           },
         }
       );
-      console.log(response);
+      //console.log("respuesta de SendSIIgo",response);
 
-      setInput({
+       setInput({
         ...input,
-        nro_factura: response.data.number,
+        nro_factura: response.data.name,
         estado_facturacion: "Facturado",
-      });
+      });      
 
       setSiigoResponse(response.data);
+      setLoading(true);
 
-      const responseEdit = await handleSubmit();
+      //peticion para actualizar la factura en la app
+      const responseEdit = await clienteAxios.put(
+        `${import.meta.env.VITE_APP_BACK}/api/facturas/updateinvoice`, 
+        {
+          _id:input._id,
+          nro_factura: response.data.name,
+          estado_facturacion: "Facturado",
+        },
+        {          
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },          
+        }
+      );
+      setLoading(false)
+     // console.log("RESPUESTA DE PUT INVOICE", responseEdit);
 
       if (
         (response.status === 200 || response.status === 201) &&
         (responseEdit.status === 200 || responseEdit.status === 201)
       ) {
-        // La operación se realizó con éxito
-        swal("success", "La operación se completó exitosamente.", "success");
+        toast.success("Factura creada con exito");
+        setSiigoButtonVisible(false);
+
       } else {
         // Hubo un error en la operación
         swal("Error", "Hubo un error en la operación.", "error");
       }
     } catch (error) {
+      console.log("Error:", error.message);
       swal("Error", "Hubo un error en la operación.", "error");
     }
   };
@@ -380,7 +402,7 @@ const ProductExpanded = ({
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     setLoading(false);
     if (e) {
       e.preventDefault();
@@ -389,14 +411,13 @@ const ProductExpanded = ({
     const data = new FormData();
     Object.keys(input).forEach((key) => data.append(key, input[key]));
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_APP_BACK}/api/facturas/updateinvoice`,
-        {
-          method: "PUT",
+      const response = await clienteAxios.put(
+        `${import.meta.env.VITE_APP_BACK}/api/facturas/updateinvoice`, input,
+        {          
           headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify(input),
+          },          
         }
       );
       setLoading(true);
@@ -532,7 +553,7 @@ const ProductExpanded = ({
                 }}
               >
                 <b>N°Pago:</b>{" "}
-                {input?.payment_id === null ? input?.payment_id : " Sin numero"}
+                {input?.payment_id !== null ? input?.payment_id : " Sin numero"}
               </p>
             </div>
             <Button
@@ -543,21 +564,24 @@ const ProductExpanded = ({
               }}
               onClick={handleEditModalOpen}
             >
-              {siigoResponse ? "PDF siigo" : "Facturacion siigo"}
+              {siigoResponse ? "PDF siigo" : "Facturación siigo"}
             </Button>
 
             <Modal
-              title="Facturacion siigo"
-              visible={editModalVisible}
+              title="Facturación siigo"
+              open={editModalVisible}
               onCancel={handleEditModalClose}
               width={"50rem"}
               footer={[
                 <Button key="cancel" onClick={handleEditModalClose}>
                   Cancelar
                 </Button>,
-                <Button key="save" type="primary" onClick={SendSiigo}>
+                siigoButtonVisible ? (<Button id="sendSiigoButton" key="save" type="primary" onClick={SendSiigo}>
                   Enviar
-                </Button>,
+                </Button>) : (
+                <Button id="sendSiigoButtonClose" key="save" type="primary" onClick={handleEditModalClose}>
+                Cerrar
+              </Button>)
               ]}
             >
               <hr style={{ marginBottom: "1rem", marginTop: "1rem" }}></hr>
@@ -565,7 +589,7 @@ const ProductExpanded = ({
               {siigoResponse ? (
                 <div style={{ width: "100%", minHeight: "80vh" }}>
                   <PDFViewer style={{ width: "100%", minHeight: "80vh" }}>
-                    <MyDocument siigoResponse={siigoResponse} Orden={input} />
+                    <MyDocument siigoResponse={siigoResponse} Orden={input} record={record}/>
                   </PDFViewer>
                 </div>
               ) : (
@@ -742,13 +766,13 @@ const ProductExpanded = ({
                         alignItems: "center",
                       }}
                     ></div>
-                    <p style={{ fontSize: "1.2rem" }}>Servicios</p>{" "}
+                    <p style={{ fontSize: "1.2rem" }}>Servicio Contratado</p>{" "}
                     {servicios.map((serv) => (
                       <>
-                        <p>Servicio: {serv.nombre}</p>
-                        <p>Precio: ${serv.precio}</p>
+                        <p>Servicio: {serv.nombre} </p>
+                        <p>Precio del Paquete: ${serv.precio}</p>
                       </>
-                    ))}
+                    ))} <p>Etapa del paquete: </p>{" "} {record.nroSesion} 
                     {productCheck === "wait" ? (
                       <div>
                         <div
@@ -938,28 +962,11 @@ const FacturacionAntDesing = () => {
       .then(() => setLoading(false))
       .catch((error) => setError(error.message));
   }, [dispatch]);
-
-  const obj = {
-    username: "siigoapi@pruebas.com",
-    access_key:
-      "OWE1OGNkY2QtZGY4ZC00Nzg1LThlZGYtNmExMzUzMmE4Yzc1Omt2YS4yJTUyQEU=",
-  };
+ 
 
   const LoginSiigo = async () => {
-    try {
-      // const { data } = await clienteAxios.post(
-      //   `http://127.0.0.1:3001/api/siigo/auth`,
-      //   obj,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
-      // setSiigoToken(data.access_token);
-      setSiigoToken(getAccessToken());
-      // console.log(data);
-      // console.log(siigoToken, "token");
+    try {    
+      setSiigoToken(getAccessToken());    
     } catch (error) {
       console.log(error.message);
     }
@@ -986,19 +993,6 @@ const FacturacionAntDesing = () => {
   useEffect(() => {
     LoginSiigo();
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(getOrders())
-  //     .then(() => setLoading(false))
-  //     .catch((error) => setError(error.message));
-  // }, [dispatch, change]);
-  // }, [orders, change]);
-
-  // useEffect(() => {
-  //   dispatch(updateOrder(false))
-  //     .then(() => setLoading(false))
-  //     .catch((error) => setError(error.message));
-  // }, [change]);
 
   let orders = useSelector((state) => state.ordenes.order || []);
 
@@ -1065,8 +1059,8 @@ const FacturacionAntDesing = () => {
         orden.factura?.nro_factura?.includes(searchTextLower) ||
         orden.factura?.payment_id?.includes(searchTextLower) ||
         orden._id?.includes(searchTextLower) ||
-        orden.cliente_id?.cedula.toString().includes(searchTextLower) ||
-        orden.cliente_id?.telefono?.includes(searchTextLower) ||
+        orden?.cliente_id?.cedula?.toString().includes(searchTextLower) ||
+        orden?.cliente_id?.telefono?.includes(searchTextLower) ||
         orden.cliente_id?.email?.includes(searchTextLower) ||
         orden.servicios[0]?.nombre.toLowerCase()?.includes(searchTextLower) ||
         orden.direccion_Servicio?.toLowerCase()?.includes(searchTextLower)

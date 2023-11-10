@@ -83,7 +83,9 @@ const NewPassword = () => {
                 <section className="bg-gray-50">
                     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                         <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900">
-                            <LazyLoadImage effect='blur' width="150" height="80" alt="Logo fondo trasparente" src="https://www.calyaan.com.co/static/media/logo.7391fed19edfcfb85f3d.png" />
+                            <LazyLoadImage effect='blur' width="150" height="80" alt="Logo fondo trasparente" 
+                            //src="https://www.calyaan.com.co/static/media/logo.7391fed19edfcfb85f3d.png" 
+                            />
                         </a>
                         <div className="w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md sm:p-8">
                             <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">

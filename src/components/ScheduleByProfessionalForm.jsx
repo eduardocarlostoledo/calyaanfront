@@ -247,7 +247,7 @@ const ScheduleByProfessionalForm = () => {
                           la fecha indicada, no te preocupes 😉, agenda mediante
                           alguna de nuestras asesoras mediante
                           <a
-                            href="https://api.whatsapp.com/send/?phone=573242118509&text&type=phone_number&app_absent=0"
+                            href="https://web.whatsapp.com/send/?phone=573242118509&text&type=phone_number&app_absent=0"
                             className="ml-1 text-whatsapp"
                             target="_blank" rel="noopener noreferrer"
 

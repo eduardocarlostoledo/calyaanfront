@@ -161,8 +161,11 @@ const TableReservas = () => {
                   {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     ID
                   </th> */}
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-20 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Cliente
+                  </th>
+                  <th className="px-20 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Email
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Profesional
@@ -170,13 +173,13 @@ const TableReservas = () => {
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Servicio
                   </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-4 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Día Compra
                   </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Estado del Servicio
                   </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-8 text-center py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Hora y Día Reserva
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -213,7 +216,15 @@ const TableReservas = () => {
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
                         <div className="flex justify-start">
                           <div className="flex-shrink-0 w-10 h-10">
-                            {reserva?.cliente_id.nombre} {" "} {reserva?.cliente_id.apellido}
+                            {reserva?.cliente_id.nombre} {" "} {reserva?.cliente_id.apellido} 
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
+                        <div className="flex justify-start">
+                          <div className="flex-shrink-0 w-10 h-10">
+                            {reserva?.cliente_id?.email}
                           </div>
                         </div>
                       </td>
@@ -253,7 +264,7 @@ const TableReservas = () => {
                         </p>
                       </td>
 
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                         <p className="text-gray-900 whitespace-no-wrap">
                         {reserva?.hora_servicio && reserva?.cita_servicio ? `${reserva?.hora_servicio} ${reserva?.cita_servicio}` : "Agendar"}
 
