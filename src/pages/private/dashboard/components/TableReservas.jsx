@@ -161,7 +161,7 @@ const TableReservas = () => {
                   {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     ID
                   </th> */}
-                  <th className="px-20 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Cliente
                   </th>
                   <th className="px-20 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -170,7 +170,7 @@ const TableReservas = () => {
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Profesional
                   </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-4 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Servicio
                   </th>
                   <th className="px-4 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -213,16 +213,17 @@ const TableReservas = () => {
                         <div className="flex items-center">{reserva._id}</div>
                       </td> */}
 
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
-                        <div className="flex justify-start">
+                      <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm ">
+                        <div className="text-gray-900 whitespace-no-wrap">
                           <div className="flex-shrink-0 w-10 h-10">
                             {reserva?.cliente_id.nombre} {" "} {reserva?.cliente_id.apellido} 
                           </div>
                         </div>
                       </td>
 
+                      
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
-                        <div className="flex justify-start">
+                        <div className="text-gray-900 whitespace-no-wrap">
                           <div className="flex-shrink-0 w-10 h-10">
                             {reserva?.cliente_id?.email}
                           </div>

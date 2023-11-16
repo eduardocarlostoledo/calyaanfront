@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import clienteAxios from '../../../config/axios';
+import swal from 'sweetalert';
 
 const Chat = ({ id }) => {
   
@@ -93,6 +94,40 @@ const Chat = ({ id }) => {
     }
   };
 
+  const handleSendMessageNotificacion = () => {    
+    const profile = JSON.parse(localStorage.getItem('profile') || '{}');
+    console.log("PROFILE", profile.email);
+    
+
+      const body = {
+        id: id,      
+        email: profile.email,  
+      };
+
+      clienteAxios
+        .post('/api/chat/notificacion/', body, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          console.log('Notificacion enviada', response.data);          
+        })
+        .then(
+          swal({
+            title: "Notificacion enviada",
+            text: "Se ha enviado una notificacion al usuario, para que se comunique contigo.",
+            icon: "success",
+            button: "Aceptar",
+          })
+        )
+        .catch((error) => {
+          console.error('Error enviando notificacion:', error);
+        });
+    };
+  
+
   return (
     <div className="p-4">
       <div className="h-96 border border-gray-300 mb-4 p-4 overflow-auto">
@@ -132,10 +167,18 @@ const Chat = ({ id }) => {
 
       <button
         onClick={shareLocation}
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
       >
         Compartir Ubicación
       </button>
+
+      <button
+        onClick={handleSendMessageNotificacion}
+        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
+      >
+        Enviar Notificacion
+      </button>
+
     </div>
   );
 };
