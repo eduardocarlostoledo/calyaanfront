@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Table, Tag, Input, Button, Modal, DatePicker } from "antd";
+import { Table, Tag, Input, Button, Modal, DatePicker, Select } from "antd";
 import {
   AiFillSetting,
   AiOutlineClose,
@@ -20,6 +20,8 @@ import MyDocument from "../../../../helpers/Components/PDFFile";
 import { toast } from "react-toastify";
 
 const { RangePicker } = DatePicker;
+
+const { Option } = Select;
 
 const ProductExpanded = ({
   _id,
@@ -432,8 +434,7 @@ const ProductExpanded = ({
 
   const handleEditModalOpen = () => {
     setEditModalVisible(true);
-    SiigoCheckUser();
-    ProductNamePeticion();
+    
   };
 
   const handleEditModalClose = () => {
@@ -937,6 +938,15 @@ const ProductExpanded = ({
 
 const FacturacionAntDesing = () => {
   const dispatch = useDispatch();
+
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [selectedEstadoFacturacion, setSelectedEstadoFacturacion] =
+    useState("");
+  
+  const [nroFacturacion, setNroFacturacion] = useState("");
+
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -948,6 +958,7 @@ const FacturacionAntDesing = () => {
 
   const [siigoToken, setSiigoToken] = useState("");
   const [productsID, setProductsID] = useState([]);
+  
 
   const handleDateChange = (dates) => {
     const dateNow = dates ? moment(dates[0].$d).format("YYYY/MM/DD") : null;
@@ -963,6 +974,17 @@ const FacturacionAntDesing = () => {
       .catch((error) => setError(error.message));
   }, [dispatch]);
  
+// Función para obtener y actualizar las órdenes después de la solicitud al invoice
+const obtenerYActualizarOrdenes = async () => {
+  try {
+  dispatch(getOrders());
+  } catch (error) {
+    console.error("Error al obtener y actualizar las órdenes:", error);
+  }
+};
+useEffect(() => {
+  obtenerYActualizarOrdenes();
+}, [dispatch]);
 
   const LoginSiigo = async () => {
     try {    
@@ -999,6 +1021,78 @@ const FacturacionAntDesing = () => {
   if (!Array.isArray(orders)) {
     orders = [];
   }
+
+  const handleEditModalOpen = () => {
+    if (!selectedRows.length) {
+      return swal("error", "Debes seleccionar alguna factura", "error");
+    } else {
+      setEditModalVisible(true);
+    }
+  };
+  
+  const handleEditModalClose = () => {
+    setEditModalVisible(false);
+    setSelectedEstadoFacturacion("");
+    setSelectedRows([]); // Limpiar las filas seleccionadas al cerrar el modal
+  };
+
+  const handleEstadoFacturacionChange = (value) => {
+    setSelectedEstadoFacturacion(value);
+  };
+
+  const handleEstadoFacturacionSave = async () => {
+    if (!selectedEstadoFacturacion) {
+      return swal("error", "Agrega estado Facturacion dentro del Select", "error");
+    }
+    if (!nroFacturacion) {
+      return swal("error", "Agrega el número de la Factura en el cuadro de texto abajo", "error");
+    }
+  
+    // Iterar sobre cada orden y enviar una solicitud por cada una
+    for (const order of selectedRows) {
+      try {
+        const response = await clienteAxios.put(
+          `${import.meta.env.VITE_APP_BACK}/api/facturas/updateinvoice`,
+          {
+            estado_facturacion: selectedEstadoFacturacion,
+            nro_factura: nroFacturacion,
+            _id: order.factura._id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,              
+              "Content-Type": "application/json",              
+            },
+          }
+          
+        );
+  
+        // Procesar la respuesta si es necesario
+        console.log(`Orden ${order._id} modificada exitosamente.`, response.data);
+      } catch (error) {
+        // Manejar el error aquí (puedes mostrar un mensaje de error, registrar el error, etc.)
+        console.error(`Error al modificar la orden ${order._id}:`, error);
+      }
+    }
+
+    await obtenerYActualizarOrdenes();
+    // Actualizar el estado del modal y limpiar después de guardar todas las órdenes
+    handleEditModalClose();
+    setSelectedRows([]);
+    setSelectedEstadoFacturacion(null);
+    swal("success", "ORDEN MODIFICADA", "success");
+  };
+
+  const handleRowSelect = (selectedRowKeys, selectedRows) => {
+     console.log(selectedRows, selectedRowKeys);
+      setSelectedRows(selectedRows);    
+    
+  };
+
+  const rowSelection = {
+    onChange: handleRowSelect,
+  };
+
   //// Mapeo ordenes para agregar una key a cada fila
   const newProducts = orders?.map((product) => ({
     ...product,
@@ -1039,7 +1133,7 @@ const FacturacionAntDesing = () => {
             orden.factura?.nro_factura?.includes(searchTextLower) ||
             orden.factura?.payment_id?.includes(searchTextLower) ||
             orden._id?.includes(searchTextLower) ||
-            orden.cliente_id?.cedula.includes(searchTextLower) ||
+            //orden?.cliente_id?.cedula.includes(searchTextLower) ||
             orden.cliente_id?.telefono?.includes(searchTextLower) ||
             orden.cliente_id?.email?.includes(searchTextLower) ||
             orden.servicios[0]?.nombre
@@ -1433,6 +1527,21 @@ const FacturacionAntDesing = () => {
         </div>
       </div>
 
+      {selectedRows.length > 0 && (
+        <div style={{ margin: "2rem", gap: "1rem" }}>
+          <p>
+            Cantidad de Servicios: <b>{selectedRows.length}</b>
+          </p>    
+<p>       total Venta : <b>{selectedRows.reduce((acc, el) => acc + el.factura.precioTotal, 0)}</b>    </p>
+   
+                  
+          <Button onClick={handleEditModalOpen} style={{ margin: ".5rem" }}>
+            Editar Filas Seleccionadas
+          </Button>
+        </div>
+      )}
+
+
       <div>        
         <Table        
           columns={columns}
@@ -1460,7 +1569,50 @@ const FacturacionAntDesing = () => {
               />
             ),
           }}
+          rowSelection={rowSelection}
         />
+<Modal
+      title="Editar Filas Seleccionadas"
+      open={editModalVisible}
+      onCancel={handleEditModalClose}
+      width={"50rem"}
+      footer={[
+        <Button key="cancel" onClick={handleEditModalClose}>
+          Cancelar
+        </Button>,
+        <Button key="save" type="primary" onClick={handleEstadoFacturacionSave}>
+          Guardar
+        </Button>,
+      ]}
+    >
+      <div className="flex flex-col space-y-4">
+        <span>Estado de Facturacion</span>
+        <Select
+  placeholder="Seleccione el estado de facturacion"
+  value={selectedEstadoFacturacion}
+  onChange={handleEstadoFacturacionChange}
+  style={{ width: "100%" }}
+>
+          <Option value="Facturado">Facturado</Option>
+          <Option value="NoFacturado">No Facturado</Option>
+          <Option value="Error">Error</Option>
+        </Select>
+      </div>
+      <hr className="my-4" />
+      <div className="flex flex-col space-y-4">
+        <span>Numero de factura</span>
+        <input
+          className="h-10 mx-auto w-70 p-4 rounded-md"
+          placeholder="Numero de factura"
+          value={nroFacturacion}
+          onChange={(e) => setNroFacturacion(e.target.value)}
+        />
+      </div>
+      <hr className="my-4" />
+      {/* Otros bloques similares */}
+    </Modal>
+
+        
       </div>
     </div>
   );
