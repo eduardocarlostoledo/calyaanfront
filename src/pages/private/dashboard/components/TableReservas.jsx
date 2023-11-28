@@ -1,5 +1,5 @@
 import fileDownload from "js-file-download";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { AiOutlineCloudDownload } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -10,6 +10,166 @@ import clienteAxios from "../../../../config/axios";
 import useGetDateTableReservas from "../../../../hooks/useGetDateTableReservas";
 import { estadoAction } from "../../../../redux/features/authSlice";
 import ModalUserInfo from "./ModalUserInfo";
+
+
+const OrdenesBusquedaReservas = () => {
+  const [ordenes, setOrdenes] = useState([]);
+  const [filtro, setFiltro] = useState({
+    emailCliente: '',
+    horaReserva: '',
+    diaReserva: '',
+    servicio: '',
+  });
+
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    // Obtener el token desde localStorage al cargar el componente
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
+  const handleInputChange = (e) => {
+    setFiltro({
+      ...filtro,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const buscarOrdenes = async () => {
+    try {
+      const response = await clienteAxios.post('/api/buscar/ordenes-busqueda-reservas/', filtro, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Incluye el token de autenticación
+        },
+      });
+
+      setOrdenes(response.data);
+    } catch (error) {
+      console.error(error);
+      // Manejar errores de la solicitud
+    }
+  };
+
+  return (
+    <div>
+      <div className="text-center">
+
+
+        <h1>Busqueda Avanzada de Reservas(Ordenes) </h1>
+        <div className="px-6 py-3">
+          <label>Email del Cliente: Ejemplo "cliente@email.com"  </label>
+          <input type="text" name="emailCliente" value={filtro.emailCliente} onChange={handleInputChange} />
+        </div>
+        <div className="px-6 py-3">
+          <label>Hora de Reserva: Ejemplo "21:00-22:00" </label>
+          <input type="text" name="horaReserva" value={filtro.horaReserva} onChange={handleInputChange} />
+        </div>
+        <div className="px-6 py-3">
+          <label>Día de Reserva: Ejemplo "2023-07-23" </label>
+          <input type="text" name="diaReserva" value={filtro.diaReserva} onChange={handleInputChange} />
+        </div>
+        <div className="px-6 py-3">
+          <label>Servicio: Ejemplo "Masaje reductor paquete x 10" </label>
+          <input type="text" name="servicio" value={filtro.servicio} onChange={handleInputChange} />
+        </div>
+
+
+        <button
+  className="inline-block w-full max-w-md mx-auto text-center text-sm font-medium leading-none text-white px-6 py-2 bg-indigo-700 rounded hover:bg-indigo-600 transform duration-300 ease-in-out"
+  onClick={buscarOrdenes}
+>
+  Buscar Ordenes
+</button>
+        
+        <div className="px-6 py-3">
+
+          <h2>Resultado:</h2>
+        </div>
+    <table className="min-w-full divide-y divide-gray-200 ml-4">
+      <thead>
+      </thead>
+      <tbody>
+        {ordenes?.map((reserva) => (
+          <tr key={reserva._id}>
+            <td className="px-6 py-3 whitespace-nowrap border-b border-gray-200">
+              <div className="text-sm font-medium text-gray-900">
+                {reserva?.cliente_id.nombre} {reserva?.cliente_id.apellido}
+              </div>
+            </td>
+
+            <td className="px-5 py-3 whitespace-nowrap border-b border-gray-200">
+              <div className="text-sm text-gray-900">{reserva?.cliente_id?.email}</div>
+            </td>
+
+            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <div className="flex justify-start">
+                          <div className="flex-shrink-0 w-10 h-10">
+                            <p className="text-sm">
+                              {reserva?.profesional_id?.creador.nombre
+                                ? `${reserva?.profesional_id?.creador.nombre.split(" ")[0]} ${reserva?.profesional_id?.creador.apellido
+                                  ? reserva?.profesional_id?.creador.apellido.split(" ")[0]
+                                  : "Agendar"
+                                }`
+                                : "Agendar"}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+
+                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <p className="text-gray-900 whitespace-no-wrap">
+                          {reserva?.servicios[0].nombre} && {reserva?.servicios[0].nombre}{" "} {reserva?.nroSesion}
+                        </p>
+                      </td>
+
+                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <p className="text-gray-900 whitespace-no-wrap">
+                          {reserva?.createdAt.split("T")[0]}
+                        </p>
+                      </td>
+
+                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <p className="text-gray-900 whitespace-no-wrap">
+                          {reserva.estado_servicio}
+                        </p>
+                      </td>
+                      
+            <td className="px-5 py-3 whitespace-nowrap border-b border-gray-200 text-center">
+              <div className="text-sm text-gray-900">
+                {reserva?.hora_servicio && reserva?.cita_servicio
+                  ? `${reserva?.hora_servicio} ${reserva?.cita_servicio}`
+                  : "Agendar"}
+              </div>
+            </td>
+
+            <td className="px-5 py-3 whitespace-nowrap border-b border-gray-200 flex justify-center">
+              <Link
+                to={`/resumen-admin/${reserva._id}`}
+                className="text-gray-900 whitespace-no-wrap p-3"
+              >
+                Ver reserva
+              </Link>
+
+              <Link
+                to={`/reservar?id=${reserva._id}`}
+                className="text-gray-900 whitespace-no-wrap ml-8 p-3"
+              >
+                Formulario
+              </Link>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+    </div>
+  );
+};
 
 const TableReservas = () => {
   const { paginado, setLimite, limite, pagina, setPagina, loading } =
@@ -68,7 +228,7 @@ const TableReservas = () => {
     }
   }, [searchTerm, paginado]);
 
-  console.log("filtrado", filtrado)
+  //console.log("filtrado", filtrado)
   const handleState = () => {
     dispatch(estadoAction());
   };
@@ -85,8 +245,8 @@ const TableReservas = () => {
   return (
     <>
       <div className="py-8">
-        <h2 className="text-2xl font-bold mb-6">Reservas</h2>
-        <div className="my-2 flex justify-between mx-4">
+        <h2 className="text-2xl font-bold ml-8 mb-6">Reservas</h2>
+        <div className="my-2 flex justify-between mx-8">
           <div className="flex sm:flex-row flex-col">
             <div className="flex flex-row mb-1 sm:mb-0">
               <div className="relative">
@@ -103,17 +263,6 @@ const TableReservas = () => {
                   <MdKeyboardArrowDown className="fill-current h-4 w-4" />
                 </div>
               </div>
-              {/* <div className="relative">
-                <select className="h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                  <option>Todos</option>
-                  <option>Activo</option>
-                  <option>Inactivo</option>
-                  <option>Suspendido</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <MdKeyboardArrowDown className="fill-current h-4 w-4" />
-                </div>
-              </div> */}
             </div>
 
             <div className="block relative w-80">
@@ -158,9 +307,7 @@ const TableReservas = () => {
             <table className="min-w-full leading-normal">
               <thead>
                 <tr>
-                  {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    ID
-                  </th> */}
+
                   <th className="px-6 py-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Cliente
                   </th>
@@ -209,42 +356,39 @@ const TableReservas = () => {
                 ) : (
                   filtrado?.map((reserva) => (
                     <tr key={reserva._id}>
-                      {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
-                        <div className="flex items-center">{reserva._id}</div>
-                      </td> */}
 
-                      <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm ">
-                        <div className="text-gray-900 whitespace-no-wrap">
-                          <div className="flex-shrink-0 w-10 h-10">
-                            {reserva?.cliente_id.nombre} {" "} {reserva?.cliente_id.apellido} 
-                          </div>
-                        </div>
-                      </td>
 
-                      
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
-                        <div className="text-gray-900 whitespace-no-wrap">
-                          <div className="flex-shrink-0 w-10 h-10">
+<td className="px-6 py-5 border-b border-gray-200 bg-white text-sm truncate">
+  <div className="text-gray-900 whitespace-no-wrap">
+    <div className="flex-shrink-0 w-10 h-10">
+      {reserva?.cliente_id.nombre} {reserva?.cliente_id.apellido}
+    </div>
+  </div>
+</td>
+
+
+<td className="px-6 py-5 border-b border-gray-200 bg-white text-sm truncate">
+  <div className="text-gray-900 whitespace-no-wrap">
+    <div className="flex-shrink-0 w-10 h-10">
                             {reserva?.cliente_id?.email}
                           </div>
                         </div>
                       </td>
-              
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-  <div className="flex justify-start">
-    <div className="flex-shrink-0 w-10 h-10">
-      <p className="text-sm">
-      {reserva?.profesional_id?.creador.nombre
-          ? `${reserva?.profesional_id?.creador.nombre.split(" ")[0]} ${
-              reserva?.profesional_id?.creador.apellido
-                ? reserva?.profesional_id?.creador.apellido.split(" ")[0]
-                : "Agendar"
-            }`
-          : "Agendar"}
-      </p>
-    </div>
-  </div>
-</td>
+
+                      <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm ">
+                        <div className="flex justify-start">
+                          <div className="flex-shrink-0 w-10 h-10">
+                            <p className="text-sm">
+                              {reserva?.profesional_id?.creador.nombre
+                                ? `${reserva?.profesional_id?.creador.nombre.split(" ")[0]} ${reserva?.profesional_id?.creador.apellido
+                                  ? reserva?.profesional_id?.creador.apellido.split(" ")[0]
+                                  : "Agendar"
+                                }`
+                                : "Agendar"}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
 
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -267,7 +411,7 @@ const TableReservas = () => {
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                         <p className="text-gray-900 whitespace-no-wrap">
-                        {reserva?.hora_servicio && reserva?.cita_servicio ? `${reserva?.hora_servicio} ${reserva?.cita_servicio}` : "Agendar"}
+                          {reserva?.hora_servicio && reserva?.cita_servicio ? `${reserva?.hora_servicio} ${reserva?.cita_servicio}` : "Agendar"}
 
                         </p>
                       </td>
@@ -304,11 +448,10 @@ const TableReservas = () => {
                 <div className="inline-flex mt-2 xs:mt-0">
                   <button
                     onClick={() => pagina !== 1 && setPagina(pagina - 1)}
-                    className={`text-sm font-semibold py-2 px-4 rounded-r ${
-                      pagina !== 1
+                    className={`text-sm font-semibold py-2 px-4 rounded-r ${pagina !== 1
                         ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
                         : "disabled:opacity-25"
-                    }`}
+                      }`}
                     disabled={pagina !== 1 ? false : true}
                   >
                     Ant
@@ -317,11 +460,10 @@ const TableReservas = () => {
                     onClick={() =>
                       pagina < paginado.totalPaginas && setPagina(pagina + 1)
                     }
-                    className={`text-sm font-semibold py-2 px-4 rounded-r ${
-                      pagina < paginado.totalPaginas
+                    className={`text-sm font-semibold py-2 px-4 rounded-r ${pagina < paginado.totalPaginas
                         ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
                         : "disabled:opacity-25"
-                    }`}
+                      }`}
                     disabled={pagina < paginado.totalPaginas ? false : true}
                   >
                     Sig
@@ -339,6 +481,8 @@ const TableReservas = () => {
           handleModalView={handleModalView}
         />
       )}
+
+      <OrdenesBusquedaReservas />
     </>
   );
 };

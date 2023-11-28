@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import clienteAxios from "../config/axios";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
+import Chat from "./private/professional/Chat";
 
 const SumaryAdmin = () => {
   const [services, setServices] = useState(
@@ -269,7 +270,7 @@ const SumaryAdmin = () => {
                     </p>
 
                     <p className="text-base text-gray-600 leading-none mt-8">
-                      ¿Preguntas? Revisa
+                      ¿Preguntas? Revisa {" "}
                       <span className="text-gray-800 font-semibold hover:underline cursor-pointer mt-2">
                         Nuestras preguntas frecuentes
                       </span>
@@ -286,6 +287,17 @@ const SumaryAdmin = () => {
             </>
         }
       </div>
+
+      {/* INICIO CHAT CON CLIENTE */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white p-4 md:p-8 shadow-lg">
+        <header className="chat-header text-center">
+          <h1>Coordina los detalles de la Reserva!</h1>
+        </header>
+        {/* id es el id de la orden*/}
+        <Chat id={id} />
+      </div>
+      {/* FIN CHAT CON CLIENTE */}
+
     </div>
   );
 };
