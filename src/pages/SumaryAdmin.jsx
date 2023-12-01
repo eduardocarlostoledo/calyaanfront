@@ -289,7 +289,7 @@ const SumaryAdmin = () => {
       </div>
 
       {/* INICIO CHAT CON CLIENTE */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white p-4 md:p-8 shadow-lg">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white p-1 md:p-1 shadow-lg">
         <header className="chat-header text-center">
           <h1>Coordina los detalles de la Reserva!</h1>
         </header>
