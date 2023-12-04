@@ -26,74 +26,144 @@ const HistoryServicesProfessional = () => {
     getHistorial();
   }, []);
 
-  return (
-    <div className="flex flex-col items-center justify-center mt-5 md:ml-62 w-full">
-      <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-full md:w-3/4">
-        <h5 className="text-xl font-medium leading-none mb-4 text-center">
-          Servicios en Curso
-        </h5>
+  // return (
+  //   <div className="flex flex-col items-center justify-center mt-5 md:ml-62 w-full">
+  //     <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-full md:w-3/4">
+  //       <h5 className="text-xl font-medium leading-none mb-4 text-center">
+  //         Servicios en Curso
+  //       </h5>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-500">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Servicio
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Sesión
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Fecha
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Hora
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Cliente
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Estado
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Pago Servicio
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Orden
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Chat Cliente
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {historial?.map((reserva) => (
-                <tr key={reserva._id} className="bg-white border-b">
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    {reserva?.servicios?.map((servicio) => servicio.nombre)}
-                  </td>
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    {reserva.nroSesion}
-                  </td>
-                  <td className="px-6 py-4">{reserva.cita_servicio}</td>
-                  <td className="px-6 py-4 text-center">{reserva.hora_servicio}</td>
-                  <td className="px-6 py-4 text-center">{reserva?.cliente_id?.nombre}</td>
-                  <td className="px-6 py-4 text-center">{reserva.estado_servicio}</td>
-                  <td className="px-6 py-4 text-center">{reserva.factura.estadoPago}</td>
-                  <td className="px-6 py-4 text-center">
-                    <Link to={`/resumen-profesional/${reserva._id}`}>Ver</Link>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link to={`/resumen-profesional/${reserva._id}`}>CHAT</Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+  //       <div className="overflow-x-auto">
+  //         <table className="w-full text-sm text-left text-gray-500">
+  //           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+  //             <tr>
+  //               <th scope="col" className="px-6 py-3 text-center">
+  //                 Servicio
+  //               </th>
+  //               <th scope="col" className="px-6 py-3 text-center">
+  //                 Sesión
+  //               </th>
+  //               <th scope="col" className="px-6 py-3 text-center">
+  //                 Fecha
+  //               </th>
+  //               <th scope="col" className="px-6 py-3 text-center">
+  //                 Hora
+  //               </th>
+  //               <th scope="col" className="px-6 py-3 text-center">
+  //                 Cliente
+  //               </th>
+  //               <th scope="col" className="px-6 py-3 text-center">
+  //                 Estado
+  //               </th>
+  //               <th scope="col" className="px-6 py-3 text-center">
+  //                 Pago Servicio
+  //               </th>
+  //               <th scope="col" className="px-6 py-3 text-center">
+  //                 Orden
+  //               </th>
+  //               <th scope="col" className="px-6 py-3 text-center">
+  //                 Chat Cliente
+  //               </th>
+  //             </tr>
+  //           </thead>
+  //           <tbody>
+  //             {historial?.map((reserva) => (
+  //               <tr key={reserva._id} className="bg-white border-b">
+  //                 <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+  //                   {reserva?.servicios?.map((servicio) => servicio.nombre)}
+  //                 </td>
+  //                 <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+  //                   {reserva.nroSesion}
+  //                 </td>
+  //                 <td className="px-6 py-4">{reserva.cita_servicio}</td>
+  //                 <td className="px-6 py-4 text-center">{reserva.hora_servicio}</td>
+  //                 <td className="px-6 py-4 text-center">{reserva?.cliente_id?.nombre}</td>
+  //                 <td className="px-6 py-4 text-center">{reserva.estado_servicio}</td>
+  //                 <td className="px-6 py-4 text-center">{reserva.factura.estadoPago}</td>
+  //                 <td className="px-6 py-4 text-center">
+  //                   <Link to={`/resumen-profesional/${reserva._id}`}>Ver</Link>
+  //                 </td>
+  //                 <td className="px-6 py-4 text-center">
+  //                   <Link to={`/resumen-profesional/${reserva._id}`}>CHAT</Link>
+  //                 </td>
+  //               </tr>
+  //             ))}
+  //           </tbody>
+  //         </table>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
+
+  return (
+  <div className="flex flex-col items-center justify-center mt-5 md:ml-62 w-full">
+    <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-full md:w-3/4">
+      <h5 className="text-xl font-medium leading-none mb-4 text-center">
+        Servicios en Curso
+      </h5>
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm text-left text-gray-500">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+  <tr>
+    <th scope="col" className="responsive-th">
+      Servicio
+    </th>
+    <th scope="col" className="responsive-th">
+      Sesión
+    </th>
+    <th scope="col" className="responsive-th hidden md:table-cell">
+      Fecha
+    </th>
+    <th scope="col" className="responsive-th hidden md:table-cell">
+      Hora
+    </th>
+    <th scope="col" className="responsive-th hidden md:table-cell">
+      Cliente
+    </th>
+    <th scope="col" className="responsive-th hidden md:table-cell">
+      Estado
+    </th>
+    <th scope="col" className="responsive-th hidden md:table-cell">
+      Pago Servicio
+    </th>
+    <th scope="col" className="responsive-th">
+      Orden
+    </th>
+    <th scope="col" className="responsive-th">
+      Chat Cliente
+    </th>
+  </tr>
+</thead>
+<tbody>
+  {historial?.map((reserva) => (
+    <tr key={reserva._id} className="bg-white border-b">
+      <td className="responsive-td">
+        {reserva?.servicios?.map((servicio) => servicio.nombre)}
+      </td>
+      <td className="responsive-td text-center">{reserva.nroSesion}</td>
+      <td className="responsive-td hidden md:table-cell text-center">{reserva.cita_servicio}</td>
+      <td className="responsive-td hidden md:table-cell text-center">{reserva.hora_servicio}</td>
+      <td className="responsive-td hidden md:table-cell text-center">{reserva?.cliente_id?.nombre}</td>
+      <td className="responsive-td hidden md:table-cell text-center">{reserva.estado_servicio}</td>
+      <td className="responsive-td hidden md:table-cell text-center">{reserva.factura.estadoPago}</td>
+      <td className="responsive-td text-center">
+        <Link to={`/resumen-profesional/${reserva._id}`}>Ver</Link>
+      </td>
+      <td className="responsive-td text-center">
+        <Link to={`/resumen-profesional/${reserva._id}`}>CHAT</Link>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+        </table>
       </div>
     </div>
-  );
+  </div>
+);
+
+
 };
 
 export default HistoryServicesProfessional;

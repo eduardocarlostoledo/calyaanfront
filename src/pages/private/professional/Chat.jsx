@@ -20,6 +20,7 @@ const Chat = ({ id }) => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
+        
 
         const newMessages = response.data.messages;
         if (newMessages.length !== messageCount) {
@@ -29,14 +30,14 @@ const Chat = ({ id }) => {
 
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching chat messages:', error);
+        console.error('No hay mensajes');
         setLoading(false);
       }
     };
 
     const intervalId = setInterval(() => {
       getChats();
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(intervalId);
 
