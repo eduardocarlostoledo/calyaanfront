@@ -13,6 +13,7 @@ import ServiciosComponent from "../components/FormReserva/ServiciosComponent";
 import axios from "axios";
 import e from "cors";
 import { Link } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const CreateReservation = () => {
 
@@ -20,10 +21,13 @@ const CreateReservation = () => {
   const params = new URLSearchParams(querystring);
   let id = params.get("id");
 
+  const [image, setImage] = useState(null);
+  const [loadingImage, setLoadingImage] = useState(false);
   const [idOrder, setIDOrder] = useState(id)
   const [datosPago,setDatosPago] = useState({
     origen:"",
-    payment_id:""
+    payment_id:"",
+    comprobante:"",
   })
 
   const [linkPago, setLinkPago] = useState("");
@@ -71,7 +75,8 @@ const CreateReservation = () => {
   const [servicios, setServicios] = useState([]);
   const [liberar, setLiberar] = useState({}); //se va a guardar el dato de la reserva si existe en caso de reprogramacion
   const [loadingLiberar,setLoadingLiberrar] = useState(false)
-
+  const [precioConDescuentos, setPrecioConDescuentos] = useState({}) || null
+  //aca toma la orden por id y trae ademas los datos de la factura
   useEffect(() => {
     if (id) {
       const getHistorial = async () => {
@@ -99,8 +104,13 @@ const CreateReservation = () => {
               metodo_pago: data.factura.metodo_pago,
               link_pago: data.factura.link_pago,
               estadoPago:data.factura.estadoPago,
+              comprobante: data.factura.comprobante,
               paquetesGenerados: data.paquetesGenerados,
+
             });
+
+            setPrecioConDescuentos(data.factura.precioTotal)
+
           } else {
             setReserva({
               ...reserva,
@@ -123,16 +133,21 @@ const CreateReservation = () => {
               metodo_pago: data.factura.metodo_pago,
               link_pago: data.factura.link_pago,
               estadoPago:data.factura.estadoPago,
+              comprobante: data.factura.comprobante,
               paquetesGenerados: data.paquetesGenerados,
             });
+            setPrecioConDescuentos(data.servicios[0].precio)
           }    
 
           setServicios(data.servicios);
 
           setDatosPago({
             origen:data.factura.origen,
-            payment_id:data.factura.payment_id
+            payment_id:data.factura.payment_id,
+            comprobante: data.factura.comprobante,
           });
+          setImage(data.factura.comprobante)
+          
 
           setEstado("nuevo");
 
@@ -367,6 +382,7 @@ const CreateReservation = () => {
   const [profesional, setProfesional] = useState({});
   const [hourSelect, setHoursSelect] = useState([]); // mapea la disponibilidad.horarios del profesional
 
+  //al parecer no se usa este handle. 5-12-23
   const handleProfesional = (profesional) => {
     const updatedArray = profesionalesRequest.map((obj) =>
       obj._id === profesional._id
@@ -484,6 +500,28 @@ const CreateReservation = () => {
     }
   };
 
+  const handleChangeImage = async (e) => {
+    try {
+      setLoadingImage(true);
+      const formData = new FormData();
+      formData.append("upload_preset", `${e.target.files[0].name}`);
+      formData.append("file", e.target.files[0], "form-data");
+
+      let { data } = await clienteAxios.post(`/api/uploads/file`, formData);
+
+      setLoadingImage(false);
+      setImage(data.imageURL);
+      toast.success(data.msg);
+    } catch (err) {
+      let error = err.response.data.msg
+        ? err.response.data.msg
+        : err.response && "Estamos presentando problemas internos";
+      return toast.error(error);
+    }
+  };
+
+  //console.log("IMAGE", image)
+
   const actualizarPago = async(e)=>{
     
     e.preventDefault()
@@ -492,12 +530,13 @@ const CreateReservation = () => {
       if ([datosPago.payment_id, datosPago.origen].includes("")) {
         return toast.error("Se requieren los campos de Nro de pago y Origen de pago");
       }
-
+//console.log("IMAGE", image)
       let {data} = await clienteAxios.post(
         `api/pay/actualizar-pago`,
         {
           ...datosPago,
-          id: idOrder
+          id: idOrder,
+          comprobante: image,
         }
       );
       toast.success(data.msg)
@@ -548,6 +587,9 @@ const CreateReservation = () => {
       return toast.error(error);
     }
   };  
+
+
+
 
   return (
     <div className="w-full mx-auto ">
@@ -601,7 +643,7 @@ const CreateReservation = () => {
 
           <hr className="mt-6 border-b-1 border-blueGray-300" />
 
-          <ServiciosComponent setServicios={setServicios} servicios={servicios} setReserva={setReserva} reserva={reserva} />
+          <ServiciosComponent setServicios={setServicios} servicios={servicios} setReserva={setReserva} reserva={reserva} precioConDescuentos={precioConDescuentos}/>
 
           {
             (reserva.metodo_pago === "") &&
@@ -749,6 +791,67 @@ const CreateReservation = () => {
                       />
                     </div>
 
+                    <label className="mb-2"> Comprobante Pago</label>
+      {loadingImage ? (
+        <div className="p-4 flex justify-center">
+          <Spinner />
+        </div>
+      ) : !image ? (
+        <>
+          <label
+            htmlFor="dropzone-file"
+            className="flex flex-col items-center justify-center mt-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100"
+          >
+            <div className="flex flex-col items-center justify-center pt-5 pb-6 rounded">
+              <svg
+                aria-hidden="true"
+                className="w-10 h-10 mb-3 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                ></path>
+              </svg>
+              <p className="text-xs text-gray-500 ">
+                SVG, PNG o JPG (MAX. 2MB)
+              </p>
+            </div>
+            <input
+              id="dropzone-file"
+              type="file"
+              className="hidden"
+              onChange={handleChangeImage}
+            />
+          </label>
+        </>
+      ) : (
+        <div className="flex gap-6">
+          <LazyLoadImage
+            className="rounded mt-2"
+            effect="blur"
+            width="240"
+            height="240"
+            alt="Logo fondo trasparente"
+            src={image}
+          />
+          <div className="mt-1 flex  items-center ">
+            <button
+              type="button"
+              className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+              onClick={(e) => setImage(null)}
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      )}
+
                     <button type="submit" className="text-white mt-4 mx-auto bg-primary hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-40 max-lg:w-3/4 max-sm:w-full">
                       Guardar
                     </button>
@@ -825,9 +928,9 @@ const CreateReservation = () => {
               </div>
             </>
           ) :
-         (<h7> 
+         (<p> 
           <> SIN TURNO AGENDADO </>         
-         </h7>)          
+         </p>)          
           }
           {/* FIN DEL FRAGMENTO DE CODIGO PARA GENERAR PAQUETES */}
       </div>

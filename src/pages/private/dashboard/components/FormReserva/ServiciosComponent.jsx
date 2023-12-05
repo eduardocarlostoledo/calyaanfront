@@ -5,8 +5,8 @@ import { toast } from 'react-toastify';
 import { NumericFormat } from 'react-number-format';
 import Spinner from '../../../../../components/Spinner';
 
-const ServiciosComponent = ({setServicios,servicios,setReserva,reserva}) => {
-
+const ServiciosComponent = ({setServicios,servicios,setReserva,reserva, precioConDescuentos}) => {
+console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos )
     const [productos, setProductos] = useState([]);
 
     const [cargando,setCargando]= useState(false)
@@ -211,6 +211,7 @@ const ServiciosComponent = ({setServicios,servicios,setReserva,reserva}) => {
                             value={servicios.reduce(
                               (a, b) => Number(a.precio) + Number(b.precio)
                             )}
+                            
                             displayType="text"
                             thousandSeparator={true}
                             prefix="$"
@@ -218,7 +219,7 @@ const ServiciosComponent = ({setServicios,servicios,setReserva,reserva}) => {
                         </p>
                       ) : (
                         <NumericFormat
-                          value={servicios?.map((a) => a.precio)[0]}
+                          value={Number(precioConDescuentos) || servicios?.map((a) => a.precio)[0]} //comentado por que no muestra el precio con descuentos                          
                           displayType="text"
                           thousandSeparator={true}
                           prefix="$"
@@ -226,7 +227,8 @@ const ServiciosComponent = ({setServicios,servicios,setReserva,reserva}) => {
                       )
                     ) : (
                       <NumericFormat
-                        value={servicios[0].valorTotal}
+                        value={Number(precioConDescuentos) || servicios[0].valorTotal}
+                        
                         displayType="text"
                         thousandSeparator={true}
                         prefix="$"
