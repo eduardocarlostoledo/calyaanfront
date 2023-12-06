@@ -1263,6 +1263,39 @@ useEffect(() => {
             </div>
           )}
 
+{record?.factura?.comprobante && (
+  <div className="mt-4">
+    <a
+      href={record?.factura?.comprobante}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded inline-flex items-center"
+    >
+      <span className="mr-2">Ver Comprobante</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        className="h-4 w-4"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </a>
+    <hr className="my-4" />
+  </div>
+)}
+
+
+
+
+
+
           {record?.factura?.nro_factura && (
             <div style={{ marginTop: ".5rem" }}>
               <hr />
@@ -1278,6 +1311,25 @@ useEffect(() => {
               <hr></hr>
             </div>
           )}
+
+          {/* {record?.factura?.coupon && (
+            <div style={{ marginTop: ".5rem" }}>
+              <b>Descuento: </b>
+              {record?.factura?.coupon}
+              <hr></hr>
+            </div>
+          )} */}
+
+{record.factura.coupon && record.factura.coupon._id && (
+  <div style={{ marginTop: ".5rem" }}>
+    <div>
+      <b>Descuento: </b>
+      {record.factura.coupon.descuento}%
+    </div>
+    <hr />
+  </div>
+)}
+
           {record?.createdAt && (
             <div style={{ marginTop: ".5rem" }}>
               <b>Dia de venta: </b>
