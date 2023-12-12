@@ -20,7 +20,7 @@ const Chat = ({ id }) => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        
+
 
         const newMessages = response.data.messages;
         if (newMessages.length !== messageCount) {
@@ -137,8 +137,8 @@ const Chat = ({ id }) => {
     const filteredText = text.replace(emailRegex, '*******').replace(phoneRegex, '*******');
     return filteredText;
   };
-  
-  
+
+
 
   const convertUrlsToLinks = (text) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -168,8 +168,8 @@ const Chat = ({ id }) => {
   };
 
   return (
-    <div className="p-4">
-      <div className="h-48 border border-gray-300 mb-4 p-4 overflow-auto">
+    <div className="p-4 h-1/2">
+      <div className="h-32 xl:h-72 border border-gray-300 mb-4 p-4 overflow-auto">
         {messages.map((message, index) => (
           <div key={index}>
             <p>
@@ -182,7 +182,7 @@ const Chat = ({ id }) => {
         ))}
       </div>
 
-      <div className="mb-4">
+      <div className="mb-1">
         <input
           className="border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="text"
@@ -193,37 +193,47 @@ const Chat = ({ id }) => {
               handleSendMessage();
             }
           }}
-          placeholder="Escribe un mensaje..."
+          placeholder="Escribir mensaje y Enviar..."
         />
       </div>
-      <p className="py-1">
-        Deja un mensaje a tu paciente/profesional en el Chat. Escribe tu mensaje en el cuadro de texto y haz click en{' '}
-        <strong>Enviar</strong>{' '}
-      </p>
-      <button
-        onClick={handleSendMessage}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-      >
-        Enviar
-      </button>
 
-      <button
-        onClick={shareLocation}
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
-      >
-        Compartir Ubicación
-      </button>
 
-      <button
-        onClick={handleSendMessageNotificacion}
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
-      >
-        Enviar Notificacion
-      </button>
-      <p className="py-3">
-        Recuerda que puedes enviarle una notificación a tu paciente/profesional haciendo click en{' '}
-        <strong>Enviar Notificación</strong>{' '}
-      </p>
+      <div className="p-1">
+
+
+        <div className="flex flex-col sm:flex-row">
+          <button
+            onClick={handleSendMessage}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 sm:px-4 rounded mr-2 mb-2 sm:mb-0 text-sm"
+          >
+            Enviar
+          </button>
+
+          <button
+            onClick={shareLocation}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 sm:px-4 rounded mr-2 mb-2 sm:mb-0 text-sm"
+          >
+            Compartir Ubicación
+          </button>
+
+          <button
+            onClick={handleSendMessageNotificacion}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 sm:px-4 rounded mr-2 mb-2 sm:mb-0 text-sm"
+          >
+            Enviar Notificacion
+          </button>
+        </div>
+
+
+
+        <p className="py-1 text-sm sm:text-base text-center">
+          Envía una notificación a tu paciente/profesional haciendo click en{' '}
+          <strong>Enviar Notificación</strong>{' '}
+        </p>
+      </div>
+
+
+
     </div>
   );
 };

@@ -38,32 +38,32 @@ const HistoryServicesProfessional = () => {
         <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">
   <tr>
-    <th scope="col" className="responsive-th">
+    <th scope="col" className="responsive-th text-center">
       Servicio
     </th>
-    <th scope="col" className="responsive-th">
+    <th scope="col" className="responsive-th text-center">
       Sesión
     </th>
-    <th scope="col" className="responsive-th hidden md:table-cell">
+    <th scope="col" className="responsive-th hidden md:table-cell text-center">
       Fecha
     </th>
-    <th scope="col" className="responsive-th hidden md:table-cell">
+    <th scope="col" className="responsive-th hidden md:table-cell text-center">
       Hora
     </th>
-    <th scope="col" className="responsive-th hidden md:table-cell">
+    <th scope="col" className="responsive-th text-center">
       Cliente
     </th>
-    <th scope="col" className="responsive-th hidden md:table-cell">
+    <th scope="col" className="responsive-th hidden md:table-cell text-center">
       Estado
     </th>
-    <th scope="col" className="responsive-th hidden md:table-cell">
+    <th scope="col" className="responsive-th hidden md:table-cell text-center">
       Pago Servicio
     </th>
-    <th scope="col" className="responsive-th">
+    {/* <th scope="col" className="responsive-th">
       Orden
-    </th>
-    <th scope="col" className="responsive-th">
-      Chat Cliente
+    </th> */}
+    <th scope="col" className="responsive-th text-center">
+      Chat y Orden
     </th>
   </tr>
 </thead>
@@ -76,12 +76,12 @@ const HistoryServicesProfessional = () => {
       <td className="responsive-td text-center">{reserva.nroSesion}</td>
       <td className="responsive-td hidden md:table-cell text-center">{reserva.cita_servicio}</td>
       <td className="responsive-td hidden md:table-cell text-center">{reserva.hora_servicio}</td>
-      <td className="responsive-td hidden md:table-cell text-center">{reserva?.cliente_id?.nombre}</td>
+      <td className="responsive-td text-center">{reserva?.cliente_id?.nombre}</td>
       <td className="responsive-td hidden md:table-cell text-center">{reserva.estado_servicio}</td>
       <td className="responsive-td hidden md:table-cell text-center">{reserva.factura.estadoPago}</td>
-      <td className="responsive-td text-center">
+      {/* <td className="responsive-td text-center">
         <Link to={`/resumen-profesional/${reserva._id}`}>Ver</Link>
-      </td>
+      </td> */}
       <td className="responsive-td text-center">
         <Link to={`/resumen-profesional/${reserva._id}`}>CHAT</Link>
       </td>
