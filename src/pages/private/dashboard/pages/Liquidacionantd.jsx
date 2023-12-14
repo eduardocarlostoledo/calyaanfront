@@ -912,6 +912,35 @@ const telefonoProfesional = orden?.profesional_id?.telefono && typeof orden.prof
                     {record?.nroSesion} <br />
                   </p>
                 )}
+
+           {record?.registroFirmaCliente && (
+  <div className="mt-4">
+    <a
+      href={record?.registroFirmaCliente}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded inline-flex items-center"
+    >
+      <span className="mr-2">Ver Firma</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        className="h-4 w-4"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </a>
+    <hr className="my-4" />
+  </div>
+)}
+
               </p>
             </div>
           ))

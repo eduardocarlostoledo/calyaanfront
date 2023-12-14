@@ -169,7 +169,7 @@ const Chat = ({ id }) => {
 
   return (
     <div className="p-4 h-1/2">
-      <div className="h-32 xl:h-72 border border-gray-300 mb-4 p-4 overflow-auto">
+      <div className="h-32 xl:h-64 border border-gray-300 mb-4 p-4 overflow-auto">
         {messages.map((message, index) => (
           <div key={index}>
             <p>
