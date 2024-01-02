@@ -52,7 +52,7 @@ const Sumary = () => {
       formData.append("upload_preset", `${e.target.files[0].name}`);
       formData.append("file", e.target.files[0], "form-data");
 
-      const { data } = await clienteAxios.post(`/api/uploads/file`, formData);
+      const { data } = await clienteAxios.post(`/api/uploads/file-firmas`, formData);
 
       setLoadingImage(false);
       setImage(data.imageURL);

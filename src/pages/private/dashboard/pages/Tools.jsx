@@ -30,8 +30,34 @@ const [ siigoForm, setSiigoForm] = useState({
     username: "siigoapi@pruebas.com",
     access_key: "OWE1OGNkY2QtZGY4ZC00Nzg1LThlZGYtNmExMzUzMmE4Yzc1Omt2YS4yJTUyQEU=",
   });
+
   const { username, access_key } = siigoForm;
     const { codigo, tipoDescuento, descuento, vencimiento } = coupon;
+    
+    const [emailReset, setEmailReset] = useState("");
+
+    const handleChangeresetPasswordyConfirmarCuenta = (e) => {
+      setEmailReset(e.target.value);
+    };
+    
+      
+      const handleSubmitResetPasswordyConfirmarCuenta = async (e) => {
+        e.preventDefault();
+      
+        if (!emailReset) {
+          return toast.error("El campo de email es obligatorio");
+        }
+      
+        try {
+          const data = await clienteAxios.post("/api/usuarios/reset-user", { emailReset });
+          toast.success("Cuenta reseteada con éxito");
+        } catch (error) {
+          console.error(error);
+          const errorMsg = "Estamos presentando problemas internos";
+          toast.error(errorMsg);
+        }
+      };
+      
 
     const handleChange = (e) => {
         setCoupon({
@@ -166,6 +192,9 @@ const [ siigoForm, setSiigoForm] = useState({
     const isAccordionOpen = (accordion) => {
         return selectedAccordion === accordion;
     };
+
+
+ 
 
     return (
         <div className="py-8">
@@ -488,63 +517,91 @@ const [ siigoForm, setSiigoForm] = useState({
                 <div className="rounded bg-white  shadow p-6">
 {/* INICIO CONFIGURACION DE SIIGO */}
 
-        <form className="mt-6" onSubmit={handleSubmitSiigo}>
-            <div className="mt-4">
-              <label className="block text-gray-700">Usuario</label>
-              <input
-                type="username"
-                name="username"
-                onChange={handleChangeSiigo}
-                value={username}
-                placeholder="Ingresa tu username de SIIGO"
-                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover focus:bg-white focus:outline-none"
-                autoFocus
-              />
-            </div>
+                    <form className="mt-6" onSubmit={handleSubmitSiigo}>
+                        <div className="mt-4">
+                            <label className="block text-gray-700">Usuario</label>
+                            <input
+                                type="username"
+                                name="username"
+                                onChange={handleChangeSiigo}
+                                value={username}
+                                placeholder="Ingresa tu username de SIIGO"
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover focus:bg-white focus:outline-none"
+                                autoFocus
+                            />
+                        </div>
 
-            <div className="mt-4">
-              <label className="block text-gray-700">Contraseña</label>
-              <input
-                type="access_key"
-                name="access_key"
-                onChange={handleChangeSiigo}
-                value={access_key}
-                placeholder="••••••••"
-                minLength="6"
-                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover
+                        <div className="mt-4">
+                            <label className="block text-gray-700">Contraseña</label>
+                            <input
+                                type="access_key"
+                                name="access_key"
+                                onChange={handleChangeSiigo}
+                                value={access_key}
+                                placeholder="••••••••"
+                                minLength="6"
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover
                   focus:bg-white focus:outline-none"
-              />
-            </div>
+                            />
+                        </div>
 
-            <div className="text-right mt-2">                
-  <a
-    href="https://siigonube.siigo.com/ISIIGO2/Login.aspx"
-    className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
-  >
-    ¿Deseas acceder a Siigo?
-  </a>
-</div>
+                        <div className="text-right mt-2">
+                            <a
+                                href="https://siigonube.siigo.com/ISIIGO2/Login.aspx"
+                                className="text-sm font-semibold text-gray-700 hover:text-bgHover focus:text-bgHover"
+                            >
+                                ¿Deseas acceder a Siigo?
+                            </a>
+                        </div>
 
 
-            {siigoForm.length > 0 ? (
-              <ButtonSpinner />
-            ) : (
-              <button
-                type="submit"
-                className="w-full block bg-primary hover:bg-bgHover focus:bg-bgHover text-white font-semibold rounded-lg
+                        {siigoForm.length > 0 ? (
+                            <ButtonSpinner />
+                        ) : (
+                            <button
+                                type="submit"
+                                className="w-full block bg-primary hover:bg-bgHover focus:bg-bgHover text-white font-semibold rounded-lg
                             px-4 py-3 mt-6"
-              >
-                INICIAR SESION EN SIIGO
-              </button>
-            )}
-        </form>
+                            >
+                                INICIAR SESION EN SIIGO
+                            </button>
+                        )}
+                    </form>
 
 
-{/* FIN CONFIGURACION DE SIIGO */}
+                    {/* FIN CONFIGURACION DE SIIGO */}
+
+                    <div>
+
+                        <form className="mt-6" onSubmit={handleSubmitResetPasswordyConfirmarCuenta}>
+                            <div className="mt-4">
+                                <label className="block text-gray-700">Usuario</label>
+                                <input
+                                    type="email"
+                                    name="emailReset"
+                                    onChange={handleChangeresetPasswordyConfirmarCuenta}
+                                    value={emailReset}
+                                    placeholder="Ingresa el email del usuario o profesional para resetear"
+                                    className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover focus:bg-white focus:outline-none"
+                                    autoFocus
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="w-full block bg-primary hover:bg-bgHover focus:bg-bgHover text-white font-semibold rounded-lg
+            px-4 py-3 mt-6"
+                            >
+                                RESETEAR USUARIO Y CONFIRMAR CUENTA            </button>
+
+                        </form>
 
 
+                    </div>
 
                 </div>
+
+                
             </div>
         </div>
     );

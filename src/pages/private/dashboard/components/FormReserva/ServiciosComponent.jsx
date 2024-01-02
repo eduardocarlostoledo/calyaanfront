@@ -4,35 +4,42 @@ import clienteAxios from '../../../../../config/axios';
 import { toast } from 'react-toastify';
 import { NumericFormat } from 'react-number-format';
 import Spinner from '../../../../../components/Spinner';
+import CouponGenerationModal from '../../pages/CouponGenerationModal';
 
-const ServiciosComponent = ({setServicios,servicios,setReserva,reserva, precioConDescuentos}) => {
-console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos )
-    const [productos, setProductos] = useState([]);
+const ServiciosComponent = ({ setServicios, servicios, setReserva, reserva, precioConDescuentos }) => {
+  console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos)
+  const [productos, setProductos] = useState([]);
 
-    const [cargando,setCargando]= useState(false)
+  const [cargando, setCargando] = useState(false)
+  const [showCouponModal, setShowCouponModal] = useState(false);
 
-    useEffect(() => {
-        const getProductos = async () => {
-            setCargando(true)
-          try {
-            let { data } = await clienteAxios.get(`/api/products`);
+  useEffect(() => {
+    const getProductos = async () => {
+      setCargando(true)
+      try {
+        let { data } = await clienteAxios.get(`/api/products`);
 
-            setProductos(data);
-            setCargando(false)
-          } catch (err) {
-            setCargando(false)
-            let error = err.response.data.msg
-              ? err.response.data.msg
-              : err.response && "Estamos presentando problemas internos";
-            return toast.error(error);
-          }
-        };
-        getProductos();
-      }, []);
+        setProductos(data);
+        setCargando(false)
+      } catch (err) {
+        setCargando(false)
+        let error = err.response.data.msg
+          ? err.response.data.msg
+          : err.response && "Estamos presentando problemas internos";
+        return toast.error(error);
+      }
+    };
+    getProductos();
+  }, []);
 
 
 
   const [coupon, setCoupon] = useState('');
+
+  // Función para abrir el modal
+  const handleOpenModal = () => {
+    setShowCouponModal(true);
+  };
 
   const handleChangeServicio = (e) => {
     if (!servicios.includes(e.target.value) && e.target.value !== "" && servicios.length < 1) {
@@ -47,7 +54,7 @@ console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos )
   // Ordenar los productos alfabéticamente por nombre
   const productosOrdenados = productos?.sort((a, b) =>
     a.nombre.localeCompare(b.nombre)
-  ); 
+  );
 
   const applyCoupon = async (e) => {
     e.preventDefault()
@@ -73,7 +80,7 @@ console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos )
       toast.error(errorMsg);
     }
   };
-  
+
   function eliminarDelCarrito() {
     setServicios([]);
   }
@@ -90,30 +97,30 @@ console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos )
       <div className="flex flex-wrap">
         <div className="w-full lg:w-6/12 px-4">
 
-        {
+          {
             cargando ?
-          <Spinner />
-          : 
-          <div className="relative w-full mb-6">
-          <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-            Servicios
-          </label>
-          <select
-            id="servicios"
-            className="bg-white appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700 text-gray-800 rounded"
-            onChange={handleChangeServicio}
-            name="servicios"
-          >
-            <option value="">Servicios</option>
-            {productosOrdenados?.map((servicio, index) => (
-              <option key={index} value={servicio._id}>
-                {servicio.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-        }
-       
+              <Spinner />
+              :
+              <div className="relative w-full mb-6">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  Servicios
+                </label>
+                <select
+                  id="servicios"
+                  className="bg-white appearance-none z-10 pl-3 py-3 w-full text-sm border border-transparent focus:outline-none focus:border-indigo-700 text-gray-800 rounded"
+                  onChange={handleChangeServicio}
+                  name="servicios"
+                >
+                  <option value="">Servicios</option>
+                  {productosOrdenados?.map((servicio, index) => (
+                    <option key={index} value={servicio._id}>
+                      {servicio.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+          }
+
           {servicios.length > 0 && (
             <div className="relative w-full mb-3">
               <form onSubmit={applyCoupon}>
@@ -139,6 +146,28 @@ console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos )
               </form>
             </div>
           )}
+
+{/* Botón para abrir el modal */}
+<button
+        className="mt-4 p-3 bg-primary hover:bg-bgHover focus:bg-bgHover rounded focus:outline-none"
+        onClick={handleOpenModal}
+      >
+        <p className="text-sm font-medium leading-none text-white">
+Generar Cupón        </p>
+      </button>
+
+          <CouponGenerationModal
+            isOpen={showCouponModal}
+            onClose={() => setShowCouponModal(false)}
+            setServicios={setServicios}
+            servicios={servicios}
+            setReserva={setReserva}
+            reserva={reserva}
+            precioConDescuentos={precioConDescuentos}
+            style={{ display: 'block', background: 'white', padding: '20px' }}
+          />
+
+
         </div>
 
         {servicios.length > 0 && (
@@ -211,7 +240,7 @@ console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos )
                             value={servicios.reduce(
                               (a, b) => Number(a.precio) + Number(b.precio)
                             )}
-                            
+
                             displayType="text"
                             thousandSeparator={true}
                             prefix="$"
@@ -228,7 +257,7 @@ console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos )
                     ) : (
                       <NumericFormat
                         value={Number(precioConDescuentos) || servicios[0].valorTotal}
-                        
+
                         displayType="text"
                         thousandSeparator={true}
                         prefix="$"
