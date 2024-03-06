@@ -6,10 +6,9 @@ import { NumericFormat } from 'react-number-format';
 import Spinner from '../../../../../components/Spinner';
 import CouponGenerationModal from '../../pages/CouponGenerationModal';
 
-const ServiciosComponent = ({ setServicios, servicios, setReserva, reserva, precioConDescuentos }) => {
+const ServiciosComponent = ({ setServicios, servicios, setReserva, reserva, precioConDescuentos , fechaVenta, setFechaVenta }) => {
   console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos)
   const [productos, setProductos] = useState([]);
-
   const [cargando, setCargando] = useState(false)
   const [showCouponModal, setShowCouponModal] = useState(false);
 
@@ -136,6 +135,22 @@ const ServiciosComponent = ({ setServicios, servicios, setReserva, reserva, prec
                     placeholder="Ingresa Cupón"
                   />
                 </div>
+
+                 {/* Nuevo campo para la fecha de venta */}
+        <div>
+          <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="fechaVenta">
+            Fecha de Venta
+          </label>
+          <input
+            type="date" // Puedes usar otro tipo de input según tus necesidades
+            value={fechaVenta}
+            onChange={(e) => setFechaVenta(e.target.value)}
+            className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+          />
+        </div>
+        {/* Fin del nuevo campo */}
+
+
                 <div>
                   <button className="mt-4 p-3 bg-primary hover:bg-bgHover focus:bg-bgHover rounded focus:outline-none">
                     <p className="text-sm font-medium leading-none text-white">

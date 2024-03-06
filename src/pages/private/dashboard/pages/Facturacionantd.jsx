@@ -967,6 +967,7 @@ const FacturacionAntDesing = () => {
     dates ? setStartDate(dateNow) : setStartDate("");
     dates ? setEndDate(dateNow2) : setEndDate("");
   };
+  
   //separo los useEffect para que no se renderize todo junto
   useEffect(() => {
     dispatch(getOrders())
@@ -1122,7 +1123,10 @@ useEffect(() => {
       const fullNameClienteInverso =
         `${orden?.cliente_id?.apellido} ${orden?.cliente_id?.nombre}`.toLowerCase();
 
-      const orderDate = moment(orden.createdAt, "YYYY/MM/DD");
+        
+        const orderDate = moment(orden?.factura?.fecha_venta, "YYYY/MM/DD");
+
+        
 
       if (startDate && endDate) {
         return (
@@ -1142,7 +1146,8 @@ useEffect(() => {
             orden.direccion_Servicio
               ?.toLowerCase()
               ?.includes(searchTextLower)) &&
-          orderDate.isBetween(startDate, endDate, null, "[]")
+              orderDate.isBetween(startDate, endDate, "day", "[]")
+
         );
       }
       return (
@@ -1312,13 +1317,7 @@ useEffect(() => {
             </div>
           )}
 
-          {/* {record?.factura?.coupon && (
-            <div style={{ marginTop: ".5rem" }}>
-              <b>Descuento: </b>
-              {record?.factura?.coupon}
-              <hr></hr>
-            </div>
-          )} */}
+         
 
 {record.factura.coupon && record.factura.coupon._id && (
   <div style={{ marginTop: ".5rem" }}>
@@ -1330,26 +1329,27 @@ useEffect(() => {
   </div>
 )}
 
-          {record?.createdAt && (
+          {record?.factura.fecha_venta && (
             <div style={{ marginTop: ".5rem" }}>
-              <b>Dia de venta: </b>
-              {moment(record.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+              <b>Fecha de venta: </b>
+              {new Date(record?.factura?.fecha_venta).toLocaleString()}
+
               <hr></hr>
             </div>
           )}
+
+{record?.cita_servicio && (
+            <div style={{ marginTop: ".5rem" }}>
+              <b>Fecha Servicio: </b>
+              {record?.cita_servicio}
+              <hr></hr>
+            </div>
+          )}
+
         </>
       ),
     },
 
-    // {
-    //   title: "Profesional",
-    //   dataIndex: "profesional_nombre",
-    //   render: (text, record) => (
-    //     <p>
-    //       {record.profesional_apellido} {text}
-    //     </p>
-    //   ),
-    // },
     {
       title: "Servicio",
       dataIndex: "servicios",
@@ -1415,46 +1415,7 @@ useEffect(() => {
         </>
       ),
     },
-    // {
-    //   title: "Estado Pago",
-    //   dataIndex: "factura.estadoPago",
-    //   filters: [
-    //     { text: "Pendiente", value: "pending" },
-    //     { text: "Rechazado", value: "rejected" },
-    //     { text: "Aprobado", value: "approved" },
-    //   ],
-    //   onFilter: (value, record) => record?.factura?.estadoPago === value,
-    //   render: ({ estadoPago }) => (
-    //     <>
-    //       {estadoPago === "approved" ? (
-    //         <Tag color="green">Aprobado</Tag>
-    //       ) : estadoPago === "rejected" ? (
-    //         <Tag color="red">Rechazado</Tag>
-    //       ) : (
-    //         <Tag color="yellow">Pendiente</Tag>
-    //       )}
-    //     </>
-    //   ),
-    // },
-    // {
-    //   title: "Pago",
-    //   dataIndex: "factura",
-    //   render: ({ payment_id, origen }) => (
-    //     <div>
-    //       <b>id del pago: </b>
-    //       <p>{payment_id}</p>
-    //       <hr></hr>
-    //       <b>Origen del pago: </b>
-    //       <p>{origen}</p>
-    //       <hr></hr>
-    //     </div>
-    //   ),
-    // },
-    // {
-    //   title: "Origen del pago",
-    //   dataIndex: "factura",
-    //   render: (text) => <p>{text.origen}</p>,
-    // },
+    
     {
       title: "Estado Servicio",
       dataIndex: "estado_servicio",
@@ -1477,54 +1438,6 @@ useEffect(() => {
       ),
     },
 
-    // {
-    //   title: "Nro. Factura",
-    //   dataIndex: "factura",
-    //   render: (text) => <p>{text.nro_factura}</p>,
-    // },
-
-    // {
-    //   title: "Cedula",
-    //   dataIndex: "cliente_cedula",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    // {
-    //   title: "Telefono",
-    //   dataIndex: "cliente_telefono",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    // {
-    //   title: "email",
-    //   dataIndex: "cliente_email",
-    //   render: (text) => <p>{text}</p>,
-    // },
-
-    // {
-    //   title: "Precio",
-    //   dataIndex: "factura",
-    //   sorter: (a, b) => a.precio - b.precio,
-    //   defaultSortOrder: "descend",
-    //   render: (text) => <p>{text.precioTotal}</p>,
-    // },
-    // {
-    //   title: "Direccion",
-    //   dataIndex: "localidad_Servicio",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text, record) => (
-    //     <p>
-    //       {record.direccion_Servicio} {text}
-    //     </p>
-    //   ),
-    // },
-
-    // {
-    //   title: "Dia de Venta",
-    //   dataIndex: "factura",
-    //   render: (text) => (
-    //     <p>{moment(text.fecha_venta).format("YYYY-MM-DD HH:mm:ss")}</p>
-    //   ),
-    // },
   ];
 
   const refreshData = () => {
@@ -1573,7 +1486,7 @@ useEffect(() => {
         </div>
         <div style={{ margin: "1rem" }}>
           <p>
-            <b>Fecha</b>
+            <b>Ventas por fecha</b>
           </p>
           <RangePicker onChange={handleDateChange} format={"YYYY/MM/DD"} />
         </div>

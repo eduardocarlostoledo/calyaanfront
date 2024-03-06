@@ -741,7 +741,7 @@ const telefonoProfesional = orden?.profesional_id?.telefono && typeof orden.prof
 ? orden.profesional_id.telefono.split("+").filter(telefono => telefono !== null)[1]
 : null;
 
-      const orderDate = moment(orden.createdAt, "YYYY/MM/DD");
+const orderDate = moment(orden?.cita_servicio, "YYYY/MM/DD");
 
       if (startDate && endDate) {
         return (
@@ -912,6 +912,16 @@ const telefonoProfesional = orden?.profesional_id?.telefono && typeof orden.prof
                     {record?.nroSesion} <br />
                   </p>
                 )}
+                {record?.localidad_servicio && (
+              <p>
+                <hr></hr>
+                <b>Fecha Venta</b> <br />
+                {new Date(record?.factura?.fecha_venta).toLocaleString()}
+
+                 
+                <br />
+              </p>
+            )}
 
            {record?.registroFirmaCliente && (
   <div className="mt-4">
@@ -951,15 +961,8 @@ const telefonoProfesional = orden?.profesional_id?.telefono && typeof orden.prof
         ),
     },
     {
-      title: "Fecha",
+      title: "Fecha Servicio",
       dataIndex: "cita_servicio",
-      // sorter: (a, b) => a.id - b.id,
-      // defaultSortOrder: "descend",
-      // onFilter: (value, record) =>
-      //   record.factura.estado_facturacion.includes("Facturado"),
-      //   onFilter: (value, record) =>
-      //   record.estado_servicio.includes("Completado"),
-
       render: (text, record) =>
         text ? (
           <p>
@@ -970,29 +973,7 @@ const telefonoProfesional = orden?.profesional_id?.telefono && typeof orden.prof
         ) : (
           <b>Sin horario</b>
         ),
-    },
-    // {
-    //   title: "estadoLiquidacion",
-    //   dataIndex: "factura",
-    //   filters: [
-    //     { text: "Liquidado", value: "Liquidado" },
-    //     { text: "NoLiquidado", value: "NoLiquidado" },
-    //     { text: "Error", value: "Error" },
-    //   ],
-    //   onFilter: (value, record) =>
-    //     record?.estadoLiquidacion?.indexOf(value) === 0,
-    //   render: (estadoLiquidacion) => (
-    //     <>
-    //       {estadoLiquidacion === "Liquidado" ? (
-    //         <Tag color="green">Liquidado</Tag>
-    //       ) : estadoLiquidacion === "Error" ? (
-    //         <Tag color="red">Error</Tag>
-    //       ) : (
-    //         <Tag color="yellow">NoLiquidado</Tag>
-    //       )}
-    //     </>
-    //   ),
-    // },
+    },    
     {
       title: "Nro. Factura",
       dataIndex: "factura",
@@ -1002,58 +983,15 @@ const telefonoProfesional = orden?.profesional_id?.telefono && typeof orden.prof
       render: (text) => (
         <p>{text?.nro_factura ? text?.nro_factura : <b>Sin numero</b>}</p>
       ),
-    },
-    // {
-    //   title: "Profesional",
-    //   dataIndex: "profesional_nombre",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text, record) => (
-    //     <p>
-    //       {record.profesional_apellido} {text}
-    //     </p>
-    //   ),
-    // },
-
-    // {
-    //   title: "Cliente",
-    //   dataIndex: "cliente_nombre",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text, record) => (
-    //     <p>
-    //       {record.cliente_apellido} {text}
-    //     </p>
-    //   ),
-    // },
-    // {
-    //   title: "SERVICIO",
-    //   dataIndex: "servicio",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text) => <p>{text}</p>,
-    // },
+    },    
     {
       title: "COTIZACION",
       dataIndex: "factura",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      render: (text) => <p>{text?.precioTotal}</p>,
-    },
-    // {
-    //   title: "CITA DIA",
-    //   dataIndex: "dia_servicio",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text) => <p>{text}</p>,
-    // },
-    // {
-    //   title: "CITA HORA",
-    //   dataIndex: "hora_servicio",
-    //   sorter: (a, b) => a.id - b.id,
-    //   defaultSortOrder: "descend",
-    //   render: (text) => <p>{text}</p>,
-    // },
+      //render: (text) => <p>{text?.precioTotal}</p>,
+      render: (text) => <p>{"COP$ "}{text?.precioTotal.toFixed(2)}</p>, // para que no tnga mas de dos decimales
+    },    
   ];
 
   const refreshData = () => {
@@ -1075,15 +1013,7 @@ const telefonoProfesional = orden?.profesional_id?.telefono && typeof orden.prof
             {" "}
             Id Pago, Nro Factura, Nombre y/o Apellido, Cedula, Telefono o Email
           </b>
-        </p>
-        {/* <p className="p">
-          {" "}
-          Puede realizar búsquedas por{" "}
-          <b>
-            Id Pago, Nro Factura, Nombre y Apellido, Cedula, Telefono, Email o
-            Día de la venta. Hora del Servicio (YYYY-MM-DD){" "}
-          </b>
-        </p> */}
+        </p>       
         <div style={{ display: "flex", margin: "1rem" }}>
           <Input.Search
             style={{
@@ -1103,7 +1033,7 @@ const telefonoProfesional = orden?.profesional_id?.telefono && typeof orden.prof
         </div>
         <div style={{ margin: "1rem" }}>
           <p>
-            <b>Fecha</b>
+            <b>Fecha de Servicio</b>
           </p>
           <RangePicker onChange={handleDateChange} format={"YYYY/MM/DD"} />
         </div>

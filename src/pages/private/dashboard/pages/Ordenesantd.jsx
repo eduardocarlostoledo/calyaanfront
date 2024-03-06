@@ -135,11 +135,11 @@ const ProductExpanded = ({
         matchesSearchInverso)
     );
   });
-  console.log(input);
+  //console.log(input);
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-    console.log(input, "input");
+    //console.log(input, "input");
   };
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -650,7 +650,7 @@ const OrdenesAntDesing = (props) => {
       const fullNameClienteInverso =
         `${orden.cliente_id?.apellido} ${orden.cliente_id?.nombre}`.toLowerCase();
 
-      const orderDate = moment(orden.createdAt, "YYYY/MM/DD");
+      const orderDate = moment(orden?.factura?.fecha_venta, "YYYY/MM/DD");
 
       if (startDate && endDate) {
         return (
@@ -688,7 +688,7 @@ const OrdenesAntDesing = (props) => {
       );
     });
   }, [newProducts, searchText, startDate, endDate]);
-  console.log(filteredOrdenes);
+  //console.log(filteredOrdenes);
   const columns = [
     Table.EXPAND_COLUMN,
     {
@@ -868,6 +868,16 @@ const OrdenesAntDesing = (props) => {
                 {record?.localidad_servicio} <br />
               </p>
             )}
+            {record?.localidad_servicio && (
+              <p>
+                <hr></hr>
+                <b>Fecha Venta</b> <br />
+                {new Date(record?.factura?.fecha_venta).toLocaleString()}
+
+                 
+                <br />
+              </p>
+            )}
           </div>
         ) : (
           <div>
@@ -887,7 +897,7 @@ const OrdenesAntDesing = (props) => {
     //   ),
     // },
     {
-      title: "Fecha",
+      title: "Fecha Servicio",
       dataIndex: "cita_servicio",
       // sorter: (a, b) => a.id - b.id,
       // defaultSortOrder: "descend",
@@ -1096,7 +1106,7 @@ const OrdenesAntDesing = (props) => {
         </div>
         <div style={{ margin: "1rem" }}>
           <p>
-            <b>Fecha</b>
+            <b>Filtrar Fecha</b>
           </p>
           <RangePicker onChange={handleDateChange} format={"YYYY/MM/DD"} />
         </div>

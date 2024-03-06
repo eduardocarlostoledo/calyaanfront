@@ -64,6 +64,7 @@ const CreateReservation = () => {
     estadoPago:""
 
   });
+  const [fechaVenta, setFechaVenta] = useState(''); // Nuevo estado para la fecha de venta
 
   const handleChange = (e) => {
     setReserva({
@@ -212,6 +213,7 @@ const CreateReservation = () => {
             telefono_servicio: reserva.telefono_servicio,
             direccion_servicio:reserva.direccion_servicio,
             coupon: reserva.coupon,
+            fecha_venta: fechaVenta,
             metodo_pago: metodo,
             link_pago: linkPago
           };
@@ -237,6 +239,7 @@ const CreateReservation = () => {
           telefono_servicio: reserva.telefono_servicio,
           direccion_servicio:reserva.direccion_servicio,
           coupon: reserva.coupon,
+          fecha_venta: fechaVenta,
           metodo_pago: metodo,
           link_pago: linkPago
         };
@@ -499,6 +502,26 @@ const CreateReservation = () => {
       return toast.error(error);
     }
   };
+//handle imagen, cambiamos por prevencion.
+  // const handleChangeImage = async (e) => {
+  //   try {
+  //     setLoadingImage(true);
+  //     const formData = new FormData();
+  //     formData.append("upload_preset", `${e.target.files[0].name}`);
+  //     formData.append("file", e.target.files[0], "form-data");
+
+  //     let { data } = await clienteAxios.post(`/api/uploads/file`, formData);
+
+  //     setLoadingImage(false);
+  //     setImage(data.imageURL);
+  //     toast.success(data.msg);
+  //   } catch (err) {
+  //     let error = err.response.data.msg
+  //       ? err.response.data.msg
+  //       : err.response && "Estamos presentando problemas internos";
+  //     return toast.error(error);
+  //   }
+  // };
 
   const handleChangeImage = async (e) => {
     try {
@@ -507,17 +530,20 @@ const CreateReservation = () => {
       formData.append("upload_preset", `${e.target.files[0].name}`);
       formData.append("file", e.target.files[0], "form-data");
 
-      let { data } = await clienteAxios.post(`/api/uploads/file`, formData);
+      const { data } = await clienteAxios.post(`/api/uploads/file-firmas`, formData);
 
       setLoadingImage(false);
       setImage(data.imageURL);
       toast.success(data.msg);
     } catch (err) {
-      let error = err.response.data.msg
-        ? err.response.data.msg
-        : err.response && "Estamos presentando problemas internos";
-      return toast.error(error);
+      handleAxiosError(err, "Error al subir la imagen");
     }
+  };
+
+  const handleAxiosError = (error, defaultMessage) => {
+    console.error("Error:", error);
+    const errorMsg = error.response?.data?.msg || defaultMessage;
+    toast.error(errorMsg);
   };
 
   //console.log("IMAGE", image)
@@ -643,7 +669,7 @@ const CreateReservation = () => {
 
           <hr className="mt-6 border-b-1 border-blueGray-300" />
 
-          <ServiciosComponent setServicios={setServicios} servicios={servicios} setReserva={setReserva} reserva={reserva} precioConDescuentos={precioConDescuentos}/>
+          <ServiciosComponent setServicios={setServicios} servicios={servicios} setReserva={setReserva} reserva={reserva} precioConDescuentos={precioConDescuentos} fechaVenta={fechaVenta} setFechaVenta={setFechaVenta}/>
 
           {
             (reserva.metodo_pago === "") &&

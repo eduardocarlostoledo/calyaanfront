@@ -13,6 +13,7 @@ import ModalUserInfo from "./ModalUserInfo";
 
 
 const OrdenesBusquedaReservas = () => {
+  const [loading, setLoading] = useState(false);
   const [ordenes, setOrdenes] = useState([]);
   const [filtro, setFiltro] = useState({
     emailCliente: '',
@@ -40,6 +41,7 @@ const OrdenesBusquedaReservas = () => {
 
   const buscarOrdenes = async () => {
     try {
+      setLoading(true);
       const response = await clienteAxios.post('/api/buscar/ordenes-busqueda-reservas/', filtro, {
         headers: {
           Authorization: `Bearer ${token}`, // Incluye el token de autenticación
@@ -47,6 +49,7 @@ const OrdenesBusquedaReservas = () => {
       });
 
       setOrdenes(response.data);
+      setLoading(false);
     } catch (error) {
       console.error(error);
       // Manejar errores de la solicitud
@@ -78,97 +81,128 @@ const OrdenesBusquedaReservas = () => {
 
 
         <button
-  className="inline-block w-full max-w-md mx-auto text-center text-sm font-medium leading-none text-white px-6 py-2 bg-indigo-700 rounded hover:bg-indigo-600 transform duration-300 ease-in-out"
-  onClick={buscarOrdenes}
->
-  Buscar Ordenes
-</button>
-        
+          className="inline-block w-full max-w-md mx-auto text-center text-sm font-medium leading-none text-white px-6 py-2 bg-indigo-700 rounded hover:bg-indigo-600 transform duration-300 ease-in-out"
+          onClick={buscarOrdenes}
+        >
+          {loading ? 'Buscando...' : 'Buscar Ordenes'}
+        </button>
+
         <div className="px-6 py-3">
+          <div className="container mx-auto px-4 sm:px-8">
+            <h2>Resultado:</h2>
 
-          <h2>Resultado:</h2>
-        </div>
-    <table className="min-w-full divide-y divide-gray-200 ml-4">
-      <thead>
-      </thead>
-      <tbody>
-        {ordenes?.map((reserva) => (
-          <tr key={reserva._id}>
-            <td className="px-6 py-3 whitespace-nowrap border-b border-gray-200">
-              <div className="text-sm font-medium text-gray-900">
-                {reserva?.cliente_id.nombre} {reserva?.cliente_id.apellido}
+            {loading ? (
+              <div className="text-center mt-4">
+                <p>Cargando...</p>
+                {/* Aquí puedes agregar tu spinner si lo tienes */}
               </div>
-            </td>
+            ) : (
 
-            <td className="px-5 py-3 whitespace-nowrap border-b border-gray-200">
-              <div className="text-sm text-gray-900">{reserva?.cliente_id?.email}</div>
-            </td>
+            <table className="min-w-full divide-y divide-gray-200 mt-4">
+              <thead>
+                <tr>
+                  <th className="px-6 py-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Cliente
+                  </th>
+                  <th className="px-20 py-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th className="px-5 py-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Profesional
+                  </th>
+                  <th className="px-4 py-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Servicio
+                  </th>
+                  <th className="px-4 py-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Fecha de Venta
+                  </th>
+                  <th className="px-2 py-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Estado del Servicio
+                  </th>
+                  <th className="px-8 py-4 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Hora y Día Reserva
+                  </th>
+                  <th className="px-5 py-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
 
-            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <div className="flex justify-start">
-                          <div className="flex-shrink-0 w-10 h-10">
-                            <p className="text-sm">
-                              {reserva?.profesional_id?.creador.nombre
-                                ? `${reserva?.profesional_id?.creador.nombre.split(" ")[0]} ${reserva?.profesional_id?.creador.apellido
-                                  ? reserva?.profesional_id?.creador.apellido.split(" ")[0]
-                                  : "Agendar"
-                                }`
-                                : "Agendar"}
-                            </p>
-                          </div>
+              <tbody>
+                {ordenes?.map((reserva) => (
+                  <tr key={reserva._id}>
+                    <td className="px-6 py-3 whitespace-nowrap border-b border-gray-200">
+                      <div className="text-sm font-medium text-gray-900">
+                        {`${reserva?.cliente_id.nombre} ${reserva?.cliente_id.apellido}`}
+                      </div>
+                    </td>
+
+                    <td className="px-20 py-3 whitespace-nowrap border-b border-gray-200">
+                      <div className="text-sm text-gray-900">{reserva?.cliente_id?.email}</div>
+                    </td>
+
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <div className="flex justify-start">
+                        <div className="flex-shrink-0 w-10 h-10">
+                          <p className="text-sm">
+                            {reserva?.profesional_id?.creador.nombre
+                              ? `${reserva?.profesional_id?.creador.nombre.split(" ")[0]} ${reserva?.profesional_id?.creador.apellido
+                                ? reserva?.profesional_id?.creador.apellido.split(" ")[0]
+                                : "Agendar"}`
+                              : "Agendar"}
+                          </p>
                         </div>
-                      </td>
+                      </div>
+                    </td>
 
+                    <td className="px-4 py-4 border-b border-gray-200 bg-white text-sm">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {`${reserva?.servicios[0].nombre} ${reserva?.nroSesion ? ` ${reserva?.nroSesion}` : ''}`}
+                      </p>
+                    </td>
 
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva?.servicios[0].nombre} && {reserva?.servicios[0].nombre}{" "} {reserva?.nroSesion}
-                        </p>
-                      </td>
+                    <td className="px-4 py-4 border-b border-gray-200 bg-white text-sm">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {reserva?.factura?.fecha_venta && (
+                          new Date(reserva?.factura?.fecha_venta).toLocaleString()
+                        )}
+                      </p>
+                    </td>
 
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva?.createdAt.split("T")[0]}
-                        </p>
-                      </td>
+                    <td className="px-2 py-4 border-b border-gray-200 bg-white text-sm">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {reserva.estado_servicio}
+                      </p>
+                    </td>
 
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva.estado_servicio}
-                        </p>
-                      </td>
-                      
-            <td className="px-5 py-3 whitespace-nowrap border-b border-gray-200 text-center">
-              <div className="text-sm text-gray-900">
-                {reserva?.hora_servicio && reserva?.cita_servicio
-                  ? `${reserva?.hora_servicio} ${reserva?.cita_servicio}`
-                  : "Agendar"}
-              </div>
-            </td>
+                    <td className="px-8 py-3 whitespace-nowrap border-b border-gray-200 text-center">
+                      <div className="text-sm text-gray-900">
+                        {reserva?.hora_servicio && reserva?.cita_servicio
+                          ? `${reserva?.hora_servicio} ${reserva?.cita_servicio}`
+                          : "Agendar"}
+                      </div>
+                    </td>
 
-            <td className="px-5 py-3 whitespace-nowrap border-b border-gray-200 flex justify-center">
-              <Link
-                to={`/resumen-admin/${reserva._id}`}
-                className="text-gray-900 whitespace-no-wrap p-3"
-              >
-                Ver reserva
-              </Link>
+                    <td className="px-5 py-3 whitespace-nowrap border-b border-gray-200 flex justify-center">
+                      <Link to={`/resumen-admin/${reserva._id}`} className="text-gray-900 whitespace-no-wrap p-3">
+                        Ver reserva
+                      </Link>
 
-              <Link
-                to={`/reservar?id=${reserva._id}`}
-                className="text-gray-900 whitespace-no-wrap ml-8 p-3"
-              >
-                Formulario
-              </Link>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+                      <Link to={`/reservar?id=${reserva._id}`} className="text-gray-900 whitespace-no-wrap ml-8 p-3">
+                        Formulario
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+ )}
+          </div>
+        </div>
+      </div>
 
     </div>
-  );
+  )
 };
 
 const TableReservas = () => {
@@ -321,7 +355,7 @@ const TableReservas = () => {
                     Servicio
                   </th>
                   <th className="px-4 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Día Compra
+                    Fecha de Venta
                   </th>
                   <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Estado del Servicio
@@ -358,18 +392,18 @@ const TableReservas = () => {
                     <tr key={reserva._id}>
 
 
-<td className="px-6 py-5 border-b border-gray-200 bg-white text-sm truncate">
-  <div className="text-gray-900 whitespace-no-wrap">
-    <div className="flex-shrink-0 w-10 h-10">
-      {reserva?.cliente_id.nombre} {reserva?.cliente_id.apellido}
-    </div>
-  </div>
-</td>
+                      <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm truncate">
+                        <div className="text-gray-900 whitespace-no-wrap">
+                          <div className="flex-shrink-0 w-10 h-10">
+                            {reserva?.cliente_id.nombre} {reserva?.cliente_id.apellido}
+                          </div>
+                        </div>
+                      </td>
 
 
-<td className="px-6 py-5 border-b border-gray-200 bg-white text-sm truncate">
-  <div className="text-gray-900 whitespace-no-wrap">
-    <div className="flex-shrink-0 w-10 h-10">
+                      <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm truncate">
+                        <div className="text-gray-900 whitespace-no-wrap">
+                          <div className="flex-shrink-0 w-10 h-10">
                             {reserva?.cliente_id?.email}
                           </div>
                         </div>
@@ -399,7 +433,9 @@ const TableReservas = () => {
 
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {reserva?.createdAt.split("T")[0]}
+                        {reserva?.factura?.fecha_venta && (
+  new Date(reserva?.factura?.fecha_venta).toLocaleString()
+)}
                         </p>
                       </td>
 
@@ -449,8 +485,8 @@ const TableReservas = () => {
                   <button
                     onClick={() => pagina !== 1 && setPagina(pagina - 1)}
                     className={`text-sm font-semibold py-2 px-4 rounded-r ${pagina !== 1
-                        ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
-                        : "disabled:opacity-25"
+                      ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
+                      : "disabled:opacity-25"
                       }`}
                     disabled={pagina !== 1 ? false : true}
                   >
@@ -461,8 +497,8 @@ const TableReservas = () => {
                       pagina < paginado.totalPaginas && setPagina(pagina + 1)
                     }
                     className={`text-sm font-semibold py-2 px-4 rounded-r ${pagina < paginado.totalPaginas
-                        ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
-                        : "disabled:opacity-25"
+                      ? "bg-gray-300 hover:bg-gray-400 text-gray-800"
+                      : "disabled:opacity-25"
                       }`}
                     disabled={pagina < paginado.totalPaginas ? false : true}
                   >
