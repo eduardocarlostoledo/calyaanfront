@@ -1488,7 +1488,7 @@ useEffect(() => {
           <p>
             <b>Ventas por fecha</b>
           </p>
-          <RangePicker onChange={handleDateChange} format={"YYYY/MM/DD"} />
+          <RangePicker onChange={handleDateChange} format={"DD/MM/YYYY"} />
         </div>
       </div>
 

@@ -1108,7 +1108,7 @@ const OrdenesAntDesing = (props) => {
           <p>
             <b>Filtrar Fecha</b>
           </p>
-          <RangePicker onChange={handleDateChange} format={"YYYY/MM/DD"} />
+          <RangePicker onChange={handleDateChange} format={"DD/MM/YYYY"} />
         </div>
       </div>
 
