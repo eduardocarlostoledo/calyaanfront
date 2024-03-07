@@ -212,7 +212,7 @@ const CalendarDay = () => {
 
                   <div className="lg:hidden md:hidden block pr-3 relative">
                     <div
-                      className="bg-white mt-6 min-w-[243px] lg:hidden md:hidden block px-3 py-5 rounded absolute right-0 hidden shadow-lg cursor-pointer"
+                      className="bg-white mt-6 min-w-[243px] lg:hidden md:hidden px-3 py-5 rounded absolute right-0 hidden shadow-lg cursor-pointer"
                       id="div1_calendar_10"
                     >
                       <div

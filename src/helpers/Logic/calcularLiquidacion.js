@@ -8,11 +8,15 @@ const calcularLiquidacion = (selectedRows) => {
       if (row.servicios[0].nombre.includes("Valoracion")) {
         console.log("valoracion")
 
-        totalProfesional += row.factura.precioTotal * 0.46;
-        totalCalyaan += row.factura.precioTotal * 0.54;
+        totalProfesional += row.factura.precioTotal * 0.50;
+        totalCalyaan += row.factura.precioTotal * 0.50;
 
       } else if (row.servicios[0].nombre.includes("corporativo")) {
         console.log("corporativo")
+        totalProfesional += row.factura.precioTotal * 0.50;
+        totalCalyaan += row.factura.precioTotal * 0.50;
+      } else if (row.servicios[0].nombre.includes("express")) {
+        console.log("express")
         totalProfesional += row.factura.precioTotal * 0.50;
         totalCalyaan += row.factura.precioTotal * 0.50;
       } else {
