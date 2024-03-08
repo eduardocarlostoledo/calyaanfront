@@ -9,6 +9,26 @@ import Spinner from "../components/Spinner";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 
+const newHourArray = [
+  "06:00-07:00",
+  "07:00-08:00",
+  "08:00-09:00",
+  "09:00-10:00",
+  "10:00-11:00",
+  "11:00-12:00",
+  "12:00-13:00",
+  "13:00-14:00",
+  "14:00-15:00",
+  "15:00-16:00",
+  "16:00-17:00",
+  "17:00-18:00",
+  "18:00-19:00",
+  "19:00-20:00",
+  "20:00-21:00",
+  "21:00-22:00",
+]
+
+
 const Sumary = () => {
   const { id } = useParams();
   const [historial, setHistorial] = useState([]);
@@ -240,17 +260,24 @@ const Sumary = () => {
               <p className="pt-4 text-base font-semibold leading-none text-gray-800 lg:mb-3 md:mb-4">
                 Agrega la hora del servicio
               </p>
-              <div className="md:flex-grow">                
-                
-                <input
+              <div className="md:flex-grow">
+                <select
                   type="time"
-                  value={horaRealizacion}
+                  name="time"
+                  id="time"
                   onChange={(e) => sethoraFechaRealizacion(e.target.value)}
                   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                />
+                >
+                  <option value="">Hora</option>
+                  {newHourArray?.map((hour, index) => (
+                    <option key={index} value={hour}>
+                      {hour}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
-            {/* fin hora de realización */}
+            {/* fin hora de realización  */}
 
           </div>
 

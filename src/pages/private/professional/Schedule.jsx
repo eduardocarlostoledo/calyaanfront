@@ -159,7 +159,7 @@ const Schedule = ({ profesionalSelect }) => {
     setHorariosForm([]);
     try {
       let info = "";
-      console.log(profesionalSelect, "aaa");
+      //console.log(profesionalSelect, "aaa");
       if (profesionalSelect) {
         const { data } = await clienteAxios.get(
           `/api/profesional/disponibilidad-profesional-admin-dash?fecha=${e.target.value}&_id=${profesionalSelect.profesional._id}`
