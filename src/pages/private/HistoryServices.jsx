@@ -3,6 +3,9 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import clienteAxios from "../../config/axios";
 import { Link } from "react-router-dom";
+import { getEstadoPagoClass } from "../../helpers/Logic/coloresEstadoPago.js";
+import { getEstadoOrdenClass } from "../../helpers/Logic/coloresEstadoOrden.js";
+
 
 const HistoryServices = () => {
   const [historial, setHistorial] = useState([]);
@@ -28,183 +31,74 @@ const HistoryServices = () => {
     getHistorial();
   }, [user._id]);
 
-  // console.log(historial);
-
   return (
-    <div className="flex items-center justify-center mt-5">
-      <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-        <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
-          <div className="mb-4">
-            <p className="font-medium text-xl mb-2">Historial</p>
-            <p className="text-gray-600 leading-loose">
-              Podrás visualizar todos los servicios que has solicitado
-              acumulando puntos para descuentos espectaculares.
-            </p>
-          </div>
+    <div className="flex flex-col items-center justify-center mt-5 md:ml-62 w-full">
+      <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-full md:w-3/4">
+        <h5 className="text-xl font-medium leading-none mb-4 text-center">
+          Servicios en Curso
+        </h5>
 
-          <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-4">
-              <h5 className="text-xl font-medium leading-none mb-2">
-                Ultimos servicios solicitados
-              </h5>
-            </div>
-
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table className="w-full text-sm text-left text-gray-500">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-center">
-                      Servicio
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-center">
-                      Fecha
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-center">
-                      Hora
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-center">
-                      Profesional
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-center">
-                      Estado
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-center">
-                      Acciones
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-center">
-                  Chat Profesional
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-500">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th scope="col" className="responsive-th text-center">
+                  Servicio
                 </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {historial?.map((reserva) => (
-                    <tr key={reserva._id} className="bg-white border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        {reserva?.servicios?.map((servicio)=>servicio.nombre)}
-                      </th>
-                      <td className="px-6 py-4 text-center">{reserva?.cita_servicio}</td>
-                      <td className="px-6 py-4 text-center">{reserva?.hora_servicio}</td>
-                      <td className="px-6 py-4 text-center">
-                        {reserva?.profesional_id?.creador?.nombre}
-                      </td>
-                      <td className="px-6 py-4 text-center">{reserva?.estado_servicio}</td>
-                      <td className="px-6 py-4 text-center">
-                        {" "}
-                        <Link to={`/resumen/${reserva._id}`}> Ver </Link>                        
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                    <Link to={`/resumen/${reserva._id}`}>CHAT</Link>
+                <th scope="col" className="responsive-th text-center">
+                  Sesión
+                </th>
+                <th scope="col" className="responsive-th hidden md:table-cell text-center">
+                  Fecha
+                </th>
+                <th scope="col" className="responsive-th hidden md:table-cell text-center">
+                  Hora
+                </th>
+                <th scope="col" className="responsive-th text-center">
+                  Cliente
+                </th>
+                <th scope="col" className="responsive-th hidden md:table-cell text-center">
+                  Estado
+                </th>
+                <th scope="col" className="responsive-th hidden md:table-cell text-center">
+                  Pago Servicio
+                </th>               
+                <th scope="col" className="responsive-th text-center">
+                  Chat y Orden
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {historial?.map((reserva) => (
+                <tr key={reserva._id} className="bg-white border-b">
+                  <td className="responsive-td">
+                    {reserva?.servicios?.map((servicio) => servicio.nombre)}
                   </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                  <td className="responsive-td text-center">{reserva?.nroSesion}</td>
+                  <td className="responsive-td hidden md:table-cell text-center">{reserva?.cita_servicio ? reserva?.cita_servicio : "Agendar" }</td>
+                  <td className="responsive-td hidden md:table-cell text-center">{reserva?.hora_servicio ? reserva?.hora_servicio : "Agendar "}</td>
+                  <td className="responsive-td text-center">{reserva?.profesional_id?.creador?.nombre ? reserva?.profesional_id?.creador?.nombre : "Agendar"}</td>
+                  <td className={`responsive-td hidden md:table-cell text-center ${getEstadoOrdenClass(reserva?.estado_servicio)}`}>{reserva?.estado_servicio}</td>
+                  <td className={`responsive-td hidden md:table-cell text-center ${getEstadoPagoClass(reserva?.factura?.estadoPago)}`}>
+  {reserva?.factura?.estadoPago}
+</td>
+
+
+                  <td className="responsive-td text-center">
+                    <Link to={`/resumen/${reserva._id}`}>CHAT</Link>
+                    <td className="px-6 py-4 text-center">
+                    </td>
+
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default HistoryServices;
-
-// import React, { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
-// import { toast } from "react-toastify";
-// import clienteAxios from "../../config/axios";
-
-// const HistoryServices = () => {
-//   const [historial, setHistorial] = useState([]);
-// console.log(historial, "historial") // FLAG
-//   const { user } = useSelector((state) => ({ ...state.auth }));
-
-//   useEffect(() => {
-//     const getHistorial = async () => {
-//       try {
-//         const response = await fetch(`${import.meta.env.VITE_APP_BACK}/ordenes/ordenbyuserid/${user._id}`);
-//         const data = await response.json();
-//         setHistorial(data);
-//         // let { data } = await clienteAxios.get(
-//         //   `ordenes/orden/${user._id}`
-//         // );
-//         // setHistorial([...data]);
-//       } catch (err) {
-//         console.log(err);
-//         let error = err.response.data.msg
-//           ? err.response.data.msg
-//           : err.response && "Estamos presentando problemas internos";
-//         return toast.error(error);
-//       }
-//     };
-//     getHistorial();
-//   }, []);
-
-//   return (
-//     <div className="flex items-center justify-center mt-5">
-//       <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-//         <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
-//           <div className="mb-4">
-//             <p className="font-medium text-xl mb-2">Historial</p>
-//             <p className="text-gray-600 leading-loose">
-//               Podrás visualizar todos los servicios que has solicitado
-//               acumulando puntos para descuentos espectaculares.
-//             </p>
-//           </div>
-
-//           <div className="lg:col-span-2">
-//             <div className="flex items-center justify-between mb-4">
-//               <h5 className="text-xl font-medium leading-none mb-2">
-//                 Ultimos servicios solicitados
-//               </h5>
-//             </div>
-
-//             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-//               <table className="w-full text-sm text-left text-gray-500">
-//                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-//                   <tr>
-//                     <th scope="col" className="px-6 py-3">
-//                       Servicio
-//                     </th>
-//                     <th scope="col" className="px-6 py-3">
-//                       Fecha y Hora
-//                     </th>
-//                     <th scope="col" className="px-6 py-3">
-//                       Profesional
-//                     </th>
-//                     <th scope="col" className="px-6 py-3">
-//                       Estado
-//                     </th>
-//                   </tr>
-//                 </thead>
-//                 <tbody>
-//                   <tr className="bg-white border-b">
-//                     {historial?.map((reserva) => (
-//                       <>
-//                         <th
-//                           scope="row"
-//                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-//                         >
-//                           {reserva.servicio}
-//                         </th>
-//                         <td className="px-6 py-4">{reserva.diaHora}</td>
-//                         <td className="px-6 py-4">{reserva.profesional}</td>
-//                         <td className="px-6 py-4">{reserva.estadoPago}</td>
-//                         <td className="px-6 py-4"></td>
-//                       </>
-//                     ))}
-//                   </tr>
-//                 </tbody>
-//               </table>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default HistoryServices;

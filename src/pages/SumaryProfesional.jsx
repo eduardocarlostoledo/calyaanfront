@@ -37,7 +37,7 @@ const Sumary = () => {
   const [estadoServicio, setEstadoServicio] = useState(null);
   const [horaRealizacion, sethoraFechaRealizacion] = useState("");
   const [fechaRealizacion, setFechaRealizacion] = useState("");
-  
+  const [estadoLiquidacion, setEstadoLiquidacion] = useState("");
 
   useEffect(() => {
     const getHistorial = async () => {
@@ -48,6 +48,7 @@ const Sumary = () => {
         setImage(data.registroFirmaCliente)
         sethoraFechaRealizacion(data.hora_servicio)
         setFechaRealizacion(data.cita_servicio);
+        setEstadoLiquidacion()
       } catch (error) {
         handleAxiosError(error);
       }
@@ -57,6 +58,11 @@ const Sumary = () => {
 
   const handleUpdateOrder = async (estado) => {
     try {
+
+      if (estadoServicio==="Cancelado") return handleAxiosError(error, "No se puede modificar un servicio cancelado");
+      liquidacion
+
+
       const response = await clienteAxios.post(`/api/ordenes/updateorderbyprofesional/`, {
         id,
         estado,
@@ -97,7 +103,7 @@ const Sumary = () => {
     toast.error(errorMsg);
   };
 
-  console.log("IMAGE", image)
+  //console.log("IMAGE", image)
 
   //console.log(historial);
 
@@ -345,7 +351,7 @@ const Sumary = () => {
 
               <button
                 type="button"
-                onClick={() => handleUpdateOrder("Completado")}
+                onClick={() => handleUpdateOrder(estadoServicio)}
                 className="text-white mt-4 mx-auto bg-primary hover:bg-bgHover focus:ring-4 focus:outline-none focus:ring-bgHover font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-40 max-lg:w-3/4 max-sm:w-full"
               >
                 Guardar

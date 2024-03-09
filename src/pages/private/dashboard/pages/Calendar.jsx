@@ -14,7 +14,7 @@ const MyCalendar = ({ reservations }) => {
       if (
         !reservation.hora_servicio &&
         !reservation.cita_servicio &&
-        reservation.factura.estadoPago === "approved" &&
+        // reservation.factura.estadoPago === "approved" &&
         !reservation.profesional_id
       ) {
         return null; // O maneja el caso de reserva sin hora de servicio de acuerdo a tus necesidades
