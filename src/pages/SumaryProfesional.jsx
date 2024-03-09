@@ -60,9 +60,7 @@ const Sumary = () => {
     try {
 
       if (estadoServicio==="Cancelado") return handleAxiosError(error, "No se puede modificar un servicio cancelado");
-      liquidacion
-
-
+      
       const response = await clienteAxios.post(`/api/ordenes/updateorderbyprofesional/`, {
         id,
         estado,
