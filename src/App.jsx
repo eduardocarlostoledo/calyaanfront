@@ -1,13 +1,9 @@
 import { lazy, useEffect } from "react";
-
-import { BrowserRouter as Router, Route } from "react-router-dom";
-
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { toast, ToastContainer } from "react-toastify";
-
 const ServicesLayout = lazy(() => import("./layout/ServicesLayout"));
 const ProfileLayout = lazy(() => import("./layout/ProfileLayout"));
 const DashboardLayout = lazy(() => import("./layout/DashboardLayout"));
-
 const Login = lazy(() => import("./pages/Login"));
 const Productos = lazy(() => import("./pages/Productos"));
 const Register = lazy(() => import("./pages/Register"));
@@ -173,11 +169,13 @@ function App() {
         <Route path="/nueva-password/:idtoken" element={<NewPassword />} />
         <Route
           path="/registro/profesional"
-          element={<RegisterProfessional />}
-        />
-
+          element={<RegisterProfessional />}        />
         <Route path="/wordpress" element={<Wordpress />} />
-
+        
+        {/* lo paso  a publico por los chats */}
+        <Route path="/resumen/:id" element={<Sumary />} /> 
+        <Route path="/resumen-profesional/:id" element={<SumaryProfesional />}/>
+             
         {/* Private Routes */}
         <Route element={<AuthGuard />}>
           <Route element={<ServicesLayout />}>
@@ -188,7 +186,7 @@ function App() {
             />
             <Route path="/reserva/fecha" element={<ScheduleByDateForm />} />
             <Route path="/pago" element={<Pages />} />
-            <Route path="/resumen/:id" element={<Sumary />} />
+            {/* <Route path="/resumen/:id" element={<Sumary />} /> lo paso a publica por los chats*/}
           </Route>
 
           <Route element={<ProfileLayout />}>
@@ -217,12 +215,13 @@ function App() {
             <Route path="/perfil-profesional" element={<UpdateProfile />} />
           </Route>
 
-          <Route element={<ServicesLayout />}>
+          {/* <Route element={<ServicesLayout />}>
             <Route
               path="/resumen-profesional/:id"
               element={<SumaryProfesional />}
             />
-          </Route>
+          </Route> */}
+
         </Route>
 
         {/* Private Routes - Admin */}

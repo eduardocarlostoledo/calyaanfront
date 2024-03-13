@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { ImWhatsapp } from "react-icons/im";
 import { NumericFormat } from "react-number-format";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate, } from "react-router-dom";
 import clienteAxios from "../config/axios";
 import { toast } from "react-toastify";
 import Chat from "./private/professional/Chat";
 import Spinner from "../components/Spinner";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import ModalLoginProfesionales from "../components/ModalLoginProfesionales";
 
 const newHourArray = [
   "06:00-07:00",
@@ -28,8 +30,11 @@ const newHourArray = [
   "21:00-22:00",
 ]
 
-
 const Sumary = () => {
+  const { user } = useSelector((state) => ({ ...state.auth }));
+  const navigate = useNavigate();
+  const { search } = useLocation();
+  const [modal, setModal] = useState(false);
   const { id } = useParams();
   const [historial, setHistorial] = useState([]);
   const [image, setImage] = useState(null);
@@ -38,6 +43,29 @@ const Sumary = () => {
   const [horaRealizacion, sethoraFechaRealizacion] = useState("");
   const [fechaRealizacion, setFechaRealizacion] = useState("");
   const [estadoLiquidacion, setEstadoLiquidacion] = useState("");
+
+  const handleModalLogin = () => {
+    setModal(!modal);
+  };
+
+  useEffect(() => {
+    const verificarSesion = async () => {
+      try {        
+        if (user === null) {
+          setModal(true);
+        } else {
+          navigate(`/resumen-profesional/${id}`);
+          setModal(false);
+        }   
+      } catch (error) {
+        console.log(error);
+        const errorMsg = error.response?.data?.msg || "Estamos presentando problemas internos";
+        toast.error(errorMsg);
+      }
+    };
+  
+    verificarSesion(); // Llama a la función de verificación cuando cambie el usuario
+  }, [user, id]); // Añade 'id' al array de dependencias para que el useEffect se dispare cuando 'id' cambie
 
   useEffect(() => {
     const getHistorial = async () => {
@@ -383,17 +411,17 @@ const Sumary = () => {
 
           </div>
 
-          {/* INICIO CHAT CON CLIENTE */}
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white p-1 md:p-1 shadow-lg">
-            <header className="chat-header text-center">
-              {/* <h1>Coordina los detalles de la Reserva!</h1> */}
-            </header>
-            {/* id es el id de la orden*/}
+<div className="chat">
+      <header className="chat-header">
+        <h1>Chatea con nosotros!</h1>
+      </header>
             <Chat id={id} />
           </div>
-          {/* FIN CHAT CON CLIENTE */}
         </div>
       </div>
+
+      {modal && <ModalLoginProfesionales handleModalLogin={handleModalLogin} />}
+
     </div>
   );
 
