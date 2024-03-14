@@ -40,6 +40,7 @@ const MyCalendar = ({ reservations }) => {
         start: startDate.toDate(),
         end: endDate.toDate(),
         estadoPago: reservation.factura?.estadoPago, // Agrega el estado de pago al objeto del evento
+        nroSesion: reservation?.nroSesion,
         direccion_servicio: reservation.direccion_servicio,
       };
     })
@@ -70,6 +71,8 @@ const EventComponent = ({ event }) => {
       <div>S: {event.servicio}</div>
       <div>P: {event.profesional}</div>
       <div>D: {event.direccion_servicio}</div>
+      <div>#: {event.nroSesion}</div>
+      <div>$: {event.estadoPago}</div>
     </div>
   );
 };

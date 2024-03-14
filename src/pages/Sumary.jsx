@@ -2,21 +2,46 @@ import React, { useEffect, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import clienteAxios from "../config/axios";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ImWhatsapp } from "react-icons/im";
 import calcularCupon from "../helpers/Logic/calcularCupon";
 import Spinner from "../components/Spinner";
 import Chat from "./private/professional/Chat";
+import { useSelector } from "react-redux";
+import ModalLogin from "../components/ModalLogin";
 
 const Sumary = () => {
-
-  const [valorDeDescuento, setValorDescuento] = useState(0)
-
-  const [cargando, setCargando] = useState(false)
-
+  const { user } = useSelector((state) => ({ ...state.auth }));
+  const navigate = useNavigate();
+  const { search } = useLocation();
   const { id } = useParams();
-
+  const [valorDeDescuento, setValorDescuento] = useState(0)
+  const [cargando, setCargando] = useState(false)
   const [historial, setHistorial] = useState([]);
+  const [modal, setModal] = useState(false);
+
+  const handleModalLogin = () => {
+    setModal(!modal);
+  };
+
+  useEffect(() => {
+    const verificarSesion = async () => {
+      try {        
+        if (user === null) {
+          setModal(true);
+        } else {
+          navigate(`/resumen/${id}`);
+          setModal(false);
+        }   
+      } catch (error) {
+        console.log(error);
+        const errorMsg = error.response?.data?.msg || "Estamos presentando problemas internos";
+        toast.error(errorMsg);
+      }
+    };
+  
+    verificarSesion(); // Llama a la función de verificación cuando cambie el usuario
+  }, [user, id]); // Añade 'id' al array de dependencias para que el useEffect se dispare cuando 'id' cambie
 
   useEffect(() => {
     const getHistorial = async () => {
@@ -54,28 +79,21 @@ const Sumary = () => {
                   </p>
                   <div className="lg:flex justify-between gap-4 mt-8">
                     <p className="md:text-xl text-base text-gray-800 leading-tight font-medium">
-                      Número de orden:{" "}
-                      <span className="text-gray-600 font-normal">
-                        {" "}
-                        {historial._id}
-                      </span>
+                      Número de orden:{" "}  {historial._id}
+                      
                     </p>
-                    <p className="md:text-xl text-base text-gray-800 leading-tight font-medium lg:mt-0 md:mt-6 mt-6">
+                    {/* <p className="md:text-xl text-base text-gray-800 leading-tight font-medium lg:mt-0 md:mt-6 mt-6">
                       Fecha de reserva:{" "}
                       <span className="text-gray-600 font-normal">
                         {historial?.cita_servicio} - {historial?.hora_servicio}{" "}
                       </span>
-                    </p>
+                    </p> */}
 
                     <div className="flex md:gap-8 gap-4">
                       <p className="md:text-xl text-base font-medium leading-normal text-gray-800 lg:mt-0 md:mt-6 mt-6">
-                        Profesional
+                        Profesional: {historial?.profesional_id?.nombre || "Pendiente"}
                       </p>
-                      <ul className="list-disc">
-                        <p className="text-base leading-normal text-gray-600 lg:max-w-[235px] w-full">
-                          {historial?.profesional_id?.nombre || "Pendiente"}
-                        </p>
-                      </ul>
+                      
                     </div>
                   </div>
                   <hr className="mt-6" />
@@ -157,8 +175,7 @@ const Sumary = () => {
 
                       </div>
                       <div className="mt-4">
-                        <p className="mb-4 text-base font-semibold leading-none text-gray-800 items-center text-center">
-                          Tienes dudas? Habla con nosotros a través de Whatsapp! {" "}                  </p>
+                    
                         <a
 
                           href={`https://web.whatsapp.com/send/?phone=573147428757&text${id}&type=phone_number&app_absent=0`}
@@ -249,25 +266,7 @@ const Sumary = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="lg:mt-0 md:mt-6 mt-4">
-                    <p className="text-base leading-normal text-gray-600 lg:max-w-[515px] w-full">
-                      Apreciamos tu compra y esperamos que disfrute de tu servicio
-                      ¡Gracias!
-                    </p>
-
-                    <p className="text-base text-gray-600 leading-none mt-8">
-                      ¿Preguntas? Revisa
-                      <span className="text-gray-800 font-semibold hover:underline cursor-pointer mt-2">
-                        {" "} Nuestras preguntas frecuentes
-                      </span>
-                    </p>
-                    <p className="text-base text-gray-600 mt-4">
-                      ¿Preguntas? Póngase en contacto con nuestro
-                      <span className="text-gray-800 font-semibold hover:underline cursor-pointer">
-                        {" "} Atención al cliente
-                      </span>
-                    </p>
-                  </div>
+                 
                 </div>
               </div>
             </>
@@ -280,6 +279,8 @@ const Sumary = () => {
       <Chat id={(id)}/>
       </div>
       </div>
+      {modal && <ModalLogin handleModalLogin={handleModalLogin} />}
+
     </div>
   );
 };
