@@ -111,7 +111,7 @@ const Sumary = () => {
                             historial?.servicios?.map((servicio) => (
                               <>
                                 <div >
-                                  <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                  <div className=" h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 items-center">
                                     <img
                                       src={servicio?.img}
                                       alt=""
