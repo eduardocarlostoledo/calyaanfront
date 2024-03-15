@@ -389,13 +389,13 @@ const TableReservas = () => {
                   </tr>
                 ) : (
                   filtrado?.map((reserva) => (
-                    <tr key={reserva._id}>
+                    <tr key={reserva?._id}>
 
 
                       <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm truncate">
                         <div className="text-gray-900 whitespace-no-wrap">
                           <div className="flex-shrink-0 w-10 h-10">
-                            {reserva?.cliente_id.nombre} {reserva?.cliente_id.apellido}
+                            {reserva?.cliente_id?.nombre} {reserva?.cliente_id?.apellido}
                           </div>
                         </div>
                       </td>

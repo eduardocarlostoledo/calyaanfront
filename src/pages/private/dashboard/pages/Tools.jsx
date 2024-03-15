@@ -33,30 +33,35 @@ const [ siigoForm, setSiigoForm] = useState({
 
   const { username, access_key } = siigoForm;
     const { codigo, tipoDescuento, descuento, vencimiento } = coupon;
-    
     const [emailReset, setEmailReset] = useState("");
-
+    const [passwordReset, setPasswordReset] = useState("");
+    
     const handleChangeresetPasswordyConfirmarCuenta = (e) => {
-      setEmailReset(e.target.value);
+      const { name, value } = e.target;
+      if (name === "emailReset") {
+        setEmailReset(value);
+      } else if (name === "passwordReset") {
+        setPasswordReset(value);
+      }
     };
     
-      
-      const handleSubmitResetPasswordyConfirmarCuenta = async (e) => {
-        e.preventDefault();
-      
-        if (!emailReset) {
-          return toast.error("El campo de email es obligatorio");
-        }
-      
-        try {
-          const data = await clienteAxios.post("/api/usuarios/reset-user", { emailReset });
-          toast.success("Cuenta reseteada con éxito");
-        } catch (error) {
-          console.error(error);
-          const errorMsg = "Estamos presentando problemas internos";
-          toast.error(errorMsg);
-        }
-      };
+    const handleSubmitResetPasswordyConfirmarCuenta = async (e) => {
+      e.preventDefault();
+    
+      if (!emailReset || !passwordReset) {
+        return toast.error("E-mail y contraseña son necesarios");
+      }
+    
+      try {
+        const data = await clienteAxios.post("/api/usuarios/reset-user", { email: emailReset, password: passwordReset });
+        toast.success("Cuenta reseteada con éxito");
+      } catch (error) {
+        console.error(error);
+        const errorMsg = error.response?.data?.msg || "Estamos presentando problemas internos";
+        toast.error(errorMsg);
+      }
+    };
+    
       
 
     const handleChange = (e) => {
@@ -572,32 +577,40 @@ const [ siigoForm, setSiigoForm] = useState({
                     {/* FIN CONFIGURACION DE SIIGO */}
 
                     <div>
+    <form className="mt-6" onSubmit={handleSubmitResetPasswordyConfirmarCuenta}>
+        <div className="mt-4">
+            <label className="block text-gray-700">Usuario</label>
+            <input
+                type="email"
+                name="emailReset"
+                onChange={handleChangeresetPasswordyConfirmarCuenta}
+                value={emailReset}
+                placeholder="Ingresa el email ..."
+                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover focus:bg-white focus:outline-none"
+                autoFocus
+            />
+        </div>
+        <div className="mt-4">
+            <label className="block text-gray-700">Contraseña</label>
+            <input
+                type="password"
+                name="passwordReset"
+                onChange={handleChangeresetPasswordyConfirmarCuenta}
+                value={passwordReset}
+                placeholder="Ingresa el password..."
+                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover focus:bg-white focus:outline-none"
+            />
+        </div>
 
-                        <form className="mt-6" onSubmit={handleSubmitResetPasswordyConfirmarCuenta}>
-                            <div className="mt-4">
-                                <label className="block text-gray-700">Usuario</label>
-                                <input
-                                    type="email"
-                                    name="emailReset"
-                                    onChange={handleChangeresetPasswordyConfirmarCuenta}
-                                    value={emailReset}
-                                    placeholder="Ingresa el email del usuario o profesional para resetear"
-                                    className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-bgHover focus:bg-white focus:outline-none"
-                                    autoFocus
-                                />
-                            </div>
+        <button
+            type="submit"
+            className="w-full block bg-primary hover:bg-bgHover focus:bg-bgHover text-white font-semibold rounded-lg px-4 py-3 mt-6"
+        >
+            RESETEAR USUARIO Y CONFIRMAR CUENTA
+        </button>
+    </form>
+</div>
 
-                            <button
-                                type="submit"
-                                className="w-full block bg-primary hover:bg-bgHover focus:bg-bgHover text-white font-semibold rounded-lg
-            px-4 py-3 mt-6"
-                            >
-                                RESETEAR USUARIO Y CONFIRMAR CUENTA            </button>
-
-                        </form>
-
-
-                    </div>
 
                 </div>
 

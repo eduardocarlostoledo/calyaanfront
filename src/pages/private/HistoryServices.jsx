@@ -55,7 +55,7 @@ const HistoryServices = () => {
                   Hora
                 </th>
                 <th scope="col" className="responsive-th text-center">
-                  Cliente
+                  Profesional
                 </th>
                 <th scope="col" className="responsive-th hidden md:table-cell text-center">
                   Estado

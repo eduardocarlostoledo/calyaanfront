@@ -7,7 +7,7 @@ import Spinner from '../../../../../components/Spinner';
 import CouponGenerationModal from '../../pages/CouponGenerationModal';
 
 const ServiciosComponent = ({ setServicios, servicios, setReserva, reserva, precioConDescuentos , fechaVenta, setFechaVenta }) => {
-  console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos)
+  //console.log("precioConDescuentos SERVICIOS COMPONENT", precioConDescuentos)
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(false)
   const [showCouponModal, setShowCouponModal] = useState(false);

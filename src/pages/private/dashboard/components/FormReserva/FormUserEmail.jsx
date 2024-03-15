@@ -32,14 +32,14 @@ const FormUserEmail = ({userEmail,setUserEmail,setEstado,setReserva,reserva}) =>
                 cliente_apellido: data?.apellido,
                 cliente_cedula: data?.cedula,
                 cliente_telefono: data?.telefono,
-                direccion_servicio:data?.direccionDefault?.direccion,
-                localidad_servicio: data?.direccionDefault?.localidad,
+                direccion_servicio:data?.direcciones[0]?.direccion,
+                localidad_servicio: data?.direcciones[0]?.localidad,
                 adicional_direccion_servicio: data?.direccionDefault?.info,
                 ciudad_Servicio: data?.direccionDefault?.ciudad,
                 telefono_servicio: data?.telefono,
                 nuevo: false,
             });
-
+console.log("FORM USER email", reserva)
             setCargando(false);
             setUserEmail("");
         } catch (err) {

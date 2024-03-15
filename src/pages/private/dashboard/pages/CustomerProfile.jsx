@@ -7,10 +7,113 @@ import { localidades } from "../../../../data";
 import { AiOutlineCheck, AiOutlineClose, AiOutlineEdit } from "react-icons/ai";
 import { updateProfileAdminDash } from "../../../../redux/features/professionalSlice";
 import { useDispatch } from "react-redux";
+import { getEstadoPagoClass } from "../../../../helpers/Logic/coloresEstadoPago";
+import { getEstadoOrdenClass } from "../../../../helpers/Logic/coloresEstadoOrden";
+
+const HistoryServices = () => {
+  const { id } = useParams();
+  const [historial, setHistorial] = useState([]);  
+  useEffect(() => {
+    const getHistorial = async () => {
+      try {
+        let { data } = await clienteAxios.get(
+          `api/usuarios/historial/${id}`
+        );  
+        setHistorial(data);          
+      } catch (error) {
+        console.log(error);
+        const errorMsg =
+          error.response?.data?.msg || "Estamos presentando problemas internos";
+        toast.error(errorMsg);
+      }
+    };
+    getHistorial();
+  }, [id]);
+
+  return (
+    <div className="flex flex-col items-center justify-center w-full">
+      <div className="bg-white p-1 w-full">
+        <h5 className="text-xl font-medium leading-none mb-4 text-center">
+          Servicios en Curso
+        </h5>  
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-500">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th scope="col" className="responsive-th text-center">
+                  Servicio
+                </th>
+                <th scope="col" className="responsive-th text-center">
+                  Sesión
+                </th>
+                <th scope="col" className="responsive-th hidden md:table-cell text-center">
+                  Fecha
+                </th>
+                <th scope="col" className="responsive-th hidden md:table-cell text-center">
+                  Hora
+                </th>
+                <th scope="col" className="responsive-th hidden md:table-cell text-center">
+                  Profesional
+                </th>
+                <th scope="col" className="responsive-th hidden md:table-cell text-center">
+                  Estado
+                </th>
+                <th scope="col" className="responsive-th hidden md:table-cell text-center">
+                  Pago Servicio
+                </th>               
+                <th scope="col" className="responsive-th text-center">
+                  Chat y Orden
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {historial?.map((reserva) => (
+                <tr key={reserva._id} className="bg-white border-b">
+                  <td className="responsive-td">
+                    {reserva?.servicios?.map((servicio) => servicio.nombre)}
+                  </td>
+                  <td className="responsive-td text-center">{reserva?.nroSesion}</td>
+                  <td className="responsive-td hidden md:table-cell text-center">{reserva?.cita_servicio ? reserva?.cita_servicio : "Agendar" }</td>
+                  <td className="responsive-td hidden md:table-cell text-center">{reserva?.hora_servicio ? reserva?.hora_servicio : "Agendar "}</td>
+                  <td className="responsive-th hidden md:table-cell text-center">{reserva?.profesional_id?.creador?.nombre ? reserva?.profesional_id?.creador?.nombre : "Agendar"}</td>
+                  <td className={`responsive-td hidden md:table-cell text-center ${getEstadoOrdenClass(reserva?.estado_servicio)}`}>{reserva?.estado_servicio}</td>
+                  <td className={`responsive-td hidden md:table-cell text-center ${getEstadoPagoClass(reserva?.factura?.estadoPago)}`}>
+  {reserva?.factura?.estadoPago} </td>  
+  <td className="responsive-td text-center">
+  <Link to={`/resumen/${reserva._id}`}>CHAT</Link>
+</td>
+<td className="px-6 py-4 text-center">
+</td>
+
+                </tr>
+              ))}
+            </tbody>  
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const CustomerProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [forEdit, setForEdit] = useState(true);
+  const [valueForm, setValueForm] = useState({
+    nombre: "",
+    apellido: "",
+    sexo: "",
+    email: "",
+    telefono: "",
+    localidad: "",
+    direccion:"",
+    direcciones: [],
+    cedula: "",
+    reviews: 0,
+    reservas: [],
+    estado: "",
+    ultimaConexion: "",
+  });
 
   const getUser = async () => {
     try {
@@ -24,21 +127,8 @@ const CustomerProfile = () => {
       return toast.error(error);
     }
   };
-  const [forEdit, setForEdit] = useState(true);
-  const [valueForm, setValueForm] = useState({
-    nombre: "",
-    apellido: "",
-    sexo: "",
-    email: "",
-    telefono: "",
-    direccionDefault: "",
-    direcciones: "",
-    cedula: "",
-    reviews: 0,
-    reservas: [],
-    estado: "",
-    ultimaConexion: "",
-  });
+ 
+console.log(valueForm)
 
   const {
     nombre,
@@ -46,8 +136,9 @@ const CustomerProfile = () => {
     sexo,
     email,
     telefono,
-    direccionDefault,
     direcciones,
+    direccion,
+    localidad,
     cedula,
     reviews,
     reservas,
@@ -60,40 +151,22 @@ const CustomerProfile = () => {
     getUser();
   }, [id]);
 
-  const options = localidades.map((localidad) => {
-    const [value, ...rest] = localidad.split("."); // Dividir por el primer punto
+  const options = localidades.map((localid) => {
+    const [value, ...rest] = localid.split("."); // Dividir por el primer punto
     const label = rest.join(".").trim(); // Unir lo restante y eliminar espacios innecesarios
     return {
-      value: localidad,
+      value: localid,
       label,
     };
   });
 
   const handleChange = (e) => {
-    // if (e.label) {
-    //   console.log(e);
-    //   return setValueForm((prevState) => ({
-    //     ...prevState,
-    //     direccionDefault: {
-    //       ...prevState.direccionDefault,
-    //       localidad: e.value,
-    //     },
-    //   }));
-    // }
-    // if (e.target.name === "direccionDefault") {
-    //   return setValueForm((prevState) => ({
-    //     ...prevState,
-    //     direccionDefault: {
-    //       ...prevState.direccionDefault,
-    //       [e.target.id]: e.target.value,
-    //     },
-    //   }));
-    // }
+
     setValueForm((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
-    // console.log(valueForm);
+
   };
 
   const handleSubmit = async (e) => {
@@ -114,6 +187,9 @@ const CustomerProfile = () => {
       toast.error("Ha ocurrido un error al enviar los datos");
     }
   };
+
+  
+  
 
   return (
     <>
@@ -188,9 +264,8 @@ const CustomerProfile = () => {
       <div className="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-6 gap-8">
         <div className="bg-white  shadow p-8">
           <div
-            className={`grid ${
-              !forEdit ? "grid-cols-3" : "grid-cols-2"
-            } justify-items-end items-center`}
+            className={`grid ${!forEdit ? "grid-cols-3" : "grid-cols-2"
+              } justify-items-end items-center`}
           >
             <h3 className="text-2xl font tracking-widest mr-auto">
               Datos personales
@@ -218,6 +293,7 @@ const CustomerProfile = () => {
               />
             )}
           </div>
+
           <div className="flex lg:flex-row md:flex-col-reverse flex-col-reverse justify-between mt-4  ">
             <div className="text">
               <div className=" lg:mt-0 mt-6">
@@ -318,60 +394,32 @@ const CustomerProfile = () => {
               <select
                 id="ciudad"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                value={direccionDefault.ciudad}
+                value={direcciones[0]?.ciudad}
                 onChange={handleChange}
-                name="direccionDefault"
+                name="direcciones"
                 disabled={true}
               >
                 <option value="">No registrado</option>
-                <option value={direccionDefault.ciudad}>
-                  {direccionDefault.ciudad}
+                <option value={direcciones[0]?.ciudad}>
+                  {direcciones[0]?.ciudad}
                 </option>
               </select>
             </div>
-            {/* <div className="lg:mt-0 md:mt-0 mt-4 w-full">
-              <p className="text-base leading-none text-gray-800">Nombre</p>
-              <select
-                id="nombre"
-                className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                value={direccionDefault.nombre}
-                onChange={handleChange}
-                name="direccionDefault"
-                disabled={forEdit}
-              >
-                <option value="">No registrado</option>
-                <option value={direccionDefault.nombre}>
-                  {direccionDefault.nombre}
-                </option>
-              </select>
-            </div> */}
+           
           </div>
 
-          <div className="lg:flex md:flex block gap-8  mt-6">
-            {/* <div className="w-full">
-              <p className="text-base leading-none text-gray-800">ID</p>
+          <div className="lg:flex md:flex block gap-8  mt-6">           
+            <div className="lg:mt-0 md:mt-0 mt-4 w-full">
+              <p className="text-base leading-none text-gray-800">Localidad</p>
               <input
                 type="text"
-                name="direccionDefault"
-                id="cedula"
-                value={direccionDefault._id}
+                name="localidad"
+                id="localidad"
                 onChange={handleChange}
+                value={localidad} 
                 placeholder="No registrado"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 disabled={forEdit}
-              />
-            </div> */}
-            <div className="lg:mt-0 md:mt-0 mt-4 w-full">
-              <p className="text-base leading-none text-gray-800">Localidad</p>
-
-              <input
-                type="text"
-                name="direccionDefault"
-                id="cedula"
-                value={direccionDefault.localidad}
-                placeholder="No registrado"
-                className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                disabled={true}
               />
             </div>
           </div>
@@ -381,107 +429,22 @@ const CustomerProfile = () => {
               <p className="text-base leading-none text-gray-800">Dirección</p>
               <input
                 type="text"
-                name="cedula"
-                id="cedula"
+                name="direccion"
+                id="direccion"
                 onChange={handleChange}
-                value={direccionDefault.direccion}
-                placeholder="No registrado"
-                className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
-                disabled={true}
-              />
-            </div>
-            {/* <div className="lg:mt-0 md:mt-0 mt-4 w-full">
-              <p className="text-base leading-none text-gray-800">Localidad</p>
-              <input
-                type="text"
-                name="cedula"
-                id="cedula"
-                onChange={handleChange}
-                value={direccionDefault.info}
+                value={direccion}
                 placeholder="No registrado"
                 className="placeholder:text-sm placeholdertext-gray-500 focus:outline-none border border-gray-300 lg:min-w-[250px] w-full py-3 px-3 rounded mt-4"
                 disabled={forEdit}
               />
-            </div> */}
+            </div>         
           </div>
         </div>
 
-        <div className="bg-white  shadow p-8">
-          <h3>Últimos servicios</h3>
-
-          <div className="flex gap-6 justify-center mx-auto  flex-wrap lg:flex-col mt-4">
-            <div className="w-full">
-              <Link
-                to="/reserva/1"
-                className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
-              >
-                <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
-                  <p className="text-lg text-gray-800  mb-3 font-normal">
-                    Depilación
-                  </p>
-                  <p className="text-sm text-gray-600  font-normal">
-                    10 Abril 2023 - 08:00 am
-                  </p>
-                </div>
-                <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 flex justify-end flex-col xl:items-end lg:items-end md:items-end items-start">
-                  <p className="text-xs text-white bg-green-400 px-3 rounded mb-2 font-normal py-1">
-                    Completado
-                  </p>
-                  <p className="text-sm text-gray-600  font-normal">
-                    Atendido por: Andrea Gomez
-                  </p>
-                </div>
-              </Link>
-            </div>
-            <div className="w-full">
-              <Link
-                to="/reserva/1"
-                className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
-              >
-                <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0">
-                  <p className="text-lg text-gray-800  mb-3 font-normal">
-                    Depilación
-                  </p>
-                  <p className="text-sm text-gray-600  font-normal">
-                    10 Abril 2023 - 08:00 am
-                  </p>
-                </div>
-                <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 flex justify-end flex-col xl:items-end lg:items-end md:items-end items-start">
-                  <p className="text-xs text-white bg-yellow-400 px-3 rounded mb-2 font-normal py-1">
-                    Pendiente
-                  </p>
-                  <p className="text-sm text-gray-600  font-normal">
-                    Atendido por: Andrea Gomez
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="w-full">
-              <Link
-                to="/reserva/1"
-                className="bg-white  shadow xl:flex lg:flex md:flex p-5 rounded cursor-pointer"
-              >
-                <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 mb-4 xl:mb-0 lg:mb-0 md:mb-0 ">
-                  <p className="text-lg text-gray-800  mb-3 font-normal">
-                    Depilación
-                  </p>
-                  <p className="text-sm text-gray-600  font-normal">
-                    10 Abril 2023 - 08:00 am
-                  </p>
-                </div>
-                <div className="xl:w-3/6 lg:w-3/6 md:w-3/6 flex justify-end flex-col xl:items-end lg:items-end md:items-end items-start">
-                  <p className="text-xs text-white bg-red-400 px-3 rounded mb-2 font-normal py-1">
-                    Cancelado
-                  </p>
-                  <p className="text-sm text-gray-600  font-normal">
-                    Atendido por: Andrea Gomez
-                  </p>
-                </div>
-              </Link>
-            </div>
-          </div>
+        <div className="bg-white w-full h-full">
+<HistoryServices/>
         </div>
+      
       </div>
       <div className="bg-white  shadow p-8 mt-5">
         <div className="mx-2 my-2 px-6 flex flex-wrap justify-center">
@@ -513,3 +476,4 @@ const CustomerProfile = () => {
 };
 
 export default CustomerProfile;
+
