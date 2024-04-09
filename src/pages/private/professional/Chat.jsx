@@ -2,12 +2,19 @@ import React, { useEffect, useState } from 'react';
 import clienteAxios from '../../../config/axios';
 import swal from 'sweetalert';
 
+
 const Chat = ({ id }) => {
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [update, setUpdate] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
+  const [cargando, setCargando] = useState(false)
+  const [modal, setModal] = useState(false);
+
+  const handleModalLogin = () => {
+    setModal(!modal);
+  };
 
   const usuario = JSON.parse(localStorage.getItem('profile'));
 

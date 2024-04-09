@@ -84,7 +84,7 @@ const ModalLogin = ({ handleModalLogin }) => {
               />
               <div className="md:px-10 py-4 px-5 md:py-6">
                 <p className="text-2xl font-bold leading-normal text-gray-800 ">
-                  Iniciar sesión
+                  Inicia sesión para Continuar
                 </p>
                 <p className="text-sm leading-3 mt-4 mb-5 text-gray-600 ">
                   Disfruta de todos los beneficios especiales que tenemos para

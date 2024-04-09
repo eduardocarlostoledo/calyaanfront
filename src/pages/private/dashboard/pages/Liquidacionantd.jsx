@@ -752,7 +752,7 @@ const orderDate = moment(orden?.cita_servicio, "YYYY/MM/DD");
             orden.factura?.payment_id?.includes(searchTextLower) ||
             orden?._id?.includes(searchTextLower) ||
             orden.profesional_id.email.includes(searchTextLower) ||
-            orden?.cliente_id?.cedula?.toString().includes(searchTextLower) ||
+            // orden?.cliente_id?.cedula?.toString().includes(searchTextLower) ||
             telefonoProfesional?.includes(searchTextLower) ||
             orden?.cliente_id?.email?.includes(searchTextLower) ||
             orden?.servicio?.toLowerCase().includes(searchTextLower) ||
@@ -769,7 +769,7 @@ const orderDate = moment(orden?.cita_servicio, "YYYY/MM/DD");
         orden.factura?.nro_factura?.includes(searchTextLower) ||
         orden.factura?.payment_id?.includes(searchTextLower) ||
         orden._id?.includes(searchTextLower) ||
-        orden.cliente_id?.cedula.toString().includes(searchTextLower) ||        
+        // orden.cliente_id?.cedula.toString().includes(searchTextLower) ||        
         orden.cliente_id?.email?.includes(searchTextLower) ||
         orden.servicios[0]?.nombre.toLowerCase()?.includes(searchTextLower) ||
         orden.direccion_Servicio?.toLowerCase()?.includes(searchTextLower)
@@ -1011,7 +1011,7 @@ const orderDate = moment(orden?.cita_servicio, "YYYY/MM/DD");
           <br /> Tambien puedes realizar búsquedas por{" "}
           <b>
             {" "}
-            Id Pago, Nro Factura, Nombre y/o Apellido, Cedula, Telefono o Email
+            Nombre Completo, Telefono o Email
           </b>
         </p>       
         <div style={{ display: "flex", margin: "1rem" }}>

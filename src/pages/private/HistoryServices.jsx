@@ -5,11 +5,17 @@ import clienteAxios from "../../config/axios";
 import { Link } from "react-router-dom";
 import { getEstadoPagoClass } from "../../helpers/Logic/coloresEstadoPago.js";
 import { getEstadoOrdenClass } from "../../helpers/Logic/coloresEstadoOrden.js";
-
+import ModalLogin from "../../components/ModalLogin.jsx";
 
 const HistoryServices = () => {
   const [historial, setHistorial] = useState([]);
   const { user } = useSelector((state) => ({ ...state.auth }));
+  const [cargando, setCargando] = useState(false)
+  const [modal, setModal] = useState(false);
+
+  const handleModalLogin = () => {
+    setModal(!modal);
+  };
 
   useEffect(() => {
     const getHistorial = async () => {
@@ -22,10 +28,15 @@ const HistoryServices = () => {
         setHistorial(data);
         // console.log(data)
       } catch (error) {
-        console.log(error);
-        const errorMsg =
-          error.response?.data?.msg || "Estamos presentando problemas internos";
-        toast.error(errorMsg);
+        
+        if (error.response?.status === 401 && error.response?.data?.msg === "Token no valido") {
+          setModal(true);
+        } else {        
+          const errorMsg = error.response?.data?.msg || "Estamos presentando problemas internos";
+          toast.error(errorMsg);
+        }
+      } finally {
+        setCargando(false); // Se asegura de que setCargando(false) se llame siempre, ya sea en caso de éxito o error
       }
     };
     getHistorial();
@@ -97,6 +108,8 @@ const HistoryServices = () => {
           </table>
         </div>
       </div>
+      {modal && <ModalLogin handleModalLogin={handleModalLogin} />}
+
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ImWhatsapp } from "react-icons/im";
 import calcularCupon from "../helpers/Logic/calcularCupon";
 import Spinner from "../components/Spinner";
-import Chat from "./private/professional/Chat";
+import Chat from "./private/Chat";
 import { useSelector } from "react-redux";
 import ModalLogin from "../components/ModalLogin";
 
@@ -46,21 +46,25 @@ const Sumary = () => {
   useEffect(() => {
     const getHistorial = async () => {
       try {
-        setCargando(true)
+        setCargando(true);
         let { data } = await clienteAxios.get(`api/ordenes/getordenbyid/${id}`);
         setHistorial(data);
-        setValorDescuento(data?.factura?.coupon?.tipoDescuento === "porcentaje" ? (data?.factura?.precioNeto - (data?.factura?.precioNeto * (data?.factura?.coupon?.descuento / 100))) : data?.factura?.coupon?.descuento)
-        setCargando(false)
+        setValorDescuento(data?.factura?.coupon?.tipoDescuento === "porcentaje" ? (data?.factura?.precioNeto - (data?.factura?.precioNeto * (data?.factura?.coupon?.descuento / 100))) : data?.factura?.coupon?.descuento);
       } catch (error) {
         console.log(error);
-        setCargando(false)
-        const errorMsg =
-          error.response?.data?.msg || "Estamos presentando problemas internos";
-        toast.error(errorMsg);
+        if (error.response?.status === 401 && error.response?.data?.msg === "Token no valido") {
+          setModal(true);
+        } else {        
+          const errorMsg = error.response?.data?.msg || "Estamos presentando problemas internos";
+          toast.error(errorMsg);
+        }
+      } finally {
+        setCargando(false); // Se asegura de que setCargando(false) se llame siempre, ya sea en caso de éxito o error
       }
     };
     getHistorial();
   }, [id]);
+  
 
   return (
 <div className="container mx-auto p-4 md:p-8 flex gap-4 3xl:gap-8 bg-white flex-wrap items-center justify-center">
